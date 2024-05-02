@@ -10,7 +10,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { EmailOutlined } from "@mui/icons-material";
 import { KeyOutlined } from "@mui/icons-material";
 
-export const loginScheme = object({
+export const SignInScheme = object({
   email: string()
     .email('Invalid email!')
     .required("Email is required!"),
@@ -41,7 +41,7 @@ const LoginForm = ({ values, handleChange, errors, touched, handleBlur, isSubmit
   return (
     <Form>
                 
-      <Container maxWidth={"xl"} sx={{ backgroundColor: "neutral.dark", padding: "5rem", borderRadius: "10px"}}>
+      <Container  sx={{  marginBottom:"5rem", borderRadius: "10px"}}>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
           <TextField
             label="Email"
@@ -61,7 +61,7 @@ const LoginForm = ({ values, handleChange, errors, touched, handleBlur, isSubmit
             InputLabelProps={{
               sx: {
                 textAlign: 'left',
-                left: "36px",
+                left: values.email ? "5px" : "36px",
                 top: "23px",
                 fontSize: values.email ? "1.2rem" : "1.4rem",
                 position: values.email ? 'relative' : 'absolute',
@@ -95,7 +95,7 @@ const LoginForm = ({ values, handleChange, errors, touched, handleBlur, isSubmit
             InputLabelProps={{
               sx: {
                 textAlign: 'left',
-                left: "36px",
+                left: values.password ? "5px" : "36px",
                 top: "25px",
                 fontSize: values.password ? "1.2rem" : "1.4rem",
                 position: values.password ? 'relative' : 'absolute',

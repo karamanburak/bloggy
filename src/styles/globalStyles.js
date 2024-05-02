@@ -7,6 +7,11 @@ export const flexBetween = {
     padding: "1rem"
 }
 
+export const flex = {
+    display:"flex",
+    justifyContent:"center",
+    alignItems:"center"
+}
 
 
 export const iconButton = {
@@ -26,17 +31,24 @@ export const homeMessage = {
 
 export const spanStyle = {
     fontWeight: "bold", 
-    fontSize: "1.5rem"
-}
-
-export const container = {
-    minWidth: "100vw",
-    backgroundColor : "primary.main"
+    fontSize: "1.5rem",
+    marginTop:"1rem",
 
 }
+
 
 export const infoMessage = {
     color: "gray", 
     letterSpacing: 2, 
     marginBottom: "2rem"
 }
+
+export const wellcomeMessage = {
+    marginTop: "-2rem", 
+    position: "relative", 
+    backgroundColor: "neutral.dark", 
+    textAlign: "center", 
+    padding: "2rem", 
+    color: "neutral.light",
+}
+

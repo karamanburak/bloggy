@@ -17,13 +17,18 @@ export default function WeatherCard() {
         setLongitude(position.coords.longitude)
     }
 
-    const getWeatherCall = async () => {
+    const getWeatherCall = () => {
         try {
-            window.navigator.geolocation.getCurrentPosition(async (position) => {
-                savePositionToState(position)
-                const { data } = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${import.meta.env.VITE_WEATHER_apiKey}`)
-                setWeatherData(data)
-            })
+            const successCallback = async (position) => {
+                savePositionToState(position);
+                const { data } = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&units=metric&appid=${import.meta.env.VITE_WEATHER_apiKey}`);
+                setWeatherData(data);
+            };
+            const errorCallback = (error) => {
+                dispatch(fetchFail());
+                console.log(error);
+            };
+            window.navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
         } catch (error) {
             dispatch(fetchFail())
             console.log(error);

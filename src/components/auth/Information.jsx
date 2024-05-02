@@ -11,7 +11,7 @@ const Information = () => {
             marginTop: { xs: "2rem", md: "8.5rem" },
             padding: "2rem",
             borderRadius: "5px",
-            height: "545px",
+            height: "605px",
 
         }}>
             <Typography variant="h5" component="h1" marginBottom="1rem" color="secondary.light" fontWeight="bold">
@@ -23,9 +23,9 @@ const Information = () => {
             </Typography>
             <Typography sx={{
                 ...infoMessage,
-                // '@media screen and (max-width: 1390px)': {
-                //     display: "none"
-                // }
+                '@media screen and (max-width: 320px)': {
+                    display: "none"
+                }
             }}>
                 These are the rules to be followed when using the site; <br />
                 <strong><i>1-)</i></strong>   When quoting from someone else's blog, reference should be given.<br />
@@ -33,6 +33,7 @@ const Information = () => {
                 <strong><i>3-)</i></strong>   Advertising content should not be written.<br />
                 <strong><i>Note:</i></strong> Those who do not follow the rules will be banned from the site indefinitely.
             </Typography>
+            <Box textAlign="center">
             <Button onClick={() => navigate("/login")}
                 sx={{
                     backgroundColor: "secondary.main", color: "white",
@@ -43,6 +44,7 @@ const Information = () => {
                 }}>
                 Do You Have an Account ?
             </Button>
+            </Box>
         </Box>
     )
 }

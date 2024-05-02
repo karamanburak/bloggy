@@ -1,19 +1,43 @@
-import { Box } from '@mui/material';
+import { Box, Card, Container, Typography } from '@mui/material';
 import home from '../assets/home.png'
 import HomeCard from '../components/home/HomeCard';
 import Footer from '../components/home/Footer';
-const Home = () => {
+import { useEffect } from "react";
+import useBlogCall from '../hooks/useBlogCall';
+import { useSelector } from 'react-redux';
+import { spanStyle, wellcomeMessage } from '../styles/globalStyles';
+
+
+
+
+const Dashboard = () => {
+    const isDashboard = '/'
+    const { getBlogData } = useBlogCall()
+    const { blogs } = useSelector(state => state.blog)
+    console.log(blogs);
+
+    useEffect(() => {
+        getBlogData("blogs")
+    }, [])
+
 
     return (
         <Box
-            sx={{ backgroundColor: "primary.main" }} >
+            sx={{ backgroundColor: "primary.dark" }} >
             <img src={home} alt="image" width="100%" />
-            <Box sx={{ width: "80vw", margin: "auto" }}>
-                <HomeCard />
+            <Container>
+                <Box sx={wellcomeMessage}>
+                        <span style={spanStyle}>Welcome to the Bloggy</span>
+                </Box>
+                {blogs.map((blog) => (
+                        <HomeCard key={blog._id} {...blog} />
+                ))}
+            </Container>
+            <Box sx={{ marginTop: "2rem" }}>
+                <Footer isDashboard={isDashboard} />
             </Box>
-            <Footer />
         </Box>
     )
 };
 
-export default Home;
+export default Dashboard;

@@ -2,35 +2,23 @@ import { useSelector, useDispatch } from "react-redux";
 import {
     fetchFail,
     fetchStart,
-    getProCatBrandSuccess,
-    getProPurcFirBrandsSuccess,
-    getProSalBrandsSuccess,
-    getPurcSalesSuccess,
     getSuccess,
-} from "../features/stockSlice";
+} from "../features/blogSlice";
 import useAxios from "./useAxios";
 import { toastErrorNotify, toastSuccessNotify } from "../helper/ToastNotify";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
-const useStockCall = () => {
+const useBlogCall = () => {
     const dispatch = useDispatch()
     const { token } = useSelector(state => state.auth)
     const axiosWithToken = useAxios()
 
 
-    //* DRY
-    //! yukarıdaki gibi her seferinde yazmak yerine daha modüler bir yapı kurarak tek bir fonksiyonla bir den fazla get işlemini gerçekleştirebiliyoruz
-    const getStockData = async (url) => {
+    const getBlogData = async (url) => {
         dispatch(fetchStart());
         try {
-            // const { data } = await axios(`${BASE_URL}${url}`, {
-            //     headers: {
-            //         Authorization: `Token ${token}`,
-            //         // Authorization: `Bearer ${accesstoken}` //* jwt için
-            //     },
-            // });
             const { data } = await axiosWithToken(`${url}`)
-            console.log(data);
+            // console.log(data);
             // dispatch(brandsSuccess(data.data));
             // dispatch(getSuccess({data:data.data,url:url}));//* action creatorlar her zaman tek bir parametre kabul ederler
             dispatch(getSuccess({ data: data.data, url }));//* action creatorlar her zaman tek bir parametre kabul ederler
@@ -165,15 +153,8 @@ const useStockCall = () => {
     };
 
     return {
-        deleteStockData,
-        putStockData,
-        postStockData,
-        getStockData,
-        getProCatBrand,
-        getProSalBrands,
-        getProPurcFirBrands,
-        getPurcSales
+        getBlogData
     }
 };
 
-export default useStockCall;
+export default useBlogCall;

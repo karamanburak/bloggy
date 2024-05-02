@@ -11,7 +11,6 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import logo from '../../assets/logo.png'
-import AuthImage from './AuthImage';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@emotion/react';
 import LightModeSharpIcon from '@mui/icons-material/LightModeSharp';
@@ -19,6 +18,8 @@ import NightsStayIcon from '@mui/icons-material/NightsStay';
 import { ColorModeContext } from '../../styles/theme';
 import { useContext } from 'react';
 import avatar from '../../assets/avatar.png'
+import useAuthCall from '../../hooks/useAuthCall';
+import { useSelector } from 'react-redux';
 
 const pages = [
     { name: 'Dashboard', src: '/' },
@@ -26,20 +27,27 @@ const pages = [
     { name: 'About Us', src: '/about' },
     { name: 'Contact', src: '/contact' }
 ];
-const settings = [
-    { name: 'Profile', src: '/profile' },
-    { name: 'Account', src: '/account' },
-    { name: 'Sign In', src: '/login' },
-    { name: 'Register', src: '/register' },
-    { name: 'Sign Out', src: '/' },
-];
 
 function Navbar() {
+    const {logout} = useAuthCall()
+    const {currentUser} = useSelector(state => state.auth)
+
     const theme = useTheme()
     const colorMode = useContext(ColorModeContext)
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const navigate = useNavigate()
+    
+    const settings = currentUser ?[
+        { name: 'Profile', src: '/profile' },
+        { name: 'Account', src: '/account' },
+        { name: 'Sign Out', src: 'login' },
+    ] : [
+        { name: 'Sign In', src: '/login' },
+        { name: 'Register', src: '/register' },
+
+
+    ]
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -56,8 +64,16 @@ function Navbar() {
         setAnchorElUser(null);
     };
 
+    const handleSettingClick = (src) => {
+        if (src === 'login') {
+            logout();
+        } else {
+            navigate(src);
+        }
+    };
+
     return (
-        <AppBar position="static" sx={{ backgroundColor: "neutral.dark" }}>
+        <AppBar position="static" sx={{ backgroundColor: "neutral.dark"}}>
             <Container sx={{ minWidth: "95vw" }}>
                 <Toolbar disableGutters>
                     <Typography sx={{ display: {xs:"none", md: "block" } }}>
@@ -101,6 +117,7 @@ function Navbar() {
                             ))}
                         </Menu>
                     </Box>
+                    
                     <Typography
                     onClick= {() => navigate("/")}
                         sx={{
@@ -124,7 +141,7 @@ function Navbar() {
                         ))}
                     </Box>
                     <IconButton
-                        sx={{ width: "40px", height: "40px", marginRight: ".5rem", backgroundColor:"primary.light"}}
+                        sx={{ width: "40px", height: "40px", marginRight: ".5rem" }}
                         onClick={colorMode.toggleColorMode}>
                         {theme.palette.mode === "dark" ? (
                             <NightsStayIcon />
@@ -132,6 +149,9 @@ function Navbar() {
                             <LightModeSharpIcon />
                         )}
                     </IconButton>
+                    <Box sx={{ marginRight: "1rem", fontWeight: "bold" }}>
+                        {currentUser}
+                    </Box>
                     <Box>
                         <Tooltip title="Open Menu">
                             <IconButton onClick={handleOpenUserMenu} >
@@ -154,8 +174,8 @@ function Navbar() {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                            {settings.map((setting) => (
-                                <MenuItem key={setting.src} onClick={() => navigate(setting.src)}>
+                            {settings.map((setting, index) => (
+                                <MenuItem key={index} onClick={() => handleSettingClick(setting.src)}>
                                     <Typography textAlign="center">{setting.name}</Typography>
                                 </MenuItem>
                             ))}

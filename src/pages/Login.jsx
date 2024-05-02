@@ -6,17 +6,18 @@ import Typography from "@mui/material/Typography";
 import PeopleSharpIcon from '@mui/icons-material/PeopleSharp';
 import { Link } from "react-router-dom";
 import { Formik } from "formik";
-// import useAuthCall from "../hooks/useAuthCall";
-import LoginForm, { loginScheme } from "../components/auth/LoginForm";
-import { container } from "../styles/globalStyles";
+import useAuthCall from "../hooks/useAuthCall";
+import LoginForm, { SignInScheme } from "../components/auth/LoginForm";
 import AuthImage from "../components/global/AuthImage";
 import image from '../assets/login.png'
+import Footer from "../components/home/Footer";
 
 const Login = () => {
-  // const { login } = useAuthCall();
+  const { login} = useAuthCall();
+
   return (
     <>
-      <Container sx={container}>
+      <Container sx={{ backgroundColor: "primary.main", minWidth: "100%" }}>
         <Grid
           container
           justifyContent="center"
@@ -35,19 +36,20 @@ const Login = () => {
                 m: "auto",
                 width: 40,
                 height: 40,
+                marginTop:"2rem"
               }}
             >
               <PeopleSharpIcon />
             </Avatar>
-            <Typography variant="h4" align="center" mb={4} color="secondary">
+            <Typography variant="h4" align="center" color="neutral.light">
               SIGN IN
             </Typography>
 
             <Formik
               initialValues={{ email: "", password: "" }}
-              validationSchema={loginScheme}
+              validationSchema={SignInScheme}
               onSubmit={(values, actions) => {
-                // login(values);
+                login(values);
                 actions.resetForm();
                 actions.setSubmitting(false);
               }}
@@ -55,8 +57,8 @@ const Login = () => {
               >
 
             </Formik>
-            <Box sx={{ textAlign: "center", mt: 2  }}>
-              <Link to="/register" style={{ color: "#4CCEAC", }}>
+            <Box sx={{ textAlign: "center", mt:-6 }}>
+              <Link to="/register" style={{ color: "cornflowerblue"}}>
                 Don't have an account? Sign up for Bloggy
               </Link>
             </Box>
@@ -64,6 +66,7 @@ const Login = () => {
           <AuthImage image={image}/>
         </Grid>
       </Container>
+        <Footer/>
     </>
   );
 };

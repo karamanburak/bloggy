@@ -11,11 +11,12 @@ import Profile from "../pages/Profile";
 import Account from "../pages/Account";
 import Navbar from "../components/global/Navbar";
 import NotFound from "../pages/NotFound";
+import Detail from "../pages/Detail";
 
 const AppRouter = () => {
   return (
     <Router>
-    <Navbar/>
+      <Navbar />
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/about" element={<About />} />
@@ -23,10 +24,11 @@ const AppRouter = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/account" element={<Account />} />
         <Route path="/login" element={<Login />} />
-        <Route path="register" element={<Register />} />
+        <Route path="/register" element={<Register />} />
         <Route path="*" element={<NotFound />} />
-        <Route path="blog" element={<PrivateRouter />}>
+        <Route path="/blog" element={<PrivateRouter />}>
           <Route path="" element={<Blogs />} />
+          <Route path="detail/:id" element={<Detail />} />
         </Route>
       </Routes>
     </Router>

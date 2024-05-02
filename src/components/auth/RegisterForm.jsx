@@ -7,46 +7,48 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useState } from "react";
 import { IconButton, InputAdornment } from "@mui/material";
-import PersonIcon from '@mui/icons-material/Person';
 import { EmailOutlined } from "@mui/icons-material";
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
 import { KeyOutlined } from "@mui/icons-material";
+import LocationCityIcon from '@mui/icons-material/LocationCity';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
 export const SignupSchema = Yup.object().shape({
   username: Yup.string()
     .min(3)
     .max(15)
-    .required('Username is requiered!'),
+    .required(),
   firstName: Yup.string()
     .min(2, 'Too Short!')
     .max(20, 'Too Long!')
-    .required('First name is required!'),
+    .required(),
   lastName: Yup.string()
     .min(2, 'Too Short!')
     .max(20, 'Too Long!')
-    .required('Last name is required!'),
-  email: Yup.string().email('Invalid email').required('Email is required!'),
+    .required(),
+  email: Yup.string().email('Invalid email').required(),
   password: Yup.string()
     .min(8, "The password must be at least 8 characters long")
     .max(20, "The password may be a maximum of 20 characters long")
-    .matches(/\d/, "The password must contain at least one number!")
+    .matches(/\d+/, "The password must contain at least one number!")
     .matches(/[a-z]/, "The password must contain at least one lowercase letter")
     .matches(/[A-Z]/, "The password must contain at least one capital letter")
     .matches(/[@$?!%&*.]+/, "The password must contain at least one special character (@$!%*?&.)")
-    .required("The password is required!"),
+    .required(),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password'), null], 'Please make sure your passwords match')
-    .required("Confirm password is required!")
+    .required("Confirm Password is a required field")
 });
 
 const registerFormField = [
-  { id: "username", name: "username", label: "Username *", type: "text", icon: <PersonIcon /> },
-  { id: "firstName", name: "firstName", label: "First Name *", type: "text", icon: <PersonIcon /> },
-  { id: "lastName", name: "lastName", label: "Last Name *", type: "text", icon: <PersonIcon /> },
+  { id: "username", name: "username", label: "Username *", type: "text", icon: <PersonAddIcon /> },
+  { id: "firstName", name: "firstName", label: "First Name *", type: "text", icon: <PersonAddIcon /> },
+  { id: "lastName", name: "lastName", label: "Last Name *", type: "text", icon: <PersonAddIcon /> },
   { id: "email", name: "email", label: "Email Address *", type: "text", icon: <EmailOutlined/> },
   { id: "image", name: "image", label: "Image ", type: "text", icon: <AddPhotoAlternateIcon/> },
   { id: "bio", name: "bio", label: "Biography ", type: "text",  icon: <HistoryEduIcon/> },
+  { id: "city", name: "city", label: "City ", type: "text", icon: <LocationCityIcon /> },
   { id: "password", name: "password", label: "Password *", type: "password", icon: <KeyOutlined/> },
   { id: "confirmPassword", name: "confirmPassword", label: "Confirm Password *", type: "password", icon: <KeyOutlined /> },
 ]
@@ -69,7 +71,7 @@ const RegisterForm = ({
       setShowConfirmPassword(!showConfirmPassword);
     }
   };
-
+  
   const endAdornment = (field) => {
     return (
       <InputAdornment position="end">
@@ -104,10 +106,11 @@ const RegisterForm = ({
             InputLabelProps={{
               sx: {
                 textAlign: 'left',
-                left: "35px",
+                left:values[field.name] ? "5px" : "35px",
                 top: "23px",
                 fontSize: values[field.name] ? "1rem" : "1.2rem",
                 position: values[field.name] ? 'relative' : 'absolute',
+                transition: 'top 0.2s, left 0.2s, font-size 0.3s'
               },
             }}
             InputProps={{
