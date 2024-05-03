@@ -1,12 +1,13 @@
 import {createSlice} from '@reduxjs/toolkit'
 
 const blogSlice = createSlice({
-    name:"blog",
+    name:"blogs",
 
     initialState:{
-        categories:[],
         blogs:[],
-        comments:[],
+        blog:{},
+        comments: [],
+        comment: {},
         loading:false,
         error:false
     },
@@ -16,10 +17,17 @@ const blogSlice = createSlice({
             state.error= false;
         },
 
-        getSuccess : (state,{payload:{data,url}}) => {
-            // console.log(payload);
+        getBlogs : (state,{payload:{data,url}}) => {
             state.loading = false;
             state[url] = data
+        },
+        postBlogs : (state,{payload}) => {
+            state.loading = false;
+            state[payload.url] = payload.data
+        },
+        getComments: (state, { payload }) => {
+            state.loading = false;
+            state.payload = payload?.data
         },
         fetchFail: state => {
             state.loading = false;
@@ -30,7 +38,8 @@ const blogSlice = createSlice({
 
 export const {
     fetchStart,
-    getSuccess,
+    getBlogs,
+    getComments,
     fetchFail
 } = blogSlice.actions;
 

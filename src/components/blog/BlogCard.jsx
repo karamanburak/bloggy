@@ -12,11 +12,15 @@ import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { Box, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import useCategoryCall from '../../hooks/useCategoryCall';
 
 
 
 const BlogCard = ({ _id, content, image, title, userId, createdAt, likes }) => {
   const navigate = useNavigate()
+  const { getCategory } = useCategoryCall()
+
 
   const localDate = () => {
     if (createdAt) {
@@ -24,39 +28,36 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes }) => {
     }
   }
 
+  useEffect(() => {
+    getCategory("categories")
+  }, [])
+
+
   return (
+    <Card
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        margin:"auto",
+        width: 500,
+        height:600
 
-    <Card 
-    sx={{ 
-
-      maxWidth: 345 
       }}
     >
-
       <CardMedia
         component="img"
         height="194"
         image={image}
-        alt="Paella dish"
+        alt={image}
       />
+    
       <CardContent>
-        <Typography variant="body2" sx={{ maxHeight: "100px", overflow: "hidden" }}>
+        <Typography variant="body2" sx={{ maxHeight: "100px", overflow: "hidden", textAlign:"justify" }}>
           {content}
         </Typography>
       </CardContent>
-      <CardActions disableSpacing>
-        <Box>
-          <IconButton aria-label="add to favorites">
-            <FavoriteIcon />
-          </IconButton>
-          <IconButton aria-label="comment">
-            <ChatBubbleOutlineIcon />
-          </IconButton>
-          <IconButton aria-label="look">
-            <RemoveRedEyeIcon />
-          </IconButton>
-        </Box>
-      </CardActions>
+
       <CardHeader
         sx={{
           '& .MuiTypography-root': {
@@ -70,8 +71,21 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes }) => {
           </Avatar>
         }
         title={title}
-        subheader={localDate()}
+        subheader={`Published Date: ${localDate()}`}
       />
+      <CardActions disableSpacing>
+        <Box>
+          <IconButton aria-label="add to favorites">
+            <FavoriteIcon />
+          </IconButton>
+          <IconButton aria-label="comment">
+            <ChatBubbleOutlineIcon />
+          </IconButton>
+          <IconButton aria-label="look">
+            <RemoveRedEyeIcon />
+          </IconButton>
+        </Box>
+      </CardActions>
       <Box sx={{ display: "flex", justifyContent: "flex-end", marginRight: "1rem" }}>
         <Button onClick={() => navigate(`/blog/detail/${_id}`, { state: { _id, content, image, title, userId, createdAt, likes } })} variant="contained" sx={{ marginBottom: "1rem", backgroundColor: "primary.light" }} >
           Read More

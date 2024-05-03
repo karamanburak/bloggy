@@ -14,7 +14,6 @@ const Dashboard = () => {
     const isDashboard = '/'
     const { getBlogData } = useBlogCall()
     const { blogs } = useSelector(state => state.blog)
-    console.log(blogs);
 
     useEffect(() => {
         getBlogData("blogs")

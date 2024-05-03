@@ -33,7 +33,7 @@ const Footer = ({isDashboard}) => {
             </Box>
          
             <Typography sx={{ color: "neutral.light", fontWeight: "bold", flexGrow: 1, display: { xs: "none", sm: 'block' }, textAlign: {sm:"left", md:"center"} }}>
-                Made By Burak Karaman &copy; 2024
+                Developed by Burak Karaman &copy; 2024
             </Typography>
 
          
