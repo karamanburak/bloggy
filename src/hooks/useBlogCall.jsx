@@ -1,4 +1,4 @@
-import { useSelector, useDispatch } from "react-redux";
+import {  useDispatch } from "react-redux";
 import {
     fetchFail,
     fetchStart,
@@ -29,22 +29,20 @@ const useBlogCall = () => {
     const deleteBlog = async (url, id) => {
         dispatch(fetchStart());
         try {
-
             await axiosWithToken.delete(`${url}/${id}`)
         } catch (error) {
             console.log(error);
             dispatch(fetchFail());
+            toastErrorNotify(error?.response?.data?.message || "Operation not success")
         } finally {
             getBlogData(url)
-            toastErrorNotify(error?.response?.data?.message || "Operation not success")
         }
     };
     const postBlog = async (url, info) => {
         dispatch(fetchStart());
         try {
-            await axiosWithToken.post(`${url}`, info)
-            console.log(postBlog);
-            toastSuccessNotify("Item successfully added!")
+            await axiosWithToken.post(url, info)
+            toastSuccessNotify("Blog successfully added!")
         } catch (error) {
             console.log(error);
             dispatch(fetchFail());
@@ -57,7 +55,7 @@ const useBlogCall = () => {
         dispatch(fetchStart());
         try {
             await axiosWithToken.put(`${url}/${info._id}`, info)
-            toastSuccessNotify("Item successfully changed")
+            toastSuccessNotify("Blog successfully changed")
         } catch (error) {
             console.log(error);
             dispatch(fetchFail());
@@ -67,6 +65,16 @@ const useBlogCall = () => {
             getBlogData(url)
         }
     };
+
+    const getLikeInfo = async () => {
+        dispatch(fetchStart());
+        try {
+            await axiosWithToken()
+        } catch (error) {
+            
+        }
+    }
+    
 
     return {
         getBlogData,

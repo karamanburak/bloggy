@@ -16,13 +16,19 @@ const authSlice = createSlice({
     },
     registerSuccess: (state, { payload }) => {
       state.loading = false;
-      state.currentUser = payload.data.username;
-      state.token = payload.token;
+      state.currentUser = payload?.data?.username;
+      state.token = payload?.token;
     },
     loginSuccess: (state, { payload }) => {
       state.loading = false;
-      state.currentUser = `${payload.user.firstName} ${payload.user.lastName}`
+      state.currentUser = payload.user;
       state.token = payload.token;
+     
+    },
+
+    getUserSuccess: (state, {payload})=>{
+      state.loading = false;
+      state.currentUser = payload.user
     },
     logoutSuccess: (state) => {
       state.loading = false;
@@ -40,6 +46,7 @@ export const {
   fetchStart,
   registerSuccess,
   loginSuccess,
+  getUserSuccess,
   logoutSuccess,
   fetchFail,
 } = authSlice.actions;

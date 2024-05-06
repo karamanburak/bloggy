@@ -8,9 +8,9 @@ export const flexBetween = {
 }
 
 export const flex = {
-    display:"flex",
-    justifyContent:"center",
-    alignItems:"center"
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
 }
 
 
@@ -22,33 +22,51 @@ export const iconButton = {
 
 export const homeMessage = {
     color: "white",
-    fontFamily: "cursive", 
+    fontFamily: "cursive",
     fontWeight: "bold",
-    position:"absolute",
+    position: "absolute",
     top: "50%",
     left: "35%",
-} 
+}
 
 export const spanStyle = {
-    fontWeight: "bold", 
+    fontWeight: "bold",
     fontSize: "1.5rem",
-    marginTop:"1rem",
+    marginTop: "1rem",
 
 }
 
 
 export const infoMessage = {
-    color: "gray", 
-    letterSpacing: 2, 
+    color: "gray",
+    letterSpacing: 2,
     marginBottom: "2rem"
 }
 
 export const wellcomeMessage = {
-    marginTop: "-2rem", 
-    position: "relative", 
-    backgroundColor: "neutral.dark", 
-    textAlign: "center", 
-    padding: "2rem", 
+    marginTop: "-2rem",
+    position: "relative",
+    backgroundColor: "neutral.dark",
+    textAlign: "center",
+    padding: "2rem",
     color: "neutral.light",
 }
 
+export const avatarNavbar = {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    cursor: "pointer",
+    // marginTop: "1rem",
+
+}
+
+export const profileStyle = {
+    display: "flex",
+    justifyContent: "start",
+    fontWeight: "bold",
+    marginTop:".2rem",
+    marginRight:".2rem"
+
+    
+}

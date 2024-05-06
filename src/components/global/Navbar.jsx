@@ -20,6 +20,9 @@ import { useContext } from 'react';
 import avatar from '../../assets/avatar.png'
 import useAuthCall from '../../hooks/useAuthCall';
 import { useSelector } from 'react-redux';
+import { useState } from 'react';
+import {avatarNavbar} from '../../styles/globalStyles'
+import { toastWarnNotify } from '../../helper/ToastNotify';
 
 const pages = [
     { name: 'Dashboard', src: '/' },
@@ -29,16 +32,16 @@ const pages = [
 ];
 
 function Navbar() {
-    const {logout} = useAuthCall()
-    const {currentUser} = useSelector(state => state.auth)
-
+    const { logout } = useAuthCall()
+    const { currentUser } = useSelector(state => state.auth)
+    // console.log(currentUser);
     const theme = useTheme()
     const colorMode = useContext(ColorModeContext)
-    const [anchorElNav, setAnchorElNav] = React.useState(null);
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const [anchorElNav, setAnchorElNav] = useState(null);
+    const [anchorElUser, setAnchorElUser] = useState(null);
     const navigate = useNavigate()
-    
-    const settings = currentUser ?[
+
+    const settings = currentUser ? [
         { name: 'Profile', src: '/profile' },
         { name: 'Account', src: '/account' },
         { name: 'Sign Out', src: 'login' },
@@ -66,20 +69,22 @@ function Navbar() {
 
     const handleSettingClick = (src) => {
         if (src === 'login') {
-            logout();
+            logout()
+            setAnchorElUser(null);
         } else {
             navigate(src);
         }
     };
 
+
     return (
-        <AppBar position="static" sx={{ backgroundColor: "neutral.dark"}}>
+        <AppBar position="static" sx={{ backgroundColor: "neutral.dark" }}>
             <Container sx={{ minWidth: "95vw" }}>
                 <Toolbar disableGutters>
-                    <Typography sx={{ display: {xs:"none", md: "block" } }}>
-                    <img src={logo} alt="register image" width="150px"
-                    />
-                </Typography>
+                    <Typography sx={{ display: { xs: "none", md: "block" } }}>
+                        <img src={logo} alt="register image" width="150px"
+                        />
+                    </Typography>
 
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                         <IconButton
@@ -111,19 +116,20 @@ function Navbar() {
                             }}
                         >
                             {pages.map((page) => (
-                                <MenuItem key={page.src} onClick={() => navigate(page.src)}>
+                                <MenuItem key={page.src} 
+                                    onClick={() => { !currentUser && page.name === "Blogs" ? (toastWarnNotify("You must login")) : (navigate(page.src)) }} >
                                     <Typography textAlign="center">{page.name}</Typography>
                                 </MenuItem>
                             ))}
                         </Menu>
                     </Box>
-                    
+
                     <Typography
-                    onClick= {() => navigate("/")}
+                        onClick={() => navigate("/")}
                         sx={{
                             display: { xs: 'flex', md: 'none' },
                             flexGrow: .7,
-                            cursor:"pointer"
+                            cursor: "pointer"
                         }}
                     >
                         <img src={logo} alt="register image" width="150px"
@@ -133,31 +139,30 @@ function Navbar() {
                         {pages.map((page) => (
                             <Button
                                 key={page.src}
-                                onClick={() => navigate(page.src)}
+                               
+                                onClick={() => {!currentUser && page.name === "Blogs" ? (toastWarnNotify("You must login")) : (navigate(page.src))}}
                                 sx={{ my: 2, color: "neutral.light", display: 'block' }}
-                            >
+                            > 
                                 {page.name}
                             </Button>
                         ))}
                     </Box>
-                    <IconButton
-                        sx={{ width: "40px", height: "40px", marginRight: ".5rem" }}
-                        onClick={colorMode.toggleColorMode}>
-                        {theme.palette.mode === "dark" ? (
-                            <NightsStayIcon />
-                        ) : (
-                            <LightModeSharpIcon />
-                        )}
-                    </IconButton>
-                    <Box sx={{ marginRight: "1rem", fontWeight: "bold" }}>
-                        {currentUser}
-                    </Box>
+                  
                     <Box>
-                        <Tooltip title="Open Menu">
-                            <IconButton onClick={handleOpenUserMenu} >
-                                <img src={avatar} alt="" style={{ width: "40px", height: "40px", borderRadius: "50%" }} />
-                           </IconButton>
-                        </Tooltip>
+                        {currentUser ? (
+                                <Box onClick={handleOpenUserMenu} sx={avatarNavbar}>
+                                <img src={currentUser.image} alt="" style={{ width: "40px", height: "40px", borderRadius: "50%", marginTop:"1.5rem"}} />
+                                    <Typography>
+                                     {`${currentUser.firstName}  ${currentUser.lastName}`}
+                                    </Typography>
+                                </Box>
+                        ) : (
+                            <Tooltip title="Open Menu">
+                                <IconButton onClick={handleOpenUserMenu} >
+                                    <img src={avatar} alt="" style={{ width: "40px", height: "40px", borderRadius: "50%" }} />
+                                </IconButton>
+                            </Tooltip>
+                        )}
                         <Menu
                             sx={{ mt: '45px' }}
                             id="menu-appbar"
@@ -174,6 +179,15 @@ function Navbar() {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
+                        <IconButton
+                            sx={{ width: "40px", height: "40px", marginLeft:"1.5rem"}}
+                            onClick={colorMode.toggleColorMode}>
+                            {theme.palette.mode === "dark" ? (
+                                <NightsStayIcon />
+                            ) : (
+                                <LightModeSharpIcon />
+                            )}
+                        </IconButton>
                             {settings.map((setting, index) => (
                                 <MenuItem key={index} onClick={() => handleSettingClick(setting.src)}>
                                     <Typography textAlign="center">{setting.name}</Typography>

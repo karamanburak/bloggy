@@ -5,6 +5,7 @@ import Modal from '@mui/material/Modal';
 import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { useState } from 'react';
 import useBlogCall from '../../hooks/useBlogCall';
+import { useSelector } from 'react-redux';
 
 const style = {
   position: 'absolute',
@@ -20,18 +21,20 @@ const style = {
 
 export default function BlogModal({ open, handleClose, initialState,categories }) {
   const { postBlog } = useBlogCall()
+  const blogs = useSelector(state => state.blog.blogs);
   const [info, setInfo] = useState(initialState)
 
 
 
   const handleChange = (e) => {
     setInfo({ ...info, [e.target.name]: e.target.value })
+    
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
     console.log("submit", info);
-    postBlog("blogs/", info)
+    postBlog("blogs", info)
     handleClose()
   }
 

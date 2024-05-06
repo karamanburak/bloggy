@@ -4,7 +4,8 @@ import {
     fetchStart,
     registerSuccess,
     loginSuccess,
-     logoutSuccess, 
+    getUserSuccess,
+    logoutSuccess,
 } from "../features/authSlice";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -16,7 +17,6 @@ const useAuthCall = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const { token } = useSelector((store) => store.auth);
-    const { currentUser } = useSelector((state) => state.auth)
 
     const register = async (userInfo) => {
         dispatch(fetchStart())
@@ -25,7 +25,7 @@ const useAuthCall = () => {
             // console.log(data);
             dispatch(registerSuccess(data))
             toastSuccessNotify("Register was successfully");
-            navigate("/")
+            navigate("/login")
         } catch (error) {
             dispatch(fetchFail())
             toastErrorNotify("Register can not be performed");
@@ -49,6 +49,40 @@ const useAuthCall = () => {
 
         }
     }
+    const updateUser = async (userInfo) => {
+        dispatch(fetchStart())
+        try {
+            await axios.put(`${BASE_URL}users/${userInfo._id}`, userInfo, {
+                headers: {
+                    Authorization: `Token ${token}`,
+                },
+            })
+            toastSuccessNotify(`Profile successfully updated`);
+            getUser()
+        } catch (error) {
+            dispatch(fetchFail())
+            toastErrorNotify('Update could not be performed')
+            console.log(error);
+        } 
+        
+    }
+    const getUser = async (id) => {
+        dispatch(fetchStart());
+        try {
+          const {data} = await axios(`${BASE_URL}users/${id}`, {
+                headers: {
+                    Authorization: `Token ${token}`,
+                },
+            });
+            dispatch(getUserSuccess(data))
+        } catch (error) {
+            dispatch(fetchFail())
+            toastErrorNotify(error.message)
+            console.log(error);
+
+        }
+    }
+
     const logout = async () => {
         dispatch(fetchStart())
         try {
@@ -67,6 +101,6 @@ const useAuthCall = () => {
         }
     }
 
-    return { register, login, logout }
+    return { register, login, logout, getUser, updateUser }
 };
 export default useAuthCall;
