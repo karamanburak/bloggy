@@ -14,10 +14,12 @@ import { Box, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import useCategoryCall from '../../hooks/useCategoryCall';
+import { flex } from '../../styles/globalStyles';
 
 
 
-const BlogCard = ({ _id, content, image, title, userId, createdAt, likes }) => {
+
+const BlogCard = ({ _id, content, image, title, userId, createdAt, likes,countOfVisitors,comments }) => {
   const navigate = useNavigate()
   const { getCategory } = useCategoryCall()
 
@@ -74,16 +76,19 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes }) => {
         subheader={`Published Date: ${localDate()}`}
       />
       <CardActions disableSpacing>
-        <Box>
-          <IconButton aria-label="add to favorites">
-            <FavoriteIcon />
-          </IconButton>
-          <IconButton aria-label="comment">
-            <ChatBubbleOutlineIcon />
-          </IconButton>
-          <IconButton aria-label="look">
-            <RemoveRedEyeIcon />
-          </IconButton>
+        <Box sx={{ ...flex, opacity: ".7", gap: ".3rem", marginLeft: "1rem" }}>
+          <FavoriteIcon />
+          <Typography>
+            <sup>{likes.length}</sup>
+          </Typography>
+          <ChatBubbleOutlineIcon />
+          <Typography>
+            <sup>{comments.length}</sup>
+          </Typography>
+          <RemoveRedEyeIcon />
+          <Typography>
+            <sup>{countOfVisitors}</sup>
+          </Typography>
         </Box>
       </CardActions>
       <Box sx={{ display: "flex", justifyContent: "flex-end", marginRight: "1rem" }}>

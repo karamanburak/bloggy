@@ -2,8 +2,7 @@ import {  useDispatch } from "react-redux";
 import {
     fetchFail,
     fetchStart,
-    getBlogs,
-    getComments
+    getSuccess,
 } from "../features/blogSlice";
 import useAxios from "./useAxios";
 import { toastErrorNotify, toastSuccessNotify } from "../helper/ToastNotify";
@@ -19,17 +18,42 @@ const useBlogCall = () => {
         try {
             const { data } = await axiosWithToken(`${url}`)
             // console.log(data);
-            dispatch(getBlogs({ data: data.data, url }));
+            dispatch(getSuccess({ data: data.data,url }));
         } catch (error) {
             console.log(error);
             dispatch(fetchFail());
         }
     };
 
-    const deleteBlog = async (url, id) => {
+    const getUserBlogs = async (userId) => {
+        dispatch(fetchStart())
+        try {
+            const { data } = await axiosWithToken(`blogs?author=${userId}`);
+            dispatch(getSuccess({ data: data.data, url: "blogs"}))
+            // console.log(data);
+        } catch (error) {
+            console.log(error);
+            dispatch(fetchFail());
+        }
+    };
+
+    const getComments = async (userId) => {
         dispatch(fetchStart());
         try {
-            await axiosWithToken.delete(`${url}/${id}`)
+            const { data } = await axiosWithToken(`${userId}`)
+            // console.log(data);
+            dispatch(getSuccess({ data: data.data, url: "comments" }))
+        } catch (error) {
+            console.log(error);
+            dispatch(fetchFail());
+            toastErrorNotify(error?.response?.data?.message || "Operation not success")
+        }
+    }
+
+    const deleteBlog = async (id) => {
+        dispatch(fetchStart());
+        try {
+            await axiosWithToken.delete(`${id}`)
         } catch (error) {
             console.log(error);
             dispatch(fetchFail());
@@ -66,14 +90,8 @@ const useBlogCall = () => {
         }
     };
 
-    const getLikeInfo = async () => {
-        dispatch(fetchStart());
-        try {
-            await axiosWithToken()
-        } catch (error) {
-            
-        }
-    }
+
+
     
 
     return {
@@ -81,6 +99,9 @@ const useBlogCall = () => {
         deleteBlog,
         putBlog,
         postBlog,
+        getComments,
+        getUserBlogs
+        
     }
 };
 

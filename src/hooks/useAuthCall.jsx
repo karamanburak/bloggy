@@ -5,6 +5,7 @@ import {
     registerSuccess,
     loginSuccess,
     getUserSuccess,
+    updateUserSuccess,
     logoutSuccess,
 } from "../features/authSlice";
 import axios from "axios";
@@ -52,18 +53,19 @@ const useAuthCall = () => {
     const updateUser = async (userInfo) => {
         dispatch(fetchStart())
         try {
-            await axios.put(`${BASE_URL}users/${userInfo._id}`, userInfo, {
+           const {data} = await axios.put(`${BASE_URL}users/${userInfo._id}`, userInfo, {
                 headers: {
                     Authorization: `Token ${token}`,
                 },
             })
+            dispatch(updateUserSuccess(data))
             toastSuccessNotify(`Profile successfully updated`);
-            getUser()
+            console.log(data);
         } catch (error) {
             dispatch(fetchFail())
             toastErrorNotify('Update could not be performed')
             console.log(error);
-        } 
+        }
         
     }
     const getUser = async (id) => {

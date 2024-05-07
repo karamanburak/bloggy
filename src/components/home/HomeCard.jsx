@@ -11,31 +11,37 @@ import { useNavigate } from "react-router-dom";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import useBlogCall from "../../hooks/useBlogCall";
+import { useEffect } from "react";
+import {flex} from '../../styles/globalStyles'
 
 
 
-const HomeCard = ({_id, content, image, title, userId, createdAt, likes }) => {
-    // console.log(_id);
+const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countOfVisitors, comments }) => {
     const navigate = useNavigate()
+
+
     const localDate = () => {
         if (createdAt) {
             return new Date(createdAt).toLocaleString("de-DE")
         }
     }
+
     return (
         <Container maxWidth="xl" sx={{ backgroundColor: "neutral.dark", paddingBottom: "2rem" }}>
-            <Card sx={{ display: "flex" }}>
+            <Card>
                 <Grid container>
                     <Grid item sm={12} md={6} order={{ xs: 2, md: 1 }}>
                         <CardHeader
-                            sx={{ 
+                            sx={{
+                                
                                 color: "seagreen",
                                 '& .MuiTypography-root': {
                                     fontSize: 15,
                                     fontWeight: "bold"
                                 }
-                                
-                                 }}
+
+                            }}
                             avatar={
                                 <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
                                     R
@@ -49,20 +55,22 @@ const HomeCard = ({_id, content, image, title, userId, createdAt, likes }) => {
                                 {content}
                             </Typography>
                         </CardContent>
-                        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-
-                            <Box>
-                                <IconButton>
-                                    <FavoriteIcon />
-                                </IconButton>
-                                <IconButton>
-                                    <ChatBubbleOutlineIcon />
-                                </IconButton>
-                                <IconButton>
+                        <Box sx={{ display: "flex", justifyContent: "space-between",cursor:"pointer" }}>
+                            <Box sx={{...flex , opacity:".7", gap:".3rem", marginLeft:"1rem"}}>
+                                    <FavoriteIcon /> 
+                                <Typography>
+                                   <sup>{likes.length}</sup>  
+                                </Typography>
+                                   <ChatBubbleOutlineIcon />
+                                <Typography>
+                                   <sup>{comments.length}</sup>  
+                                </Typography>
                                     <RemoveRedEyeIcon />
-                                </IconButton>
+                                <Typography>
+                                  <sup>{countOfVisitors}</sup>  
+                                </Typography>
                             </Box>
-                            <Button onClick={() => navigate(`/blog/detail/${_id}`, { state: { content, image, title, userId, createdAt, likes } })} variant="contained" sx={{ marginRight: "1rem", marginBottom: "1rem", backgroundColor: "primary.light" }} >
+                            <Button onClick={() => navigate(`/blog/detail/${_id}`, { state: { content, image, title, userId, createdAt,comments } })} variant="contained" sx={{ marginRight: "1rem", marginBottom: "1rem", backgroundColor: "primary.light" }} >
                                 Read More
                             </Button>
                         </Box>

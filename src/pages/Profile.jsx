@@ -5,6 +5,7 @@ import { flex, profileStyle } from "../styles/globalStyles";
 import { useNavigate } from "react-router-dom";
 import UpdateProfileModal from "../components/profile/UpdateProfileModal";
 import MyBlogsContainer from "../components/profile/MyBlogsContainer";
+import Footer from "../components/home/Footer";
 
 const Profile = () => {
   const { currentUser } = useSelector(state => state.auth)
@@ -23,7 +24,7 @@ const Profile = () => {
 
 
   return (
-
+    <>
     <Container maxWidth="false" sx={{ ...flex, backgroundColor: "primary.main", minHeight: "100vh" }}>
       <Grid container maxWidth="lg" sx={{ padding: "3rem" }}>
         <Grid item xs={12} md={5} sx={{
@@ -107,6 +108,8 @@ const Profile = () => {
         </Grid>
       </Grid>
     </Container>
+      <Footer/>
+      </>
   )
 }
 export default Profile;

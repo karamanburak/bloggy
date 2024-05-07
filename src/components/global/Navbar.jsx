@@ -81,7 +81,9 @@ function Navbar() {
         <AppBar position="static" sx={{ backgroundColor: "neutral.dark" }}>
             <Container sx={{ minWidth: "95vw" }}>
                 <Toolbar disableGutters>
-                    <Typography sx={{ display: { xs: "none", md: "block" } }}>
+                    <Typography
+                    onClick={()=>navigate("/")}
+                     sx={{ display: { xs: "none", md: "block",cursor:"pointer" } }}>
                         <img src={logo} alt="register image" width="150px"
                         />
                     </Typography>

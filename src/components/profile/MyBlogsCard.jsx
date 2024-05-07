@@ -8,17 +8,19 @@ import CardContent from '@mui/material/CardContent';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
-import { Box, Button, Container, Grid, IconButton } from "@mui/material";
+import { Box, Button, Container } from "@mui/material";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import { flex } from '../../styles/globalStyles'
+import { flex } from '../../styles/globalStyles';
 import { useNavigate } from "react-router-dom";
 
 
 
-const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes }) => {
+const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, comments, countOfVisitors }) => {
+    console.log(_id, content, image, title, userId, createdAt, likes, comments);
     const navigate = useNavigate()
+
 
     const localDate = () => {
         if (createdAt) {
@@ -27,8 +29,8 @@ const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes }) =
     }
 
     return (
-        <Container maxWidth="xl" sx={{ ...flex, paddingBottom: "2rem"}}>
-            <Card sx={{borderRadius:"10px"}}>
+        <Container maxWidth="xl" sx={{ ...flex, paddingBottom: "2rem" }}>
+            <Card sx={{ borderRadius: "10px" }}>
                 <CardMedia
                     sx={{
                         marginTop: "1rem",
@@ -64,17 +66,20 @@ const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes }) =
                         {content}
                     </Typography>
                 </CardContent>
-                <Box sx={{ display: "flex", justifyContent: "space-around" }}>
-                    <Box>
-                        <IconButton>
-                            <FavoriteIcon />
-                        </IconButton>
-                        <IconButton>
-                            <ChatBubbleOutlineIcon />
-                        </IconButton>
-                        <IconButton>
-                            <RemoveRedEyeIcon />
-                        </IconButton>
+                <Box sx={{ display: "flex", justifyContent: "space-between", cursor: "pointer" }}>
+                    <Box sx={{ ...flex, opacity: ".7", gap: ".3rem", marginLeft: "1rem" }}>
+                        <FavoriteIcon />
+                        <Typography>
+                            <sup>{likes.length}</sup>
+                        </Typography>
+                        <ChatBubbleOutlineIcon />
+                        <Typography>
+                            <sup>{comments.length}</sup>
+                        </Typography>
+                        <RemoveRedEyeIcon />
+                        <Typography>
+                            <sup>{countOfVisitors}</sup>
+                        </Typography>
                     </Box>
                     <Button onClick={() => navigate(`/blog/detail/${_id}`, { state: { content, image, title, userId, createdAt, likes } })} variant="contained" sx={{ marginRight: "1rem", marginBottom: "1rem", backgroundColor: "primary.light" }} >
                         Read More

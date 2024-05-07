@@ -8,17 +8,20 @@ import { useState } from 'react';
 
 
 const MyBlogsContainer = () => {
-    const { getBlogData } = useBlogCall()
-    const { blogs } = useSelector(state => state.blog)
+    const { getUserBlogs } = useBlogCall();
+    const  curentUser  = useSelector(state => state.auth)
+    const  {blogs}  = useSelector(state => state.blog)
+    // console.log(blogs);
     const [currentPage, setCurrentPage] = useState(1);
     const blogsPerPage = 3;
 
     useEffect(() => {
-        getBlogData("blogs")
-    }, [])
+        getUserBlogs(curentUser._id);
+    }, []);
 
 
-    // Calculate current blogs to display
+
+
     const indexOfLastBlog = currentPage * blogsPerPage;
     const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
     const currentBlogs = blogs.slice(indexOfFirstBlog, indexOfLastBlog);

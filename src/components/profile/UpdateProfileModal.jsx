@@ -30,7 +30,7 @@ export default function UpdateProfileModal({
     lastName,
 
 }) {
-    
+
     const { updateUser } = useAuthCall()
     const [info, setInfo] = useState({
         username: username,
@@ -61,9 +61,9 @@ export default function UpdateProfileModal({
         setInfo({ ...info, [e.target.name]: e.target.value })
     }
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-       await updateUser(info)
+        updateUser(info)
         handleClose();
     }
 

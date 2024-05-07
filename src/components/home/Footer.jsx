@@ -26,7 +26,7 @@ const links = [
 
 const Footer = ({isDashboard}) => {
 
-    return <>
+    return (
         <Toolbar sx={{backgroundColor:"neutral.dark"}}>
             <Box sx={{ display: { xs: "none", md: 'block' }}}>
                 <WeatherCard/>
@@ -52,7 +52,7 @@ const Footer = ({isDashboard}) => {
                 </Typography>
             ))}
         </Toolbar>
-    </>;
+    )
 };
 
 export default Footer;

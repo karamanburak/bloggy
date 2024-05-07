@@ -27,7 +27,6 @@ const Blogs = () => {
     image: "",
     isPublish: "",
   })
-
   const [currentPage, setCurrentPage] = useState(1);
   const blogsPerPage = 8;
 
