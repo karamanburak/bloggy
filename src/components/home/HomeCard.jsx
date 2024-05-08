@@ -6,15 +6,12 @@ import CardContent from '@mui/material/CardContent';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
-import { Box, Button, Container, Grid, IconButton } from "@mui/material";
+import { Box, Button, Container, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import useBlogCall from "../../hooks/useBlogCall";
-import { useEffect } from "react";
 import {flex} from '../../styles/globalStyles'
-
 
 
 const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countOfVisitors, comments }) => {
@@ -29,7 +26,14 @@ const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countO
 
     return (
         <Container maxWidth="xl" sx={{ backgroundColor: "neutral.dark", paddingBottom: "2rem" }}>
-            <Card>
+            <Card 
+            sx={{
+                minHeight:"300px",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                }}
+            >
                 <Grid container>
                     <Grid item sm={12} md={6} order={{ xs: 2, md: 1 }}>
                         <CardHeader
@@ -44,7 +48,7 @@ const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countO
                             }}
                             avatar={
                                 <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                                    R
+                                    {_id ? <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${userId}`} alt="image" /> : "R"}
                                 </Avatar>
                             }
                             title={title}
@@ -76,6 +80,7 @@ const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countO
                         </Box>
                     </Grid>
                     <Grid item sm={12} md={6} order={{ xs: 1, md: 2 }} sx={{ margin: "auto", marginBottom: "1rem" }}>
+
                         <CardMedia
                             sx={{
                                 marginTop: "1rem",

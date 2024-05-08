@@ -22,7 +22,7 @@ const useBlogCall = () => {
         } catch (error) {
             console.log(error);
             dispatch(fetchFail());
-        }
+        } 
     };
 
     const getUserBlogs = async (userId) => {
@@ -37,12 +37,12 @@ const useBlogCall = () => {
         }
     };
 
-    const getComments = async (userId) => {
+    const getComments = async (url,userId) => {
         dispatch(fetchStart());
         try {
-            const { data } = await axiosWithToken(`${userId}`)
-            // console.log(data);
-            dispatch(getSuccess({ data: data.data, url: "comments" }))
+            const { data } = await axiosWithToken(`${url}/${userId}`)
+            console.log(data);
+            dispatch(getSuccess({ data: data.data, url: "comments"}))
         } catch (error) {
             console.log(error);
             dispatch(fetchFail());

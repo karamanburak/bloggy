@@ -67,6 +67,5 @@ export const profileStyle = {
     fontWeight: "bold",
     marginTop:".2rem",
     marginRight:".2rem"
-
     
 }

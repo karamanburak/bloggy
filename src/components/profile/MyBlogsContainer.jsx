@@ -1,38 +1,43 @@
-import { Button, Container, Typography } from '@mui/material';
+import { Box, Button, Container, Typography } from '@mui/material';
 import { useEffect } from "react";
 import { useSelector } from 'react-redux';
 import useBlogCall from '../../hooks/useBlogCall';
 import MyBlogsCard from './MyBlogsCard';
 import { useState } from 'react';
+import loadingGif from '../../assets/loading.gif'
 
 
 
-const MyBlogsContainer = () => {
+const MyBlogsContainer = ({_id}) => {
     const { getUserBlogs } = useBlogCall();
-    const  curentUser  = useSelector(state => state.auth)
-    const  {blogs}  = useSelector(state => state.blog)
+    const  {blogs, loading}  = useSelector(state => state.blog)
     // console.log(blogs);
+    
     const [currentPage, setCurrentPage] = useState(1);
     const blogsPerPage = 3;
 
     useEffect(() => {
-        getUserBlogs(curentUser._id);
+        getUserBlogs(_id);
     }, []);
-
-
-
 
     const indexOfLastBlog = currentPage * blogsPerPage;
     const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
     const currentBlogs = blogs.slice(indexOfFirstBlog, indexOfLastBlog);
+    // console.log(currentBlogs);
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     return (
         <Container>
+            {loading ? (
+                <img src={loadingGif} alt="loading..." height={500} />
+            ) : (
+               <Box>
             {currentBlogs.map((blog) => (
-                <MyBlogsCard key={blog._id} {...blog} />
+                <MyBlogsCard key={blog._id} {...blog}/>
             ))}
+               </Box> 
+            )}
             <Typography style={{ marginTop: "20px",textAlign:"center" }}>
                 {Array.from({ length: Math.ceil(blogs.length / blogsPerPage) }).map(
                     (_, index) => (

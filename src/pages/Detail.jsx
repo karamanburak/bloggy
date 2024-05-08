@@ -9,12 +9,23 @@ import { red } from '@mui/material/colors';
 import { Box, Button, Grid } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import useBlogCall from "../hooks/useBlogCall";
 
 
 const Detail = () => {
     const navigate = useNavigate()
     const { state } = useLocation()
-    const { content, image, title, createdAt } = state;
+    const { content, image, title, createdAt,userId} = state;
+const {comments} = useSelector(state=> state.blog)
+const {getComments} = useBlogCall()
+console.log(comments);
+
+useEffect(()=>{
+    getComments("comments", userId)
+},[userId])
+
 
     const localDate = () => {
         if (createdAt) {
@@ -56,7 +67,7 @@ const Detail = () => {
                         }}
                         avatar={
                             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                                R
+                                {userId ? <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${userId}`} alt="image" /> : "R"}
                             </Avatar>
                         }
                         title={title}

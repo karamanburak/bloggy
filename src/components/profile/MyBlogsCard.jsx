@@ -18,7 +18,7 @@ import { useNavigate } from "react-router-dom";
 
 
 const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, comments, countOfVisitors }) => {
-    console.log(_id, content, image, title, userId, createdAt, likes, comments);
+    
     const navigate = useNavigate()
 
 
@@ -54,8 +54,8 @@ const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, com
 
                     }}
                     avatar={
-                        <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                            R
+                        <Avatar sx={{ bgcolor: red[500] }} aria-label="image">
+                            {_id ? <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${userId}`} alt="image"/> : "R"}
                         </Avatar>
                     }
                     title={title}

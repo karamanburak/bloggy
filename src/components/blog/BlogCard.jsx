@@ -4,7 +4,6 @@ import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -19,7 +18,7 @@ import { flex } from '../../styles/globalStyles';
 
 
 
-const BlogCard = ({ _id, content, image, title, userId, createdAt, likes,countOfVisitors,comments }) => {
+const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countOfVisitors, comments }) => {
   const navigate = useNavigate()
   const { getCategory } = useCategoryCall()
 
@@ -41,9 +40,9 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes,countOf
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        margin:"auto",
+        margin: "auto",
         width: 500,
-        height:600
+        height: 600
 
       }}
     >
@@ -53,9 +52,9 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes,countOf
         image={image}
         alt={image}
       />
-    
+
       <CardContent>
-        <Typography variant="body2" sx={{ maxHeight: "100px", overflow: "hidden", textAlign:"justify" }}>
+        <Typography variant="body2" sx={{ maxHeight: "100px", overflow: "hidden", textAlign: "justify" }}>
           {content}
         </Typography>
       </CardContent>
@@ -69,7 +68,7 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes,countOf
         }}
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            R
+            {_id ? <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${userId}`} alt="image" /> : "R"}
           </Avatar>
         }
         title={title}

@@ -9,8 +9,8 @@ import Footer from "../components/home/Footer";
 
 const Profile = () => {
   const { currentUser } = useSelector(state => state.auth)
-  const { image, username, email, bio, city, createdAt, firstName, lastName } = currentUser
-  // console.log(currentUser);
+  const { image, username, email, bio, city, createdAt, firstName, lastName,_id } = currentUser
+    // console.log(currentUser);
   const navigate = useNavigate()
   const [open, setOpen] = React.useState(false);
   const handleClose = () =>  setOpen(false);
@@ -104,7 +104,7 @@ const Profile = () => {
             handleOpen={handleOpen}
             {...currentUser}
           />
-          <MyBlogsContainer />
+          <MyBlogsContainer {...currentUser} />
         </Grid>
       </Grid>
     </Container>

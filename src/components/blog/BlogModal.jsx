@@ -5,7 +5,7 @@ import Modal from '@mui/material/Modal';
 import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { useState } from 'react';
 import useBlogCall from '../../hooks/useBlogCall';
-import { useSelector } from 'react-redux';
+import { toastWarnNotify } from '../../helper/ToastNotify';
 
 const style = {
   position: 'absolute',
@@ -21,7 +21,6 @@ const style = {
 
 export default function BlogModal({ open, handleClose, initialState,categories }) {
   const { postBlog } = useBlogCall()
-  const blogs = useSelector(state => state.blog.blogs);
   const [info, setInfo] = useState(initialState)
 
 
@@ -33,6 +32,11 @@ export default function BlogModal({ open, handleClose, initialState,categories }
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    const contentLength = info.content.trim().split(/\s+/).length;
+    if (contentLength < 30) {
+      toastWarnNotify("Content must be least 30 words")
+      return; 
+    }
     console.log("submit", info);
     postBlog("blogs", info)
     handleClose()
@@ -104,7 +108,7 @@ export default function BlogModal({ open, handleClose, initialState,categories }
               name="isPublish"
               onChange={handleChange}
               color="success"
-              value={info.isPublish || ""}
+              value={info.isPublish}
 
             >
               {
