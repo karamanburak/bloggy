@@ -20,7 +20,7 @@ const Detail = () => {
     const { content, image, title, createdAt,userId} = state;
 const {comments} = useSelector(state=> state.blog)
 const {getComments} = useBlogCall()
-console.log(comments);
+// console.log(comments);
 
 useEffect(()=>{
     getComments("comments", userId)

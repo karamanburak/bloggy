@@ -12,6 +12,12 @@ export const flex = {
     justifyContent: "center",
     alignItems: "center"
 }
+export const flexColumn = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection:"column"
+}
 
 
 export const iconButton = {

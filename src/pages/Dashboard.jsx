@@ -1,4 +1,4 @@
-import { Box, Card, Container, Typography } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import home from '../assets/home.png'
 import HomeCard from '../components/home/HomeCard';
 import Footer from '../components/home/Footer';
@@ -13,21 +13,49 @@ import loadingGif from '../assets/loading.gif'
 import { useState } from 'react';
 import axios from 'axios';
 import ShowsCard from '../components/home/ShowsCard';
+import NewsCard from '../components/home/NewsCard';
+import MealsCard from '../components/home/MealsCard';
 
 const url = 'https://api.tvmaze.com/shows'
+const url2 = `https://newsapi.org/v2/everything?domains=wsj.com&apiKey=${import.meta.env.VITE_News_ApiKey}`
+const url3 = 'https://www.themealdb.com/api/json/v1/1/categories.php'
 
 const Dashboard = () => {
     const isDashboard = '/'
     const { getBlogData } = useBlogCall()
     const { blogs, loading } = useSelector(state => state.blog)
     const [shows, setShows] = useState([])
+    const [news, setNews] = useState([])
+    const [meals, setMeals] = useState([])
 
+    const getNews = async () => {
+        try {
+            const { data } = await axios(url2)
+            setNews(data.articles)
+            console.log(data.articles);
+
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
 
     const getShows = async () => {
         try {
             const { data } = await axios(url)
             setShows(data)
-            console.log(data);
+
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
+
+    const getMeal = async () => {
+        try {
+            const { data } = await axios(url3)
+            setMeals(data.categories)
+            console.log(data.categories);
 
         } catch (error) {
             console.log(error);
@@ -39,6 +67,8 @@ const Dashboard = () => {
     useEffect(() => {
         getBlogData("blogs")
         getShows()
+        getNews()
+        getMeal()
     }, [])
 
 
@@ -64,8 +94,18 @@ const Dashboard = () => {
                             ))}
                         </Slide>
                         <Slide>
+                            {news.map((news) => (
+                                <NewsCard key={news.content} {...news} />
+                            ))}
+                        </Slide>
+                        <Slide>
                             {shows.map(show => (
                                 <ShowsCard key={show.id} {...show} />
+                            ))}
+                        </Slide>
+                        <Slide>
+                            {meals.map(meal => (
+                                <MealsCard key={meal.idCategory} {...meal} />
                             ))}
                         </Slide>
                     </Box>

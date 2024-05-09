@@ -99,10 +99,6 @@ const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countO
                                 marginTop: "1rem",
                                 marginRight: "1rem",
                                 padding: "1rem",
-                                borderRadius: "1rem",
-                                '& img': {
-                                    borderRadius: "1rem"
-                                }
                             }}
                             component="img"
                             height="274"

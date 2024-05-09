@@ -29,7 +29,7 @@ const ShowsCard = ({ name, genres, image, summary, url }) => {
                     justifyContent: "space-between",
                 }}>
                 <Grid container>
-                    <Grid item sm={12} md={6} order={{ xs: 2, md: 2 }}>
+                    <Grid item sm={12} md={6} order={{ xs: 2, md: 1 }}>
                         <CardHeader
                             sx={{
                                 color: "seagreen",
@@ -60,17 +60,15 @@ const ShowsCard = ({ name, genres, image, summary, url }) => {
                             READ MORE
                         </Button>
                     </Grid>
-                    <Grid item sm={12} md={6} order={{ xs: 2, md: 1 }} sx={{ margin: "auto", marginBottom: "1rem" }}>
+                    <Grid item sm={12} md={6} order={{ xs: 1, md: 2 }} sx={{ margin: "auto", marginBottom: "1rem" }}>
                         <CardMedia
                             sx={{
                                 marginTop: "1rem",
                                 marginRight: "1rem",
                                 padding: "1rem",
                                 borderRadius: "1rem",
-                                objectFit: "fill",
-                                '& img': {
-                                    borderRadius: "1rem"
-                                }
+                                    borderRadius: "1rem",
+                                    objectFit:"fill"
                             }}
                             component="img"
                             height="274"
