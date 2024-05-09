@@ -32,8 +32,9 @@ const Footer = ({isDashboard}) => {
                 <WeatherCard/>
             </Box>
          
-            <Typography sx={{ color: "neutral.light", fontWeight: "bold", flexGrow: 1, display: { xs: "none", sm: 'block' }, textAlign: {sm:"left", md:"center"} }}>
-                Developed by Burak Karaman &copy; 2024
+            <Typography sx={{ color: "neutral.light", fontWeight: "bold", flexGrow: 1, display: { xs: "none", sm: 'block' }, textAlign: "center" }}>
+                Developed by Burak Karaman  2024 &copy; All Rights Reserved.
+
             </Typography>
 
          

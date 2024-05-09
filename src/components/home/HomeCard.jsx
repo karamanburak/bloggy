@@ -12,10 +12,23 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import {flex} from '../../styles/globalStyles'
+import PageHeader from "./PageHeader";
+import { toastWarnNotify } from "../../helper/ToastNotify";
+import { useSelector } from "react-redux";
 
 
 const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countOfVisitors, comments }) => {
+    const { currentUser } = useSelector(state => state.auth)
     const navigate = useNavigate()
+
+
+    const handleReadMore = () => {
+        if (!currentUser) {
+            toastWarnNotify("You must Login");
+        } else {
+            navigate(`/blog/detail/${_id}`, { state: { content, image, title, userId, createdAt, comments }})
+        }
+    }
 
 
     const localDate = () => {
@@ -26,6 +39,7 @@ const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countO
 
     return (
         <Container maxWidth="xl" sx={{ backgroundColor: "neutral.dark", paddingBottom: "2rem" }}>
+            <PageHeader text="Blogs"/>
             <Card 
             sx={{
                 minHeight:"300px",
@@ -38,7 +52,6 @@ const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countO
                     <Grid item sm={12} md={6} order={{ xs: 2, md: 1 }}>
                         <CardHeader
                             sx={{
-                                
                                 color: "seagreen",
                                 '& .MuiTypography-root': {
                                     fontSize: 15,
@@ -74,7 +87,7 @@ const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countO
                                   <sup>{countOfVisitors}</sup>  
                                 </Typography>
                             </Box>
-                            <Button onClick={() => navigate(`/blog/detail/${_id}`, { state: { content, image, title, userId, createdAt,comments } })} variant="contained" sx={{ marginRight: "1rem", marginBottom: "1rem", backgroundColor: "primary.light" }} >
+                            <Button onClick={handleReadMore} variant="contained" sx={{ marginRight: "1rem", marginBottom: "1rem", backgroundColor: "primary.light" }} >
                                 Read More
                             </Button>
                         </Box>
@@ -92,7 +105,7 @@ const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countO
                                 }
                             }}
                             component="img"
-                            height="214"
+                            height="274"
                             image={image}
                             alt="image"
                         />

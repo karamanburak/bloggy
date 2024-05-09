@@ -145,7 +145,12 @@ function Navbar() {
                                 onClick={() => {!currentUser && page.name === "Blogs" ? (toastWarnNotify("You must login")) : (navigate(page.src))}}
                                 sx={{ my: 2, color: "neutral.light", display: 'block' }}
                             > 
+                                <Typography sx={{
+                                    marginTop: "1rem"
+                                }}>
+
                                 {page.name}
+                            </Typography>
                             </Button>
                         ))}
                     </Box>
@@ -153,7 +158,12 @@ function Navbar() {
                     <Box>
                         {currentUser ? (
                                 <Box onClick={handleOpenUserMenu} sx={avatarNavbar}>
-                                <img src={currentUser.image} alt="" style={{ width: "40px", height: "40px", borderRadius: "50%", marginTop:"1.5rem"}} />
+                                <img src={currentUser.image} alt="" style={{ 
+                                    width: "40px", 
+                                    height: "40px", 
+                                    borderRadius: "50%", 
+                                    marginTop:"1.5rem"
+                                    }} />
                                     <Typography>
                                      {`${currentUser.firstName}  ${currentUser.lastName}`}
                                     </Typography>
@@ -161,7 +171,11 @@ function Navbar() {
                         ) : (
                             <Tooltip title="Open Menu">
                                 <IconButton onClick={handleOpenUserMenu} >
-                                    <img src={avatar} alt="" style={{ width: "40px", height: "40px", borderRadius: "50%" }} />
+                                    <img src={avatar} alt="" style={{ 
+                                        width: "40px", 
+                                        height: "40px",
+                                         borderRadius: "50%"
+                                          }} />
                                 </IconButton>
                             </Tooltip>
                         )}
