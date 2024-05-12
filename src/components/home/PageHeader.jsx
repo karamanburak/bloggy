@@ -1,11 +1,11 @@
-import { Typography } from "@mui/material";
+import { Button } from "@mui/material";
 import React from "react";
 
 const PageHeader = ({text}) => {
   return(
-    <Typography sx={{color:"neutral.light",fontWeight:"bold", fontSize:"1.2rem"}}>
+    <Button sx={{color:"neutral.light",fontWeight:"bold", fontSize:"1.2rem", marginLeft:"1rem"}}>
         {text}
-    </Typography>
+    </Button>
   )
 }
 export default PageHeader;

@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import useCategoryCall from '../../hooks/useCategoryCall';
 import { flex } from '../../styles/globalStyles';
+import { useState } from 'react';
 
 
 
@@ -21,6 +22,7 @@ import { flex } from '../../styles/globalStyles';
 const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countOfVisitors, comments }) => {
   const navigate = useNavigate()
   const { getCategory } = useCategoryCall()
+  const [readingTime, setReadingTime] = useState(null);
 
 
   const localDate = () => {
@@ -31,6 +33,12 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
 
   useEffect(() => {
     getCategory("categories")
+
+    const words = content.split(' ').length;
+    const minutes = Math.ceil(words / 150); 
+    if (minutes >= 1) {
+      setReadingTime(`${minutes} min read`);
+    }
   }, [])
 
 
@@ -89,12 +97,20 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
             <sup>{countOfVisitors}</sup>
           </Typography>
         </Box>
+        <Box sx={{ display: "inline-block", marginLeft: "auto", marginRight:"1rem" }}>
+          {readingTime && (
+            <Typography variant="body2" sx={{ backgroundColor: "neutral.dark", padding: ".5rem", borderRadius: "5px" }}>
+              {readingTime}
+            </Typography>
+          )}
+        </Box>
       </CardActions>
       <Box sx={{ display: "flex", justifyContent: "flex-end", marginRight: "1rem" }}>
         <Button onClick={() => navigate(`/blog/detail/${_id}`, { state: { _id, content, image, title, userId, createdAt, likes } })} variant="contained" sx={{ marginBottom: "1rem", backgroundColor: "primary.light" }} >
           Read More
         </Button>
       </Box>
+
     </Card>
 
   )

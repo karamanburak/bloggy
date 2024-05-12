@@ -28,7 +28,6 @@ const pages = [
     { name: 'Dashboard', src: '/' },
     { name: 'Blogs', src: '/blog' },
     { name: 'About Us', src: '/about' },
-    { name: 'Contact', src: '/contact' }
 ];
 
 function Navbar() {
@@ -43,7 +42,6 @@ function Navbar() {
 
     const settings = currentUser ? [
         { name: 'Profile', src: '/profile' },
-        { name: 'Account', src: '/account' },
         { name: 'Sign Out', src: 'login' },
     ] : [
         { name: 'Sign In', src: '/login' },

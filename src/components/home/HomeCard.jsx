@@ -15,18 +15,23 @@ import {flex} from '../../styles/globalStyles'
 import PageHeader from "./PageHeader";
 import { toastWarnNotify } from "../../helper/ToastNotify";
 import { useSelector } from "react-redux";
+import { useState } from "react";
+import { useEffect } from "react";
 
 
 const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countOfVisitors, comments }) => {
+    
     const { currentUser } = useSelector(state => state.auth)
     const navigate = useNavigate()
+    const [readingTime, setReadingTime] = useState(null);
+
 
 
     const handleReadMore = () => {
         if (!currentUser) {
             toastWarnNotify("You must Login");
         } else {
-            navigate(`/blog/detail/${_id}`, { state: { content, image, title, userId, createdAt, comments }})
+            navigate(`/blog/detail/${_id}`, { state: { content, image, title, userId, createdAt,_id }})
         }
     }
 
@@ -37,8 +42,16 @@ const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countO
         }
     }
 
+    useEffect(() => {
+        const words = content.split(' ').length;
+        const minutes = Math.ceil(words / 150);
+        if (minutes >= 1) {
+            setReadingTime(`${minutes} min read`);
+        }
+    }, [])
+
     return (
-        <Container maxWidth="xl" sx={{ backgroundColor: "neutral.dark", paddingBottom: "2rem" }}>
+        <Container maxWidth="xl" sx={{ backgroundColor: "neutral.dark", paddingBottom: "2rem"}}>
             <PageHeader text="Blogs"/>
             <Card 
             sx={{
@@ -72,6 +85,13 @@ const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countO
                                 {content}
                             </Typography>
                         </CardContent>
+                        <Box sx={{ display: "inline-block", marginLeft: "1rem" }}>
+                            {readingTime && (
+                                <Typography variant="body2" sx={{ backgroundColor: "neutral.dark", padding: ".5rem", borderRadius: "5px" }}>
+                                    {readingTime}
+                                </Typography>
+                            )}
+                        </Box>
                         <Box sx={{ display: "flex", justifyContent: "space-between",cursor:"pointer" }}>
                             <Box sx={{...flex , opacity:".7", gap:".3rem", marginLeft:"1rem"}}>
                                     <FavoriteIcon /> 

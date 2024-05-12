@@ -14,49 +14,37 @@ import { useState } from 'react';
 import axios from 'axios';
 import ShowsCard from '../components/home/ShowsCard';
 import NewsCard from '../components/home/NewsCard';
-import MealsCard from '../components/home/MealsCard';
 
 const url = 'https://api.tvmaze.com/shows'
 const url2 = `https://newsapi.org/v2/everything?domains=wsj.com&apiKey=${import.meta.env.VITE_News_ApiKey}`
-const url3 = 'https://www.themealdb.com/api/json/v1/1/categories.php'
-
 const Dashboard = () => {
     const isDashboard = '/'
     const { getBlogData } = useBlogCall()
     const { blogs, loading } = useSelector(state => state.blog)
     const [shows, setShows] = useState([])
     const [news, setNews] = useState([])
-    const [meals, setMeals] = useState([])
+    
 
     const getNews = async () => {
         try {
-            const { data } = await axios(url2)
+            const {data} = await axios(url2)
             setNews(data.articles)
             console.log(data.articles);
-
+            
         } catch (error) {
             console.log(error);
-
+            
         }
     }
+
+
 
     const getShows = async () => {
         try {
             const { data } = await axios(url)
             setShows(data)
-
-        } catch (error) {
-            console.log(error);
-
-        }
-    }
-
-    const getMeal = async () => {
-        try {
-            const { data } = await axios(url3)
-            setMeals(data.categories)
-            console.log(data.categories);
-
+            // console.log(data);
+            
         } catch (error) {
             console.log(error);
 
@@ -68,17 +56,16 @@ const Dashboard = () => {
         getBlogData("blogs")
         getShows()
         getNews()
-        getMeal()
     }, [])
 
 
     return (
         <Box
             sx={{ backgroundColor: "primary.dark" }} >
-            <img src={home} alt="image" width="100%" />
+            <img src={home} alt="image" width="100%"/>
 
             <Container>
-                <Box sx={wellcomeMessage}>
+                <Box sx={{...wellcomeMessage,borderRadius:"1rem"}}>
                     <Typography variant='span' style={spanStyle}>Welcome to the Bloggy</Typography>
                 </Box>
                 <Box sx={wellcomeMessage}>
@@ -90,23 +77,19 @@ const Dashboard = () => {
                     <Box>
                         <Slide>
                             {blogs.map((blog) => (
-                                <HomeCard key={blog._id} {...blog} />
-                            ))}
+                                    <HomeCard key={blog._id} {...blog} />
+                                ))}
                         </Slide>
                         <Slide>
-                            {news.map((news) => (
-                                <NewsCard key={news.content} {...news} />
-                            ))}
+ 
+                               {shows.map((show) => (
+                                    <ShowsCard key={show.id} {...show} />
+                                ))}
                         </Slide>
                         <Slide>
-                            {shows.map(show => (
-                                <ShowsCard key={show.id} {...show} />
-                            ))}
-                        </Slide>
-                        <Slide>
-                            {meals.map(meal => (
-                                <MealsCard key={meal.idCategory} {...meal} />
-                            ))}
+                            { news.map((newsItem,index) => (
+                                <NewsCard key={index} {...newsItem} />
+                                ))}
                         </Slide>
                     </Box>
                 )}

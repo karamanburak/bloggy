@@ -14,12 +14,14 @@ import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { flex } from '../../styles/globalStyles';
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useState } from "react";
 
 
 
-const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, comments, countOfVisitors }) => {
-    
+const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, comments, countOfVisitors}) => {
     const navigate = useNavigate()
+    const [readingTime, setReadingTime] = useState(null);
 
 
     const localDate = () => {
@@ -28,9 +30,22 @@ const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, com
         }
     }
 
+    const calcReadingTime = () => {
+        const words = content.split(' ').length;
+        const minutes = Math.ceil(words / 150);
+        if (minutes >= 1) {
+            setReadingTime(`${minutes} min read`);
+        }
+}
+
+useEffect(()=>{
+    calcReadingTime()
+},[])
+
+
     return (
         <Container maxWidth="xl" sx={{ ...flex, paddingBottom: "2rem" }}>
-            <Card sx={{ borderRadius: "10px" }}>
+              <Card sx={{ borderRadius: "10px" }}>
                 <CardMedia
                     sx={{
                         marginTop: "1rem",
@@ -61,6 +76,13 @@ const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, com
                     title={title}
                     subheader={`Published Date: ${localDate()}`}
                 />
+                <Box sx={{display:"inline-block", marginLeft:"1rem" }}>
+                    {readingTime && (
+                        <Typography variant="body2" sx={{ backgroundColor: "neutral.dark", padding: ".5rem", borderRadius: "5px"}}>
+                            {readingTime}
+                        </Typography>
+                    )}
+                </Box>
                 <CardContent>
                     <Typography variant="body2" sx={{ maxHeight: "100px", overflow: "hidden" }} >
                         {content}

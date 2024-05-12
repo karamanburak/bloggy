@@ -12,19 +12,22 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import useBlogCall from "../hooks/useBlogCall";
+import PageHeader from "../components/home/PageHeader";
 
 
 const Detail = () => {
     const navigate = useNavigate()
     const { state } = useLocation()
-    const { content, image, title, createdAt,userId} = state;
-const {comments} = useSelector(state=> state.blog)
-const {getComments} = useBlogCall()
-// console.log(comments);
+    const { content, image, title, createdAt, userId,_id } = state;
+    const { getComments } = useBlogCall()
+    const {comments} = useSelector(state=> state.blog)
+    console.log(comments);
+        
 
-useEffect(()=>{
-    getComments("comments", userId)
-},[userId])
+    useEffect(() => {
+        getComments("comments", userId)
+    }, [userId])
+    
 
 
     const localDate = () => {
@@ -77,11 +80,19 @@ useEffect(()=>{
                         <Typography variant="body2" sx={{ textAlign: "justify" }} >
                             {content}
                         </Typography>
-                        <Box sx={{ textAlign: "end" }}>
-                       
-                        {/* <Typography>{comments}</Typography> */}
-                        </Box>
-
+                        <CardContent>
+                        
+                        <PageHeader text="Comments"/>
+                            {comments.map(comment => {
+                                if (comment.blogId === _id) {
+                                    return (
+                                        <Box key={comment._id}>
+                                            <Typography>{comment.comment}</Typography>
+                                        </Box>
+                                    );
+                                }
+                            })}
+                        </CardContent>
 
                     </CardContent>
                     <Button onClick={() => navigate(-1)} variant="contained" sx={{ marginLeft: "1rem", marginBottom: "1rem", backgroundColor: "primary.light" }} >
