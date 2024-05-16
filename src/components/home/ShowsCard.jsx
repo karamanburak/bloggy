@@ -43,7 +43,14 @@ const ShowsCard = ({ name, genres, image, summary, url }) => {
                             subheader={`${genres[0]} - ${genres[1]} - ${genres[2]}`}
                         />
                         <CardContent>
-                            <Typography variant="body2" sx={{ maxHeight: "100px", overflow: "hidden" }} >
+                            <Typography variant="body2" sx={{ 
+                                maxHeight: "100px",
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                display: '-webkit-box',
+                                WebkitLineClamp: '3',
+                                WebkitBoxOrient: 'vertical' 
+                                  }} >
                                 {summary}
                             </Typography>
                         </CardContent>

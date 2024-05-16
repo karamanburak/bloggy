@@ -19,9 +19,11 @@ import { useState } from "react";
 
 
 
+
 const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, comments, countOfVisitors}) => {
     const navigate = useNavigate()
     const [readingTime, setReadingTime] = useState(null);
+
 
 
     const localDate = () => {
@@ -90,8 +92,8 @@ useEffect(()=>{
                 </CardContent>
                 <Box sx={{ display: "flex", justifyContent: "space-between", cursor: "pointer" }}>
                     <Box sx={{ ...flex, opacity: ".7", gap: ".3rem", marginLeft: "1rem" }}>
-                        <FavoriteIcon />
-                        <Typography>
+                        <Typography >
+                            <FavoriteIcon />
                             <sup>{likes.length}</sup>
                         </Typography>
                         <ChatBubbleOutlineIcon />

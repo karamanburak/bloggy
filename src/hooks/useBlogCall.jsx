@@ -82,18 +82,28 @@ const useBlogCall = () => {
         dispatch(fetchStart());
         try {
             const { data } = await axiosWithToken(`${url}`)
-            console.log(data);
+            // console.log(data);
             dispatch(getSuccess({ data: data.data, url: "comments" }))
         } catch (error) {
             console.log(error);
             dispatch(fetchFail());
             toastErrorNotify(error?.response?.data?.message || "Operation not success")
         }
-    }
+    };
 
+    const getLike = async (url, id) => {
+        dispatch(fetchStart());
+        try {
+            const { data } = await axiosWithToken.post(`${url}/${id}/postLike`);
+            // console.log(data);
+        } catch (error) {
+            console.log(error);
+            dispatch(fetchFail());
+        } finally{
+            getBlogData("blogs");
+        }
+    };
 
-
-    
 
     return {
         getBlogData,
@@ -101,7 +111,8 @@ const useBlogCall = () => {
         putBlog,
         postBlog,
         getComments,
-        getUserBlogs
+        getUserBlogs,
+        getLike
         
     }
 };

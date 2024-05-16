@@ -8,7 +8,7 @@ const blogSlice = createSlice({
         blog:{},
         comments: [],
         comment: {},
-        likeCounts:{},
+        likeCounts:"",
         loading:false,
         error:false
     },

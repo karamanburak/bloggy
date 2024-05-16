@@ -15,6 +15,8 @@ import { useEffect } from 'react';
 import useCategoryCall from '../../hooks/useCategoryCall';
 import { flex } from '../../styles/globalStyles';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import useBlogCall from '../../hooks/useBlogCall';
 
 
 
@@ -23,6 +25,27 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
   const navigate = useNavigate()
   const { getCategory } = useCategoryCall()
   const [readingTime, setReadingTime] = useState(null);
+  const { getLike } = useBlogCall()
+  const { currentUser } = useSelector(state => state.auth)
+  const [liked, setLiked] = useState(false);
+
+  useEffect(() => {
+    if (currentUser && likes.includes(currentUser._id)) {
+      setLiked(true);
+    } else {
+      setLiked(false);
+    }
+  }, [likes, currentUser]);
+
+  const handleLike = () => {
+    if (!currentUser) {
+      toastWarnNotify("You must login to like the blog.");
+      return;
+    }
+
+    getLike("blogs", _id);
+  }
+
 
 
   const localDate = () => {
@@ -84,8 +107,14 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
       />
       <CardActions disableSpacing>
         <Box sx={{ ...flex, opacity: ".7", gap: ".3rem", marginLeft: "1rem" }}>
-          <FavoriteIcon />
-          <Typography>
+          <Typography >
+            <FavoriteIcon
+              sx={{
+                color: liked ? "red" : "black",
+                cursor:"pointer"
+              }}
+              onClick={handleLike}
+            />
             <sup>{likes.length}</sup>
           </Typography>
           <ChatBubbleOutlineIcon />

@@ -16,7 +16,7 @@ import ShowsCard from '../components/home/ShowsCard';
 import NewsCard from '../components/home/NewsCard';
 
 const url = 'https://api.tvmaze.com/shows'
-const url2 = `https://newsapi.org/v2/everything?domains=wsj.com&apiKey=${import.meta.env.VITE_News_ApiKey}`
+const url2 = `https://newsapi.org/v2/everything?q=tesla&from=2024-04-16&sortBy=publishedAt&apiKey=${import.meta.env.VITE_News_ApiKey}`
 const Dashboard = () => {
     const isDashboard = '/'
     const { getBlogData } = useBlogCall()
@@ -29,7 +29,7 @@ const Dashboard = () => {
         try {
             const {data} = await axios(url2)
             setNews(data.articles)
-            console.log(data.articles);
+            // console.log(data.articles);
             
         } catch (error) {
             console.log(error);

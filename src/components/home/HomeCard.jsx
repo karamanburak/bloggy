@@ -17,14 +17,17 @@ import { toastWarnNotify } from "../../helper/ToastNotify";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { useEffect } from "react";
+import useBlogCall from "../../hooks/useBlogCall";
 
 
 const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countOfVisitors, comments }) => {
     
+    const { getLike } = useBlogCall()
+    
     const { currentUser } = useSelector(state => state.auth)
     const navigate = useNavigate()
     const [readingTime, setReadingTime] = useState(null);
-
+    const [liked, setLiked] = useState(false);
 
 
     const handleReadMore = () => {
@@ -40,6 +43,23 @@ const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countO
         if (createdAt) {
             return new Date(createdAt).toLocaleString("de-DE")
         }
+    }
+
+    useEffect(() => {
+        if (currentUser && likes.includes(currentUser._id)) {
+            setLiked(true);
+        } else {
+            setLiked(false);
+        }
+    }, [likes, currentUser]);
+
+    const handleLike = () => {
+        if (!currentUser) {
+            toastWarnNotify("You must login to like the blog.");
+            return;
+        }
+
+        getLike("blogs", _id);
     }
 
     useEffect(() => {
@@ -81,7 +101,14 @@ const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countO
                             subheader={`Published Date: ${localDate()}`}
                         />
                         <CardContent>
-                            <Typography variant="body2" sx={{ maxHeight: "100px", overflow: "hidden" }} >
+                            <Typography variant="body2" sx={{
+                                maxHeight: "100px", 
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                display: '-webkit-box',
+                                WebkitLineClamp: '3',
+                                WebkitBoxOrient: 'vertical' 
+                                }} >
                                 {content}
                             </Typography>
                         </CardContent>
@@ -94,9 +121,14 @@ const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countO
                         </Box>
                         <Box sx={{ display: "flex", justifyContent: "space-between",cursor:"pointer" }}>
                             <Box sx={{...flex , opacity:".7", gap:".3rem", marginLeft:"1rem"}}>
-                                    <FavoriteIcon /> 
-                                <Typography>
-                                   <sup>{likes.length}</sup>  
+                                <Typography >
+                                    <FavoriteIcon
+                                        sx={{
+                                            color: liked ? "red" : "black"
+                                        }}
+                                        onClick={handleLike}
+                                    />
+                                   <sup>{likes.length}</sup> 
                                 </Typography>
                                    <ChatBubbleOutlineIcon />
                                 <Typography>

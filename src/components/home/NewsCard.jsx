@@ -81,7 +81,11 @@ const NewsCard = ({ source,author, description, urlToImage,url,title,publishedAt
                           </Typography>
                           <Typography variant="body2" sx={{
                               maxHeight: "100px",
-                              overflow: "hidden"
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              display: '-webkit-box',
+                              WebkitLineClamp: '3',
+                              WebkitBoxOrient: 'vertical' 
                           }} >
                               {description ? description : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident quam vero repudiandae totam, ab quod earum itaque explicabo illo sint laborum minus fugiat velit. Quasi non sapiente placeat id exercitationem."}
                           </Typography>
