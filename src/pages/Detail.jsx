@@ -1,4 +1,3 @@
-import React from "react";
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
@@ -13,20 +12,37 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import useBlogCall from "../hooks/useBlogCall";
 import PageHeader from "../components/home/PageHeader";
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import { flex } from '../styles/globalStyles'
+import { useState } from 'react';
+
 
 
 const Detail = () => {
     const navigate = useNavigate()
     const { state } = useLocation()
-    const { content, image, title, createdAt, userId,_id } = state;
+    const { content, image, title, createdAt, userId,_id,likes,countOfVisitors } = state;
     const { getComments,getLike } = useBlogCall()
+    const { currentUser } = useSelector(state => state.auth)
+    console.log(currentUser);
+    
     const {comments} = useSelector(state=> state.blog)
     console.log(comments);
+    const [liked, setLiked] = useState(false);
+
         
 
     useEffect(() => {
         getComments("comments", userId)
-    }, [userId])
+            if (currentUser && likes.includes(currentUser._id)) {
+                setLiked(true);
+            } else {
+                setLiked(false);
+            }
+
+        }, [likes, currentUser]);
     
 
 
@@ -34,6 +50,10 @@ const Detail = () => {
         if (createdAt) {
             return new Date(createdAt).toLocaleString("de-DE")
         }
+    }
+
+    const handleLike = () => {
+        getLike("blogs", _id);
     }
 
 
@@ -95,6 +115,26 @@ const Detail = () => {
                         </CardContent>
 
                     </CardContent>
+                    <Box sx={{ ...flex, opacity: ".7", gap: ".5rem", justifyContent:"end" }}>
+                        <Typography >
+                            <FavoriteIcon
+                                sx={{
+                                    color: liked ? "red" : "",
+                                    cursor: "pointer"
+                                }}
+                                onClick={handleLike}
+                            />
+                            <sup>{likes.length}</sup>
+                        </Typography>
+                        <ChatBubbleOutlineIcon />
+                        <Typography>
+                            <sup>{comments.length}</sup>
+                        </Typography>
+                        <RemoveRedEyeIcon />
+                        <Typography>
+                            <sup>{countOfVisitors}</sup>
+                        </Typography>
+                    </Box>
                     <Button onClick={() => navigate(-1)} variant="contained" sx={{ marginLeft: "1rem", marginBottom: "1rem", backgroundColor: "primary.light" }} >
                         Go BACK
                     </Button>
