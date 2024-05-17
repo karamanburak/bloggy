@@ -51,7 +51,15 @@ const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countO
         } else {
             setLiked(false);
         }
+
+        const words = content.split(' ').length;
+        const minutes = Math.ceil(words / 150);
+        if (minutes >= 1) {
+            setReadingTime(`${minutes} min read`);
+        }
+
     }, [likes, currentUser]);
+
 
     const handleLike = () => {
         if (!currentUser) {
@@ -61,14 +69,6 @@ const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countO
 
         getLike("blogs", _id);
     }
-
-    useEffect(() => {
-        const words = content.split(' ').length;
-        const minutes = Math.ceil(words / 150);
-        if (minutes >= 1) {
-            setReadingTime(`${minutes} min read`);
-        }
-    }, [])
 
     return (
         <Container maxWidth="xl" sx={{ backgroundColor: "neutral.dark", paddingBottom: "2rem"}}>
@@ -124,7 +124,7 @@ const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countO
                                 <Typography >
                                     <FavoriteIcon
                                         sx={{
-                                            color: liked ? "red" : "black"
+                                            color: liked ? "red" : ""
                                         }}
                                         onClick={handleLike}
                                     />

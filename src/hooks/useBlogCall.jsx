@@ -83,7 +83,7 @@ const useBlogCall = () => {
         try {
             const { data } = await axiosWithToken(`${url}`)
             // console.log(data);
-            dispatch(getSuccess({ data: data.data, url: "comments" }))
+            dispatch(getSuccess({ data: data.data, url }))
         } catch (error) {
             console.log(error);
             dispatch(fetchFail());

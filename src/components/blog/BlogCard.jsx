@@ -29,14 +29,31 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
   const { currentUser } = useSelector(state => state.auth)
   const [liked, setLiked] = useState(false);
 
+  const localDate = () => {
+    if (createdAt) {
+      return new Date(createdAt).toLocaleString("de-DE")
+    }
+  }
+
   useEffect(() => {
     if (currentUser && likes.includes(currentUser._id)) {
       setLiked(true);
     } else {
       setLiked(false);
     }
+
+    getCategory("categories")
+
+    const words = content.split(' ').length;
+    const minutes = Math.ceil(words / 150);
+    if (minutes >= 1) {
+      setReadingTime(`${minutes} min read`);
+    }
+
   }, [likes, currentUser]);
 
+  
+  
   const handleLike = () => {
     if (!currentUser) {
       toastWarnNotify("You must login to like the blog.");
@@ -45,25 +62,6 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
 
     getLike("blogs", _id);
   }
-
-
-
-  const localDate = () => {
-    if (createdAt) {
-      return new Date(createdAt).toLocaleString("de-DE")
-    }
-  }
-
-  useEffect(() => {
-    getCategory("categories")
-
-    const words = content.split(' ').length;
-    const minutes = Math.ceil(words / 150); 
-    if (minutes >= 1) {
-      setReadingTime(`${minutes} min read`);
-    }
-  }, [])
-
 
   return (
     <Card
@@ -110,7 +108,7 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
           <Typography >
             <FavoriteIcon
               sx={{
-                color: liked ? "red" : "black",
+                color: liked ? "red" : "",
                 cursor:"pointer"
               }}
               onClick={handleLike}

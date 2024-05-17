@@ -19,7 +19,7 @@ const Detail = () => {
     const navigate = useNavigate()
     const { state } = useLocation()
     const { content, image, title, createdAt, userId,_id } = state;
-    const { getComments } = useBlogCall()
+    const { getComments,getLike } = useBlogCall()
     const {comments} = useSelector(state=> state.blog)
     console.log(comments);
         
