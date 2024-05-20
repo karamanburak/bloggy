@@ -1,8 +1,9 @@
-import {  useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
     fetchFail,
     fetchStart,
     getSuccess,
+    getCommentsData
 } from "../features/blogSlice";
 import useAxios from "./useAxios";
 import { toastErrorNotify, toastSuccessNotify } from "../helper/ToastNotify";
@@ -18,18 +19,18 @@ const useBlogCall = () => {
         try {
             const { data } = await axiosWithToken(`${url}`)
             // console.log(data);
-            dispatch(getSuccess({ data: data.data,url }));
+            dispatch(getSuccess({ data: data.data, url }));
         } catch (error) {
             console.log(error);
             dispatch(fetchFail());
-        } 
+        }
     };
 
     const getUserBlogs = async (userId) => {
         dispatch(fetchStart())
         try {
             const { data } = await axiosWithToken(`blogs?author=${userId}`);
-            dispatch(getSuccess({ data: data.data, url: "blogs"}))
+            dispatch(getSuccess({ data: data.data, url: "blogs" }))
             // console.log(data);
         } catch (error) {
             console.log(error);
@@ -38,7 +39,7 @@ const useBlogCall = () => {
     };
 
 
-    const deleteBlog = async (url,id) => {
+    const deleteBlog = async (url, id) => {
         dispatch(fetchStart());
         try {
             await axiosWithToken.delete(`${url}/${id}`)
@@ -78,12 +79,12 @@ const useBlogCall = () => {
         }
     };
 
-    const getComments = async (url) => {
+    const getDetailBlog = async (url,id) => {
         dispatch(fetchStart());
         try {
-            const { data } = await axiosWithToken(`${url}`)
-            // console.log(data);
-            dispatch(getSuccess({ data: data.data, url }))
+            const {data} = await axiosWithToken(`${url}/${id}`)
+            console.log(data);
+            dispatch(getCommentsData({ data:data.data, url }))
         } catch (error) {
             console.log(error);
             dispatch(fetchFail());
@@ -91,15 +92,29 @@ const useBlogCall = () => {
         }
     };
 
-    const getLike = async (url, id) => {
+    const postComment = async (url,info) => {
         dispatch(fetchStart());
         try {
-            const { data } = await axiosWithToken.post(`${url}/${id}/postLike`);
-            // console.log(data);
+            await axiosWithToken.post(`${url}`, info)
+            toastSuccessNotify("Comment successfully added!")
         } catch (error) {
             console.log(error);
             dispatch(fetchFail());
+            toastErrorNotify(error?.response?.data?.message || "Operation not success")
         } finally{
+            getBlogData(url);
+
+        }
+    };
+
+    const getLike = async (url, id) => {
+        dispatch(fetchStart());
+        try {
+           await axiosWithToken.post(`${url}/${id}/postLike`);
+        } catch (error) {
+            console.log(error);
+            dispatch(fetchFail());
+        } finally {
             getBlogData("blogs");
         }
     };
@@ -110,10 +125,11 @@ const useBlogCall = () => {
         deleteBlog,
         putBlog,
         postBlog,
-        getComments,
+        getDetailBlog,
         getUserBlogs,
-        getLike
-        
+        getLike,
+        postComment
+
     }
 };
 

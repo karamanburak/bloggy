@@ -11,39 +11,37 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import useBlogCall from "../hooks/useBlogCall";
-import PageHeader from "../components/home/PageHeader";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { flex } from '../styles/globalStyles'
 import { useState } from 'react';
+import CommentForm from '../components/blog/CommentForm';
 
 
 
 const Detail = () => {
     const navigate = useNavigate()
     const { state } = useLocation()
-    const { content, image, title, createdAt, userId,_id,likes,countOfVisitors } = state;
-    const { getComments,getLike } = useBlogCall()
+    const { content, image, title, createdAt, userId, _id, likes, countOfVisitors } = state;
+    const { getLike, getDetailBlog } = useBlogCall()
     const { currentUser } = useSelector(state => state.auth)
-    console.log(currentUser);
-    
-    const {comments} = useSelector(state=> state.blog)
+    const { comments } = useSelector(state => state.blog)
     console.log(comments);
     const [liked, setLiked] = useState(false);
 
-        
+
 
     useEffect(() => {
-        getComments("comments", userId)
-            if (currentUser && likes.includes(currentUser._id)) {
-                setLiked(true);
-            } else {
-                setLiked(false);
-            }
+        getDetailBlog("blogs", _id)
+        if (currentUser && likes.includes(currentUser._id)) {
+            setLiked(true);
+        } else {
+            setLiked(false);
+        }
 
-        }, [likes, currentUser]);
-    
+    }, [likes, currentUser]);
+
 
 
     const localDate = () => {
@@ -52,37 +50,35 @@ const Detail = () => {
         }
     }
 
-    const handleLike = () => {
-        getLike("blogs", _id);
+    const handleLike = async () => {
+        await getLike("blogs", _id);
+
     }
 
-
     return (
-        <Card sx={{
-            backgroundColor: "primary.dark", padding: "2rem", minHeight: "90vh"
-        }}>
-            <Grid container>
-                <Grid item sx={{ margin: "auto" }}>
+        <Card sx={{backgroundColor: "primary.dark", padding: "2rem", minHeight: "90vh"}}>
+            <Grid container sx={{...flex, gap:4}}>
+                <Grid item xs={12} lg={4}>
+                <Button onClick={() => navigate(-1)} variant="contained" sx={{ backgroundColor: "primary.light", mb: 5 }} >
+                    Go BACK
+                </Button>
                     <CardMedia
-                        sx={{ borderRadius: "5px" }}
+                        sx={{
+                            margin: "auto",
+                            borderRadius: "5px",
+                            objectFit:"contain"
+                        }}
                         component="img"
                         height="400"
                         image={image}
                         alt="image"
                     />
                 </Grid>
-                <Grid item sx={{
-                    margin: "auto",
-                    width: {
-                        xs: "100%",
-                        sm: "80%",
-                        lg: "50vw"
-                    },
-
-                }}>
+                <Grid item xs={12} lg={6}>
                     <CardHeader
                         sx={{
                             color: "aqua",
+                            // mt: 10,
                             '& .MuiTypography-root': {
                                 fontSize: 18,
                                 fontWeight: "bold"
@@ -100,47 +96,46 @@ const Detail = () => {
                         <Typography variant="body2" sx={{ textAlign: "justify" }} >
                             {content}
                         </Typography>
-                        <CardContent>
-                        
-                        <PageHeader text="Comments"/>
-                            {comments.map(comment => {
-                                if (comment.blogId === _id) {
-                                    return (
-                                        <Box key={comment._id}>
-                                            <Typography>{comment.comment}</Typography>
-                                        </Box>
-                                    );
-                                }
-                            })}
-                        </CardContent>
-
                     </CardContent>
-                    <Box sx={{ ...flex, opacity: ".7", gap: ".5rem", justifyContent:"end" }}>
-                        <Typography >
+                    <Box sx={{ ...flex, opacity: ".7", gap: ".5rem", justifyContent: "end" }}>
+                        <Typography>
                             <FavoriteIcon
                                 sx={{
                                     color: liked ? "red" : "",
                                     cursor: "pointer"
                                 }}
-                                onClick={handleLike}
+                                onClick={() => getLike("blogs", _id)}
                             />
                             <sup>{likes.length}</sup>
                         </Typography>
                         <ChatBubbleOutlineIcon />
-                        <Typography>
-                            <sup>{comments.length}</sup>
+                               <Typography>
+                            <sup>{comments?.comments?.length || 0}</sup>
                         </Typography>
                         <RemoveRedEyeIcon />
                         <Typography>
                             <sup>{countOfVisitors}</sup>
                         </Typography>
                     </Box>
-                    <Button onClick={() => navigate(-1)} variant="contained" sx={{ marginLeft: "1rem", marginBottom: "1rem", backgroundColor: "primary.light" }} >
-                        Go BACK
-                    </Button>
                 </Grid>
+                <Box sx={{margin:"auto"}}>
+                <CardContent CardContent sx={{ margin: "auto" }}>
+                    <Typography sx={{ textAlign: "center", my: 5, color: "secondary.main" }}>COMMENTS</Typography>
+                        <CommentForm />
+                    {comments?.comments?.map(comment => {
+                        if (comment.blogId === _id) {
+                            return (
+                                <Box key={comment._id} sx={{ my: 10, backgroundColor: "secondary.main", padding: "2rem", borderRadius: "1rem" }}>
+                                    <Typography>{comment.comment}</Typography>
+                                </Box>
+                            );
+                        }
+                    })}
+
+                </CardContent>
+            </Box>
             </Grid>
-        </Card>
+        </Card >
 
     )
 };
