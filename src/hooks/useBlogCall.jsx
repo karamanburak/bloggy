@@ -38,10 +38,10 @@ const useBlogCall = () => {
     };
 
 
-    const deleteBlog = async (id) => {
+    const deleteBlog = async (url,id) => {
         dispatch(fetchStart());
         try {
-            await axiosWithToken.delete(`${id}`)
+            await axiosWithToken.delete(`${url}/${id}`)
         } catch (error) {
             console.log(error);
             dispatch(fetchFail());
