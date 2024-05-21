@@ -83,12 +83,14 @@ const useBlogCall = () => {
         dispatch(fetchStart());
         try {
             const {data} = await axiosWithToken(`${url}/${id}`)
-            console.log(data);
+            // console.log(data);
             dispatch(getCommentsData({ data:data.data, url }))
         } catch (error) {
             console.log(error);
             dispatch(fetchFail());
             toastErrorNotify(error?.response?.data?.message || "Operation not success")
+        } finally{
+            getBlogData(url)
         }
     };
 
@@ -101,10 +103,7 @@ const useBlogCall = () => {
             console.log(error);
             dispatch(fetchFail());
             toastErrorNotify(error?.response?.data?.message || "Operation not success")
-        } finally{
-            getBlogData(url);
-
-        }
+        } 
     };
 
     const getLike = async (url, id) => {
@@ -115,7 +114,7 @@ const useBlogCall = () => {
             console.log(error);
             dispatch(fetchFail());
         } finally {
-            getBlogData("blogs");
+            getBlogData(url);
         }
     };
 

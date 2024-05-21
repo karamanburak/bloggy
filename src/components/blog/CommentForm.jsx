@@ -4,9 +4,10 @@ import useBlogCall from "../../hooks/useBlogCall";
 
 const ariaLabel = { 'aria-label': 'description' };
 
-const CommentForm = () => {
-  const { postComment } = useBlogCall()
+const CommentForm = ({blogId,comments}) => {
+  console.log(comments);
   
+  const { postComment } = useBlogCall()
   const [commentText, setCommentText] = useState("")
 
 
@@ -16,9 +17,12 @@ const CommentForm = () => {
       "blogId": blogId,
       "comment": commentText
     };
-    postComment("comments", commentText);
+    postComment("comments", commentData);
+  
     setCommentText("")
+
   };
+
 
   return (
     <Container>
@@ -29,7 +33,6 @@ const CommentForm = () => {
         onSubmit={handleSubmit}
       >
 
-    
         <Input placeholder="Add Comment" inputProps={ariaLabel}  onChange={(e) => setCommentText( e.target.value)} />
         <Button type="submit" variant="contained" sx={{ mt: 1, backgroundColor: "primary.light" }}>Add Comment</Button>
       </FormControl>

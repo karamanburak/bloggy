@@ -27,7 +27,7 @@ const Detail = () => {
     const { getLike, getDetailBlog } = useBlogCall()
     const { currentUser } = useSelector(state => state.auth)
     const { comments } = useSelector(state => state.blog)
-    console.log(comments);
+    // console.log(comments);
     const [liked, setLiked] = useState(false);
 
 
@@ -50,10 +50,6 @@ const Detail = () => {
         }
     }
 
-    const handleLike = async () => {
-        await getLike("blogs", _id);
-
-    }
 
     return (
         <Card sx={{backgroundColor: "primary.dark", padding: "2rem", minHeight: "90vh"}}>
@@ -121,11 +117,28 @@ const Detail = () => {
                 <Box sx={{margin:"auto"}}>
                 <CardContent CardContent sx={{ margin: "auto" }}>
                     <Typography sx={{ textAlign: "center", my: 5, color: "secondary.main" }}>COMMENTS</Typography>
-                        <CommentForm />
+                        <CommentForm blogId={_id} {...comments}/>
                     {comments?.comments?.map(comment => {
                         if (comment.blogId === _id) {
                             return (
                                 <Box key={comment._id} sx={{ my: 10, backgroundColor: "secondary.main", padding: "2rem", borderRadius: "1rem" }}>
+                                    <CardHeader
+                                        sx={{
+                                            color: "seagreen",
+                                            '& .MuiTypography-root': {
+                                                fontSize: 15,
+                                                fontWeight: "bold"
+                                            }
+
+                                        }}
+                                        avatar={
+                                            <Avatar aria-label="recipe">
+                                                {userId ? <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${userId.firstName}`} alt="image" /> : "R"}
+                                            </Avatar>
+                                        }
+                                    // title={title}
+                                    subheader={`Published Date: ${localDate()}`}
+                                    />
                                     <Typography>{comment.comment}</Typography>
                                 </Box>
                             );
