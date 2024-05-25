@@ -27,7 +27,7 @@ const Detail = () => {
     const { getLike, getDetailBlog } = useBlogCall()
     const { currentUser } = useSelector(state => state.auth)
     const { comments } = useSelector(state => state.blog)
-    // console.log(comments);
+    console.log(comments);
     const [liked, setLiked] = useState(false);
 
 

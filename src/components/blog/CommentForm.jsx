@@ -5,7 +5,7 @@ import useBlogCall from "../../hooks/useBlogCall";
 const ariaLabel = { 'aria-label': 'description' };
 
 const CommentForm = ({blogId,comments}) => {
-  console.log(comments);
+  // console.log(comments);
   
   const { postComment } = useBlogCall()
   const [commentText, setCommentText] = useState("")
