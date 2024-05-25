@@ -43,26 +43,24 @@ const Detail = () => {
     }, [likes, currentUser]);
 
 
+    const formatDate = (dateString) => {
+        return new Date(dateString).toLocaleString("de-DE");
+    };
 
-    const localDate = () => {
-        if (createdAt) {
-            return new Date(createdAt).toLocaleString("de-DE")
-        }
-    }
 
 
     return (
-        <Card sx={{backgroundColor: "primary.dark", padding: "2rem", minHeight: "90vh"}}>
-            <Grid container sx={{...flex, gap:4}}>
+        <Card sx={{ backgroundColor: "primary.dark", padding: "2rem", minHeight: "90vh" }}>
+            <Grid container sx={{ ...flex, gap: 4 }}>
                 <Grid item xs={12} lg={4}>
-                <Button onClick={() => navigate(-1)} variant="contained" sx={{ backgroundColor: "primary.light", mb: 5 }} >
-                    Go BACK
-                </Button>
+                    <Button onClick={() => navigate(-1)} variant="contained" sx={{ backgroundColor: "primary.light", mb: 5 }} >
+                        Go BACK
+                    </Button>
                     <CardMedia
                         sx={{
                             margin: "auto",
                             borderRadius: "5px",
-                            objectFit:"contain"
+                            objectFit: "contain"
                         }}
                         component="img"
                         height="400"
@@ -86,13 +84,11 @@ const Detail = () => {
                             </Avatar>
                         }
                         title={title}
-                        subheader={`Published Date: ${localDate()}`}
+                        subheader={`Published Date: ${formatDate(createdAt)}`}
                     />
-                    <CardContent>
-                        <Typography variant="body2" sx={{ textAlign: "justify" }} >
-                            {content}
-                        </Typography>
-                    </CardContent>
+                    <Typography variant="body2" sx={{ textAlign: "justify" }} >
+                        {content}
+                    </Typography>
                     <Box sx={{ ...flex, opacity: ".7", gap: ".5rem", justifyContent: "end" }}>
                         <Typography>
                             <FavoriteIcon
@@ -105,8 +101,8 @@ const Detail = () => {
                             <sup>{likes.length}</sup>
                         </Typography>
                         <ChatBubbleOutlineIcon />
-                               <Typography>
-                            <sup>{comments?.comments?.length || 0}</sup>
+                        <Typography>
+                            <sup>{comments?.length || 0}</sup>
                         </Typography>
                         <RemoveRedEyeIcon />
                         <Typography>
@@ -114,39 +110,37 @@ const Detail = () => {
                         </Typography>
                     </Box>
                 </Grid>
-                <Box sx={{margin:"auto"}}>
-                <CardContent CardContent sx={{ margin: "auto" }}>
-                    <Typography sx={{ textAlign: "center", my: 5, color: "secondary.main" }}>COMMENTS</Typography>
-                        <CommentForm blogId={_id} {...comments}/>
-                    {comments?.comments?.map(comment => {
-                        if (comment.blogId === _id) {
-                            return (
-                                <Box key={comment._id} sx={{ my: 10, backgroundColor: "secondary.main", padding: "2rem", borderRadius: "1rem" }}>
-                                    <CardHeader
-                                        sx={{
-                                            color: "seagreen",
-                                            '& .MuiTypography-root': {
-                                                fontSize: 15,
-                                                fontWeight: "bold"
+                <Box sx={{ margin: "auto" }}>
+                    <CardContent sx={{ margin: "auto" }}>
+                        <Typography sx={{ textAlign: "center", my: 5, color: "secondary.main" }}>COMMENTS</Typography>
+                        <CommentForm blogId={_id} {...comments} />
+                        {comments?.map(comment => {
+                            if (comment.blogId === _id) {
+                                return (
+                                    <Box key={comment._id} sx={{ my: 10, backgroundColor: "secondary.main", padding: "2rem", borderRadius: "1rem", maxWidth: "90vw" }}>
+                                        <CardHeader
+                                            sx={{
+                                                color: "seagreen",
+                                                '& .MuiTypography-root': {
+                                                    fontSize: 15,
+                                                    fontWeight: "bold",
+                                                }
+
+                                            }}
+                                            avatar={
+                                                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                                                        <img key={comment._id} src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${comment.userId.firstName}`} alt="image" />                   
+                                                </Avatar>
                                             }
-
-                                        }}
-                                        avatar={
-                                            <Avatar aria-label="recipe">
-                                                {userId ? <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${userId.firstName}`} alt="image" /> : "R"}
-                                            </Avatar>
-                                        }
-                                    // title={title}
-                                    subheader={`Published Date: ${localDate()}`}
-                                    />
-                                    <Typography>{comment.comment}</Typography>
-                                </Box>
-                            );
-                        }
-                    })}
-
-                </CardContent>
-            </Box>
+                                            subheader={`Published Date: ${formatDate(comment.createdAt)}`}
+                                        />
+                                        <Typography>{comment.comment}</Typography>
+                                    </Box>
+                                );
+                            }
+                        })}
+                    </CardContent>
+                </Box>
             </Grid>
         </Card >
 

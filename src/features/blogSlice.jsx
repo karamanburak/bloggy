@@ -23,7 +23,7 @@ const blogSlice = createSlice({
         },
         getCommentsData : (state,{payload}) => {
             state.loading = false;
-            state.comments = payload.data
+            state.comments = payload.data.comments
         },
 
         postBlogs : (state,{payload}) => {

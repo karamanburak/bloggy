@@ -105,7 +105,7 @@ useEffect(()=>{
                             <sup>{countOfVisitors}</sup>
                         </Typography>
                     </Box>
-                    <Button onClick={() => navigate(`/blog/detail/${_id}`, { state: { content, image, title, userId, createdAt, likes } })} variant="contained" sx={{ marginRight: "1rem", marginBottom: "1rem", backgroundColor: "primary.light" }} >
+                    <Button onClick={() => navigate(`/blog/detail/${_id}`, { state: { content, image, title, userId, createdAt, likes,_id } })} variant="contained" sx={{ marginRight: "1rem", marginBottom: "1rem", backgroundColor: "primary.light" }} >
                         Read More
                     </Button>
                 </Box>
