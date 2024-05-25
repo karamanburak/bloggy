@@ -75,7 +75,7 @@ const useBlogCall = () => {
             toastErrorNotify(error?.response?.data?.message || "Operation not success")
 
         } finally {
-            getBlogData(url)
+            getDetailBlog("blogs")
         }
     };
 

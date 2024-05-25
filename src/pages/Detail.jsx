@@ -47,6 +47,9 @@ const Detail = () => {
         return new Date(dateString).toLocaleString("de-DE");
     };
 
+    const handleCommentSubmit = () => {
+        getDetailBlog("blogs", _id);
+    };
 
 
     return (
@@ -113,7 +116,7 @@ const Detail = () => {
                 <Box sx={{ margin: "auto" }}>
                     <CardContent sx={{ margin: "auto" }}>
                         <Typography sx={{ textAlign: "center", my: 5, color: "secondary.main" }}>COMMENTS</Typography>
-                        <CommentForm blogId={_id} {...comments} />
+                        <CommentForm blogId={_id} onCommentSubmit={handleCommentSubmit} />
                         {comments?.map(comment => {
                             if (comment.blogId === _id) {
                                 return (
