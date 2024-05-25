@@ -11,6 +11,9 @@ import loadingGif from '../../assets/loading.gif'
 const MyBlogsContainer = ({_id}) => {
     const { getUserBlogs } = useBlogCall();
     const  {blogs, loading}  = useSelector(state => state.blog)
+    const {currentUser} = useSelector(state=> state.auth)
+    // console.log(currentUser);
+    
     // console.log(blogs);
     
     const [currentPage, setCurrentPage] = useState(1);
@@ -33,9 +36,10 @@ const MyBlogsContainer = ({_id}) => {
                 <img src={loadingGif} alt="loading..." height={500} />
             ) : (
                <Box>
-            {currentBlogs.map((blog) => (
+            {getUserBlogs ? (currentBlogs.map((blog) => (
                 <MyBlogsCard key={blog._id} {...blog}/>
-            ))}
+            ))) : "" 
+            }
                </Box> 
             )}
             <Typography style={{ marginTop: "20px",textAlign:"center" }}>

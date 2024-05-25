@@ -27,7 +27,7 @@ const Detail = () => {
     const { getLike, getDetailBlog } = useBlogCall()
     const { currentUser } = useSelector(state => state.auth)
     const { comments } = useSelector(state => state.blog)
-    console.log(comments);
+    // console.log(comments);
     const [liked, setLiked] = useState(false);
 
 
@@ -92,7 +92,7 @@ const Detail = () => {
                     <Typography variant="body2" sx={{ textAlign: "justify" }} >
                         {content}
                     </Typography>
-                    <Box sx={{ ...flex, opacity: ".7", gap: ".5rem", justifyContent: "end" }}>
+                    <Box sx={{ ...flex, opacity: ".7", gap: ".5rem", justifyContent: "end", mt:4 }}>
                         <Typography>
                             <FavoriteIcon
                                 sx={{
@@ -135,6 +135,7 @@ const Detail = () => {
                                                         <img key={comment._id} src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${comment.userId.firstName}`} alt="image" />                   
                                                 </Avatar>
                                             }
+                                            title={`${comment.userId.firstName} ${comment.userId.lastName}`}
                                             subheader={`Published Date: ${formatDate(comment.createdAt)}`}
                                         />
                                         <Typography>{comment.comment}</Typography>
