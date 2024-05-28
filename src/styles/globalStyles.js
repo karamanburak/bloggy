@@ -79,9 +79,9 @@ export const profileStyle = {
 export const commentsStyle = {
     textAlign: "center",
      my: 5, 
-     color: "yellowgreen", 
+     color: "neutral.main", 
      fontWeight: "bold", 
-     backgroundColor: "indianred", 
+     backgroundColor: "secondary.main", 
      display: "block", 
      padding: 2, 
      borderTopLeftRadius: "10px",

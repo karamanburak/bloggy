@@ -21,15 +21,15 @@ import CommentForm from '../components/blog/CommentForm';
 
 
 const Detail = () => {
+    const [liked, setLiked] = useState(false);
     const navigate = useNavigate()
     const { state } = useLocation()
     const { content, image, title, createdAt, userId, _id, likes, countOfVisitors } = state;
     const { getLike, getDetailBlog } = useBlogCall()
     const { currentUser } = useSelector(state => state.auth)
-    const { comments } = useSelector(state => state.blog)
-    // console.log(comments);
-    const [liked, setLiked] = useState(false);
-
+    const { blogs, comments } = useSelector(state => state.blog)
+    console.log(currentUser);
+    console.log(blogs);
 
 
     useEffect(() => {
@@ -54,11 +54,11 @@ const Detail = () => {
 
     return (
         <Card sx={{ backgroundColor: "primary.dark", padding: "2rem", minHeight: "90vh" }}>
-            <Grid container sx={{ ...flex, gap: 4 }}>
-                <Grid item xs={12} lg={4}>
                     <Button onClick={() => navigate(-1)} variant="contained" sx={{ backgroundColor: "primary.light", mb: 5 }} >
                         Go BACK
                     </Button>
+            <Grid container sx={{ ...flex, gap: 4 }}>
+                <Grid item xs={12} lg={4}>
                     <CardMedia
                         sx={{
                             margin: "auto",
@@ -72,27 +72,35 @@ const Detail = () => {
                     />
                 </Grid>
                 <Grid item xs={12} lg={6}>
-                    <CardHeader
-                        sx={{
-                            color: "aqua",
-                            // mt: 10,
-                            '& .MuiTypography-root': {
-                                fontSize: 18,
-                                fontWeight: "bold"
+                    <Box sx={{...flex, justifyContent:"space-between"}}>
+                        <CardHeader
+                            sx={{
+                                color: "aqua",
+                                // mt: 10,
+                                '& .MuiTypography-root': {
+                                    fontSize: 18,
+                                    fontWeight: "bold"
+                                }
+                            }}
+                            avatar={
+                                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                                    {userId ? <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${userId}`} alt="image" /> : "R"}
+                                </Avatar>
                             }
-                        }}
-                        avatar={
-                            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                                {userId ? <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${userId}`} alt="image" /> : "R"}
-                            </Avatar>
-                        }
-                        title={title}
-                        subheader={`Published Date: ${formatDate(createdAt)}`}
-                    />
+                            title={title}
+                            subheader={`Published Date: ${formatDate(createdAt)}`}
+                        />
+                 
+                    </Box>
                     <Typography variant="body2" sx={{ textAlign: "justify" }} >
                         {content}
                     </Typography>
-                    <Box sx={{ ...flex, opacity: ".7", gap: ".5rem", justifyContent: "end", mt:4 }}>
+                    <Box sx={{ ...flex, opacity: ".7", gap: ".5rem", justifyContent: "space-between", m:4}}>
+                        <Box sx={{ display: "flex", gap: 2, marginLeft:"-2rem" }}>
+                            <Button variant='contained' sx={{ backgroundColor: "cornflowerblue" }}>Update Blog</Button>
+                            <Button variant='contained' sx={{ backgroundColor: "red" }}>Delete Blog</Button>
+                        </Box>
+                        <Box sx={{ ...flex, opacity: ".7", gap: ".5rem", justifyContent: "space-between"}} >
                         <Typography>
                             <FavoriteIcon
                                 sx={{
@@ -111,14 +119,15 @@ const Detail = () => {
                         <Typography>
                             <sup>{countOfVisitors}</sup>
                         </Typography>
+                        </Box>
                     </Box>
                 </Grid>
-                <Box sx={{ margin: "auto" }}>
-                        <Typography sx={commentsStyle}>COMMENTS</Typography>
-                    <CardContent sx={{margin: "auto", width:"80vw"}}>
-                    <Box sx={{marginTop:"4rem"}}>
-                        <CommentForm blogId={_id} onCommentSubmit={handleCommentSubmit} />
-                    </Box>
+                <Box sx={{ margin: "auto", padding:"2rem"}}>
+                    <Typography sx={commentsStyle}>COMMENTS</Typography>
+                    <CardContent sx={{ margin: "auto", width: "80vw" }}>
+                        <Box sx={{ marginTop: "4rem" }}>
+                            <CommentForm blogId={_id} onCommentSubmit={handleCommentSubmit} />
+                        </Box>
                         {comments?.length > 0 ? (
                             comments.map(comment => {
                                 if (comment.blogId === _id) {
@@ -147,7 +156,7 @@ const Detail = () => {
                                 return null;
                             })
                         ) : (
-                            <Typography sx={{textAlign:"center", mt:5, fontSize:"2rem"}}>There are no comments yet...</Typography>
+                            <Typography sx={{ textAlign: "center", mt: 5, fontSize: "2rem" }}>There are no comments yet...</Typography>
                         )}
                     </CardContent>
                 </Box>

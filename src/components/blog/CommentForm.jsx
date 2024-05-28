@@ -31,7 +31,7 @@ const CommentForm = ({ blogId, onCommentSubmit }) => {
         onSubmit={handleSubmit}
       >
 
-        <Input placeholder="Add Comment" inputProps={ariaLabel}  onChange={(e) => setCommentText( e.target.value)} />
+        <Input sx={{ fontWeight:"bold"}} placeholder="Add Comment" inputProps={ariaLabel}  onChange={(e) => setCommentText( e.target.value)} />
         <Button type="submit" variant="contained" sx={{ mt: 1, backgroundColor: "primary.light" }}>Add Comment</Button>
       </FormControl>
     </Container>

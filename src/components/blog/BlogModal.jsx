@@ -37,7 +37,7 @@ export default function BlogModal({ open, handleClose, initialState,categories }
       toastWarnNotify("Content must be least 30 words")
       return; 
     }
-    console.log("submit", info);
+    // console.log("submit", info);
     postBlog("blogs", info)
     handleClose()
   }
