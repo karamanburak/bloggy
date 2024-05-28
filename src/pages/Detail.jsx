@@ -25,20 +25,17 @@ const Detail = () => {
     const navigate = useNavigate()
     const { state } = useLocation()
     const { content, image, title, createdAt, userId, _id, likes, countOfVisitors } = state;
-    const {  getDetailBlog } = useBlogCall()
+    const { getDetailBlog } = useBlogCall()
     const { currentUser } = useSelector(state => state.auth)
-    const { blogs, comments } = useSelector(state => state.blog)
+    // console.log(currentUser);
+    const { comments } = useSelector(state => state.blog)
     const [commentText, setCommentText] = useState("")
-
-    
-    console.log(currentUser);
-    console.log(blogs);
 
 
     useEffect(() => {
         getDetailBlog("blogs", _id)
 
-    }, [currentUser,commentText]);
+    }, [currentUser, commentText]);
 
 
     const formatDate = (dateString) => {
@@ -50,12 +47,14 @@ const Detail = () => {
 
     };
 
+    const isCurrentUserOwner = currentUser && userId === currentUser._id;
+
 
     return (
         <Card sx={{ backgroundColor: "primary.dark", padding: "2rem", minHeight: "90vh" }}>
-                    <Button onClick={() => navigate(-1)} variant="contained" sx={{ backgroundColor: "primary.light", mb: 5,display:flex, gap:1}} >
-                <ArrowBackIcon/> GO BACK
-                    </Button>
+            <Button onClick={() => navigate(-1)} variant="contained" sx={{ backgroundColor: "primary.light", mb: 5, display: flex, gap: 1 }} >
+                <ArrowBackIcon /> GO BACK
+            </Button>
             <Grid container sx={{ ...flex, gap: 4 }}>
                 <Grid item xs={12} lg={4}>
                     <CardMedia
@@ -71,7 +70,7 @@ const Detail = () => {
                     />
                 </Grid>
                 <Grid item xs={12} lg={6}>
-                    <Box sx={{...flex, justifyContent:"space-between"}}>
+                    <Box sx={{ ...flex, justifyContent: "space-between" }}>
                         <CardHeader
                             sx={{
                                 color: "aqua",
@@ -89,37 +88,39 @@ const Detail = () => {
                             title={title}
                             subheader={`Published Date: ${formatDate(createdAt)}`}
                         />
-                 
+
                     </Box>
                     <Typography variant="body2" sx={{ textAlign: "justify" }} >
                         {content}
                     </Typography>
-                    <Box sx={{ ...flex, opacity: ".7", gap: ".5rem", justifyContent: "space-between", m:4}}>
-                        <Box sx={{ display: "flex", gap: 2, marginLeft:"-2rem" }}>
-                            <Button variant='contained' sx={{ backgroundColor: "cornflowerblue" }}>Update Blog</Button>
-                            <Button variant='contained' sx={{ backgroundColor: "red" }}>Delete Blog</Button>
-                        </Box>
-                        <Box sx={{ ...flex, opacity: ".7", gap: ".5rem", justifyContent: "space-between"}} >
+                    <Box sx={{ ...flex, opacity: ".7", gap: ".5rem", justifyContent: "space-between", m: 4 }}>
+                        {isCurrentUserOwner && (
+                            <Box sx={{ display: "flex", gap: 2, marginLeft: "-2rem" }}>
+                                <Button variant='contained' sx={{ backgroundColor: "cornflowerblue" }}>Update Blog</Button>
+                                <Button variant='contained' sx={{ backgroundColor: "red" }}>Delete Blog</Button>
+                            </Box>
+                        )}
+                        <Box sx={{ ...flex, opacity: ".7", gap: ".5rem", justifyContent: "space-between" }} >
                             <Typography >
-                                <FavoriteIcon/>
+                                <FavoriteIcon />
                                 <sup>{likes.length}</sup>
                             </Typography>
-                        <ChatBubbleOutlineIcon />
-                        <Typography>
-                            <sup>{comments?.length || 0}</sup>
-                        </Typography>
-                        <RemoveRedEyeIcon />
-                        <Typography>
-                            <sup>{countOfVisitors}</sup>
-                        </Typography>
+                            <ChatBubbleOutlineIcon />
+                            <Typography>
+                                <sup>{comments?.length || 0}</sup>
+                            </Typography>
+                            <RemoveRedEyeIcon />
+                            <Typography>
+                                <sup>{countOfVisitors}</sup>
+                            </Typography>
                         </Box>
                     </Box>
                 </Grid>
-                <Box sx={{ margin: "auto", padding:"2rem", backgroundColor:"secondary.main", borderRadius:"10px"}}>
+                <Box sx={{ margin: "auto", padding: "2rem", backgroundColor: "secondary.main", borderRadius: "10px" }}>
                     <Typography sx={commentsStyle}>COMMENTS</Typography>
                     <CardContent sx={{ margin: "auto", width: "80vw" }}>
                         <Box sx={{ marginTop: "4rem" }}>
-                            <CommentForm blogId={_id} onCommentSubmit={handleCommentSubmit} commentText={commentText} setCommentText={setCommentText}/>
+                            <CommentForm blogId={_id} onCommentSubmit={handleCommentSubmit} commentText={commentText} setCommentText={setCommentText} />
                         </Box>
                         {comments?.length > 0 ? (
                             comments.map(comment => {
