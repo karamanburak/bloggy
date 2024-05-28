@@ -26,6 +26,7 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
   const { getCategory } = useCategoryCall()
   const [readingTime, setReadingTime] = useState(null);
   const { getLike } = useBlogCall()
+
   const { currentUser } = useSelector(state => state.auth)
   const [liked, setLiked] = useState(false);
 

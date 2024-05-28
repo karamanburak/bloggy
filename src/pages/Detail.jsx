@@ -21,26 +21,23 @@ import CommentForm from '../components/blog/CommentForm';
 
 
 const Detail = () => {
-    const [liked, setLiked] = useState(false);
     const navigate = useNavigate()
     const { state } = useLocation()
     const { content, image, title, createdAt, userId, _id, likes, countOfVisitors } = state;
-    const { getLike, getDetailBlog } = useBlogCall()
+    const {  getDetailBlog } = useBlogCall()
     const { currentUser } = useSelector(state => state.auth)
     const { blogs, comments } = useSelector(state => state.blog)
+    const [commentText, setCommentText] = useState("")
+
+    
     console.log(currentUser);
     console.log(blogs);
 
 
     useEffect(() => {
         getDetailBlog("blogs", _id)
-        if (currentUser && likes.includes(currentUser._id)) {
-            setLiked(true);
-        } else {
-            setLiked(false);
-        }
 
-    }, [likes, currentUser]);
+    }, [currentUser,commentText]);
 
 
     const formatDate = (dateString) => {
@@ -49,6 +46,7 @@ const Detail = () => {
 
     const handleCommentSubmit = () => {
         getDetailBlog("blogs", _id);
+
     };
 
 
@@ -101,16 +99,10 @@ const Detail = () => {
                             <Button variant='contained' sx={{ backgroundColor: "red" }}>Delete Blog</Button>
                         </Box>
                         <Box sx={{ ...flex, opacity: ".7", gap: ".5rem", justifyContent: "space-between"}} >
-                        <Typography>
-                            <FavoriteIcon
-                                sx={{
-                                    color: liked ? "red" : "",
-                                    cursor: "pointer"
-                                }}
-                                onClick={() => getLike("blogs", _id)}
-                            />
-                            <sup>{likes.length}</sup>
-                        </Typography>
+                            <Typography >
+                                <FavoriteIcon/>
+                                <sup>{likes.length}</sup>
+                            </Typography>
                         <ChatBubbleOutlineIcon />
                         <Typography>
                             <sup>{comments?.length || 0}</sup>
@@ -126,7 +118,7 @@ const Detail = () => {
                     <Typography sx={commentsStyle}>COMMENTS</Typography>
                     <CardContent sx={{ margin: "auto", width: "80vw" }}>
                         <Box sx={{ marginTop: "4rem" }}>
-                            <CommentForm blogId={_id} onCommentSubmit={handleCommentSubmit} />
+                            <CommentForm blogId={_id} onCommentSubmit={handleCommentSubmit} commentText={commentText} setCommentText={setCommentText}/>
                         </Box>
                         {comments?.length > 0 ? (
                             comments.map(comment => {
