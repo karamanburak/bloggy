@@ -54,7 +54,7 @@ const Detail = () => {
     return (
         <Card sx={{ backgroundColor: "primary.dark", padding: "2rem", minHeight: "90vh" }}>
                     <Button onClick={() => navigate(-1)} variant="contained" sx={{ backgroundColor: "primary.light", mb: 5,display:flex, gap:1}} >
-                <ArrowBackIcon/>   Go BACK
+                <ArrowBackIcon/> GO BACK
                     </Button>
             <Grid container sx={{ ...flex, gap: 4 }}>
                 <Grid item xs={12} lg={4}>
