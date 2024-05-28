@@ -43,6 +43,7 @@ const useBlogCall = () => {
         dispatch(fetchStart());
         try {
             await axiosWithToken.delete(`${url}/${id}`)
+            toastSuccessNotify("Blog successfully deleted")
         } catch (error) {
             console.log(error);
             dispatch(fetchFail());
