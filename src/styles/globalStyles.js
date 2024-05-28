@@ -81,11 +81,10 @@ export const commentsStyle = {
      my: 5, 
      color: "neutral.main", 
      fontWeight: "bold", 
-     backgroundColor: "secondary.main", 
      display: "block", 
      padding: 2, 
      borderTopLeftRadius: "10px",
      borderBottomRightRadius: "10px", 
-     width: "200px", 
+     width: "400px", 
      margin: "auto",
 }

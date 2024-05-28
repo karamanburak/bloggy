@@ -114,7 +114,7 @@ const Detail = () => {
                         </Box>
                     </Box>
                 </Grid>
-                <Box sx={{ margin: "auto", padding:"2rem"}}>
+                <Box sx={{ margin: "auto", padding:"2rem", backgroundColor:"secondary.main", borderRadius:"10px"}}>
                     <Typography sx={commentsStyle}>COMMENTS</Typography>
                     <CardContent sx={{ margin: "auto", width: "80vw" }}>
                         <Box sx={{ marginTop: "4rem" }}>
@@ -124,7 +124,7 @@ const Detail = () => {
                             comments.map(comment => {
                                 if (comment.blogId === _id) {
                                     return (
-                                        <Box key={comment._id} sx={{ my: 10, backgroundColor: "secondary.main", padding: "2rem", borderRadius: "1rem", maxWidth: "90vw" }}>
+                                        <Box key={comment._id} sx={{ my: 10, backgroundColor: "primary.main", padding: "2rem", borderRadius: "1rem", maxWidth: "90vw" }}>
                                             <CardHeader
                                                 sx={{
                                                     color: "seagreen",
