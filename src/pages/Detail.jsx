@@ -5,7 +5,7 @@ import CardContent from '@mui/material/CardContent';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
-import { Box, Button, Grid } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -18,18 +18,27 @@ import { commentsStyle, flex } from '../styles/globalStyles'
 import { useState } from 'react';
 import CommentForm from '../components/blog/CommentForm';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import EditNoteIcon from '@mui/icons-material/EditNote';
 
 
 const Detail = () => {
     const navigate = useNavigate()
     const { state } = useLocation()
     const { content, image, title, createdAt, userId, _id, likes, countOfVisitors } = state;
-    const { getDetailBlog } = useBlogCall()
+    const { getDetailBlog, deleteBlog } = useBlogCall()
     const { currentUser } = useSelector(state => state.auth)
     // console.log(currentUser);
     const { comments } = useSelector(state => state.blog)
     const [commentText, setCommentText] = useState("")
+    const [open, setOpen] = useState(false);
+
+
+    const handleDelete = () => {
+        setOpen(false);
+        deleteBlog("blogs", _id)
+        navigate(-1)
+    };
 
 
     useEffect(() => {
@@ -96,8 +105,24 @@ const Detail = () => {
                     <Box sx={{ ...flex, opacity: ".7", gap: ".5rem", justifyContent: "space-between", m: 4 }}>
                         {isCurrentUserOwner && (
                             <Box sx={{ display: "flex", gap: 2, marginLeft: "-2rem" }}>
-                                <Button variant='contained' sx={{ backgroundColor: "cornflowerblue" }}>Update Blog</Button>
-                                <Button variant='contained' sx={{ backgroundColor: "red" }}>Delete Blog</Button>
+                                <Button variant='contained' sx={{ backgroundColor: "cornflowerblue" }}> <EditNoteIcon />Edit Blog</Button>
+                                <Button
+                                    variant='contained'
+                                    sx={{ backgroundColor: "red" }}
+                                    onClick={() => setOpen(true)}
+                                >
+                                    <DeleteForeverIcon /> Delete Blog
+                                </Button>
+                                <Dialog open={open} onClose={() => setOpen(false)}>
+                                    <DialogTitle>Confirm Delete</DialogTitle>
+                                    <DialogContent>
+                                        Are you sure you want to delete this blog post?
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={() => setOpen(false)} sx={{ color: 'gray' }}>Cancel</Button>
+                                        <Button onClick={handleDelete} sx={{ color: 'red' }}>Delete</Button>
+                                    </DialogActions>
+                                </Dialog>
                             </Box>
                         )}
                         <Box sx={{ ...flex, opacity: ".7", gap: ".5rem", justifyContent: "space-between" }} >
