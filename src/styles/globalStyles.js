@@ -75,3 +75,17 @@ export const profileStyle = {
     marginRight:".2rem"
     
 }
+
+export const commentsStyle = {
+    textAlign: "center",
+     my: 5, 
+     color: "yellowgreen", 
+     fontWeight: "bold", 
+     backgroundColor: "indianred", 
+     display: "block", 
+     padding: 2, 
+     borderTopLeftRadius: "10px",
+     borderBottomRightRadius: "10px", 
+     width: "200px", 
+     margin: "auto",
+}

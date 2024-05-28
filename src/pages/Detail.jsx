@@ -14,7 +14,7 @@ import useBlogCall from "../hooks/useBlogCall";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import { flex } from '../styles/globalStyles'
+import { commentsStyle, flex } from '../styles/globalStyles'
 import { useState } from 'react';
 import CommentForm from '../components/blog/CommentForm';
 
@@ -114,35 +114,41 @@ const Detail = () => {
                     </Box>
                 </Grid>
                 <Box sx={{ margin: "auto" }}>
-                    <CardContent sx={{ margin: "auto" }}>
-                        <Typography sx={{ textAlign: "center", my: 5, color: "secondary.main" }}>COMMENTS</Typography>
+                        <Typography sx={commentsStyle}>COMMENTS</Typography>
+                    <CardContent sx={{margin: "auto", width:"80vw"}}>
+                    <Box sx={{marginTop:"4rem"}}>
                         <CommentForm blogId={_id} onCommentSubmit={handleCommentSubmit} />
-                        {comments?.map(comment => {
-                            if (comment.blogId === _id) {
-                                return (
-                                    <Box key={comment._id} sx={{ my: 10, backgroundColor: "secondary.main", padding: "2rem", borderRadius: "1rem", maxWidth: "90vw" }}>
-                                        <CardHeader
-                                            sx={{
-                                                color: "seagreen",
-                                                '& .MuiTypography-root': {
-                                                    fontSize: 15,
-                                                    fontWeight: "bold",
+                    </Box>
+                        {comments?.length > 0 ? (
+                            comments.map(comment => {
+                                if (comment.blogId === _id) {
+                                    return (
+                                        <Box key={comment._id} sx={{ my: 10, backgroundColor: "secondary.main", padding: "2rem", borderRadius: "1rem", maxWidth: "90vw" }}>
+                                            <CardHeader
+                                                sx={{
+                                                    color: "seagreen",
+                                                    '& .MuiTypography-root': {
+                                                        fontSize: 15,
+                                                        fontWeight: "bold",
+                                                    }
+                                                }}
+                                                avatar={
+                                                    <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                                                        <img key={comment._id} src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${comment.userId.firstName}`} alt="image" />
+                                                    </Avatar>
                                                 }
-
-                                            }}
-                                            avatar={
-                                                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                                                        <img key={comment._id} src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${comment.userId.firstName}`} alt="image" />                   
-                                                </Avatar>
-                                            }
-                                            title={`${comment.userId.firstName} ${comment.userId.lastName}`}
-                                            subheader={`Published Date: ${formatDate(comment.createdAt)}`}
-                                        />
-                                        <Typography>{comment.comment}</Typography>
-                                    </Box>
-                                );
-                            }
-                        })}
+                                                title={`${comment.userId.firstName} ${comment.userId.lastName}`}
+                                                subheader={`Published Date: ${formatDate(comment.createdAt)}`}
+                                            />
+                                            <Typography>{comment.comment}</Typography>
+                                        </Box>
+                                    );
+                                }
+                                return null;
+                            })
+                        ) : (
+                            <Typography sx={{textAlign:"center", mt:5, fontSize:"2rem"}}>There are no comments yet...</Typography>
+                        )}
                     </CardContent>
                 </Box>
             </Grid>
