@@ -62,7 +62,7 @@ const Dashboard = () => {
     return (
         <Box
             sx={{ backgroundColor: "primary.dark" }} >
-            <img src={home} alt="image" width="100%"/>
+            <img src={home} alt="image" width="100%" height="500px"/>
 
             <Container>
                 <Box sx={{...wellcomeMessage,borderRadius:"1rem"}}>
