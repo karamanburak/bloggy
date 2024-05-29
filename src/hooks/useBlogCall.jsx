@@ -26,6 +26,21 @@ const useBlogCall = () => {
         }
     };
 
+    const getDetailBlog = async (url, id) => {
+        dispatch(fetchStart());
+        try {
+            const { data } = await axiosWithToken(`${url}/${id}`)
+            // console.log(data);
+            dispatch(getCommentsData({ data: data.data, url }))
+        } catch (error) {
+            console.log(error);
+            dispatch(fetchFail());
+            toastErrorNotify(error?.response?.data?.message || "Operation not success")
+        } finally {
+            getBlogData(url)
+        }
+    };
+
     const getUserBlogs = async (userId) => {
         dispatch(fetchStart())
         try {
@@ -80,20 +95,6 @@ const useBlogCall = () => {
         }
     };
 
-    const getDetailBlog = async (url,id) => {
-        dispatch(fetchStart());
-        try {
-            const {data} = await axiosWithToken(`${url}/${id}`)
-            // console.log(data);
-            dispatch(getCommentsData({ data:data.data, url }))
-        } catch (error) {
-            console.log(error);
-            dispatch(fetchFail());
-            toastErrorNotify(error?.response?.data?.message || "Operation not success")
-        } finally{
-            getBlogData(url)
-        }
-    };
 
     const postComment = async (url,info) => {
         dispatch(fetchStart());

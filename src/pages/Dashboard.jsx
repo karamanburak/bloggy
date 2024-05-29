@@ -30,7 +30,6 @@ const Dashboard = () => {
             const {data} = await axios(url2)
             const firstFifteenArticles = data.articles.slice(0, 15);
             setNews(firstFifteenArticles);
-            // console.log(firstFifteenArticles);
             
         } catch (error) {
             console.log(error);

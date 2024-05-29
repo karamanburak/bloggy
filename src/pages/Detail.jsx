@@ -25,6 +25,8 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 const Detail = () => {
     const navigate = useNavigate()
     const { state } = useLocation()
+    console.log(state);
+    
     const { content, image, title, createdAt, userId, _id, likes, countOfVisitors } = state;
     const { getDetailBlog, deleteBlog } = useBlogCall()
     const { currentUser } = useSelector(state => state.auth)
@@ -44,7 +46,7 @@ const Detail = () => {
     useEffect(() => {
         getDetailBlog("blogs", _id)
 
-    }, [currentUser, commentText]);
+    }, [commentText]);
 
 
     const formatDate = (dateString) => {

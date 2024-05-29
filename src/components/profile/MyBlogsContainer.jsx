@@ -17,7 +17,7 @@ const MyBlogsContainer = ({_id}) => {
     // console.log(blogs);
     
     const [currentPage, setCurrentPage] = useState(1);
-    const blogsPerPage = 3;
+    const blogsPerPage = 2;
 
     useEffect(() => {
         getUserBlogs(_id);
