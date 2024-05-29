@@ -60,9 +60,7 @@ SOLUTION
 |    │   │   └── useCategoryCall.jsx
 |    ├── pages
 |    │   ├── About.jsx
-|    │   ├── Account.jsx
 |    │   ├── Blogs.jsx
-|    │   ├── Contact.jsx
 |    │   ├── Dashboard.jsx
 |    │   ├── Detail.jsx
 |    │   ├── Login.jsx
