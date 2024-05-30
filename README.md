@@ -4,7 +4,7 @@
 
 ## Description
 
-Bloggy app is a web page made with react. While previously written blogs can be viewed, favorite blogs can be added and removed. After logging in, the user can update their profile or create blogs that are not public. 
+📰 Bloggy app is a web page made with react. While previously written blogs can be viewed, favorite blogs can be added and removed. After logging in, the user can update their profile or create blogs that are not public. 
 
 ## Project Skeleton
 
