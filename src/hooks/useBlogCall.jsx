@@ -116,7 +116,7 @@ const useBlogCall = () => {
             dispatch(fetchFail());
             toastErrorNotify(error?.response?.data?.message || "Operation not success")
         } finally {
-            getBlogData(url)
+            getBlogData()
         }
     };
 
