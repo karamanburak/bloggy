@@ -25,15 +25,14 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 const Detail = () => {
     const navigate = useNavigate()
     const { state } = useLocation()
-    
-    const { content, image, title, createdAt, userId, _id, likes, countOfVisitors } = state;
+
+    const { content, image, createdAt, userId, title, _id, likes, countOfVisitors } = state;
     const { getCommentsDetail, deleteBlog, getBlogDetail } = useBlogCall()
     const { currentUser } = useSelector(state => state.auth)
     // console.log(currentUser);
-    const { comments,blog } = useSelector(state => state.blog)
+    const { comments, blog } = useSelector(state => state.blog)
     const [commentText, setCommentText] = useState("")
     const [open, setOpen] = useState(false);
-console.log(blog);
 
 
 
@@ -81,6 +80,7 @@ console.log(blog);
                         image={image}
                         alt="image"
                     />
+                    <Typography variant='h6' component="h1" sx={{textAlign:"center", textTransform:"uppercase", textDecoration:"underline", color:"white", fontWeight:"bold"}}>{title}</Typography>
                 </Grid>
                 <Grid item xs={12} lg={6}>
                     <Box sx={{ ...flex, justifyContent: "space-between" }}>
@@ -174,9 +174,10 @@ console.log(blog);
                                             />
                                             <Typography>{comment.comment}</Typography>
                                         </Box>
-                                    );
+                                    )
+                                } else {
+                                    return null;
                                 }
-                                return null;
                             })
                         ) : (
                             <Typography sx={{ textAlign: "center", mt: 5, fontSize: "2rem" }}>There are no comments yet...</Typography>
@@ -185,7 +186,6 @@ console.log(blog);
                 </Box>
             </Grid>
         </Card >
-
     )
 };
 

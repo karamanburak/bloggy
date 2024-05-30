@@ -23,17 +23,17 @@ const Dashboard = () => {
     const { blogs, loading } = useSelector(state => state.blog)
     const [shows, setShows] = useState([])
     const [news, setNews] = useState([])
-    
+
 
     const getNews = async () => {
         try {
-            const {data} = await axios(url2)
+            const { data } = await axios(url2)
             const firstFifteenArticles = data.articles.slice(0, 15);
             setNews(firstFifteenArticles);
-            
+
         } catch (error) {
             console.log(error);
-            
+
         }
     }
 
@@ -44,7 +44,7 @@ const Dashboard = () => {
             const { data } = await axios(url)
             setShows(data)
             // console.log(data);
-            
+
         } catch (error) {
             console.log(error);
 
@@ -62,37 +62,49 @@ const Dashboard = () => {
     return (
         <Box
             sx={{ backgroundColor: "primary.dark" }} >
-            <img src={home} alt="image" width="100%" height="500px"/>
+            <img src={home} alt="image" width="100%" height="500px" />
 
             <Container>
-                <Box sx={{...wellcomeMessage,borderRadius:"1rem"}}>
+                <Box sx={{ ...wellcomeMessage, borderRadius: "1rem" }}>
                     <Typography variant='span' style={spanStyle}>Welcome to the Bloggy</Typography>
                 </Box>
                 <Box sx={wellcomeMessage}>
                     <Quotes />
                 </Box>
-                {loading ? (
-                    <img src={loadingGif} alt="loading..." height={500} style={{ display: "flex", margin: "auto" }} />
-                ) : (
-                    <Box>
+                <Box>
+                    {loading ? (
+                        <img src={loadingGif} alt="loading..." height={500} style={{ display: "flex", margin: "auto" }} />
+                    ) : (
                         <Slide>
                             {blogs.map((blog) => (
-                                    <HomeCard key={blog._id} {...blog} />
-                                ))}
+                                <HomeCard key={blog._id} {...blog} />
+                            ))}
                         </Slide>
+                    )}
+                </Box>
+                <Box>
+                    {loading ? (
+                        <img src={loadingGif} alt="loading..." height={500} style={{ display: "flex", margin: "auto" }} />
+                    ) : (
                         <Slide>
- 
-                               {shows.map((show) => (
-                                    <ShowsCard key={show.id} {...show} />
-                                ))}
+                            {shows.map((show) => (
+                                <ShowsCard key={show.id} {...show} />
+                            ))}
                         </Slide>
+                    )}
+                </Box>
+                <Box>
+                    {loading ? (
+                        <img src={loadingGif} alt="loading..." height={500} style={{ display: "flex", margin: "auto" }} />
+                    ) : (
                         <Slide>
-                            { news.map((newsItem,index) => (
+                            {news.map((newsItem, index) => (
                                 <NewsCard key={index} {...newsItem} />
-                                ))}
+                            ))}
                         </Slide>
-                    </Box>
-                )}
+                    )}
+                </Box>
+
             </Container>
             <Box sx={{ marginTop: "2rem" }}>
                 <Footer isDashboard={isDashboard} />
