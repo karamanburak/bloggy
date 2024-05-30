@@ -16,7 +16,7 @@ import ShowsCard from '../components/home/ShowsCard';
 import NewsCard from '../components/home/NewsCard';
 
 const url = 'https://api.tvmaze.com/shows'
-const url2 = `https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=${import.meta.env.VITE_News_ApiKey}`
+const url2 = `https://newsapi.org/v2/top-headlines?country=de&apiKey=c8c0b92337864bc7ab23287df77e8df9`
 const Dashboard = () => {
     const isDashboard = '/'
     const { getBlogData } = useBlogCall()
@@ -28,8 +28,11 @@ const Dashboard = () => {
     const getNews = async () => {
         try {
             const { data } = await axios(url2)
-            const firstFifteenArticles = data.articles.slice(0, 15);
-            setNews(firstFifteenArticles);
+            // const firstFifteenArticles = data.articles.slice(0, 15);
+            // setNews(firstFifteenArticles);
+            console.log(data.articles);
+            setNews(data.articles)
+            
 
         } catch (error) {
             console.log(error);
