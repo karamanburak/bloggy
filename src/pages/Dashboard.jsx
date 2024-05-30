@@ -28,9 +28,7 @@ const Dashboard = () => {
     const getNews = async () => {
         try {
             const { data } = await axios(url2)
-            // const firstFifteenArticles = data.articles.slice(0, 15);
-            // setNews(firstFifteenArticles);
-            console.log(data.articles);
+            // console.log(data.articles);
             setNews(data.articles)
             
 
