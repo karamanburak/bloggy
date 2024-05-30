@@ -96,4 +96,4 @@ SOLUTION
 
 ## Postman Documentation
 
-[View Postman Documentation]()
+[View Postman Documentation](https://documenter.getpostman.com/view/32987022/2sA3Qv7AFa)
