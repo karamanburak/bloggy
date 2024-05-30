@@ -25,15 +25,16 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 const Detail = () => {
     const navigate = useNavigate()
     const { state } = useLocation()
-    console.log(state);
     
     const { content, image, title, createdAt, userId, _id, likes, countOfVisitors } = state;
-    const { getDetailBlog, deleteBlog } = useBlogCall()
+    const { getCommentsDetail, deleteBlog, getBlogDetail } = useBlogCall()
     const { currentUser } = useSelector(state => state.auth)
     // console.log(currentUser);
-    const { comments } = useSelector(state => state.blog)
+    const { comments,blog } = useSelector(state => state.blog)
     const [commentText, setCommentText] = useState("")
     const [open, setOpen] = useState(false);
+console.log(blog);
+
 
 
     const handleDelete = () => {
@@ -44,7 +45,8 @@ const Detail = () => {
 
 
     useEffect(() => {
-        getDetailBlog("blogs", _id)
+        getCommentsDetail("blogs", _id)
+        getBlogDetail("blogs", _id)
 
     }, [commentText]);
 
@@ -54,7 +56,7 @@ const Detail = () => {
     };
 
     const handleCommentSubmit = () => {
-        getDetailBlog("blogs", _id);
+        getCommentsDetail("blogs", _id);
 
     };
 
@@ -93,10 +95,10 @@ const Detail = () => {
                             }}
                             avatar={
                                 <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                                    {userId ? <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${userId}`} alt="image" /> : "R"}
+                                    {blog ? <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${blog.firstName}`} alt="image" /> : "R"}
                                 </Avatar>
                             }
-                            title={title}
+                            title={`${blog.firstName} ${blog.lastName}`}
                             subheader={`Published Date: ${formatDate(createdAt)}`}
                         />
 

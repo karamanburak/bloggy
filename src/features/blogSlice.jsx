@@ -26,6 +26,11 @@ const blogSlice = createSlice({
             state.comments = payload.data.comments
         },
 
+        getBlogDetailSuccess: (state, {payload}) => {
+            state.loading = false;
+            state.blog = payload.data.userId
+        },
+
         postBlogs : (state,{payload}) => {
             state.loading = false;
             state[payload.url] = payload.data
@@ -43,6 +48,7 @@ export const {
     fetchStart,
     getSuccess,
     getCommentsData,
+    getBlogDetailSuccess,
     fetchFail,
 } = blogSlice.actions;
 
