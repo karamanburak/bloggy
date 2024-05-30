@@ -102,7 +102,7 @@ const useBlogCall = () => {
             toastErrorNotify(error?.response?.data?.message || "Operation not success")
         } finally {
             getBlogData(url)
-        }
+        } 
     };
 
 
@@ -115,6 +115,8 @@ const useBlogCall = () => {
             console.log(error);
             dispatch(fetchFail());
             toastErrorNotify(error?.response?.data?.message || "Operation not success")
+        } finally {
+            getBlogData(url)
         }
     };
 
@@ -125,7 +127,9 @@ const useBlogCall = () => {
         } catch (error) {
             console.log(error);
             dispatch(fetchFail());
-        } 
+        } finally{
+            getBlogData(url)
+        }
     };
 
 
