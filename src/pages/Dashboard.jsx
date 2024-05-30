@@ -30,7 +30,7 @@ const Dashboard = () => {
     //         const { data } = await axios(url2)
     //         // console.log(data.articles);
     //         setNews(data.articles)
-
+            
 
     //     } catch (error) {
     //         console.log(error);
@@ -82,20 +82,30 @@ const Dashboard = () => {
                             ))}
                         </Slide>
                     )}
-
-                    <Slide>
-                        {shows.map((show) => (
-                            <ShowsCard key={show.id} {...show} />
-                        ))}
-                    </Slide>
-
-                    {/* <Slide>
+                </Box>
+                <Box>
+                    {loading ? (
+                        <img src={loadingGif} alt="loading..." height={500} style={{ display: "flex", margin: "auto" }} />
+                    ) : (
+                        <Slide>
+                            {shows.map((show) => (
+                                <ShowsCard key={show.id} {...show} />
+                            ))}
+                        </Slide>
+                    )}
+                </Box>
+                {/* <Box>
+                    {loading ? (
+                        <img src={loadingGif} alt="loading..." height={500} style={{ display: "flex", margin: "auto" }} />
+                    ) : (
+                        <Slide>
                             {news.map((newsItem, index) => (
                                 <NewsCard key={index} {...newsItem} />
                             ))}
-                        </Slide> */}
+                        </Slide>
+                    )}
+                </Box> */}
 
-                </Box>
             </Container>
             <Box sx={{ marginTop: "2rem" }}>
                 <Footer isDashboard={isDashboard} />
