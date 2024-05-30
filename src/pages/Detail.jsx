@@ -73,14 +73,13 @@ const Detail = () => {
                         sx={{
                             margin: "auto",
                             borderRadius: "5px",
-                            objectFit: "contain"
+                            objectFit: "contain",
                         }}
                         component="img"
                         height="400"
                         image={image}
                         alt="image"
                     />
-                    <Typography variant='h6' component="h1" sx={{textAlign:"center", textTransform:"uppercase", textDecoration:"underline", color:"white", fontWeight:"bold"}}>{title}</Typography>
                 </Grid>
                 <Grid item xs={12} lg={6}>
                     <Box sx={{ ...flex, justifyContent: "space-between" }}>
@@ -103,6 +102,7 @@ const Detail = () => {
                         />
 
                     </Box>
+                    <Typography variant='h6' component="h1" sx={{ textAlign: "center", textTransform: "uppercase", textDecoration: "underline", fontWeight: "bold"}}>{title}</Typography>
                     <Typography variant="body2" sx={{ textAlign: "justify" }} >
                         {content}
                     </Typography>
