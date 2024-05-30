@@ -90,7 +90,7 @@ SOLUTION
 
 ##  Outcome
 
-![Bloggy App]()
+![Bloggy App](https://github.com/karamanburak/bloggy-app/assets/150926922/443fe597-818e-4166-9976-877275ae5bf3)
 
 
 
