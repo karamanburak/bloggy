@@ -16,7 +16,7 @@ import ShowsCard from '../components/home/ShowsCard';
 import NewsCard from '../components/home/NewsCard';
 
 const url = 'https://api.tvmaze.com/shows'
-const url2 = `https://newsapi.org/v2/top-headlines?country=de&apiKey=c8c0b92337864bc7ab23287df77e8df9`
+// const url2 = `https://newsapi.org/v2/everything?q=bitcoin&from=2024-04-30&sortBy=publishedAt&apiKey=c8c0b92337864bc7ab23287df77e8df9`
 const Dashboard = () => {
     const isDashboard = '/'
     const { getBlogData } = useBlogCall()
@@ -25,18 +25,18 @@ const Dashboard = () => {
     const [news, setNews] = useState([])
 
 
-    const getNews = async () => {
-        try {
-            const { data } = await axios(url2)
-            // console.log(data.articles);
-            setNews(data.articles)
+    // const getNews = async () => {
+    //     try {
+    //         const { data } = await axios(url2)
+    //         // console.log(data.articles);
+    //         setNews(data.articles)
             
 
-        } catch (error) {
-            console.log(error);
+    //     } catch (error) {
+    //         console.log(error);
 
-        }
-    }
+    //     }
+    // }
 
 
 
@@ -56,7 +56,7 @@ const Dashboard = () => {
     useEffect(() => {
         getBlogData("blogs")
         getShows()
-        getNews()
+        // getNews()
     }, [])
 
 
@@ -94,7 +94,7 @@ const Dashboard = () => {
                         </Slide>
                     )}
                 </Box>
-                <Box>
+                {/* <Box>
                     {loading ? (
                         <img src={loadingGif} alt="loading..." height={500} style={{ display: "flex", margin: "auto" }} />
                     ) : (
@@ -104,7 +104,7 @@ const Dashboard = () => {
                             ))}
                         </Slide>
                     )}
-                </Box>
+                </Box> */}
 
             </Container>
             <Box sx={{ marginTop: "2rem" }}>
