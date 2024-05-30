@@ -98,7 +98,7 @@ const Detail = () => {
                                     {blog ? <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${blog.firstName}`} alt="image" /> : "R"}
                                 </Avatar>
                             }
-                            title={`${blog.firstName} ${blog.lastName}`}
+                            title={ blog ? `${blog.firstName} ${blog.lastName}`: title}
                             subheader={`Published Date: ${formatDate(createdAt)}`}
                         />
 
