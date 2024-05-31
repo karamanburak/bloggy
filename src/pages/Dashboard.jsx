@@ -86,7 +86,7 @@ const Dashboard = () => {
                 </Box>
                 <Box>
                     {loading ? (
-                        <img src={loadingGif} alt="loading..." height={500} style={{ display: "flex", margin: "auto" }} />
+                       ""
                     ) : (
                         <Slide>
                             {shows.map((show) => (
@@ -97,7 +97,7 @@ const Dashboard = () => {
                 </Box>
                 <Box>
                     {loading ? (
-                        <img src={loadingGif} alt="loading..." height={500} style={{ display: "flex", margin: "auto" }} />
+                        ""
                     ) : (
                         <Slide>
                             {books.map((booksItem, index) => (
