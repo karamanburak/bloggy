@@ -16,7 +16,7 @@ import ShowsCard from '../components/home/ShowsCard';
 import NewsCard from '../components/home/NewsCard';
 
 const url = 'https://api.tvmaze.com/shows'
-const url2 = `https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${import.meta.env.VITE_BOOKS_ApiKey}`
+const url2 = `https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${import.meta.env.VITE_BOOKS_apiKey}`
 const Dashboard = () => {
     const isDashboard = '/'
     const { getBlogData } = useBlogCall()
@@ -29,7 +29,7 @@ const Dashboard = () => {
         try {
             const  {data} = await axios(url2)
             setBooks(data.results.books)
-            console.log(data);
+            // console.log(data);
             
 
         } catch (error) {
