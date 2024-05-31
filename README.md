@@ -83,6 +83,7 @@ SOLUTION
 |    ├── package.json
 |    ├── pnpm-lock.yaml
 |    ├── README.md
+|    ├── vercel.json
 └──   vite.config.js
 
 

@@ -17,7 +17,8 @@ import { toastWarnNotify } from "../../helper/ToastNotify";
 
 const defaultImage = 'https://thumbs.dreamstime.com/b/news-woodn-dice-depicting-letters-bundle-small-newspapers-leaning-left-dice-34802664.jpg'
 
-const NewsCard = ({ source,author, description, urlToImage,url,title,publishedAt}) => {
+const NewsCard = ({ contributor,description, book_image, amazon_product_url
+,title,publishedAt}) => {
     const { currentUser } = useSelector(state => state.auth)
 
 
@@ -25,7 +26,8 @@ const NewsCard = ({ source,author, description, urlToImage,url,title,publishedAt
         if (!currentUser) {
             toastWarnNotify("You must Login");
         } else {
-            window.open(url, '_blank')
+            window.open(amazon_product_url
+, '_blank')
         }
     }
 
@@ -43,7 +45,7 @@ const NewsCard = ({ source,author, description, urlToImage,url,title,publishedAt
           borderBottomLeftRadius: "1rem",
           borderBottomRightRadius: "1rem"
       }}>
-          <PageHeader text="News" />
+          <PageHeader text="Books" />
           <Card
               sx={{
                   height: { xs: 600, md: 300 },
@@ -71,13 +73,13 @@ const NewsCard = ({ source,author, description, urlToImage,url,title,publishedAt
                               maxHeight: "100px",
                               color: "secondary.dark"
                           }} >
-                              {author}
+                              {contributor}
                           </Typography>
                           <Typography variant="body2" sx={{
                               maxHeight: "100px",
                               color: "red"
                           }} >
-                              {source.name}
+                              {title}
                           </Typography>
                           <Typography variant="body2" sx={{
                               maxHeight: "100px",
@@ -111,10 +113,11 @@ const NewsCard = ({ source,author, description, urlToImage,url,title,publishedAt
                               marginTop: "1rem",
                               marginRight: "1rem",
                               padding: "1rem",
+                              objectFit:"contain",
                           }}
                           component="img"
                           height="274"
-                          image={urlToImage ? urlToImage : defaultImage}
+                          image={book_image ? book_image : defaultImage}
                           alt="image"
                       />
 

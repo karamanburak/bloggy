@@ -16,27 +16,28 @@ import ShowsCard from '../components/home/ShowsCard';
 import NewsCard from '../components/home/NewsCard';
 
 const url = 'https://api.tvmaze.com/shows'
-// const url2 = `https://newsapi.org/v2/everything?q=bitcoin&from=2024-04-30&sortBy=publishedAt&apiKey=c8c0b92337864bc7ab23287df77e8df9`
+const url2 = `https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${import.meta.env.VITE_BOOKS_ApiKey}`
 const Dashboard = () => {
     const isDashboard = '/'
     const { getBlogData } = useBlogCall()
     const { blogs, loading } = useSelector(state => state.blog)
     const [shows, setShows] = useState([])
-    const [news, setNews] = useState([])
+    const [books, setBooks] = useState([])
 
 
-    // const getNews = async () => {
-    //     try {
-    //         const { data } = await axios(url2)
-    //         // console.log(data.articles);
-    //         setNews(data.articles)
+    const getBooks = async () => {
+        try {
+            const  {data} = await axios(url2)
+            setBooks(data.results.books)
+            console.log(data);
             
 
-    //     } catch (error) {
-    //         console.log(error);
+        } catch (error) {
+            console.log(error);
 
-    //     }
-    // }
+        }
+    }
+
 
 
 
@@ -56,7 +57,7 @@ const Dashboard = () => {
     useEffect(() => {
         getBlogData("blogs")
         getShows()
-        // getNews()
+        getBooks()
     }, [])
 
 
@@ -94,17 +95,17 @@ const Dashboard = () => {
                         </Slide>
                     )}
                 </Box>
-                {/* <Box>
+                <Box>
                     {loading ? (
                         <img src={loadingGif} alt="loading..." height={500} style={{ display: "flex", margin: "auto" }} />
                     ) : (
                         <Slide>
-                            {news.map((newsItem, index) => (
-                                <NewsCard key={index} {...newsItem} />
+                            {books.map((booksItem, index) => (
+                                <NewsCard key={index} {...booksItem} />
                             ))}
                         </Slide>
                     )}
-                </Box> */}
+                </Box>
 
             </Container>
             <Box sx={{ marginTop: "2rem" }}>

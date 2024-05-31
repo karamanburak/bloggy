@@ -102,7 +102,7 @@ const Detail = () => {
                         />
 
                     </Box>
-                    <Typography variant='h6' component="h1" sx={{ textAlign: "center", textTransform: "uppercase", textDecoration: "underline", fontWeight: "bold"}}>{title}</Typography>
+                    <Typography variant='h6' component="h1" sx={{ textTransform: "uppercase", fontWeight: "bold"}}>{title}</Typography>
                     <Typography variant="body2" sx={{ textAlign: "justify" }} >
                         {content}
                     </Typography>
