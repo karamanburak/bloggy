@@ -49,7 +49,7 @@ const Dashboard = () => {
             sx={{ backgroundColor: "primary.main" }} >
             <img src={home} alt="image" width="100%" height="500px" />
 
-            <Container>
+            <Container maxWidth="xl">
                 <Box sx={{ ...wellcomeMessage, borderRadius: "1rem" }}>
                     <Typography variant='span' style={spanStyle}>Welcome to the Bloggy</Typography>
                 </Box>

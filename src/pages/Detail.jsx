@@ -5,7 +5,7 @@ import CardContent from '@mui/material/CardContent';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -26,12 +26,12 @@ import useCategoryCall from '../hooks/useCategoryCall';
 const Detail = () => {
     const navigate = useNavigate()
     const { state } = useLocation()
-    const { content, image, createdAt, userId, title, _id, likes, countOfVisitors,categoryId } = state;
+    const { content, image, createdAt, userId, title, _id, likes, categoryId,countOfVisitors } = state;
     const { getCommentsDetail, deleteBlog, getBlogDetail } = useBlogCall()
     const { currentUser } = useSelector(state => state.auth)
-    const {  comments, blog} = useSelector(state => state.blog)
+    const { comments, blog} = useSelector(state => state.blog)    
     const { categories } = useSelector(state => state.category)
-    const { getCategory } = useCategoryCall(); 
+    const { getCategory } = useCategoryCall();
     const [commentText, setCommentText] = useState("")
     const [open, setOpen] = useState(false);
 
@@ -47,7 +47,7 @@ const Detail = () => {
 
     useEffect(() => {
         if (!categories.length) {
-            getCategory('categories'); 
+            getCategory('categories');
         }
         getCommentsDetail("blogs", _id)
         getBlogDetail("blogs", _id)
