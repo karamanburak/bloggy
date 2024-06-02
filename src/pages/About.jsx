@@ -36,7 +36,7 @@ const About = () => {
   const theme = useTheme()
 
   return (
-    <Box sx={{ backgroundColor: "primary.dark" }}>
+    <Box sx={{ backgroundColor: "primary.main" }}>
       <Container>
         <Typography variant="h3" sx={{
           fontStyle: "italic",
@@ -94,8 +94,7 @@ const About = () => {
           padding: "2rem",
           marginTop: "2rem",
           marginBottom: "5rem",
-          color: "secondary.light"
-        }}>
+s        }}>
           <Typography variant="h4" sx={{
             textAlign: "center"
           }}>

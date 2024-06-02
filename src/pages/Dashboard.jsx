@@ -63,7 +63,7 @@ const Dashboard = () => {
 
     return (
         <Box
-            sx={{ backgroundColor: "primary.dark" }} >
+            sx={{ backgroundColor: "primary.main" }} >
             <img src={home} alt="image" width="100%" height="500px" />
 
             <Container>
