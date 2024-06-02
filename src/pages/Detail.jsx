@@ -30,7 +30,6 @@ const Detail = () => {
     const { currentUser } = useSelector(state => state.auth)
     const {  comments, blog } = useSelector(state => state.blog)
     const { categories } = useSelector(state => state.category)
-    console.log("categories", categories);
     const [commentText, setCommentText] = useState("")
     const [open, setOpen] = useState(false);
 

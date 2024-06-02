@@ -20,7 +20,7 @@ import { useState } from "react";
 
 
 
-const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, comments, countOfVisitors}) => {
+const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, comments, countOfVisitors,categoryId}) => {
     const navigate = useNavigate()
     const [readingTime, setReadingTime] = useState(null);
 
@@ -105,7 +105,7 @@ useEffect(()=>{
                             <sup>{countOfVisitors}</sup>
                         </Typography>
                     </Box>
-                    <Button onClick={() => navigate(`/blog/detail/${_id}`, { state: { content, image, title, userId, createdAt, likes,_id } })} variant="contained" sx={{ marginRight: "1rem", marginBottom: "1rem", backgroundColor: "primary.light" }} >
+                    <Button onClick={() => navigate(`/blog/detail/${_id}`, { state: { content, image, title, userId, createdAt, likes, _id, categoryId } })} variant="contained" sx={{ marginRight: "1rem", marginBottom: "1rem", backgroundColor: "primary.light" }} >
                         Read More
                     </Button>
                 </Box>

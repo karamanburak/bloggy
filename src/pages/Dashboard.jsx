@@ -13,7 +13,6 @@ import loadingGif from '../assets/loading.gif'
 import { useState } from 'react';
 import axios from 'axios';
 import ShowsCard from '../components/home/ShowsCard';
-import NewsCard from '../components/home/NewsCard';
 
 const url = 'https://api.tvmaze.com/shows'
 const Dashboard = () => {

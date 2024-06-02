@@ -16,7 +16,7 @@ const blogSlice = createSlice({
 
         getCategories: (state, {payload}) => {
             state.loading = false;
-            state[payload.url] = payload.data
+            state.categories = payload.data
         },
         fetchFail: state => {
             state.loading = false;
