@@ -20,6 +20,7 @@ import CommentForm from '../components/blog/CommentForm';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditNoteIcon from '@mui/icons-material/EditNote';
+import useCategoryCall from '../hooks/useCategoryCall';
 
 
 const Detail = () => {
@@ -28,8 +29,9 @@ const Detail = () => {
     const { content, image, createdAt, userId, title, _id, likes, countOfVisitors,categoryId } = state;
     const { getCommentsDetail, deleteBlog, getBlogDetail } = useBlogCall()
     const { currentUser } = useSelector(state => state.auth)
-    const {  comments, blog } = useSelector(state => state.blog)
+    const {  comments, blog} = useSelector(state => state.blog)
     const { categories } = useSelector(state => state.category)
+    const { getCategory } = useCategoryCall(); 
     const [commentText, setCommentText] = useState("")
     const [open, setOpen] = useState(false);
 
@@ -44,6 +46,9 @@ const Detail = () => {
 
 
     useEffect(() => {
+        if (!categories.length) {
+            getCategory('categories'); 
+        }
         getCommentsDetail("blogs", _id)
         getBlogDetail("blogs", _id)
 

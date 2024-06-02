@@ -33,7 +33,7 @@ const blogSlice = createSlice({
 
         postBlogs : (state,{payload}) => {
             state.loading = false;
-            state[payload.url] = payload.data
+            state.blogs = payload.data
         },
 
 
