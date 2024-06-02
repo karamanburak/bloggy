@@ -20,7 +20,7 @@ import { useState } from "react";
 
 
 
-const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, comments, countOfVisitors,categoryId}) => {
+const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, comments, countOfVisitors, categoryId }) => {
     const navigate = useNavigate()
     const [readingTime, setReadingTime] = useState(null);
 
@@ -38,20 +38,19 @@ const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, com
         if (minutes >= 1) {
             setReadingTime(`${minutes} min read`);
         }
-}
+    }
 
-useEffect(()=>{
-    calcReadingTime()
-},[])
+    useEffect(() => {
+        calcReadingTime()
+    }, [])
 
 
     return (
-        <Container maxWidth="xl" sx={{ ...flex, paddingBottom: "2rem" }}>
-              <Card sx={{ borderRadius: "10px" }}>
+        <Container sx={{ paddingBottom: "2rem",width: {xs:"120%", sm:"100%", lg:"80%"}, textAlign:"justify", marginLeft:{xs:"-2rem", sm:"auto"}}}>
+            <Card sx={{ borderRadius: "10px"}}>
                 <CardMedia
                     sx={{
                         marginTop: "1rem",
-                        marginRight: "1rem",
                         padding: "1rem",
                         borderRadius: "1.5rem",
                     }}
@@ -72,15 +71,15 @@ useEffect(()=>{
                     }}
                     avatar={
                         <Avatar sx={{ bgcolor: red[500] }} aria-label="image">
-                            {_id ? <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${userId}`} alt="image"/> : "R"}
+                            {_id ? <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${userId}`} alt="image" /> : "R"}
                         </Avatar>
                     }
                     title={title}
                     subheader={`Published Date: ${localDate()}`}
                 />
-                <Box sx={{display:"inline-block", marginLeft:"1rem" }}>
+                <Box sx={{ display: "inline-block", marginLeft: "1rem" }}>
                     {readingTime && (
-                        <Typography variant="body2" sx={{ backgroundColor: "neutral.dark", padding: ".5rem", borderRadius: "5px"}}>
+                        <Typography variant="body2" sx={{ backgroundColor: "neutral.dark", padding: ".5rem", borderRadius: "5px" }}>
                             {readingTime}
                         </Typography>
                     )}
@@ -105,7 +104,7 @@ useEffect(()=>{
                             <sup>{countOfVisitors}</sup>
                         </Typography>
                     </Box>
-                    <Button onClick={() => navigate(`/blog/detail/${_id}`, { state: { content, image, title, userId, createdAt, likes, _id, categoryId } })} variant="contained" sx={{ marginRight: "1rem", marginBottom: "1rem", backgroundColor: "primary.light" }} >
+                    <Button onClick={() => navigate(`/blog/detail/${_id}`, { state: { content, image, title, userId, createdAt, likes, _id, categoryId,countOfVisitors } })} variant="contained" sx={{ marginRight: "1rem", marginBottom: "1rem", backgroundColor: "primary.light" }} >
                         Read More
                     </Button>
                 </Box>

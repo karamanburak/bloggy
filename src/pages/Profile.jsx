@@ -26,12 +26,13 @@ const Profile = () => {
   return (
     <>
     <Container maxWidth="false" sx={{ ...flex, backgroundColor: "primary.main", minHeight: "100vh" }}>
-      <Grid container maxWidth="lg" sx={{ padding: "3rem" }}>
+        <Grid container sx={{ padding: {lg:"3rem"}}}>
         <Grid item xs={12} md={5} sx={{
           backgroundColor: "#FFD500",
           padding: "2rem",
           borderTopLeftRadius: "2rem",
-          borderBottomLeftRadius: "2rem"
+          borderBottomLeftRadius: "2rem",
+          
         }}>
           <Button
             onClick={handleOpen}
