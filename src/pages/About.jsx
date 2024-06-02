@@ -3,8 +3,6 @@ import { Box, Container, Grid, Typography } from "@mui/material";
 import Footer from './../components/home/Footer';
 import { flex } from "../styles/globalStyles";
 import { useTheme } from "@emotion/react";
-import { useMode } from "../styles/theme";
-import { useContext } from "react";
 
 const avatars = [
   {
