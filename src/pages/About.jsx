@@ -50,7 +50,7 @@ const About = () => {
         </Typography>
         <Box sx={{
           color: theme.palette.mode === "dark" ? "#fff" : "#000"
-}}>
+        }}>
           <Typography variant="h4" component="h1" sx={{ fontWeight: "bold", textAlign: "center" }}>About Us</Typography>
           <Typography>
             <br />
@@ -84,8 +84,8 @@ const About = () => {
           <Typography>
             We invite you to join our growing community of readers and contributors. Follow us on social media, subscribe to our newsletter, and feel free to reach out with your thoughts and feedback. Your voice is important to us, and we are always eager to hear from our readers.
           </Typography>
-          <br/>
-          <Typography variant="h5" sx={{ fontWeight: "bold",textAlign:"center" }}>
+          <br />
+          <Typography variant="h5" sx={{ fontWeight: "bold", textAlign: "center" }}>
             Thank you for being a part of Bloggy. Together, let's dream, explore, and create.
           </Typography>
         </Box>
@@ -94,7 +94,7 @@ const About = () => {
           padding: "2rem",
           marginTop: "2rem",
           marginBottom: "5rem",
-s        }}>
+        }}>
           <Typography variant="h4" sx={{
             textAlign: "center"
           }}>
