@@ -13,7 +13,7 @@ const avatars = [
     position: "Co-CEO"
   },
   {
-    name: "Alfred Hitchcock",
+    name: "Diego Hitchcock",
     position: " Editor"
   },
   {
@@ -43,10 +43,9 @@ const About = () => {
          color:"whitesmoke"
           }}>
         Unleash Your Creativity <br />
-          <span style={{ color: "cornflowerblue" }}> Dream, Explore, Create</span>
+          <span style={{color:"green" }}> Dream, Explore, Create</span>
       </Typography>
       <Box sx={{ 
-        backgroundColor: "neutral.dark", 
         borderRadius: "10px", 
         padding: "2rem", 
         marginTop: "2rem",
@@ -54,7 +53,6 @@ const About = () => {
          color:"secondary.light" 
          }}>
         <Typography variant="h4" sx={{
-           color: "cornflowerblue",
             textAlign: "center" 
             }}>
           Our Team
@@ -81,7 +79,6 @@ const About = () => {
               </Typography>
               <Typography align="center" sx={{ 
                 marginRight: "1rem",
-                color:"gray" 
                 }}>
                 {avatar.position}
               </Typography>
