@@ -25,15 +25,12 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 const Detail = () => {
     const navigate = useNavigate()
     const { state } = useLocation()
-
-    const { content, image, createdAt, userId, title, _id, likes, countOfVisitors } = state;
+    const { content, image, createdAt, userId, title, _id, likes, countOfVisitors,categoryId } = state;
     const { getCommentsDetail, deleteBlog, getBlogDetail } = useBlogCall()
     const { currentUser } = useSelector(state => state.auth)
-    // console.log(currentUser);
-    const { blogs, comments, blog } = useSelector(state => state.blog)
+    const {  comments, blog } = useSelector(state => state.blog)
     const { categories } = useSelector(state => state.category)
-    // console.log(categories);
-    // console.log(blogs);
+    console.log("categories", categories);
     const [commentText, setCommentText] = useState("")
     const [open, setOpen] = useState(false);
 
@@ -65,13 +62,19 @@ const Detail = () => {
 
     const isCurrentUserOwner = currentUser && userId === currentUser._id;
 
+    const getCategoryName = () => {
+        const category = categories.find(cat => cat._id === categoryId);
+        return category ? category.name : "Unknown Category";
+    };
+
+
 
     return (
-        <Card sx={{ backgroundColor: "primary.dark", padding: "2rem", margin: "auto" }}>
+        <Card sx={{ backgroundColor: "primary.main", padding: "2rem", margin: "auto" }}>
             <Button onClick={() => navigate(-1)} variant="contained" sx={{ backgroundColor: "primary.light", mb: 5, display: flex, gap: 1 }} >
                 <ArrowBackIcon /> GO BACK
             </Button>
-            <Box sx={{ width: { xs: "80vw", md: "50vw"}, margin: "auto" }}>
+            <Box sx={{ width: { xs: "80vw", md: "50vw" }, margin: "auto" }}>
                 <CardMedia
                     sx={{
                         margin: "auto",
@@ -87,7 +90,7 @@ const Detail = () => {
                 <Box sx={{ ...flex, justifyContent: "space-between", marginLeft: ".7rem" }}>
                     <CardHeader
                         sx={{
-                            color: "aqua",
+                            color: "indianred",
                             mt: 6,
                             '& .MuiTypography-root': {
                                 fontSize: 18,
@@ -104,8 +107,11 @@ const Detail = () => {
                     />
 
                 </Box>
-                <Typography variant='h6' component="h1" sx={{ textTransform: "uppercase", fontWeight: "bold", marginLeft: "1.5rem" }}>{title}</Typography>
-                <Typography variant="body2" sx={{ textAlign: "justify", marginLeft: "1.5rem" }} >
+                <Typography variant="subtitle1" sx={{ backgroundColor: "primary.light", color: "neutral.light", marginLeft: "1.5rem", marginBottom: "1rem", display: "inline-block", padding: ".5rem", borderRadius: "7px" }}>
+                    Category: {getCategoryName()}
+                </Typography>
+                <Typography variant='h6' component="h1" sx={{ textTransform: "uppercase", fontWeight: "bold", marginLeft: "1.5rem", color: "indianred" }}>{title}</Typography>
+                <Typography variant="body2" sx={{ textAlign: "justify", marginLeft: "1.5rem", fontSize: "1.1rem" }} >
                     {content}
                 </Typography>
                 <Box sx={{ ...flex, opacity: ".7", gap: ".5rem", justifyContent: "space-between", m: 4 }}>
@@ -147,7 +153,7 @@ const Detail = () => {
                     </Box>
                 </Box>
                 <Box>
-                    <CardContent sx={{ margin: "auto",  marginLeft: "-2rem" }}>
+                    <CardContent sx={{ margin: "auto", marginLeft: "-2rem" }}>
                         <CommentForm blogId={_id} onCommentSubmit={handleCommentSubmit} commentText={commentText} setCommentText={setCommentText} />
                         {comments?.length > 0 ? (
                             comments.map(comment => {

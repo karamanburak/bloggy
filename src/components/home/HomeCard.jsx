@@ -20,7 +20,7 @@ import { useEffect } from "react";
 import useBlogCall from "../../hooks/useBlogCall";
 
 
-const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countOfVisitors, comments }) => {
+const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countOfVisitors, comments,categoryId }) => {
     
     const { getLike } = useBlogCall()
     
@@ -34,7 +34,7 @@ const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countO
         if (!currentUser) {
             toastWarnNotify("You must Login");
         } else {
-            navigate(`/blog/detail/${_id}`, { state: { content, image, title, userId, createdAt, _id, likes, countOfVisitors }})
+            navigate(`/blog/detail/${_id}`, { state: { content, image, title, userId, createdAt, _id, likes, countOfVisitors, categoryId }})
         }
     }
 
