@@ -14,7 +14,7 @@ import useBlogCall from "../hooks/useBlogCall";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import { commentsStyle, flex } from '../styles/globalStyles'
+import { flex } from '../styles/globalStyles'
 import { useState } from 'react';
 import CommentForm from '../components/blog/CommentForm';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -30,9 +30,13 @@ const Detail = () => {
     const { getCommentsDetail, deleteBlog, getBlogDetail } = useBlogCall()
     const { currentUser } = useSelector(state => state.auth)
     // console.log(currentUser);
-    const { comments, blog } = useSelector(state => state.blog)
+    const { blogs, comments, blog } = useSelector(state => state.blog)
+    const { categories } = useSelector(state => state.category)
+    // console.log(categories);
+    // console.log(blogs);
     const [commentText, setCommentText] = useState("")
     const [open, setOpen] = useState(false);
+
 
 
 
@@ -63,99 +67,93 @@ const Detail = () => {
 
 
     return (
-        <Card sx={{ backgroundColor: "primary.dark", padding: "2rem", minHeight: "90vh" }}>
+        <Card sx={{ backgroundColor: "primary.dark", padding: "2rem", margin: "auto" }}>
             <Button onClick={() => navigate(-1)} variant="contained" sx={{ backgroundColor: "primary.light", mb: 5, display: flex, gap: 1 }} >
                 <ArrowBackIcon /> GO BACK
             </Button>
-            <Grid container sx={{ ...flex, gap: 4 }}>
-                <Grid item xs={12} lg={4}>
-                    <CardMedia
-                        sx={{
-                            margin: "auto",
-                            borderRadius: "5px",
-                            objectFit: "contain",
-                        }}
-                        component="img"
-                        height="400"
-                        image={image}
-                        alt="image"
-                    />
-                </Grid>
-                <Grid item xs={12} lg={6}>
-                    <Box sx={{ ...flex, justifyContent: "space-between" }}>
-                        <CardHeader
-                            sx={{
-                                color: "aqua",
-                                // mt: 10,
-                                '& .MuiTypography-root': {
-                                    fontSize: 18,
-                                    fontWeight: "bold"
-                                }
-                            }}
-                            avatar={
-                                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                                    {blog ? <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${blog.firstName}`} alt="image" /> : "R"}
-                                </Avatar>
-                            }
-                            title={ blog ? `${blog.firstName} ${blog.lastName}`: title}
-                            subheader={`Published Date: ${formatDate(createdAt)}`}
-                        />
+            <Box sx={{ width: { xs: "80vw", md: "50vw"}, margin: "auto" }}>
+                <CardMedia
+                    sx={{
+                        margin: "auto",
+                        borderRadius: "5px",
+                        objectFit: "cover",
 
-                    </Box>
-                    <Typography variant='h6' component="h1" sx={{ textTransform: "uppercase", fontWeight: "bold"}}>{title}</Typography>
-                    <Typography variant="body2" sx={{ textAlign: "justify" }} >
-                        {content}
-                    </Typography>
-                    <Box sx={{ ...flex, opacity: ".7", gap: ".5rem", justifyContent: "space-between", m: 4 }}>
-                        {isCurrentUserOwner && (
-                            <Box sx={{ display: "flex", gap: 2, marginLeft: "-2rem" }}>
-                                <Button variant='contained' sx={{ backgroundColor: "cornflowerblue" }}> <EditNoteIcon />Edit Blog</Button>
-                                <Button
-                                    variant='contained'
-                                    sx={{ backgroundColor: "red" }}
-                                    onClick={() => setOpen(true)}
-                                >
-                                    <DeleteForeverIcon /> Delete Blog
-                                </Button>
-                                <Dialog open={open} onClose={() => setOpen(false)}>
-                                    <DialogTitle>Confirm Delete</DialogTitle>
-                                    <DialogContent>
-                                        Are you sure you want to delete this blog post?
-                                    </DialogContent>
-                                    <DialogActions>
-                                        <Button onClick={() => setOpen(false)} sx={{ color: 'gray' }}>Cancel</Button>
-                                        <Button onClick={handleDelete} sx={{ color: 'red' }}>Delete</Button>
-                                    </DialogActions>
-                                </Dialog>
-                            </Box>
-                        )}
-                        <Box sx={{ ...flex, opacity: ".7", gap: ".5rem", justifyContent: "space-between" }} >
-                            <Typography >
-                                <FavoriteIcon />
-                                <sup>{likes.length}</sup>
-                            </Typography>
-                            <ChatBubbleOutlineIcon />
-                            <Typography>
-                                <sup>{comments?.length || 0}</sup>
-                            </Typography>
-                            <RemoveRedEyeIcon />
-                            <Typography>
-                                <sup>{countOfVisitors}</sup>
-                            </Typography>
+                    }}
+                    component="img"
+                    height="400"
+                    image={image}
+                    alt="image"
+                />
+                <Box sx={{ ...flex, justifyContent: "space-between", marginLeft: ".7rem" }}>
+                    <CardHeader
+                        sx={{
+                            color: "aqua",
+                            mt: 6,
+                            '& .MuiTypography-root': {
+                                fontSize: 18,
+                                fontWeight: "bold"
+                            }
+                        }}
+                        avatar={
+                            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                                {blog ? <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${blog.firstName}`} alt="image" /> : "R"}
+                            </Avatar>
+                        }
+                        title={blog ? `${blog.firstName} ${blog.lastName}` : title}
+                        subheader={`Published Date: ${formatDate(createdAt)}`}
+                    />
+
+                </Box>
+                <Typography variant='h6' component="h1" sx={{ textTransform: "uppercase", fontWeight: "bold", marginLeft: "1.5rem" }}>{title}</Typography>
+                <Typography variant="body2" sx={{ textAlign: "justify", marginLeft: "1.5rem" }} >
+                    {content}
+                </Typography>
+                <Box sx={{ ...flex, opacity: ".7", gap: ".5rem", justifyContent: "space-between", m: 4 }}>
+                    {isCurrentUserOwner && (
+                        <Box sx={{ display: "flex", gap: 2, marginLeft: "2-1em" }}>
+                            <Button variant='contained' sx={{ backgroundColor: "cornflowerblue" }}> <EditNoteIcon />Edit Blog</Button>
+                            <Button
+                                variant='contained'
+                                sx={{ backgroundColor: "red" }}
+                                onClick={() => setOpen(true)}
+                            >
+                                <DeleteForeverIcon /> Delete Blog
+                            </Button>
+                            <Dialog open={open} onClose={() => setOpen(false)}>
+                                <DialogTitle>Confirm Delete</DialogTitle>
+                                <DialogContent>
+                                    Are you sure you want to delete this blog post?
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button onClick={() => setOpen(false)} sx={{ color: 'gray' }}>Cancel</Button>
+                                    <Button onClick={handleDelete} sx={{ color: 'red' }}>Delete</Button>
+                                </DialogActions>
+                            </Dialog>
                         </Box>
+                    )}
+                    <Box sx={{ ...flex, opacity: ".7", gap: ".5rem", justifyContent: "space-between" }} >
+                        <Typography >
+                            <FavoriteIcon />
+                            <sup>{likes.length}</sup>
+                        </Typography>
+                        <ChatBubbleOutlineIcon />
+                        <Typography>
+                            <sup>{comments?.length || 0}</sup>
+                        </Typography>
+                        <RemoveRedEyeIcon />
+                        <Typography>
+                            <sup>{countOfVisitors}</sup>
+                        </Typography>
                     </Box>
-                </Grid>
-                <Box sx={{ margin: "auto", padding: "2rem", backgroundColor: "secondary.main", borderRadius: "10px" }}>
-                    <Typography sx={commentsStyle}>COMMENTS</Typography>
-                    <CardContent sx={{ margin: "auto", width: "80vw" }}>
-                        <Box sx={{ marginTop: "4rem" }}>
-                            <CommentForm blogId={_id} onCommentSubmit={handleCommentSubmit} commentText={commentText} setCommentText={setCommentText} />
-                        </Box>
+                </Box>
+                <Box>
+                    <CardContent sx={{ margin: "auto",  marginLeft: "-2rem" }}>
+                        <CommentForm blogId={_id} onCommentSubmit={handleCommentSubmit} commentText={commentText} setCommentText={setCommentText} />
                         {comments?.length > 0 ? (
                             comments.map(comment => {
                                 if (comment.blogId === _id) {
                                     return (
-                                        <Box key={comment._id} sx={{ my: 10, backgroundColor: "primary.main", padding: "2rem", borderRadius: "1rem", maxWidth: "90vw" }}>
+                                        <Box key={comment._id} sx={{ margin: "auto", width: { xs: "80vw", sm: "50vw" }, backgroundColor: "primary.light", padding: "2rem", borderRadius: "1rem", my: 6 }}>
                                             <CardHeader
                                                 sx={{
                                                     color: "seagreen",
@@ -172,7 +170,7 @@ const Detail = () => {
                                                 title={`${comment.userId.firstName} ${comment.userId.lastName}`}
                                                 subheader={`Published Date: ${formatDate(comment.createdAt)}`}
                                             />
-                                            <Typography>{comment.comment}</Typography>
+                                            <Typography sx={{ marginLeft: "1.2rem" }}>{comment.comment}</Typography>
                                         </Box>
                                     )
                                 } else {
@@ -184,7 +182,7 @@ const Detail = () => {
                         )}
                     </CardContent>
                 </Box>
-            </Grid>
+            </Box>
         </Card >
     )
 };
