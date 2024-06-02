@@ -5,8 +5,6 @@ import useBlogCall from '../../hooks/useBlogCall';
 import MyBlogsCard from './MyBlogsCard';
 import { useState } from 'react';
 import loadingGif from '../../assets/loading.gif'
-import { flex } from '../../styles/globalStyles';
-import AuthImage from './../global/AuthImage';
 
 
 

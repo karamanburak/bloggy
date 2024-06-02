@@ -12,7 +12,6 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { Box, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import useCategoryCall from '../../hooks/useCategoryCall';
 import { flex } from '../../styles/globalStyles';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -23,7 +22,6 @@ import useBlogCall from '../../hooks/useBlogCall';
 
 const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countOfVisitors, comments,categoryId }) => {
   const navigate = useNavigate()
-  const { getCategory } = useCategoryCall()
   const [readingTime, setReadingTime] = useState(null);
   const { getLike } = useBlogCall()
 
@@ -43,7 +41,6 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
       setLiked(false);
     }
 
-    getCategory("categories")
 
     const words = content.split(' ').length;
     const minutes = Math.ceil(words / 150);
