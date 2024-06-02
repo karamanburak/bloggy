@@ -91,7 +91,7 @@ const Detail = () => {
                     image={image}
                     alt="image"
                 />
-                <Box sx={{ ...flex, justifyContent: "space-between", marginLeft: ".7rem" }}>
+                <Box sx={{ ...flex,  justifyContent:"space-between", marginLeft: ".7rem" }}>
                     <CardHeader
                         sx={{
                             color: "indianred",
@@ -109,17 +109,31 @@ const Detail = () => {
                         title={blog ? `${blog.firstName} ${blog.lastName}` : title}
                         subheader={`Published Date: ${formatDate(createdAt)}`}
                     />
-                    <Typography variant="subtitle1" sx={{ backgroundColor: "primary.light", color: "neutral.light", marginLeft: "1.5rem", marginBottom: "1rem", display: "inline-block", padding: ".5rem", borderRadius: "7px" }}>
-                        Category: {getCategoryName()}
+                    <Typography variant="subtitle1" sx={{ backgroundColor: "indianred", color: "neutral.light", marginLeft: "1.5rem", marginTop: "2rem", display: "inline-block", padding: ".5rem", borderRadius: "7px", textAlign:"center" }}>
+                        <b>Category:</b> {getCategoryName()}
                     </Typography>
                 </Box>
                 <Typography variant='h6' component="h1" sx={{ textTransform: "uppercase", fontWeight: "bold", marginLeft: "1.5rem", color: "indianred" }}>{title}</Typography>
                 <Typography variant="body2" sx={{ textAlign: "justify", marginLeft: "1.5rem", fontSize: "1.1rem" }} >
                     {content}
                 </Typography>
-                <Box sx={{ ...flex, opacity: ".7", gap: ".5rem", justifyContent: "space-between", m: 4 }}>
+                <Box sx={{display:{xs: "block", lg:"flex"}, opacity: ".7",  justifyContent: "space-between", m: 4 }}>
+                    <Box sx={{ display:"flex", opacity: ".7", gap: ".5rem",  mt:2 }} >
+                        <Typography >
+                            <FavoriteIcon />
+                            <sup>{likes.length}</sup>
+                        </Typography>
+                        <ChatBubbleOutlineIcon />
+                        <Typography>
+                            <sup>{comments?.length || 0}</sup>
+                        </Typography>
+                        <RemoveRedEyeIcon />
+                        <Typography>
+                            <sup>{countOfVisitors}</sup>
+                        </Typography>
+                    </Box>
                     {isCurrentUserOwner && (
-                        <Box sx={{ display: "flex", gap: 2, marginLeft: "2-1em" }}>
+                        <Box sx={{ display: "flex", gap: 2, marginLeft: "2-1em",mt:2}}>
                             <Button variant='contained' sx={{ backgroundColor: "cornflowerblue" }}> <EditNoteIcon />Edit Blog</Button>
                             <Button
                                 variant='contained'
@@ -140,20 +154,6 @@ const Detail = () => {
                             </Dialog>
                         </Box>
                     )}
-                    <Box sx={{ ...flex, opacity: ".7", gap: ".5rem", justifyContent: "space-between" }} >
-                        <Typography >
-                            <FavoriteIcon />
-                            <sup>{likes.length}</sup>
-                        </Typography>
-                        <ChatBubbleOutlineIcon />
-                        <Typography>
-                            <sup>{comments?.length || 0}</sup>
-                        </Typography>
-                        <RemoveRedEyeIcon />
-                        <Typography>
-                            <sup>{countOfVisitors}</sup>
-                        </Typography>
-                    </Box>
                 </Box>
                 <Box>
                     <CardContent sx={{ margin: "auto", marginLeft: "-2rem" }}>

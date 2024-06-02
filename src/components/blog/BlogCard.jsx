@@ -84,6 +84,7 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
       />
 
       <CardContent>
+      <Typography sx={{color:"indianred", fontWeight:"bold",textAlign:"center"}}>{title}</Typography>
         <Typography variant="body2" sx={{ maxHeight: "100px", overflow: "hidden", textAlign: "justify" }}>
           {content}
         </Typography>
@@ -101,7 +102,6 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
             {_id ? <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${userId}`} alt="image" /> : "R"}
           </Avatar>
         }
-        title={title}
         subheader={`Published Date: ${localDate()}`}
       />
       <CardActions disableSpacing>
