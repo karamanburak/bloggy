@@ -16,27 +16,12 @@ import ShowsCard from '../components/home/ShowsCard';
 import NewsCard from '../components/home/NewsCard';
 
 const url = 'https://api.tvmaze.com/shows'
-const url2 = `https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${import.meta.env.VITE_BOOKS_apiKey}`
 const Dashboard = () => {
     const isDashboard = '/'
     const { getBlogData } = useBlogCall()
     const { blogs, loading } = useSelector(state => state.blog)
     const [shows, setShows] = useState([])
-    const [books, setBooks] = useState([])
 
-
-    const getBooks = async () => {
-        try {
-            const  {data} = await axios(url2)
-            setBooks(data.results.books)
-            // console.log(data);
-            
-
-        } catch (error) {
-            console.log(error);
-
-        }
-    }
 
 
 
@@ -57,7 +42,6 @@ const Dashboard = () => {
     useEffect(() => {
         getBlogData("blogs")
         getShows()
-        getBooks()
     }, [])
 
 
@@ -95,18 +79,6 @@ const Dashboard = () => {
                         </Slide>
                     )}
                 </Box>
-                <Box>
-                    {loading ? (
-                        ""
-                    ) : (
-                        <Slide>
-                            {books.map((booksItem, index) => (
-                                <NewsCard key={index} {...booksItem} />
-                            ))}
-                        </Slide>
-                    )}
-                </Box>
-
             </Container>
             <Box sx={{ marginTop: "2rem" }}>
                 <Footer isDashboard={isDashboard} />

@@ -105,11 +105,10 @@ const Detail = () => {
                         title={blog ? `${blog.firstName} ${blog.lastName}` : title}
                         subheader={`Published Date: ${formatDate(createdAt)}`}
                     />
-
+                    <Typography variant="subtitle1" sx={{ backgroundColor: "primary.light", color: "neutral.light", marginLeft: "1.5rem", marginBottom: "1rem", display: "inline-block", padding: ".5rem", borderRadius: "7px" }}>
+                        Category: {getCategoryName()}
+                    </Typography>
                 </Box>
-                <Typography variant="subtitle1" sx={{ backgroundColor: "primary.light", color: "neutral.light", marginLeft: "1.5rem", marginBottom: "1rem", display: "inline-block", padding: ".5rem", borderRadius: "7px" }}>
-                    Category: {getCategoryName()}
-                </Typography>
                 <Typography variant='h6' component="h1" sx={{ textTransform: "uppercase", fontWeight: "bold", marginLeft: "1.5rem", color: "indianred" }}>{title}</Typography>
                 <Typography variant="body2" sx={{ textAlign: "justify", marginLeft: "1.5rem", fontSize: "1.1rem" }} >
                     {content}
