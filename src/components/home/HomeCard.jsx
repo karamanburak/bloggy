@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import {flex} from '../../styles/globalStyles'
+import { flex } from '../../styles/globalStyles'
 import PageHeader from "./PageHeader";
 import { toastWarnNotify } from "../../helper/ToastNotify";
 import { useSelector } from "react-redux";
@@ -20,10 +20,10 @@ import { useEffect } from "react";
 import useBlogCall from "../../hooks/useBlogCall";
 
 
-const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countOfVisitors, comments,categoryId }) => {
-    
+const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countOfVisitors, comments, categoryId }) => {
+
     const { getLike } = useBlogCall()
-    
+
     const { currentUser } = useSelector(state => state.auth)
     const navigate = useNavigate()
     const [readingTime, setReadingTime] = useState(null);
@@ -34,7 +34,7 @@ const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countO
         if (!currentUser) {
             toastWarnNotify("You must Login");
         } else {
-            navigate(`/blog/detail/${_id}`, { state: { content, image, title, userId, createdAt, _id, likes, countOfVisitors, categoryId }})
+            navigate(`/blog/detail/${_id}`, { state: { content, image, title, userId, createdAt, _id, likes, countOfVisitors, categoryId } })
         }
     }
 
@@ -71,18 +71,26 @@ const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countO
     }
 
     return (
-        <Container maxWidth="xl" sx={{ backgroundColor: "neutral.dark", paddingBottom: "2rem"}}>
-            <PageHeader text="Blogs"/>
-            <Card 
-            sx={{
-                minHeight:"300px",
+        <Container maxWidth="xl" sx={{ backgroundColor: "neutral.dark", paddingBottom: "2rem" }}>
+            <PageHeader text="Blogs" />
+            <Card
+                sx={{
+                    minHeight: "300px",
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",
                 }}
             >
                 <Grid container>
-                    <Grid item sm={12} md={6} order={{ xs: 2, md: 1 }}>
+                    <Grid item sm={12} md={6} order={{ xs: 2, md: 1 }}
+                        sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between",
+                            my: 3
+                        }}
+                    >
+                        <Box sx={{ display: { xs: "block", sm: "flex", justifyContent: "space-between" } }}>
                         <CardHeader
                             sx={{
                                 color: "seagreen",
@@ -100,27 +108,36 @@ const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countO
                             title={title}
                             subheader={`Published Date: ${localDate()}`}
                         />
-                        <CardContent>
-                            <Typography variant="body2" sx={{
-                                maxHeight: "100px", 
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                display: '-webkit-box',
-                                WebkitLineClamp: '3',
-                                WebkitBoxOrient: 'vertical' 
-                                }} >
-                                {content}
-                            </Typography>
-                        </CardContent>
-                        <Box sx={{ display: "inline-block", marginLeft: "1rem" }}>
+                        <Box sx={{ display: "inline-block",mt:3 }}>
                             {readingTime && (
-                                <Typography variant="body2" sx={{ backgroundColor: "neutral.dark", padding: ".5rem", borderRadius: "5px" }}>
+                                <Typography variant="body2"
+                                    sx={{
+                                        backgroundColor: "primary.light",
+                                        padding: ".5rem",
+                                        borderRadius: "5px",
+                                        display: "inline-block",
+                                        marginLeft:"1rem",
+                                        marginRight: {xs:"0", sm:"1.5rem"}
+                                    }}>
                                     {readingTime}
                                 </Typography>
                             )}
                         </Box>
-                        <Box sx={{ display: "flex", justifyContent: "space-between",cursor:"pointer" }}>
-                            <Box sx={{...flex , opacity:".7", gap:".3rem", marginLeft:"1rem"}}>
+                        </Box>
+                        <CardContent>
+                            <Typography variant="body2" sx={{
+                                maxHeight: "100px",
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                display: '-webkit-box',
+                                WebkitLineClamp: '3',
+                                WebkitBoxOrient: 'vertical'
+                            }} >
+                                {content}
+                            </Typography>
+                        </CardContent>
+                        <Box sx={{ display: "flex", justifyContent: "space-between", cursor: "pointer" }}>
+                            <Box sx={{ ...flex, opacity: ".7", gap: ".3rem", marginLeft: "1rem" }}>
                                 <Typography >
                                     <FavoriteIcon
                                         sx={{
@@ -128,15 +145,15 @@ const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countO
                                         }}
                                         onClick={handleLike}
                                     />
-                                   <sup>{likes.length}</sup> 
+                                    <sup>{likes.length}</sup>
                                 </Typography>
-                                   <ChatBubbleOutlineIcon />
+                                <ChatBubbleOutlineIcon />
                                 <Typography>
-                                   <sup>{comments.length}</sup>  
+                                    <sup>{comments.length}</sup>
                                 </Typography>
-                                    <RemoveRedEyeIcon />
+                                <RemoveRedEyeIcon />
                                 <Typography>
-                                  <sup>{countOfVisitors}</sup>  
+                                    <sup>{countOfVisitors}</sup>
                                 </Typography>
                             </Box>
                             <Button onClick={handleReadMore} variant="contained" sx={{ marginRight: "1rem", marginBottom: "1rem", backgroundColor: "primary.light" }} >

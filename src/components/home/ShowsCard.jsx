@@ -23,13 +23,19 @@ const ShowsCard = ({ name, genres, image, summary, url }) => {
             <PageHeader text="Tv-Shows" />
             <Card
                 sx={{
-                    height: { xs: 600, md: 300 },
+                    height: { xs: 650, md: 400 },
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",
                 }}>
                 <Grid container>
-                    <Grid item sm={12} md={6} order={{ xs: 2, md: 2 }}>
+                    <Grid item sm={12} md={6} order={{ xs: 2, md: 2 }} 
+                    sx={{
+                   display:"flex",
+                   flexDirection:"column",
+                   justifyContent:"space-between",
+                   my:3
+                    }}>
                         <CardHeader
                             sx={{
                                 color: "seagreen",
@@ -74,10 +80,10 @@ const ShowsCard = ({ name, genres, image, summary, url }) => {
                                 padding: "1rem",
                                 borderRadius: "1rem",
                                 borderRadius: "1rem",
-                                objectFit: "fill"
+                                objectFit:"fill",
                             }}
                             component="img"
-                            height="274"
+                            height="374"
                             image={image?.original || image?.medium}
                             alt="image"
                         />
