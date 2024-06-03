@@ -1,6 +1,6 @@
 # Bloggy App
 
-[Bloggy App Live](https://bk-bloggy.vercel.app/)
+[Bloggy App Live](https://bloggiie.vercel.app/)
 
 ## Description
 
