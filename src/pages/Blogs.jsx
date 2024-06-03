@@ -42,46 +42,54 @@ const Blogs = () => {
 
 
   return (
-    <>
-      <Container maxWidth="100vw" sx={{minHeight:"100vh", backgroundColor: "primary.main", paddingBottom:"1rem",margin: "auto"}}>
-      <Box sx={{height:"1rem"}}></Box>
-      <Button 
-      onClick={handleOpen}
-      variant="contained" 
-      sx={{backgroundColor:"primary.light", 
-      display:"block", 
-      marginLeft:"auto",
-      marginRight:"1.8rem"
+    <Box sx={{ backgroundColor: "primary.main", paddingTop: "1.5rem" }}>
+      <Button
+        onClick={handleOpen}
+        variant="contained"
+        sx={{
+          backgroundColor: "primary.light",
+          display: "block",
+          marginLeft: "auto",
+          marginRight: "3.5rem",
 
-      }}
-      
+        }}
+
       >
         New Blog
       </Button>
+      <Container maxWidth="100vw" sx={{
+        minHeight: "90vh",
+        paddingBottom: "1rem",
+        margin: "auto",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}>
         <Grid container spacing={1} mt={3} >
           {loading ? (
-            <img src={loadingGif} alt="loading..." height={500} style={{margin:"auto"}}/>
+            <img src={loadingGif} alt="loading..." height={500} style={{ margin: "auto" }} />
           ) : (
-              currentBlogs.map((blog) => (
-            <Grid item xs={12} md={6} lg={4} xl={3} key={blog._id} sx={{display:"flex",alignItems:"stretch"}}>
-              <BlogCard {...blog}/>
-            </Grid>
-          )))}
+            currentBlogs.map((blog) => (
+              <Grid item xs={12} md={6} lg={4} xl={3} key={blog._id} sx={{ display: "flex", alignItems: "stretch" }}>
+                <BlogCard {...blog} />
+              </Grid>
+            )))}
         </Grid>
-      <Typography style={{ marginTop: "20px", textAlign: "center" }}>
-        {Array.from({ length: Math.ceil(blogs.length / blogsPerPage) }).map(
-          (_, index) => (
-            <Button
-              key={index}
-              onClick={() => paginate(index + 1)}
-              variant={currentPage === index + 1 ? "contained" : "outlined"}
-              sx={{ margin: "5px", color: "indianred", backgroundColor:currentPage === index + 1 ? "primary.light" : "" }}
-            >
-              {index + 1}
-            </Button>
-          )
-        )}
-      </Typography>
+        <Typography style={{  marginTop: "20px", textAlign: "center" }}>
+          {Array.from({ length: Math.ceil(blogs.length / blogsPerPage) }).map(
+            (_, index) => (
+              <Button
+                key={index}
+                onClick={() => paginate(index + 1)}
+                variant={currentPage === index + 1 ? "contained" : "outlined"}
+                sx={{ margin: "5px", color: "indianred", backgroundColor: currentPage === index + 1 ? "primary.light" : "" }}
+              >
+                {index + 1}
+              </Button>
+            )
+          )}
+        </Typography>
       </Container>
       {open && (
         <BlogModal
@@ -90,10 +98,10 @@ const Blogs = () => {
           handleClose={handleClose}
           initialState={initialState}
         />
-      )}    
+      )}
 
       <Footer />
-    </>
+    </Box>
   )
 };
 
