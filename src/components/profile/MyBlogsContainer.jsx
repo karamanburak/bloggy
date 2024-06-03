@@ -32,7 +32,13 @@ const MyBlogsContainer = ({_id}) => {
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     return (
-        <Container>
+        <Container sx={{
+            minHeight:"100vh",
+            display:"flex",
+            flexDirection:"column",
+            justifyContent:"space-between",
+            alignItems:"center",
+            }}>
             {loading ? (
                 <img src={loadingGif} alt="loading..." height={500} />
             ) : (

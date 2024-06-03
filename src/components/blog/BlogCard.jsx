@@ -70,7 +70,6 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
         margin: "auto",
         width: 500,
         height: 600
-
       }}
     >
       <CardMedia

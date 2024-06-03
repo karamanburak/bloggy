@@ -32,7 +32,6 @@ const Detail = () => {
     const { comments, blog} = useSelector(state => state.blog)    
     const { categories } = useSelector(state => state.category)
     const { getCategory } = useCategoryCall();
-    const [commentText, setCommentText] = useState("")
     const [open, setOpen] = useState(false);
 
 
@@ -49,20 +48,15 @@ const Detail = () => {
         if (!categories.length) {
             getCategory('categories');
         }
-        getCommentsDetail("blogs", _id)
-        getBlogDetail("blogs", _id)
+        // getBlogDetail("blogs", _id)
 
-    }, [commentText]);
+    }, []);
 
 
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleString("de-DE");
     };
 
-    const handleCommentSubmit = () => {
-        getCommentsDetail("blogs", _id);
-
-    };
 
     const isCurrentUserOwner = currentUser && userId === currentUser._id;
 
@@ -157,7 +151,7 @@ const Detail = () => {
                 </Box>
                 <Box>
                     <CardContent sx={{ margin: "auto", marginLeft: "-2rem" }}>
-                        <CommentForm blogId={_id} onCommentSubmit={handleCommentSubmit} commentText={commentText} setCommentText={setCommentText} />
+                        <CommentForm blogId={_id}  id={_id} />
                         {comments?.length > 0 ? (
                             comments.map(comment => {
                                 if (comment.blogId === _id) {

@@ -71,7 +71,7 @@ const Blogs = () => {
             <img src={loadingGif} alt="loading..." height={500} style={{ margin: "auto" }} />
           ) : (
             currentBlogs.map((blog) => (
-              <Grid item xs={12} md={6} lg={4} xl={3} key={blog._id} sx={{ display: "flex", alignItems: "stretch" }}>
+              <Grid item xs = { 12} md = { 6} lg = { 4} xl = { 3} key = { blog._id }>
                 <BlogCard {...blog} />
               </Grid>
             )))}

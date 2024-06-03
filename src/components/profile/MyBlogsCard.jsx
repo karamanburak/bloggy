@@ -46,8 +46,13 @@ const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, com
 
 
     return (
-        <Container sx={{ paddingBottom: "2rem",width: {xs:"120%", sm:"100%", lg:"80%"}, textAlign:"justify", marginLeft:{xs:"-2rem", sm:"auto"}}}>
-            <Card sx={{ borderRadius: "10px"}}>
+        <Container sx={{ 
+            paddingBottom: "2rem",
+            textAlign:"justify", 
+            width: {xs:"120%", sm:"100%", lg:"80%"}, 
+            marginLeft:{xs:"-2rem", sm:"auto",
+            }}}>
+            <Card sx={{ borderRadius: "10px" }}>
                 <CardMedia
                     sx={{
                         marginTop: "1rem",
@@ -89,7 +94,7 @@ const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, com
                         {content}
                     </Typography>
                 </CardContent>
-                <Box sx={{ display: "flex", justifyContent: "space-between", cursor: "pointer" }}>
+                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                     <Box sx={{ ...flex, opacity: ".7", gap: ".3rem", marginLeft: "1rem" }}>
                         <Typography >
                             <FavoriteIcon />
