@@ -6,7 +6,6 @@ import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import Footer from "../components/home/Footer";
 import { useState } from "react";
 import BlogModal from "../components/blog/BlogModal";
-import useCategoryCall from "../hooks/useCategoryCall";
 import loadingGif from '../assets/loading.gif'
 
 

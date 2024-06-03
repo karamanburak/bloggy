@@ -27,13 +27,14 @@ const Detail = () => {
     const navigate = useNavigate()
     const { state } = useLocation()
     const { content, image, createdAt, userId, title, _id, likes, categoryId,countOfVisitors } = state;
-    const { getCommentsDetail, deleteBlog, getBlogDetail } = useBlogCall()
+    const {  deleteBlog,getCommentsDetail } = useBlogCall()
     const { currentUser } = useSelector(state => state.auth)
     const { comments, blog} = useSelector(state => state.blog)    
     const { categories } = useSelector(state => state.category)
     const { getCategory } = useCategoryCall();
     const [open, setOpen] = useState(false);
-
+    const { getLike } = useBlogCall()
+    const [liked, setLiked] = useState(false);
 
 
 
@@ -48,10 +49,19 @@ const Detail = () => {
         if (!categories.length) {
             getCategory('categories');
         }
-        // getBlogDetail("blogs", _id)
+        if (currentUser && likes.includes(currentUser._id)) {
+            setLiked(true);
+        } else {
+            setLiked(false);
+        }
+        getCommentsDetail("blogs", _id)
 
-    }, []);
+        
+    }, [ likes,currentUser]);
 
+    const handleLike = () => {
+        getLike("blogs", _id);
+    }
 
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleString("de-DE");
@@ -112,9 +122,15 @@ const Detail = () => {
                     {content}
                 </Typography>
                 <Box sx={{display:{xs: "block", lg:"flex"}, opacity: ".7",  justifyContent: "space-between", m: 4 }}>
-                    <Box sx={{ display:"flex", opacity: ".7", gap: ".5rem",  mt:2 }} >
+                    <Box sx={{ display:"flex", gap: ".5rem",  mt:2 }} >
                         <Typography >
-                            <FavoriteIcon />
+                            <FavoriteIcon
+                                sx={{
+                                    color: liked ? "red" : "",
+                                    cursor: "pointer"
+                                }}
+                                onClick={handleLike}
+                            />
                             <sup>{likes.length}</sup>
                         </Typography>
                         <ChatBubbleOutlineIcon />
@@ -123,7 +139,7 @@ const Detail = () => {
                         </Typography>
                         <RemoveRedEyeIcon />
                         <Typography>
-                            <sup>{countOfVisitors}</sup>
+                            <sup>{countOfVisitors+1}</sup>
                         </Typography>
                     </Box>
                     {isCurrentUserOwner && (

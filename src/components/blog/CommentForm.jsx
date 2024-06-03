@@ -1,12 +1,11 @@
 import { Button, Container, FormControl, Input } from "@mui/material";
 import useBlogCall from "../../hooks/useBlogCall";
 import { useState } from "react";
-import { useEffect } from "react";
 
 const ariaLabel = { 'aria-label': 'description' };
 
-const CommentForm = ({ blogId, id }) => {
-  const { postComment, getCommentsDetail } = useBlogCall()
+const CommentForm = ({ blogId}) => {
+  const { postComment } = useBlogCall()
   const [commentText, setCommentText] = useState("")
 
 
@@ -19,12 +18,6 @@ const CommentForm = ({ blogId, id }) => {
     postComment("comments", commentData);
     setCommentText("")
   };
-
-  useEffect(()=>{
-    getCommentsDetail("blogs", id)
-
-  },[])
-
 
   return (
     <Container>
