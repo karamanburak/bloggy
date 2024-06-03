@@ -9,14 +9,12 @@ import loadingGif from '../../assets/loading.gif'
 
 
 
-const MyBlogsContainer = ({_id}) => {
+const MyBlogsContainer = ({ _id }) => {
     const { getUserBlogs } = useBlogCall();
-    const  {blogs, loading}  = useSelector(state => state.blog)
-    const {currentUser} = useSelector(state=> state.auth)
-    // console.log(currentUser);
-    
+    const { blogs, loading } = useSelector(state => state.blog)
+
     // console.log(blogs);
-    
+
     const [currentPage, setCurrentPage] = useState(1);
     const blogsPerPage = 2;
 
@@ -33,30 +31,30 @@ const MyBlogsContainer = ({_id}) => {
 
     return (
         <Container sx={{
-            minHeight:"100vh",
-            display:"flex",
-            flexDirection:"column",
-            justifyContent:"space-between",
-            alignItems:"center",
-            }}>
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            alignItems: "center",
+            minHeight: "135vh",
+        }}>
             {loading ? (
                 <img src={loadingGif} alt="loading..." height={500} />
             ) : (
-               <Box>
-            {getUserBlogs ? (currentBlogs.map((blog) => (
-                <MyBlogsCard key={blog._id} {...blog}/>
-            ))) : "" 
-            }
-               </Box> 
+                <Box>
+                    {getUserBlogs ? (currentBlogs.map((blog) => (
+                        <MyBlogsCard key={blog._id} {...blog} />
+                    ))) : ""
+                    }
+                </Box>
             )}
-            <Typography style={{ marginTop: "20px",textAlign:"center"}}>
+            <Typography style={{ marginTop: "20px", textAlign: "center" }}>
                 {Array.from({ length: Math.ceil(blogs.length / blogsPerPage) }).map(
                     (_, index) => (
                         <Button
                             key={index}
                             onClick={() => paginate(index + 1)}
                             variant={currentPage === index + 1 ? "contained" : "outlined"}
-                            sx={{ margin: "5px", color:"indianred" }}
+                            sx={{ margin: "5px", color: "indianred" }}
                         >
                             {index + 1}
                         </Button>

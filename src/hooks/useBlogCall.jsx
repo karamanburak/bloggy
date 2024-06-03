@@ -42,7 +42,7 @@ const useBlogCall = () => {
         try {
            const {data} =  await axiosWithToken(`${url}/${id}`);
             dispatch(getBlogDetailSuccess(data))
-            // console.log(data.data.userId);
+            console.log(data.data.userId);
             
         } catch (error) {
             console.log(error);

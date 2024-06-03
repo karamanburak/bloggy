@@ -27,9 +27,9 @@ const Detail = () => {
     const navigate = useNavigate()
     const { state } = useLocation()
     const { content, image, createdAt, userId, title, _id, likes, categoryId,countOfVisitors } = state;
-    const {  deleteBlog,getCommentsDetail } = useBlogCall()
+    const {  deleteBlog,getBlogDetail,getCommentsDetail } = useBlogCall()
     const { currentUser } = useSelector(state => state.auth)
-    const { comments, blog} = useSelector(state => state.blog)    
+    const { comments, blog} = useSelector(state => state.blog) 
     const { categories } = useSelector(state => state.category)
     const { getCategory } = useCategoryCall();
     const [open, setOpen] = useState(false);
@@ -54,6 +54,7 @@ const Detail = () => {
         } else {
             setLiked(false);
         }
+        getBlogDetail("blogs", _id)
         getCommentsDetail("blogs", _id)
 
         
