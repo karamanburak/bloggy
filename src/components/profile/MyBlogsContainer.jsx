@@ -8,6 +8,7 @@ import loadingGif from '../../assets/loading.gif'
 
 
 
+
 const MyBlogsContainer = ({_id}) => {
     const { getUserBlogs } = useBlogCall();
     const  {blogs, loading}  = useSelector(state => state.blog)
@@ -42,7 +43,7 @@ const MyBlogsContainer = ({_id}) => {
             }
                </Box> 
             )}
-            <Typography style={{ marginTop: "20px",textAlign:"center" }}>
+            <Typography style={{ marginTop: "20px",textAlign:"center"}}>
                 {Array.from({ length: Math.ceil(blogs.length / blogsPerPage) }).map(
                     (_, index) => (
                         <Button

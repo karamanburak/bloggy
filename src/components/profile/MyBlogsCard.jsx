@@ -79,7 +79,7 @@ const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, com
                 />
                 <Box sx={{ display: "inline-block", marginLeft: "1rem" }}>
                     {readingTime && (
-                        <Typography variant="body2" sx={{ backgroundColor: "neutral.dark", padding: ".5rem", borderRadius: "5px" }}>
+                        <Typography variant="body2" sx={{ backgroundColor: "primary.light", padding: ".5rem", borderRadius: "5px" }}>
                             {readingTime}
                         </Typography>
                     )}

@@ -9,7 +9,7 @@ import Footer from "../components/home/Footer";
 
 const Profile = () => {
   const { currentUser } = useSelector(state => state.auth)
-  const { image, username, email, bio, city, createdAt, firstName, lastName,_id } = currentUser
+  const { image, username, email, bio, city, createdAt, firstName, lastName } = currentUser
     // console.log(currentUser);
   const navigate = useNavigate()
   const [open, setOpen] = React.useState(false);
@@ -72,12 +72,14 @@ const Profile = () => {
             display: "flex",
             justifyContent: "end",
             marginBottom: "1rem",
-            color: "blue"
+            color: "blue",
+            fontSize:"1.2rem",
+            mt:8
           }}>
             {`Created Date: ${localDate()}`}
           </Typography>
           <Typography sx={{ ...profileStyle, textAlign: "justify" }}>
-            <Typography variant="span">{bio}</Typography>
+            <Typography variant="span" sx={{fontSize:"1.2rem",mt:8}}>{bio}</Typography>
           </Typography>
         </Grid>
         <Grid item xs={12} md={7} sx={{

@@ -72,6 +72,7 @@ export const profileStyle = {
     justifyContent: "start",
     fontWeight: "bold",
     marginTop:".2rem",
-    marginRight:".2rem"
+    marginRight:".2rem",
+    fontSize:"1.2rem"
     
 }
