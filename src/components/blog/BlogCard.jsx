@@ -16,6 +16,7 @@ import { flex } from '../../styles/globalStyles';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import useBlogCall from '../../hooks/useBlogCall';
+// import UpdateModal from './UpdateModal';
 
 
 
@@ -24,7 +25,6 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
   const navigate = useNavigate()
   const [readingTime, setReadingTime] = useState(null);
   const { getLike } = useBlogCall()
-
   const { currentUser } = useSelector(state => state.auth)
   const [liked, setLiked] = useState(false);
 
@@ -70,7 +70,6 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
         margin: "auto",
         // width: 500,
         height: 600,
-        
       }}
     >
       <CardMedia
@@ -135,7 +134,7 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
           Read More
         </Button>
       </Box>
-
+      {/* <UpdateModal /> */}
     </Card>
 
   )

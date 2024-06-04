@@ -49,10 +49,10 @@ const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, com
         <Container sx={{ 
             paddingBottom: "2rem",
             textAlign:"justify", 
-            width: {xs:"120%", sm:"100%", lg:"80%"}, 
-            marginLeft:{xs:"-2rem", sm:"auto",
-            }}}>
-            <Card sx={{ borderRadius: "10px" }}>
+            width: {xs:"120%", sm:"80%"}, 
+            marginLeft:{xs:"-2rem", sm:"auto"},
+            }}>
+            <Card sx={{ borderRadius: "10px"}}>
                 <CardMedia
                     sx={{
                         marginTop: "1rem",
@@ -84,7 +84,7 @@ const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, com
                 />
                 <Box sx={{ display: "inline-block", marginLeft: "1rem" }}>
                     {readingTime && (
-                        <Typography variant="body2" sx={{ backgroundColor: "primary.light", padding: ".5rem", borderRadius: "5px" }}>
+                        <Typography variant="body2" sx={{marginLeft:"3rem", backgroundColor: "primary.light", padding: ".5rem", borderRadius: "5px" }}>
                             {readingTime}
                         </Typography>
                     )}
@@ -94,8 +94,8 @@ const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, com
                         {content}
                     </Typography>
                 </CardContent>
-                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                    <Box sx={{ ...flex, opacity: ".7", gap: ".3rem", marginLeft: "1rem" }}>
+                <Box sx={{ display: {xs:"block", sm:"flex"},justifyContent: "space-between" }}>
+                    <Box sx={{ ...flex, opacity: ".7", gap: ".3rem", marginLeft:"1rem"}}>
                         <Typography >
                             <FavoriteIcon />
                             <sup>{likes.length}</sup>
@@ -109,7 +109,7 @@ const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, com
                             <sup>{countOfVisitors}</sup>
                         </Typography>
                     </Box>
-                    <Button onClick={() => navigate(`/blog/detail/${_id}`, { state: { content, image, title, userId, createdAt, likes, _id, categoryId,countOfVisitors } })} variant="contained" sx={{ marginRight: "1rem", marginBottom: "1rem", backgroundColor: "primary.light" }} >
+                    <Button onClick={() => navigate(`/blog/detail/${_id}`, { state: { content, image, title, userId, createdAt, likes, _id, categoryId, countOfVisitors } })} variant="contained" sx={{ marginLeft: { xs: "3.5rem" , sm:"1rem"} , marginRight: "1rem", marginBottom: "1rem", backgroundColor: "primary.light" }} >
                         Read More
                     </Button>
                 </Box>

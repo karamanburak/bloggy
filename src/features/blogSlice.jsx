@@ -5,8 +5,8 @@ const blogSlice = createSlice({
 
     initialState:{
         blogs:[],
-        blog:{},
         comments: [],
+        blog:{},
         likeCounts:"",
         loading:false,
         error:false
@@ -49,6 +49,7 @@ export const {
     getSuccess,
     getCommentsData,
     getBlogDetailSuccess,
+    getBlogSuccess,
     fetchFail,
 } = blogSlice.actions;
 

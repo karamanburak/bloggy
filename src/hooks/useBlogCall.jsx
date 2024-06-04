@@ -37,18 +37,20 @@ const useBlogCall = () => {
             dispatch(fetchFail());
         }
     };
+
     const getBlogDetail = async (url, id) => {
         dispatch(fetchStart())
         try {
            const {data} =  await axiosWithToken(`${url}/${id}`);
             dispatch(getBlogDetailSuccess(data))
-            console.log(data.data.userId);
+            // console.log(data.data.userId);
             
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             dispatch(fetchFail());
         } 
     };
+
 
     const getCommentsDetail = async (url, id) => {
         dispatch(fetchStart());
@@ -63,8 +65,6 @@ const useBlogCall = () => {
         } 
     };
 
-
-
     const deleteBlog = async (url, id) => {
         dispatch(fetchStart());
         try {
@@ -78,6 +78,7 @@ const useBlogCall = () => {
             getBlogData(url)
         }
     };
+
     const postBlog = async (url, info) => {
         dispatch(fetchStart());
         try {
@@ -91,6 +92,7 @@ const useBlogCall = () => {
             getBlogData(url)
         }
     };
+
     const putBlog = async (url, info) => {
         dispatch(fetchStart());
         try {
@@ -143,7 +145,6 @@ const useBlogCall = () => {
         getUserBlogs,
         getLike,
         postComment
-
     }
 };
 

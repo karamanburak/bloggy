@@ -26,10 +26,10 @@ import useCategoryCall from '../hooks/useCategoryCall';
 const Detail = () => {
     const navigate = useNavigate()
     const { state } = useLocation()
-    const { content, image, createdAt, userId, title, _id, likes, categoryId,countOfVisitors } = state;
-    const {  deleteBlog,getBlogDetail,getCommentsDetail } = useBlogCall()
+    const { content, image, createdAt, userId, title, _id, likes, categoryId, countOfVisitors } = state;
+    const { deleteBlog, getBlogDetail, getCommentsDetail } = useBlogCall()
     const { currentUser } = useSelector(state => state.auth)
-    const { comments, blog} = useSelector(state => state.blog) 
+    const { comments, blog } = useSelector(state => state.blog)
     const { categories } = useSelector(state => state.category)
     const { getCategory } = useCategoryCall();
     const [open, setOpen] = useState(false);
@@ -57,8 +57,8 @@ const Detail = () => {
         getBlogDetail("blogs", _id)
         getCommentsDetail("blogs", _id)
 
-        
-    }, [ likes,currentUser]);
+
+    }, [likes, currentUser]);
 
     const handleLike = () => {
         getLike("blogs", _id);
@@ -96,7 +96,7 @@ const Detail = () => {
                     image={image}
                     alt="image"
                 />
-                <Box sx={{ ...flex,  justifyContent:"space-between", marginLeft: ".7rem" }}>
+                <Box sx={{ ...flex, justifyContent: "space-between", marginLeft: ".7rem" }}>
                     <CardHeader
                         sx={{
                             color: "indianred",
@@ -114,7 +114,7 @@ const Detail = () => {
                         title={blog ? `${blog.firstName} ${blog.lastName}` : title}
                         subheader={`Published Date: ${formatDate(createdAt)}`}
                     />
-                    <Typography variant="subtitle1" sx={{ backgroundColor: "indianred", color: "neutral.light", marginLeft: "1.5rem", marginTop: "2rem", display: "inline-block", padding: ".5rem", borderRadius: "7px", textAlign:"center" }}>
+                    <Typography variant="subtitle1" sx={{ backgroundColor: "indianred", color: "white", marginLeft: "1.5rem", marginTop: "2rem", display: "inline-block", padding: ".5rem", borderRadius: "7px", textAlign: "center" }}>
                         <b>Category:</b> {getCategoryName()}
                     </Typography>
                 </Box>
@@ -122,8 +122,8 @@ const Detail = () => {
                 <Typography variant="body2" sx={{ textAlign: "justify", marginLeft: "1.5rem", fontSize: "1.1rem" }} >
                     {content}
                 </Typography>
-                <Box sx={{display:{xs: "block", lg:"flex"}, opacity: ".7",  justifyContent: "space-between", m: 4 }}>
-                    <Box sx={{ display:"flex", gap: ".5rem",  mt:2 }} >
+                <Box sx={{ display: { xs: "block", lg: "flex" }, opacity: ".7", justifyContent: "space-between", m: 4 }}>
+                    <Box sx={{ display: "flex", gap: ".5rem", mt: 2 }} >
                         <Typography >
                             <FavoriteIcon
                                 sx={{
@@ -140,12 +140,13 @@ const Detail = () => {
                         </Typography>
                         <RemoveRedEyeIcon />
                         <Typography>
-                            <sup>{countOfVisitors+1}</sup>
+                            <sup>{countOfVisitors + 1}</sup>
                         </Typography>
                     </Box>
                     {isCurrentUserOwner && (
-                        <Box sx={{ display: "flex", gap: 2, marginLeft: "2-1em",mt:2}}>
-                            <Button variant='contained' sx={{ backgroundColor: "cornflowerblue" }}> <EditNoteIcon />Edit Blog</Button>
+                        <Box sx={{ display: "flex", gap: 2, marginLeft: "2-1em", mt: 2 }}>
+                            <Button variant='contained' sx={{ backgroundColor: "cornflowerblue" }}>
+                                <EditNoteIcon />Edit Blog</Button>
                             <Button
                                 variant='contained'
                                 sx={{ backgroundColor: "red" }}
@@ -168,7 +169,9 @@ const Detail = () => {
                 </Box>
                 <Box>
                     <CardContent sx={{ margin: "auto", marginLeft: "-2rem" }}>
-                        <CommentForm blogId={_id}  id={_id} />
+
+                        <CommentForm blogId={_id} />
+                        
                         {comments?.length > 0 ? (
                             comments.map(comment => {
                                 if (comment.blogId === _id) {

@@ -18,6 +18,7 @@ const CommentForm = ({ blogId}) => {
     postComment("comments", commentData);
     setCommentText("")
   };
+  
 
   return (
     <Container>
