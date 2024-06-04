@@ -5,7 +5,6 @@ const blogSlice = createSlice({
 
     initialState:{
         blogs:[],
-        comments: [],
         blog:{},
         likeCounts:"",
         loading:false,
@@ -21,14 +20,10 @@ const blogSlice = createSlice({
             state.loading = false;
             state[url] = data
         },
-        getCommentsData : (state,{payload}) => {
-            state.loading = false;
-            state.comments = payload.data.comments
-        },
 
         getBlogDetailSuccess: (state, {payload}) => {
             state.loading = false;
-            state.blog = payload.data.userId
+            state.blog = payload.data
         },
 
         postBlogs : (state,{payload}) => {

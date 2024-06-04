@@ -26,6 +26,7 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
   const [readingTime, setReadingTime] = useState(null);
   const { getLike } = useBlogCall()
   const { currentUser } = useSelector(state => state.auth)
+  const { blog } = useSelector(state => state.blog)
   const [liked, setLiked] = useState(false);
 
   const localDate = () => {
@@ -48,7 +49,7 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
       setReadingTime(`${minutes} min read`);
     }
 
-  }, [likes, currentUser]);
+  }, [likes, currentUser, getLike]);
 
   
   
@@ -130,7 +131,7 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
         </Box>
       </CardActions>
       <Box sx={{ display: "flex", justifyContent: "flex-end", marginRight: "1rem" }}>
-        <Button onClick={() => navigate(`/blog/detail/${_id}`, { state: { _id, content, image, title, userId, createdAt, likes, countOfVisitors, categoryId } })} variant="contained" sx={{ marginBottom: "1rem", backgroundColor: "primary.light" }} >
+        <Button onClick={() => navigate(`/blog/detail/${_id}`, { state: { _id, content, image, title, userId, createdAt, likes, countOfVisitors, categoryId,blog } })} variant="contained" sx={{ marginBottom: "1rem", backgroundColor: "primary.light" }} >
           Read More
         </Button>
       </Box>

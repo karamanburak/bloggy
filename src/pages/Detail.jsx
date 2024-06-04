@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import useBlogCall from "../hooks/useBlogCall";
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+import MarkUnreadChatAltOutlinedIcon from '@mui/icons-material/MarkUnreadChatAltOutlined'; 
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { flex } from '../styles/globalStyles'
 import { useState } from 'react';
@@ -26,17 +26,19 @@ import useCategoryCall from '../hooks/useCategoryCall';
 const Detail = () => {
     const navigate = useNavigate()
     const { state } = useLocation()
-    const { content, image, createdAt, userId, title, _id, likes, categoryId, countOfVisitors } = state;
-    const { deleteBlog, getBlogDetail, getCommentsDetail } = useBlogCall()
+    const { content, image, createdAt, userId, title, _id, likes, categoryId, countOfVisitors,blog } = state;
+    const { deleteBlog, getBlogDetail } = useBlogCall()
     const { currentUser } = useSelector(state => state.auth)
-    const { comments, blog } = useSelector(state => state.blog)
     const { categories } = useSelector(state => state.category)
     const { getCategory } = useCategoryCall();
     const [open, setOpen] = useState(false);
     const { getLike } = useBlogCall()
     const [liked, setLiked] = useState(false);
+    const [showComments, setShowComments] = useState(false); 
 
-
+    const handleToggleComments = () => {
+        setShowComments(prevState => !prevState); 
+    };
 
     const handleDelete = () => {
         setOpen(false);
@@ -54,16 +56,13 @@ const Detail = () => {
         } else {
             setLiked(false);
         }
-        getBlogDetail("blogs", _id)
-        getCommentsDetail("blogs", _id)
+            getBlogDetail("blogs", _id)
 
-
-    }, [likes, currentUser]);
+    }, []);
 
     const handleLike = () => {
         getLike("blogs", _id);
-    }
-
+    };
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleString("de-DE");
     };
@@ -108,10 +107,10 @@ const Detail = () => {
                         }}
                         avatar={
                             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                                {blog ? <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${blog.firstName}`} alt="image" /> : "R"}
+                                {blog ? <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${blog?.userId?.firstName}`} alt="image" /> : "R" }
                             </Avatar>
                         }
-                        title={blog ? `${blog.firstName} ${blog.lastName}` : title}
+                        title={blog ? `${blog?.userId?.firstName} ${blog?.userId?.lastName}` : title}
                         subheader={`Published Date: ${formatDate(createdAt)}`}
                     />
                     <Typography variant="subtitle1" sx={{ backgroundColor: "indianred", color: "white", marginLeft: "1.5rem", marginTop: "2rem", display: "inline-block", padding: ".5rem", borderRadius: "7px", textAlign: "center" }}>
@@ -122,7 +121,7 @@ const Detail = () => {
                 <Typography variant="body2" sx={{ textAlign: "justify", marginLeft: "1.5rem", fontSize: "1.1rem" }} >
                     {content}
                 </Typography>
-                <Box sx={{ display: { xs: "block", lg: "flex" }, opacity: ".7", justifyContent: "space-between", m: 4 }}>
+                <Box sx={{ display: { xs: "block", lg: "flex" }, opacity: ".7", justifyContent: "space-between", m: 4 ,cursor:"pointer"}}>
                     <Box sx={{ display: "flex", gap: ".5rem", mt: 2 }} >
                         <Typography >
                             <FavoriteIcon
@@ -134,9 +133,9 @@ const Detail = () => {
                             />
                             <sup>{likes.length}</sup>
                         </Typography>
-                        <ChatBubbleOutlineIcon />
+                        <MarkUnreadChatAltOutlinedIcon onClick={handleToggleComments} />
                         <Typography>
-                            <sup>{comments?.length || 0}</sup>
+                            <sup>{blog?.comments?.length || 0}</sup>
                         </Typography>
                         <RemoveRedEyeIcon />
                         <Typography>
@@ -144,7 +143,7 @@ const Detail = () => {
                         </Typography>
                     </Box>
                     {isCurrentUserOwner && (
-                        <Box sx={{ display: "flex", gap: 2, marginLeft: "2-1em", mt: 2 }}>
+                        <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
                             <Button variant='contained' sx={{ backgroundColor: "cornflowerblue" }}>
                                 <EditNoteIcon />Edit Blog</Button>
                             <Button
@@ -171,9 +170,9 @@ const Detail = () => {
                     <CardContent sx={{ margin: "auto", marginLeft: "-2rem" }}>
 
                         <CommentForm blogId={_id} />
-                        
-                        {comments?.length > 0 ? (
-                            comments.map(comment => {
+               {showComments && (
+                blog?.comments?.length > 0 ? (
+                            blog.comments.map(comment => {
                                 if (comment.blogId === _id) {
                                     return (
                                         <Box key={comment._id} sx={{ margin: "auto", width: { xs: "80vw", sm: "50vw" }, backgroundColor: "primary.light", padding: "2rem", borderRadius: "1rem", my: 6 }}>
@@ -202,7 +201,9 @@ const Detail = () => {
                             })
                         ) : (
                             <Typography sx={{ textAlign: "center", mt: 5, fontSize: "2rem" }}>There are no comments yet...</Typography>
-                        )}
+                        )
+                )}
+                        
                     </CardContent>
                 </Box>
             </Box>

@@ -21,10 +21,9 @@ import useBlogCall from "../../hooks/useBlogCall";
 
 
 const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countOfVisitors, comments, categoryId }) => {
-
     const { getLike } = useBlogCall()
-
     const { currentUser } = useSelector(state => state.auth)
+    const { blog } = useSelector(state => state.blog)
     const navigate = useNavigate()
     const [readingTime, setReadingTime] = useState(null);
     const [liked, setLiked] = useState(false);
@@ -34,7 +33,7 @@ const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countO
         if (!currentUser) {
             toastWarnNotify("You must Login");
         } else {
-            navigate(`/blog/detail/${_id}`, { state: { content, image, title, userId, createdAt, _id, likes, countOfVisitors, categoryId } })
+            navigate(`/blog/detail/${_id}`, { state: { content, image, title, userId, createdAt, _id, likes, countOfVisitors, categoryId, blog } })
         }
     }
 

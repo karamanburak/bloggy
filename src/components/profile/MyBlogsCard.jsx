@@ -16,6 +16,7 @@ import { flex } from '../../styles/globalStyles';
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 
 
@@ -23,6 +24,8 @@ import { useState } from "react";
 const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, comments, countOfVisitors, categoryId }) => {
     const navigate = useNavigate()
     const [readingTime, setReadingTime] = useState(null);
+    const { blog } = useSelector(state => state.blog)
+
 
 
 
@@ -109,7 +112,7 @@ const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, com
                             <sup>{countOfVisitors}</sup>
                         </Typography>
                     </Box>
-                    <Button onClick={() => navigate(`/blog/detail/${_id}`, { state: { content, image, title, userId, createdAt, likes, _id, categoryId, countOfVisitors } })} variant="contained" sx={{ marginLeft: { xs: "3.5rem" , sm:"1rem"} , marginRight: "1rem", marginBottom: "1rem", backgroundColor: "primary.light" }} >
+                    <Button onClick={() => navigate(`/blog/detail/${_id}`, { state: { content, image, title, userId, createdAt, likes, _id, categoryId, countOfVisitors,blog } })} variant="contained" sx={{ marginLeft: { xs: "3.5rem" , sm:"1rem"} , marginRight: "1rem", marginBottom: "1rem", backgroundColor: "primary.light" }} >
                         Read More
                     </Button>
                 </Box>

@@ -4,7 +4,6 @@ import {
     fetchStart,
     getSuccess,
     getBlogDetailSuccess,
-    getCommentsData,
 } from "../features/blogSlice";
 import useAxios from "./useAxios";
 import { toastErrorNotify, toastSuccessNotify } from "../helper/ToastNotify";
@@ -43,27 +42,27 @@ const useBlogCall = () => {
         try {
            const {data} =  await axiosWithToken(`${url}/${id}`);
             dispatch(getBlogDetailSuccess(data))
-            // console.log(data.data.userId);
+            // console.log(data.data);
             
-        } catch (error) {
-            // console.log(error);
-            dispatch(fetchFail());
-        } 
-    };
-
-
-    const getCommentsDetail = async (url, id) => {
-        dispatch(fetchStart());
-        try {
-            const { data } = await axiosWithToken(`${url}/${id}`)
-            // console.log(data);
-            dispatch(getCommentsData({ data: data.data, url }))
         } catch (error) {
             console.log(error);
             dispatch(fetchFail());
-            toastErrorNotify(error?.response?.data?.message || "Operation not success")
         } 
     };
+
+
+    // const getCommentsDetail = async (url, id) => {
+    //     dispatch(fetchStart());
+    //     try {
+    //         const { data } = await axiosWithToken(`${url}/${id}`)
+    //         // console.log(data);
+    //         dispatch(getBlogDetailSuccess({ data: data.data, url }))
+    //     } catch (error) {
+    //         console.log(error);
+    //         dispatch(fetchFail());
+    //         toastErrorNotify(error?.response?.data?.message || "Operation not success")
+    //     } 
+    // };
 
     const deleteBlog = async (url, id) => {
         dispatch(fetchStart());
@@ -125,13 +124,14 @@ const useBlogCall = () => {
     const getLike = async (url, id) => {
         dispatch(fetchStart());
         try {
-            await axiosWithToken.post(`${url}/${id}/postLike`);
+          const {data} =  await axiosWithToken.post(`${url}/${id}/postLike`);
+          console.log(data);
+            // getBlogDetail(`blogs/${id}/getLike`)
+            getBlogData(`blogs`)
         } catch (error) {
             console.log(error);
             dispatch(fetchFail());
-        } finally{
-            getBlogData(url)
-        }
+        } 
     };
 
 
@@ -140,7 +140,7 @@ const useBlogCall = () => {
         deleteBlog,
         putBlog,
         postBlog,
-        getCommentsDetail,
+        // getCommentsDetail,
         getBlogDetail,
         getUserBlogs,
         getLike,
