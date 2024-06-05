@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import useBlogCall from "../hooks/useBlogCall";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import MarkUnreadChatAltOutlinedIcon from '@mui/icons-material/MarkUnreadChatAltOutlined'; 
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { flex } from '../styles/globalStyles'
 import { useState } from 'react';
@@ -57,12 +58,11 @@ const Detail = () => {
         if (!categories.length) {
             getCategory('categories');
         }
-        
         getBlogDetail("blogs", _id)
-    }, [likes]);
+        
+    }, []);
 
     const handleLike = () => {
-
         postLike("blogs", _id);
     }
 
@@ -136,7 +136,14 @@ const Detail = () => {
                             />
                             <sup>{likes.length}</sup>
                         </Typography>
-                        <MarkUnreadChatAltOutlinedIcon onClick={handleToggleComments} />
+                        <Typography onClick={handleToggleComments}>
+                        {showComments ? (
+                                <ChatBubbleOutlineIcon/>
+                        ) : (
+                            <MarkUnreadChatAltOutlinedIcon />
+                        )
+                        } 
+                        </Typography>
                         <Typography>
                             <sup>{blog?.comments?.length || 0}</sup>
                         </Typography>

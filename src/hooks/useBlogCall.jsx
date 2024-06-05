@@ -46,7 +46,7 @@ const useBlogCall = () => {
         } catch (error) {
             console.log(error);
             dispatch(fetchFail());
-        } 
+        }
     };
 
     const deleteBlog = async (url, id) => {
@@ -102,32 +102,22 @@ const useBlogCall = () => {
             console.log(error);
             dispatch(fetchFail());
             toastErrorNotify(error?.response?.data?.message || "Operation not success")
-        } 
+        }
     }
 
     const postLike = async (url, id) => {
         dispatch(fetchStart());
         try {
-            await axiosWithToken.post(`${url}/${id}/postLike`);  
-        
-            getBlogDetail(url,id)
+            await axiosWithToken.post(`${url}/${id}/postLike`);
+            getBlogData('blogs')
+            // console.log(getBlogDetail('blogs', id)
+
         } catch (error) {
             console.log(error);
             dispatch(fetchFail());
         }
-    };
 
-    const getLike = async (url, id) => {
-        dispatch(fetchStart());
-        try {
-            await axiosWithToken(`${url}/${id}/getLike`);  
-            getBlogDetail(url,id)
-        } catch (error) {
-            console.log(error);
-            dispatch(fetchFail());
-        }
     };
-
 
 
     return {
@@ -138,7 +128,6 @@ const useBlogCall = () => {
         getBlogDetail,
         getUserBlogs,
         postLike,
-        getLike,
         postComment
     }
 };
