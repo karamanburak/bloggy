@@ -33,7 +33,7 @@ const Detail = () => {
     const { categories } = useSelector(state => state.category)
     const { getCategory } = useCategoryCall();
     const [open, setOpen] = useState(false);
-    const { getLike } = useBlogCall()
+    const { postLike } = useBlogCall()
     const [liked, setLiked] = useState(false);
     const [showComments, setShowComments] = useState(false); 
 
@@ -49,6 +49,7 @@ const Detail = () => {
 
 
     useEffect(() => {
+        getBlogDetail("blogs", _id)
         if (!categories.length) {
             getCategory('categories');
         }
@@ -57,13 +58,14 @@ const Detail = () => {
         } else {
             setLiked(false);
         }
-            getBlogDetail("blogs", _id)
 
-    }, []);
+    }, [_id]);
 
     const handleLike = () => {
-        getLike("blogs", _id);
-    };
+
+        postLike("blogs", _id);
+    }
+
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleString("de-DE");
     };

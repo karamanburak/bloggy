@@ -16,7 +16,7 @@ const CommentForm = ({ blogId}) => {
       "comment": commentText
     };
     postComment("comments", commentData);
-    console.log(commentData);
+    // console.log(commentData);
     
     setCommentText("")
   };
