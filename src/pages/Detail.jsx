@@ -59,7 +59,7 @@ const Detail = () => {
         }
         
         getBlogDetail("blogs", _id)
-    }, [likes,getLike]);
+    }, [likes]);
 
     const handleLike = () => {
 
