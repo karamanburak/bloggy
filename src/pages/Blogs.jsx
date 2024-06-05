@@ -13,6 +13,7 @@ const Blogs = () => {
   const { getBlogData } = useBlogCall()
   const { blogs, loading } = useSelector(state => state.blog)
   const { categories } = useSelector(state => state.category)
+  
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => {

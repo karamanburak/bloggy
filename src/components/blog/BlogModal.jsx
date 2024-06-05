@@ -6,6 +6,7 @@ import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/mater
 import { useState } from 'react';
 import useBlogCall from '../../hooks/useBlogCall';
 import { toastWarnNotify } from '../../helper/ToastNotify';
+import { useSelector } from 'react-redux';
 
 const style = {
   position: 'absolute',
@@ -19,9 +20,11 @@ const style = {
   p: 4,
 };
 
-export default function BlogModal({ open, handleClose, initialState,categories }) {
+export default function BlogModal({ open, handleClose, initialState }) {
   const { postBlog } = useBlogCall()
   const [info, setInfo] = useState(initialState)
+  const { categories } = useSelector(state => state.category)
+
 
 
 

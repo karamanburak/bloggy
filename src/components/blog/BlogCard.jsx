@@ -26,7 +26,6 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
   const [readingTime, setReadingTime] = useState(null);
   const { postLike,getLike } = useBlogCall()
   const { currentUser } = useSelector(state => state.auth)
-  // const { blog } = useSelector(state => state.blog)
   const [liked, setLiked] = useState(false);
 
   const localDate = () => {
@@ -42,7 +41,6 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
       setLiked(false);
     }
 
-
     const words = content.split(' ').length;
     const minutes = Math.ceil(words / 150);
     if (minutes >= 1) {
@@ -54,11 +52,6 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
   
   
   const handleLike = () => {
-    if (!currentUser) {
-      toastWarnNotify("You must login to like the blog.");
-      return;
-    }
-
     postLike("blogs", _id);
   }
 

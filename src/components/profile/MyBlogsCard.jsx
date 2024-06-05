@@ -14,6 +14,8 @@ import { flex } from '../../styles/globalStyles';
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import useBlogCall from "../../hooks/useBlogCall";
 
 
 
@@ -21,6 +23,9 @@ import { useState } from "react";
 const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, comments, countOfVisitors, categoryId }) => {
     const navigate = useNavigate()
     const [readingTime, setReadingTime] = useState(null);
+    const { currentUser } = useSelector(state => state.auth)
+    const { postLike } = useBlogCall()
+    const [liked, setLiked] = useState(false);
 
 
 
@@ -40,18 +45,28 @@ const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, com
     }
 
     useEffect(() => {
+        if (likes.includes(currentUser._id)) {
+            setLiked(true);
+        } else {
+            setLiked(false);
+        }
+
         calcReadingTime()
-    }, [])
+    }, [likes])
+
+    const handleLike = () => {
+        postLike("blogs", _id);
+    }
 
 
     return (
-        <Container sx={{ 
+        <Container sx={{
             paddingBottom: "2rem",
-            textAlign:"justify", 
-            width: {xs:"120%", sm:"80%"}, 
-            marginLeft:{xs:"-2rem", sm:"auto"},
-            }}>
-            <Card sx={{ borderRadius: "10px"}}>
+            textAlign: "justify",
+            width: { xs: "120%", sm: "80%" },
+            marginLeft: { xs: "-2rem", sm: "auto" },
+        }}>
+            <Card sx={{ borderRadius: "10px" }}>
                 <CardMedia
                     sx={{
                         marginTop: "1rem",
@@ -83,7 +98,7 @@ const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, com
                 />
                 <Box sx={{ display: "inline-block", marginLeft: "1rem" }}>
                     {readingTime && (
-                        <Typography variant="body2" sx={{marginLeft:"3rem", backgroundColor: "primary.light", padding: ".5rem", borderRadius: "5px" }}>
+                        <Typography variant="body2" sx={{ marginLeft: "3rem", backgroundColor: "primary.light", padding: ".5rem", borderRadius: "5px" }}>
                             {readingTime}
                         </Typography>
                     )}
@@ -93,10 +108,16 @@ const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, com
                         {content}
                     </Typography>
                 </CardContent>
-                <Box sx={{ display: {xs:"block", sm:"flex"},justifyContent: "space-between" }}>
-                    <Box sx={{ ...flex, opacity: ".7", gap: ".3rem", marginLeft:"1rem"}}>
+                <Box sx={{ display: { xs: "block", sm: "flex" }, justifyContent: "space-between" }}>
+                    <Box sx={{ ...flex, opacity: ".7", gap: ".3rem", marginLeft: "1rem" }}>
                         <Typography >
-                            <FavoriteIcon />
+                            <FavoriteIcon
+                                sx={{
+                                    color: liked ? "red" : "",
+                                    cursor: "pointer"
+                                }}
+                                onClick={handleLike}
+                            />
                             <sup>{likes.length}</sup>
                         </Typography>
                         <ChatBubbleOutlineIcon />
@@ -108,7 +129,7 @@ const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, com
                             <sup>{countOfVisitors}</sup>
                         </Typography>
                     </Box>
-                    <Button onClick={() => navigate(`/blog/detail/${_id}`, { state: { content, image, title, userId, createdAt, likes, _id, categoryId, countOfVisitors } })} variant="contained" sx={{ marginLeft: { xs: "3.5rem" , sm:"1rem"} , marginRight: "1rem", marginBottom: "1rem", backgroundColor: "primary.light" }} >
+                    <Button onClick={() => navigate(`/blog/detail/${_id}`, { state: { content, image, title, userId, createdAt, likes, _id, categoryId, countOfVisitors } })} variant="contained" sx={{ marginLeft: { xs: "3.5rem", sm: "1rem" }, marginRight: "1rem", marginBottom: "1rem", backgroundColor: "primary.light" }} >
                         Read More
                     </Button>
                 </Box>

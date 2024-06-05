@@ -21,7 +21,7 @@ import useBlogCall from "../../hooks/useBlogCall";
 
 
 const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countOfVisitors, comments, categoryId }) => {
-    const { getLike } = useBlogCall()
+    const { postLike } = useBlogCall()
     const { currentUser } = useSelector(state => state.auth)
     const navigate = useNavigate()
     const [readingTime, setReadingTime] = useState(null);
@@ -65,7 +65,7 @@ const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countO
             return;
         }
 
-        getLike("blogs", _id);
+        postLike("blogs", _id);
     }
 
     return (

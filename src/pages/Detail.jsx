@@ -33,7 +33,7 @@ const Detail = () => {
     const { categories } = useSelector(state => state.category)
     const { getCategory } = useCategoryCall();
     const [open, setOpen] = useState(false);
-    const { postLike } = useBlogCall()
+    const { postLike,getLike } = useBlogCall()
     const [liked, setLiked] = useState(false);
     const [showComments, setShowComments] = useState(false); 
 
@@ -49,17 +49,17 @@ const Detail = () => {
 
 
     useEffect(() => {
-        getBlogDetail("blogs", _id)
-        if (!categories.length) {
-            getCategory('categories');
-        }
-        if (currentUser && likes.includes(currentUser._id)) {
+        if (likes.includes(currentUser._id)) {
             setLiked(true);
         } else {
             setLiked(false);
         }
-
-    }, [_id]);
+        if (!categories.length) {
+            getCategory('categories');
+        }
+        
+        getBlogDetail("blogs", _id)
+    }, [likes]);
 
     const handleLike = () => {
 
