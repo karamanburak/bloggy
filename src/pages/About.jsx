@@ -52,23 +52,23 @@ const About = () => {
           color: theme.palette.mode === "dark" ? "#fff" : "#000"
         }}>
           <Typography variant="h4" component="h1" sx={{ fontWeight: "bold", textAlign: "center" }}>About Us</Typography>
-          <Typography>
+          <Typography sx={{ fontSize: "1.2rem" }}>
             <br />
             At Bloggy, we are passionate about sharing stories, insights, and knowledge across a variety of topics. Our mission is to create a platform where readers can find engaging content that informs, inspires, and entertains.
           </Typography>
           <br />
           <Typography variant="h5" sx={{ fontWeight: "bold" }}>Who We Are</Typography>
-          <Typography>
+          <Typography sx={{ fontSize: "1.2rem" }}>
             We are a diverse team of writers, editors, and enthusiasts who come together to bring you fresh perspectives on topics that matter. From technology and lifestyle to travel and personal development, our team is dedicated to delivering high-quality articles that resonate with our readers.
           </Typography>
           <br />
           <Typography variant="h5" sx={{ fontWeight: "bold" }}>Our Mission</Typography>
-          <Typography>
+          <Typography sx={{ fontSize: "1.2rem" }}>
             Our mission is to connect people through the power of storytelling. We believe that everyone has a story to tell and valuable insights to share. By providing a space for these stories, we hope to foster a community of curious and thoughtful readers.
           </Typography>
           <br />
           <Typography variant="h5" sx={{ fontWeight: "bold" }}> What We Offer</Typography>
-          <Typography>
+          <Typography sx={{ fontSize: "1.2rem" }}>
             <strong>In-Depth Articles:</strong> Comprehensive and well-researched articles that delve into various subjects.
             <br />
             <strong>Personal Stories:</strong> Real-life experiences and narratives that inspire and motivate.
@@ -81,7 +81,7 @@ const About = () => {
           </Typography>
           <br />
           <Typography variant="h5" sx={{ fontWeight: "bold" }}> Join Our Community </Typography>
-          <Typography>
+          <Typography sx={{fontSize:"1.2rem"}}>
             We invite you to join our growing community of readers and contributors. Follow us on social media, subscribe to our newsletter, and feel free to reach out with your thoughts and feedback. Your voice is important to us, and we are always eager to hear from our readers.
           </Typography>
           <br />
