@@ -26,9 +26,10 @@ import useCategoryCall from '../hooks/useCategoryCall';
 const Detail = () => {
     const navigate = useNavigate()
     const { state } = useLocation()
-    const { content, image, createdAt, userId, title, _id, likes, categoryId, countOfVisitors,blog } = state;
+    const { content, image, createdAt, userId, title, _id, likes, categoryId, countOfVisitors } = state;
     const { deleteBlog, getBlogDetail } = useBlogCall()
     const { currentUser } = useSelector(state => state.auth)
+    const { blog } = useSelector(state => state.blog)
     const { categories } = useSelector(state => state.category)
     const { getCategory } = useCategoryCall();
     const [open, setOpen] = useState(false);
