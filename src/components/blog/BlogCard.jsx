@@ -16,15 +16,16 @@ import { flex } from '../../styles/globalStyles';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import useBlogCall from '../../hooks/useBlogCall';
+import useCategoryCall from '../../hooks/useCategoryCall';
 // import UpdateModal from './UpdateModal';
 
 
 
 
-const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countOfVisitors, comments,categoryId }) => {
+const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countOfVisitors, comments, categoryId }) => {
   const navigate = useNavigate()
   const [readingTime, setReadingTime] = useState(null);
-  const { postLike,getLike } = useBlogCall()
+  const { postLike, getLike } = useBlogCall()
   const { currentUser } = useSelector(state => state.auth)
   const [liked, setLiked] = useState(false);
 
@@ -47,10 +48,11 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
       setReadingTime(`${minutes} min read`);
     }
 
-  }, [likes, currentUser,getLike]);
 
-  
-  
+  }, [likes, currentUser, getLike]);
+
+
+
   const handleLike = () => {
     postLike("blogs", _id);
   }
@@ -74,12 +76,23 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
       />
 
       <CardContent>
-      <Typography sx={{color:"indianred", fontWeight:"bold",textAlign:"center", textTransform:"uppercase"}}>{title}</Typography>
-        <Typography variant="body2" sx={{ maxHeight: "100px", overflow: "hidden", textAlign: "justify" }}>
+        <Typography sx={{ color: "indianred", fontWeight: "bold", textAlign: "center", textTransform: "uppercase" }}>{title}</Typography>
+        <Typography variant="body2"
+          sx={{
+            // maxHeight: "100px",
+            overflow: "hidden",
+            extAlign: "justify",
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            display: '-webkit-box',
+            WebkitLineClamp: '4',
+            WebkitBoxOrient: 'vertical',
+            textAlign:"justify"
+
+          }}>
           {content}
         </Typography>
       </CardContent>
-
       <CardHeader
         sx={{
           '& .MuiTypography-root': {
@@ -100,7 +113,7 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
             <FavoriteIcon
               sx={{
                 color: liked ? "red" : "",
-                cursor:"pointer"
+                cursor: "pointer"
               }}
               onClick={handleLike}
             />
@@ -115,7 +128,7 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
             <sup>{countOfVisitors}</sup>
           </Typography>
         </Box>
-        <Box sx={{ display: "inline-block", marginLeft: "auto", marginRight:"1rem" }}>
+        <Box sx={{ display: "inline-block", marginLeft: "auto", marginRight: "1rem" }}>
           {readingTime && (
             <Typography variant="body2" sx={{ backgroundColor: "neutral.dark", padding: ".5rem", borderRadius: "5px" }}>
               {readingTime}

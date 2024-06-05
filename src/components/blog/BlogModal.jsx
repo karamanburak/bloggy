@@ -20,13 +20,10 @@ const style = {
   p: 4,
 };
 
-export default function BlogModal({ open, handleClose, initialState }) {
+export default function BlogModal({ open, handleClose, initialState,categories }) {
   const { postBlog } = useBlogCall()
   const [info, setInfo] = useState(initialState)
-  const { categories } = useSelector(state => state.category)
-
-
-
+  
 
   const handleChange = (e) => {
     setInfo({ ...info, [e.target.name]: e.target.value })

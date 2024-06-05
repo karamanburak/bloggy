@@ -121,7 +121,6 @@ const useBlogCall = () => {
         dispatch(fetchStart());
         try {
             await axiosWithToken(`${url}/${id}/getLike`);  
-        
             getBlogDetail(url,id)
         } catch (error) {
             console.log(error);

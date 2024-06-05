@@ -7,13 +7,14 @@ import Footer from "../components/home/Footer";
 import { useState } from "react";
 import BlogModal from "../components/blog/BlogModal";
 import loadingGif from '../assets/loading.gif'
+import useCategoryCall from "../hooks/useCategoryCall";
 
 
 const Blogs = () => {
   const { getBlogData } = useBlogCall()
   const { blogs, loading } = useSelector(state => state.blog)
   const { categories } = useSelector(state => state.category)
-  
+  const { getCategory } = useCategoryCall()
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -38,6 +39,7 @@ const Blogs = () => {
 
   useEffect(() => {
     getBlogData("blogs")
+    getCategory("categories")
   }, [])
 
 

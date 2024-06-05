@@ -37,7 +37,7 @@ export default function WeatherCard() {
 
     useEffect(() => {
         getWeatherCall()
-    }, [latitude, longitude])
+    }, [])
     if (!weatherData) {
         return null;
     }
