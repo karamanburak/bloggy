@@ -16,10 +16,7 @@ import { flex } from '../../styles/globalStyles';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import useBlogCall from '../../hooks/useBlogCall';
-import useCategoryCall from '../../hooks/useCategoryCall';
-// import UpdateModal from './UpdateModal';
-
-
+// import UpdateModal from './UpdateModal';ove
 
 
 const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countOfVisitors, comments, categoryId }) => {
@@ -82,12 +79,11 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
             // maxHeight: "100px",
             overflow: "hidden",
             extAlign: "justify",
-            overflow: 'hidden',
             textOverflow: 'ellipsis',
             display: '-webkit-box',
             WebkitLineClamp: '4',
             WebkitBoxOrient: 'vertical',
-            textAlign:"justify"
+            textAlign: "justify"
 
           }}>
           {content}

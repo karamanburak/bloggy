@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import useBlogCall from "../hooks/useBlogCall";
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import MarkUnreadChatAltOutlinedIcon from '@mui/icons-material/MarkUnreadChatAltOutlined'; 
+import MarkUnreadChatAltOutlinedIcon from '@mui/icons-material/MarkUnreadChatAltOutlined';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { flex } from '../styles/globalStyles'
@@ -27,19 +27,20 @@ import useCategoryCall from '../hooks/useCategoryCall';
 const Detail = () => {
     const navigate = useNavigate()
     const { state } = useLocation()
-    const { content, image, createdAt, userId, title, _id, likes, categoryId, countOfVisitors } = state;
+    const { content, image, createdAt, userId, title, _id, likes: initialLikes, categoryId, countOfVisitors } = state;
     const { deleteBlog, getBlogDetail } = useBlogCall()
     const { currentUser } = useSelector(state => state.auth)
     const { blog } = useSelector(state => state.blog)
     const { categories } = useSelector(state => state.category)
     const { getCategory } = useCategoryCall();
     const [open, setOpen] = useState(false);
-    const { postLike,getLike } = useBlogCall()
-    const [liked, setLiked] = useState(false);
-    const [showComments, setShowComments] = useState(false); 
+    const { postLike } = useBlogCall()
+    const [likes, setLikes] = useState(initialLikes);
+    const [liked, setLiked] = useState(initialLikes.includes(currentUser._id));
+    const [showComments, setShowComments] = useState(false);
 
     const handleToggleComments = () => {
-        setShowComments(prevState => !prevState); 
+        setShowComments(prevState => !prevState);
     };
 
     const handleDelete = () => {
@@ -59,11 +60,13 @@ const Detail = () => {
             getCategory('categories');
         }
         getBlogDetail("blogs", _id)
-        
+
     }, []);
 
     const handleLike = () => {
-        postLike("blogs", _id);
+        postLike('blogs', _id);
+        setLiked(!liked);
+        setLikes(prevLikes => liked ? prevLikes.filter(id => id !== currentUser._id) : [...prevLikes, currentUser._id]);
     }
 
     const formatDate = (dateString) => {
@@ -110,7 +113,7 @@ const Detail = () => {
                         }}
                         avatar={
                             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                                {blog ? <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${blog?.userId?.firstName}`} alt="image" /> : "R" }
+                                {blog ? <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${blog?.userId?.firstName}`} alt="image" /> : "R"}
                             </Avatar>
                         }
                         title={blog ? `${blog?.userId?.firstName} ${blog?.userId?.lastName}` : title}
@@ -124,7 +127,7 @@ const Detail = () => {
                 <Typography variant="body2" sx={{ textAlign: "justify", marginLeft: "1.5rem", fontSize: "1.1rem" }} >
                     {content}
                 </Typography>
-                <Box sx={{ display: { xs: "block", lg: "flex" }, opacity: ".7", justifyContent: "space-between", m: 4 ,cursor:"pointer"}}>
+                <Box sx={{ display: { xs: "block", lg: "flex" }, opacity: ".7", justifyContent: "space-between", m: 4, cursor: "pointer" }}>
                     <Box sx={{ display: "flex", gap: ".5rem", mt: 2 }} >
                         <Typography >
                             <FavoriteIcon
@@ -137,12 +140,12 @@ const Detail = () => {
                             <sup>{likes.length}</sup>
                         </Typography>
                         <Typography onClick={handleToggleComments}>
-                        {showComments ? (
-                                <ChatBubbleOutlineIcon/>
-                        ) : (
-                            <MarkUnreadChatAltOutlinedIcon />
-                        )
-                        } 
+                            {showComments ? (
+                                <ChatBubbleOutlineIcon />
+                            ) : (
+                                <MarkUnreadChatAltOutlinedIcon />
+                            )
+                            }
                         </Typography>
                         <Typography>
                             <sup>{blog?.comments?.length || 0}</sup>
@@ -180,40 +183,40 @@ const Detail = () => {
                     <CardContent sx={{ margin: "auto", marginLeft: "-2rem" }}>
 
                         <CommentForm blogId={_id} />
-               {showComments && (
-                blog?.comments?.length > 0 ? (
-                            blog.comments.map(comment => {
-                                if (comment.blogId === _id) {
-                                    return (
-                                        <Box key={comment._id} sx={{ margin: "auto", width: { xs: "80vw", sm: "50vw" }, backgroundColor: "primary.light", padding: "2rem", borderRadius: "1rem", my: 6 }}>
-                                            <CardHeader
-                                                sx={{
-                                                    color: "seagreen",
-                                                    '& .MuiTypography-root': {
-                                                        fontSize: 15,
-                                                        fontWeight: "bold",
+                        {showComments && (
+                            blog?.comments?.length > 0 ? (
+                                blog.comments.map(comment => {
+                                    if (comment.blogId === _id) {
+                                        return (
+                                            <Box key={comment._id} sx={{ margin: "auto", width: { xs: "80vw", sm: "50vw" }, backgroundColor: "primary.light", padding: "2rem", borderRadius: "1rem", my: 6 }}>
+                                                <CardHeader
+                                                    sx={{
+                                                        color: "seagreen",
+                                                        '& .MuiTypography-root': {
+                                                            fontSize: 15,
+                                                            fontWeight: "bold",
+                                                        }
+                                                    }}
+                                                    avatar={
+                                                        <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                                                            <img key={comment._id} src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${comment.userId.firstName}`} alt="image" />
+                                                        </Avatar>
                                                     }
-                                                }}
-                                                avatar={
-                                                    <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                                                        <img key={comment._id} src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${comment.userId.firstName}`} alt="image" />
-                                                    </Avatar>
-                                                }
-                                                title={`${comment.userId.firstName} ${comment.userId.lastName}`}
-                                                subheader={`Published Date: ${formatDate(comment.createdAt)}`}
-                                            />
-                                            <Typography sx={{ marginLeft: "1.2rem" }}>{comment.comment}</Typography>
-                                        </Box>
-                                    )
-                                } else {
-                                    return null;
-                                }
-                            })
-                        ) : (
-                            <Typography sx={{ textAlign: "center", mt: 5, fontSize: "2rem" }}>There are no comments yet...</Typography>
-                        )
-                )}
-                        
+                                                    title={`${comment.userId.firstName} ${comment.userId.lastName}`}
+                                                    subheader={`Published Date: ${formatDate(comment.createdAt)}`}
+                                                />
+                                                <Typography sx={{ marginLeft: "1.2rem" }}>{comment.comment}</Typography>
+                                            </Box>
+                                        )
+                                    } else {
+                                        return null;
+                                    }
+                                })
+                            ) : (
+                                <Typography sx={{ textAlign: "center", mt: 5, fontSize: "2rem" }}>There are no comments yet...</Typography>
+                            )
+                        )}
+
                     </CardContent>
                 </Box>
             </Box>

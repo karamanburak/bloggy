@@ -29,13 +29,13 @@ const ShowsCard = ({ name, genres, image, summary, url }) => {
                     justifyContent: "space-between",
                 }}>
                 <Grid container>
-                    <Grid item sm={12} md={6} order={{ xs: 2, md: 2 }} 
-                    sx={{
-                   display:"flex",
-                   flexDirection:"column",
-                   justifyContent:"space-between",
-                   my:3
-                    }}>
+                    <Grid item sm={12} md={6} order={{ xs: 2, md: 2 }}
+                        sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between",
+                            my: 3
+                        }}>
                         <CardHeader
                             sx={{
                                 color: "seagreen",
@@ -49,14 +49,14 @@ const ShowsCard = ({ name, genres, image, summary, url }) => {
                             subheader={`${genres[0]} - ${genres[1]} - ${genres[2]}`}
                         />
                         <CardContent>
-                            <Typography variant="body2" sx={{ 
+                            <Typography variant="body2" sx={{
                                 maxHeight: "100px",
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
                                 display: '-webkit-box',
                                 WebkitLineClamp: '3',
-                                WebkitBoxOrient: 'vertical' 
-                                  }} >
+                                WebkitBoxOrient: 'vertical'
+                            }} >
                                 {summary}
                             </Typography>
                         </CardContent>
@@ -79,8 +79,7 @@ const ShowsCard = ({ name, genres, image, summary, url }) => {
                                 marginRight: "1rem",
                                 padding: "1rem",
                                 borderRadius: "1rem",
-                                borderRadius: "1rem",
-                                objectFit:"fill",
+                                objectFit: "fill",
                             }}
                             component="img"
                             height="374"

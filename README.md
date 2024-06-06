@@ -4,10 +4,9 @@
 
 ## Description
 
-📰 Bloggy app is a web page made with react. While previously written blogs can be viewed, favorite blogs can be added and removed. After logging in, the user can update their profile or create blogs that are not public. 
+📰 Bloggy app is a web page made with react. While previously written blogs can be viewed, favorite blogs can be added and removed. After logging in, the user can update their profile or create blogs that are not public.
 
 ## Project Skeleton
-
 
 ```
 - Bloggy App (folder)
@@ -29,7 +28,6 @@ SOLUTION
 |    │   │   ├── BlogCard.jsx
 |    │   │   ├── BlogModal.jsx
 |    │   │   ├── CommentForm.jsx
-|    │   │   ├── DeleteModal.jsx
 |    │   │   ├── NewBlog.jsx
 |    │   │   └── UpdateModal.jsx
 |    │   ├── global
@@ -38,7 +36,6 @@ SOLUTION
 |    │   ├── home
 |    │   │   ├── Footer.jsx
 |    │   │   ├── HomeCard.jsx
-|    │   │   ├── NewsCard.jsx
 |    │   │   ├── PageHeader.jsx
 |    │   │   ├── Quotes.jsx
 |    │   │   ├── ShowsCard.jsx
@@ -89,11 +86,9 @@ SOLUTION
 
 ```
 
-##  Outcome
+## Outcome
 
 ![Bloggy App]()
-
-
 
 ## Postman Documentation
 
