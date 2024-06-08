@@ -26,13 +26,13 @@ const useAuthCall = () => {
             // console.log(data);
             dispatch(registerSuccess(data.data))
             toastSuccessNotify("Register was successfully");
-            navigate(logout)
+            navigate("/login")
         } catch (error) {
             dispatch(fetchFail())
             toastErrorNotify("Register can not be performed");
             console.log(error);
 
-        } 
+        }
     }
 
     const login = async (userInfo) => {
@@ -53,7 +53,7 @@ const useAuthCall = () => {
     const updateUser = async (userInfo) => {
         dispatch(fetchStart())
         try {
-           const {data} = await axios.put(`${BASE_URL}users/${userInfo._id}`, userInfo, {
+            const { data } = await axios.put(`${BASE_URL}users/${userInfo._id}`, userInfo, {
                 headers: {
                     Authorization: `Token ${token}`,
                 },
@@ -66,12 +66,12 @@ const useAuthCall = () => {
             toastErrorNotify('Update could not be performed')
             console.log(error);
         }
-        
+
     }
     const getUser = async (id) => {
         dispatch(fetchStart());
         try {
-          const {data} = await axios(`${BASE_URL}users/${id}`, {
+            const { data } = await axios(`${BASE_URL}users/${id}`, {
                 headers: {
                     Authorization: `Token ${token}`,
                 },

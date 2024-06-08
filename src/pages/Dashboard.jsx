@@ -22,9 +22,6 @@ const Dashboard = () => {
     const [shows, setShows] = useState([])
 
 
-
-
-
     const getShows = async () => {
         try {
             const { data } = await axios(url)
@@ -69,7 +66,7 @@ const Dashboard = () => {
                 </Box>
                 <Box>
                     {loading ? (
-                       ""
+                        ""
                     ) : (
                         <Slide>
                             {shows.map((show) => (

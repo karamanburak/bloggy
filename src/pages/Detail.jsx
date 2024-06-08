@@ -157,8 +157,8 @@ const Detail = () => {
                     </Box>
                     {isCurrentUserOwner && (
                         <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
-                            <Button variant='contained' sx={{ backgroundColor: "cornflowerblue" }}>
-                                <EditNoteIcon />Edit Blog</Button>
+                            {/* <Button variant='contained' sx={{ backgroundColor: "cornflowerblue" }}>
+                                <EditNoteIcon />Edit Blog</Button> */}
                             <Button
                                 variant='contained'
                                 sx={{ backgroundColor: "red" }}
