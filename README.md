@@ -36,7 +36,7 @@ pnpm install
 
 Create a .env file in the root directory and add the following:
 ```
-VITE_BASE_URL=your_adress
+please check 'frontend.env' file and use your own enviroments
 ```
 
 4. Run the development server:
