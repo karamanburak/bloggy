@@ -23,11 +23,26 @@
 ## Installation
 
 1. Clone the repository:
-
    ```
    git clone https://github.com/karamanburak/bloggy-app.git
    cd bloggy-app
-   npm install
+   ```
+ 2.  Install dependencies:
+
+```
+pnpm install
+```
+3. Set up environment variables:
+
+Create a .env file in the root directory and add the following:
+```
+REACT_APP_API_URL=your_adress
+```
+
+4. Run the development server:
+```
+pnpm dev
+```
   
 # Usage
 ### Register and Login
