@@ -36,7 +36,7 @@ pnpm install
 
 Create a .env file in the root directory and add the following:
 ```
-REACT_APP_API_URL=your_adress
+VITE_BASE_URL=your_adress
 ```
 
 4. Run the development server:
