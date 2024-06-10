@@ -38,7 +38,6 @@ Create a .env file in the root directory and add the following:
 ```
 VITE_BASE_URL = 
 VITE_WEATHER_apiKey =
-VITE_SHOWS_ApiKey =
 ```
 
 4. Run the development server:
