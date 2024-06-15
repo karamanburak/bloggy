@@ -36,7 +36,8 @@ pnpm install
 
 Create a .env file in the root directory and add the following:
 ```
-VITE_BASE_URL=your_adress
+VITE_BASE_URL = 
+VITE_WEATHER_apiKey =
 ```
 
 4. Run the development server:
