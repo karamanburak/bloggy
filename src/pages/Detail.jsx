@@ -161,7 +161,7 @@ const Detail = () => {
                                 <EditNoteIcon />Edit Blog</Button> */}
                             <Button
                                 variant='contained'
-                                sx={{ backgroundColor: "red" }}
+                                sx={{ backgroundColor: "red", color: "white" }}
                                 onClick={() => setOpen(true)}
                             >
                                 <DeleteForeverIcon /> Delete Blog
