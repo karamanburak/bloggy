@@ -25,7 +25,7 @@ const Dashboard = () => {
     const getShows = async () => {
         try {
             const { data } = await axios(url)
-            setShows(data)
+            setShows(data.slice(0, 10))
             // console.log(data);
 
         } catch (error) {
