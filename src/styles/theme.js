@@ -77,7 +77,7 @@ export const tokens = (mode) => ({
                 100: "#CCDDD3",
                 200: "#080b12",
                 300: "#0c101b",
-                400: "#f2f0f0", 
+                400: "#f2f0f0",
                 500: "#141b2d",
                 600: "#1F2A40",
                 700: "#727681",
@@ -130,7 +130,7 @@ export const themeSettings = (mode) => {
                 ? {
                     // palette values for dark mode
                     primary: {
-                        main: colors.primary[500],
+                        main: colors.primary[400],
                     },
                     secondary: {
                         main: colors.greenAccent[500],
@@ -147,7 +147,7 @@ export const themeSettings = (mode) => {
                 : {
                     // palette values for light mode
                     primary: {
-                        main: colors.primary[100],
+                        main: colors.primary[400],
                     },
                     secondary: {
                         main: colors.greenAccent[500],
@@ -162,7 +162,7 @@ export const themeSettings = (mode) => {
                     },
                 }),
         },
-        
+
     };
 };
 
@@ -173,19 +173,19 @@ export const ColorModeContext = createContext({
 
 export const useMode = () => {
     const [mode, setMode] = useState(
-        localStorage.getItem("theme") || 
+        localStorage.getItem("theme") ||
         "light");
 
     const colorMode = useMemo(
         () => ({
             toggleColorMode: () =>
                 setMode((prev) => {
-                   const newMode = prev === "light" ? "dark" : "light";
-                   const htmlElement = document.documentElement;
-                   htmlElement.classList.remove(prev);
-                   htmlElement.classList.add(newMode);
-                   localStorage.setItem("theme", newMode);
-                   return newMode
+                    const newMode = prev === "light" ? "dark" : "light";
+                    const htmlElement = document.documentElement;
+                    htmlElement.classList.remove(prev);
+                    htmlElement.classList.add(newMode);
+                    localStorage.setItem("theme", newMode);
+                    return newMode
 
                 })
 

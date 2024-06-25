@@ -43,7 +43,6 @@ const About = () => {
           marginBottom: "2rem",
           paddingTop: "2rem",
           textAlign: "center",
-          color: "whitesmoke"
         }}>
           Unleash Your Creativity <br />
           <span style={{ color: "green" }}> Dream, Explore, Create</span>
@@ -81,7 +80,7 @@ const About = () => {
           </Typography>
           <br />
           <Typography variant="h5" sx={{ fontWeight: "bold" }}> Join Our Community </Typography>
-          <Typography sx={{fontSize:"1.2rem"}}>
+          <Typography sx={{ fontSize: "1.2rem" }}>
             We invite you to join our growing community of readers and contributors. Follow us on social media, subscribe to our newsletter, and feel free to reach out with your thoughts and feedback. Your voice is important to us, and we are always eager to hear from our readers.
           </Typography>
           <br />

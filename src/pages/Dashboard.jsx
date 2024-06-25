@@ -37,7 +37,7 @@ const Dashboard = () => {
 
     useEffect(() => {
         getBlogData("blogs")
-        getShows()
+        // getShows()
     }, [])
 
 
@@ -47,12 +47,12 @@ const Dashboard = () => {
             <img src={home} alt="image" width="100%" height="500px" />
 
             <Container maxWidth="xl">
-                <Box sx={{ ...wellcomeMessage, borderRadius: "1rem" }}>
+                <Box sx={{ ...wellcomeMessage }}>
                     <Typography variant='span' style={spanStyle}>Welcome to the Bloggy</Typography>
                 </Box>
-                <Box sx={wellcomeMessage}>
+                {/* <Box sx={wellcomeMessage}>
                     <Quotes />
-                </Box>
+                </Box> */}
                 <Box>
                     {loading ? (
                         <img src={loadingGif} alt="loading..." height={500} style={{ display: "flex", margin: "auto" }} />
@@ -64,7 +64,7 @@ const Dashboard = () => {
                         </Slide>
                     )}
                 </Box>
-                <Box>
+                {/* <Box>
                     {loading ? (
                         ""
                     ) : (
@@ -74,7 +74,7 @@ const Dashboard = () => {
                             ))}
                         </Slide>
                     )}
-                </Box>
+                </Box> */}
             </Container>
             <Box sx={{ marginTop: "2rem" }}>
                 <Footer isDashboard={isDashboard} />
