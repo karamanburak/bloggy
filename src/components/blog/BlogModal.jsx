@@ -46,11 +46,11 @@ export default function BlogModal({ open, handleClose, initialState, categories 
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // const contentLength = info.content.trim().split(/\s+/).length;
-    // if (contentLength < 30) {
-    //   toastWarnNotify("Content must be least 30 words")
-    //   return;
-    // }
+    const contentLength = info.content.trim().split(/\s+/).length;
+    if (contentLength < 30) {
+      toastWarnNotify("Content must be least 30 words")
+      return;
+    }
     // console.log("submit", info);
     postBlog("blogs", info)
     handleClose()
@@ -131,7 +131,7 @@ export default function BlogModal({ open, handleClose, initialState, categories 
             </Select>
           </FormControl>
 
-          {/* <TextField
+          <TextField
             id="content"
             name='content'
             label="Content *"
@@ -142,9 +142,9 @@ export default function BlogModal({ open, handleClose, initialState, categories 
             color='success'
             type='text'
             onChange={handleChange}
-          /> */}
+          />
 
-          <Editor apiKey={tinyMceApiKey}
+          {/* <Editor apiKey={tinyMceApiKey}
             onInit={(evt, editor) => (editorRef.current = editor)}
             initialValue={info.content}
             init={{
@@ -158,14 +158,14 @@ export default function BlogModal({ open, handleClose, initialState, categories 
               toolbar: 'undo redo | casechange blocks | bold italic backcolor | ' +
                 'alignleft aligncenter alignright alignjustify | ' + ' image ' +
                 'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help',
-              content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+              content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px; text-align: left; }',
             }}
-            style={{ backgroundColor: theme.palette.primary.main }}
+
             onEditorChange={handleEditorChange}
           // onChange={handleChange}
           // value={info.content}
 
-          />
+          /> */}
 
           <Button
             sx={{ backgroundColor: "secondary.main" }}
