@@ -4,6 +4,7 @@ import PageHeader from './PageHeader';
 import { toastWarnNotify } from '../../helper/ToastNotify';
 import { useSelector } from 'react-redux';
 
+const defaultImage = "https://t3.ftcdn.net/jpg/03/27/55/60/360_F_327556002_99c7QmZmwocLwF7ywQ68ChZaBry1DbtD.jpg"
 
 
 const NewsCard = ({ title, author, content, description, source, urlToImage, url }) => {
@@ -83,7 +84,7 @@ const NewsCard = ({ title, author, content, description, source, urlToImage, url
                             }}
                             component="img"
                             height="374"
-                            image={urlToImage}
+                            image={urlToImage ? urlToImage : defaultImage}
                             alt="image"
                         />
                     </Grid>

@@ -5,7 +5,6 @@ import { toastWarnNotify } from '../../helper/ToastNotify';
 import { useSelector } from 'react-redux';
 
 
-
 const ShowsCard = ({ name, genres, image, summary, url }) => {
     const { currentUser } = useSelector(state => state.auth)
 

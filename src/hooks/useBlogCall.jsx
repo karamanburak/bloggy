@@ -117,6 +117,19 @@ const useBlogCall = () => {
 
     };
 
+    const getTrendsData = async () => {
+        dispatch(fetchStart())
+        try {
+            const { data } = await axiosWithToken("blogs/?page=1&limit=100")
+            // console.log(data);
+            dispatch(getSuccess({ data: data?.data, url: "trendings" }))
+
+        } catch (error) {
+            console.log(error);
+            dispatch(fetchFail());
+        }
+    }
+
 
     return {
         getBlogData,
@@ -126,7 +139,8 @@ const useBlogCall = () => {
         getBlogDetail,
         getUserBlogs,
         postLike,
-        postComment
+        postComment,
+        getTrendsData
     }
 };
 

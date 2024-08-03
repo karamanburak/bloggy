@@ -16,7 +16,6 @@ import ShowsCard from '../components/home/ShowsCard';
 import NewsCard from '../components/home/NewsCard';
 
 const url = 'https://api.tvmaze.com/shows'
-const newsUrl = `https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=${import.meta.env.VITE_NEWS_apiKey}`
 const Dashboard = () => {
     const isDashboard = '/'
     const { getBlogData } = useBlogCall()
@@ -37,22 +36,22 @@ const Dashboard = () => {
         }
     }
 
-    const getNews = async () => {
-        try {
-            const { data } = await axios(newsUrl)
-            setNews(data.articles)
-            // console.log(data.articles);
+    // const getNews = async () => {
+    //     try {
+    //         const { data } = await axios(newsUrl)
+    //         setNews(data.articles)
+    //         console.log(data.data);
 
-        } catch (error) {
-            console.log(error);
+    //     } catch (error) {
+    //         console.log(error);
 
-        }
-    }
+    //     }
+    // }
 
 
     useEffect(() => {
         getBlogData("blogs")
-        getNews()
+        // getNews()
         getShows()
     }, [])
 
@@ -80,7 +79,7 @@ const Dashboard = () => {
                         </Slide>
                     )}
                 </Box>
-                <Box>
+                {/* <Box>
                     {loading ? (
                         ""
                     ) : (
@@ -90,7 +89,7 @@ const Dashboard = () => {
                             ))}
                         </Slide>
                     )}
-                </Box>
+                </Box> */}
                 <Box>
                     {loading ? (
                         ""

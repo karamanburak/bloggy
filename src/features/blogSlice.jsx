@@ -1,32 +1,33 @@
-import {createSlice} from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
 const blogSlice = createSlice({
-    name:"blogs",
+    name: "blogs",
 
-    initialState:{
-        blogs:[],
-        blog:{},
-        likeCounts:"",
-        loading:false,
-        error:false
+    initialState: {
+        blogs: [],
+        blog: {},
+        trendings: [],
+        likeCounts: "",
+        loading: false,
+        error: false
     },
-    reducers:{
-        fetchStart:state=> {
+    reducers: {
+        fetchStart: state => {
             state.loading = true;
-            state.error= false;
+            state.error = false;
         },
 
-        getSuccess : (state,{payload:{data,url}}) => {
+        getSuccess: (state, { payload: { data, url } }) => {
             state.loading = false;
             state[url] = data
         },
 
-        getBlogDetailSuccess: (state, {payload}) => {
+        getBlogDetailSuccess: (state, { payload }) => {
             state.loading = false;
             state.blog = payload.data
         },
 
-        postBlogs : (state,{payload}) => {
+        postBlogs: (state, { payload }) => {
             state.loading = false;
             state.blogs = payload.data
         },

@@ -8,6 +8,7 @@ import { useState } from "react";
 import BlogModal from "../components/blog/BlogModal";
 import loadingGif from '../assets/loading.gif'
 import useCategoryCall from "../hooks/useCategoryCall";
+import TrendBlogs from "../components/blog/TrendBlogs";
 
 
 const Blogs = () => {
@@ -59,6 +60,7 @@ const Blogs = () => {
       >
         New Blog
       </Button>
+      {/* <TrendBlogs /> */}
       <Container maxWidth="100vw" sx={{
         minHeight: "90vh",
         paddingBottom: "1rem",
@@ -73,12 +75,12 @@ const Blogs = () => {
             <img src={loadingGif} alt="loading..." height={500} style={{ margin: "auto" }} />
           ) : (
             currentBlogs.map((blog) => (
-              <Grid item xs = { 12} md = { 6} lg = { 4} xl = { 3} key = { blog._id }>
+              <Grid item xs={12} md={6} lg={4} xl={3} key={blog._id}>
                 <BlogCard {...blog} />
               </Grid>
             )))}
         </Grid>
-        <Typography style={{  marginTop: "20px", textAlign: "center" }}>
+        <Typography style={{ marginTop: "20px", textAlign: "center" }}>
           {Array.from({ length: Math.ceil(blogs.length / blogsPerPage) }).map(
             (_, index) => (
               <Button
