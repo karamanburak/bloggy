@@ -13,13 +13,16 @@ import loadingGif from '../assets/loading.gif'
 import { useState } from 'react';
 import axios from 'axios';
 import ShowsCard from '../components/home/ShowsCard';
+import NewsCard from '../components/home/NewsCard';
 
 const url = 'https://api.tvmaze.com/shows'
+const newsUrl = `https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=${import.meta.env.VITE_NEWS_apiKey}`
 const Dashboard = () => {
     const isDashboard = '/'
     const { getBlogData } = useBlogCall()
     const { blogs, loading } = useSelector(state => state.blog)
     const [shows, setShows] = useState([])
+    const [news, setNews] = useState([])
 
 
     const getShows = async () => {
@@ -34,10 +37,23 @@ const Dashboard = () => {
         }
     }
 
+    const getNews = async () => {
+        try {
+            const { data } = await axios(newsUrl)
+            setNews(data.articles)
+            // console.log(data.articles);
+
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
+
 
     useEffect(() => {
         getBlogData("blogs")
-        // getShows()
+        getNews()
+        getShows()
     }, [])
 
 
@@ -48,11 +64,11 @@ const Dashboard = () => {
 
             <Container maxWidth="xl">
                 <Box sx={{ ...wellcomeMessage }}>
-                    <Typography variant='span' style={spanStyle}>Welcome to the Bloggy</Typography>
+                    <Typography variant='span' style={{ ...spanStyle, fontFamily: "Dancing Script, cursive", fontSize: "2rem" }}>Welcome to the Bloggy</Typography>
                 </Box>
-                {/* <Box sx={wellcomeMessage}>
-                    <Quotes />
-                </Box> */}
+                <Box sx={wellcomeMessage}>
+                    {/* <Quotes /> */}
+                </Box>
                 <Box>
                     {loading ? (
                         <img src={loadingGif} alt="loading..." height={500} style={{ display: "flex", margin: "auto" }} />
@@ -64,22 +80,33 @@ const Dashboard = () => {
                         </Slide>
                     )}
                 </Box>
-                {/* <Box>
+                <Box>
                     {loading ? (
                         ""
                     ) : (
                         <Slide>
-                            {shows.map((show) => (
+                            {news?.map((news, id) => (
+                                <NewsCard key={id} {...news} />
+                            ))}
+                        </Slide>
+                    )}
+                </Box>
+                <Box>
+                    {loading ? (
+                        ""
+                    ) : (
+                        <Slide>
+                            {shows?.map((show) => (
                                 <ShowsCard key={show.id} {...show} />
                             ))}
                         </Slide>
                     )}
-                </Box> */}
-            </Container>
+                </Box>
+            </Container >
             <Box sx={{ marginTop: "2rem" }}>
                 <Footer isDashboard={isDashboard} />
             </Box>
-        </Box>
+        </Box >
     )
 };
 

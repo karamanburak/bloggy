@@ -36,7 +36,7 @@ const Footer = ({ isDashboard }) => {
 
             <Typography sx={{ color: "neutral.light", fontWeight: "bold", flexGrow: 1, display: { xs: "none", sm: 'block' }, textAlign: "center" }}>
 
-                &copy;  {currentYear} Bloggy. All Rights Reserved.
+                &copy;  {currentYear} Bloggy. All Rights Reserved
 
             </Typography>
 

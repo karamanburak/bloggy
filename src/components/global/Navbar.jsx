@@ -21,7 +21,7 @@ import avatar from '../../assets/avatar.png'
 import useAuthCall from '../../hooks/useAuthCall';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
-import {avatarNavbar} from '../../styles/globalStyles'
+import { avatarNavbar } from '../../styles/globalStyles'
 import { toastWarnNotify } from '../../helper/ToastNotify';
 
 const pages = [
@@ -80,8 +80,8 @@ function Navbar() {
             <Container sx={{ minWidth: "95vw" }}>
                 <Toolbar disableGutters>
                     <Typography
-                    onClick={()=>navigate("/")}
-                     sx={{ display: { xs: "none", md: "block",cursor:"pointer" } }}>
+                        onClick={() => navigate("/")}
+                        sx={{ display: { xs: "none", md: "block", cursor: "pointer" } }}>
                         <img src={logo} alt="register image" width="150px"
                         />
                     </Typography>
@@ -116,7 +116,7 @@ function Navbar() {
                             }}
                         >
                             {pages.map((page) => (
-                                <MenuItem key={page.src} 
+                                <MenuItem key={page.src}
                                     onClick={() => { !currentUser && page.name === "Blogs" ? (toastWarnNotify("You must login")) : (navigate(page.src)) }} >
                                     <Typography textAlign="center">{page.name}</Typography>
                                 </MenuItem>
@@ -139,41 +139,41 @@ function Navbar() {
                         {pages.map((page) => (
                             <Button
                                 key={page.src}
-                               
-                                onClick={() => {!currentUser && page.name === "Blogs" ? (toastWarnNotify("You must login")) : (navigate(page.src))}}
+
+                                onClick={() => { !currentUser && page.name === "Blogs" ? (toastWarnNotify("You must login")) : (navigate(page.src)) }}
                                 sx={{ my: 2, color: "neutral.light", display: 'block' }}
-                            > 
+                            >
                                 <Typography sx={{
                                     marginTop: "1rem"
                                 }}>
 
-                                {page.name}
-                            </Typography>
+                                    {page.name}
+                                </Typography>
                             </Button>
                         ))}
                     </Box>
-                  
+
                     <Box>
                         {currentUser ? (
-                                <Box onClick={handleOpenUserMenu} sx={avatarNavbar}>
-                                <img src={currentUser.image} alt="" style={{ 
-                                    width: "40px", 
-                                    height: "40px", 
-                                    borderRadius: "50%", 
-                                    marginTop:"1.5rem"
-                                    }} />
-                                    <Typography>
-                                     {`${currentUser.firstName}  ${currentUser.lastName}`}
-                                    </Typography>
-                                </Box>
+                            <Box onClick={handleOpenUserMenu} sx={avatarNavbar}>
+                                <img src={currentUser.image} alt="" style={{
+                                    width: "40px",
+                                    height: "40px",
+                                    borderRadius: "50%",
+                                    marginTop: "1.5rem"
+                                }} />
+                                <Typography>
+                                    {`${currentUser.firstName}  ${currentUser.lastName}`}
+                                </Typography>
+                            </Box>
                         ) : (
                             <Tooltip title="Open Menu">
                                 <IconButton onClick={handleOpenUserMenu} >
-                                    <img src={avatar} alt="" style={{ 
-                                        width: "40px", 
+                                    <img src={avatar} alt="" style={{
+                                        width: "40px",
                                         height: "40px",
-                                         borderRadius: "50%"
-                                          }} />
+                                        borderRadius: "50%"
+                                    }} />
                                 </IconButton>
                             </Tooltip>
                         )}
@@ -193,15 +193,15 @@ function Navbar() {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                        <IconButton
-                            sx={{ width: "40px", height: "40px", marginLeft:"1.5rem"}}
-                            onClick={colorMode.toggleColorMode}>
-                            {theme.palette.mode === "dark" ? (
-                                <NightsStayIcon />
-                            ) : (
-                                <LightModeSharpIcon />
-                            )}
-                        </IconButton>
+                            <IconButton
+                                sx={{ width: "40px", height: "40px", marginLeft: "1.5rem" }}
+                                onClick={colorMode.toggleColorMode}>
+                                {theme.palette.mode === "dark" ? (
+                                    <NightsStayIcon />
+                                ) : (
+                                    <LightModeSharpIcon />
+                                )}
+                            </IconButton>
                             {settings.map((setting, index) => (
                                 <MenuItem key={index} onClick={() => handleSettingClick(setting.src)}>
                                     <Typography textAlign="center">{setting.name}</Typography>

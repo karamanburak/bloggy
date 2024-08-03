@@ -34,23 +34,24 @@ export default function BlogModal({ open, handleClose, initialState, categories 
   const handleChange = (e) => {
     setInfo({ ...info, [e.target.name]: e.target.value })
 
+
   }
 
   const handleEditorChange = (content) => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(content, 'text/html');
     const text = doc.body.textContent || "";
-    setInfo((prevInfo) => ({ ...prevInfo, content: text }));
+    setInfo((prevInfo) => ({ content: text, ...prevInfo }));
   };
 
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    const contentLength = info.content.trim().split(/\s+/).length;
-    if (contentLength < 30) {
-      toastWarnNotify("Content must be least 30 words")
-      return;
-    }
+    // const contentLength = info.content.trim().split(/\s+/).length;
+    // if (contentLength < 30) {
+    //   toastWarnNotify("Content must be least 30 words")
+    //   return;
+    // }
     // console.log("submit", info);
     postBlog("blogs", info)
     handleClose()
@@ -143,7 +144,6 @@ export default function BlogModal({ open, handleClose, initialState, categories 
             type='text'
             onChange={handleChange}
           />
-
           {/* <Editor apiKey={tinyMceApiKey}
             onInit={(evt, editor) => (editorRef.current = editor)}
             initialValue={info.content}
@@ -159,9 +159,10 @@ export default function BlogModal({ open, handleClose, initialState, categories 
                 'alignleft aligncenter alignright alignjustify | ' + ' image ' +
                 'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help',
               content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px; text-align: left; }',
-            }}
+            }} 
+ 
 
-            onEditorChange={handleEditorChange}
+          onEditorChange={handleEditorChange}
           // onChange={handleChange}
           // value={info.content}
 

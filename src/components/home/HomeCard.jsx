@@ -89,38 +89,38 @@ const HomeCard = ({ _id, content, image, title, userId, createdAt, likes, countO
                         }}
                     >
                         <Box sx={{ display: { xs: "block", sm: "flex", justifyContent: "space-between" } }}>
-                        <CardHeader
-                            sx={{
-                                color: "seagreen",
-                                '& .MuiTypography-root': {
-                                    fontSize: 15,
-                                    fontWeight: "bold"
-                                }
+                            <CardHeader
+                                sx={{
+                                    color: "seagreen",
+                                    '& .MuiTypography-root': {
+                                        fontSize: 15,
+                                        fontWeight: "bold"
+                                    }
 
-                            }}
-                            avatar={
-                                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                                    {_id ? <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${userId}`} alt="image" /> : "R"}
-                                </Avatar>
-                            }
-                            title={title}
-                            subheader={`Published Date: ${localDate()}`}
-                        />
-                        <Box sx={{ display: "inline-block",mt:3 }}>
-                            {readingTime && (
-                                <Typography variant="body2"
-                                    sx={{
-                                        backgroundColor: "primary.light",
-                                        padding: ".5rem",
-                                        borderRadius: "5px",
-                                        display: "inline-block",
-                                        marginLeft:"1rem",
-                                        marginRight: {xs:"0", sm:"1.5rem"}
-                                    }}>
-                                    {readingTime}
-                                </Typography>
-                            )}
-                        </Box>
+                                }}
+                                avatar={
+                                    <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                                        {_id ? <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${userId}`} alt="image" /> : "R"}
+                                    </Avatar>
+                                }
+                                title={title}
+                                subheader={`Published Date: ${localDate()}`}
+                            />
+                            <Box sx={{ display: "inline-block", mt: 3 }}>
+                                {readingTime && (
+                                    <Typography variant="body2"
+                                        sx={{
+                                            backgroundColor: "primary.light",
+                                            padding: ".5rem",
+                                            borderRadius: "5px",
+                                            display: "inline-block",
+                                            marginLeft: "1rem",
+                                            marginRight: { xs: "0", sm: "1.5rem" }
+                                        }}>
+                                        {readingTime}
+                                    </Typography>
+                                )}
+                            </Box>
                         </Box>
                         <CardContent>
                             <Typography variant="body2" sx={{
