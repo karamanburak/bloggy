@@ -24,32 +24,36 @@ const links = [
     },
 ]
 
-const Footer = ({isDashboard}) => {
+const currentYear = new Date().getFullYear();
+
+const Footer = ({ isDashboard }) => {
 
     return (
-        <Toolbar sx={{backgroundColor:"neutral.dark"}}>
-            <Box sx={{ display: { xs: "none", md: 'block' }}}>
-                <WeatherCard/>
+        <Toolbar sx={{ backgroundColor: "neutral.dark" }}>
+            <Box sx={{ display: { xs: "none", md: 'block' } }}>
+                <WeatherCard />
             </Box>
-         
+
             <Typography sx={{ color: "neutral.light", fontWeight: "bold", flexGrow: 1, display: { xs: "none", sm: 'block' }, textAlign: "center" }}>
-                Developed by Burak Karaman  2024 &copy; All Rights Reserved.
+
+                &copy;  {currentYear} Bloggy. All Rights Reserved.
 
             </Typography>
 
-         
+
 
             {links.map((link, index) => (
-                <Typography key={index} sx={{ margin:"auto",
+                <Typography key={index} sx={{
+                    margin: "auto",
                     '&:hover': {
                         transform: "scale( 1.10)"
                     }
                 }}>
-                {(isDashboard !== '/' || link.address !== '/') && (
-                      <a href={link.address} target={link.target}>
-                        <img width="50" height="50" src={link.src} alt="new-post" />
-                    </a>
-                )}
+                    {(isDashboard !== '/' || link.address !== '/') && (
+                        <a href={link.address} target={link.target}>
+                            <img width="50" height="50" src={link.src} alt="new-post" />
+                        </a>
+                    )}
                 </Typography>
             ))}
         </Toolbar>

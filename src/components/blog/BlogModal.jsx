@@ -6,37 +6,51 @@ import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/mater
 import { useState } from 'react';
 import useBlogCall from '../../hooks/useBlogCall';
 import { toastWarnNotify } from '../../helper/ToastNotify';
-import { useSelector } from 'react-redux';
+import { useRef } from 'react';
+import { Editor } from '@tinymce/tinymce-react';
+import { useTheme } from '@mui/material/styles';
+
 
 const style = {
   position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: 700,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
 };
 
-export default function BlogModal({ open, handleClose, initialState,categories }) {
+export default function BlogModal({ open, handleClose, initialState, categories }) {
   const { postBlog } = useBlogCall()
   const [info, setInfo] = useState(initialState)
-  
+  const tinyMceApiKey = 'ac9cwhopnulcef9wks894b69d3qa7bknbma3g19u30dkybq7';
+  const editorRef = useRef(null);
+
+  const theme = useTheme()
 
   const handleChange = (e) => {
     setInfo({ ...info, [e.target.name]: e.target.value })
-    
+
   }
+
+  const handleEditorChange = (content) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(content, 'text/html');
+    const text = doc.body.textContent || "";
+    setInfo((prevInfo) => ({ ...prevInfo, content: text }));
+  };
+
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    const contentLength = info.content.trim().split(/\s+/).length;
-    if (contentLength < 30) {
-      toastWarnNotify("Content must be least 30 words")
-      return; 
-    }
+    // const contentLength = info.content.trim().split(/\s+/).length;
+    // if (contentLength < 30) {
+    //   toastWarnNotify("Content must be least 30 words")
+    //   return;
+    // }
     // console.log("submit", info);
     postBlog("blogs", info)
     handleClose()
@@ -117,7 +131,7 @@ export default function BlogModal({ open, handleClose, initialState,categories }
             </Select>
           </FormControl>
 
-          <TextField
+          {/* <TextField
             id="content"
             name='content'
             label="Content *"
@@ -128,6 +142,29 @@ export default function BlogModal({ open, handleClose, initialState,categories }
             color='success'
             type='text'
             onChange={handleChange}
+          /> */}
+
+          <Editor apiKey={tinyMceApiKey}
+            onInit={(evt, editor) => (editorRef.current = editor)}
+            initialValue={info.content}
+            init={{
+              height: 250,
+              menubar: false,
+              plugins: [
+                'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                'lists', 'link', 'image', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
+                'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount'
+              ],
+              toolbar: 'undo redo | casechange blocks | bold italic backcolor | ' +
+                'alignleft aligncenter alignright alignjustify | ' + ' image ' +
+                'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help',
+              content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+            }}
+            style={{ backgroundColor: theme.palette.primary.main }}
+            onEditorChange={handleEditorChange}
+          // onChange={handleChange}
+          // value={info.content}
+
           />
 
           <Button
