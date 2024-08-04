@@ -72,12 +72,12 @@ const Blogs = () => {
         src={blogRatings}
         alt="home video"
         width="100%"
-        height="720px"
+        // height="720px"
         autoPlay
         loop
         muted
         playsInline
-        style={{ objectFit: 'cover', marginBottom: "1rem" }}
+        style={{ objectFit: 'cover', marginBottom: "1rem", minHeight: "100vh" }}
       />
       <TrendBlogs />
       <Container maxWidth="100vw" sx={{

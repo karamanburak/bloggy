@@ -65,12 +65,12 @@ const Dashboard = () => {
                 src={homeVideo}
                 alt="home video"
                 width="100%"
-                height="720px"
+                // height="720px"
                 autoPlay
                 loop
                 muted
                 playsInline
-                style={{ objectFit: 'cover' }}
+                style={{ objectFit: 'cover', minHeight: "100vh" }}
             />
 
             <Container maxWidth="xl">
