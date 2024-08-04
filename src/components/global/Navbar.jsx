@@ -142,7 +142,7 @@ function Navbar() {
                             aria-controls="menu-appbar"
                             aria-haspopup="true"
                             onClick={handleOpenNavMenu}
-                            color="white"
+                            color="inherit"
                         >
                             <MenuIcon />
                         </IconButton>
@@ -168,7 +168,7 @@ function Navbar() {
                             {pages.map((page) => (
                                 <MenuItem key={page.src}
                                     onClick={() => { !currentUser && page.name === "Blogs" ? (toastWarnNotify("You must login")) : (navigate(page.src)) }} >
-                                    <Typography textAlign="center" sx={{ color: navbarTextColor }} >{page.name}</Typography>
+                                    <Typography textAlign="center"  >{page.name}</Typography>
                                 </MenuItem>
                             ))}
                         </Menu>
