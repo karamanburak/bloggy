@@ -23,6 +23,9 @@ import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import { avatarNavbar } from '../../styles/globalStyles'
 import { toastWarnNotify } from '../../helper/ToastNotify';
+import { BsPencilSquare } from "react-icons/bs";
+import { useEffect } from 'react';
+
 
 const pages = [
     { name: 'Dashboard', src: '/' },
@@ -39,8 +42,13 @@ function Navbar() {
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
     const navigate = useNavigate()
+    const [navbarBg, setNavbarBg] = useState({
+        backgroundColor: 'transparent',
+        opacity: 1
+    });
 
     const settings = currentUser ? [
+        // { name: `${currentUser.firstName}  ${currentUser.lastName}` },
         { name: 'Profile', src: '/profile' },
         { name: 'Sign Out', src: 'login' },
     ] : [
@@ -74,9 +82,29 @@ function Navbar() {
         }
     };
 
+    const handleScroll = () => {
+        if (window.scrollY > 300) {
+            setNavbarBg({
+                backgroundColor: theme.palette.neutral.dark,
+                opacity: 0.9
+            });
+        } else {
+            setNavbarBg('transparent');
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [theme]);
+
+
+
 
     return (
-        <AppBar position="static" sx={{ backgroundColor: "neutral.dark" }}>
+        <Box position="fixed" sx={{ backgroundColor: navbarBg, transition: 'background-color 0.5s ease', zIndex: 99, width: "100vw" }}>
             <Container sx={{ minWidth: "95vw" }}>
                 <Toolbar disableGutters>
                     <Typography
@@ -93,7 +121,7 @@ function Navbar() {
                             aria-controls="menu-appbar"
                             aria-haspopup="true"
                             onClick={handleOpenNavMenu}
-                            color="inherit"
+                            color='white'
                         >
                             <MenuIcon />
                         </IconButton>
@@ -113,38 +141,29 @@ function Navbar() {
                             onClose={handleCloseNavMenu}
                             sx={{
                                 display: { xs: 'block', md: 'none' },
+                                color: "white"
                             }}
                         >
                             {pages.map((page) => (
                                 <MenuItem key={page.src}
                                     onClick={() => { !currentUser && page.name === "Blogs" ? (toastWarnNotify("You must login")) : (navigate(page.src)) }} >
-                                    <Typography textAlign="center">{page.name}</Typography>
+                                    <Typography textAlign="center" >{page.name}</Typography>
                                 </MenuItem>
                             ))}
                         </Menu>
                     </Box>
 
-                    <Typography
-                        onClick={() => navigate("/")}
-                        sx={{
-                            display: { xs: 'flex', md: 'none' },
-                            flexGrow: .7,
-                            cursor: "pointer"
-                        }}
-                    >
-                        <img src={logo} alt="register image" width="150px"
-                        />
-                    </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page) => (
                             <Button
                                 key={page.src}
 
                                 onClick={() => { !currentUser && page.name === "Blogs" ? (toastWarnNotify("You must login")) : (navigate(page.src)) }}
-                                sx={{ my: 2, color: "neutral.light", display: 'block' }}
+                                sx={{ my: 2, color: "white", display: 'block' }}
                             >
                                 <Typography sx={{
-                                    marginTop: "1rem"
+                                    marginTop: "1rem",
+                                    color: theme.palette.mode === 'dark' ? 'white' : 'black'
                                 }}>
 
                                     {page.name}
@@ -152,8 +171,26 @@ function Navbar() {
                             </Button>
                         ))}
                     </Box>
-
                     <Box>
+                        {currentUser && <Typography
+                            sx={{
+                                cursor: "pointer",
+                                marginRight: "2rem",
+                                marginTop: "1.7rem",
+                                // fontSize: "1.2rem",
+                                // opacity: ".8"
+                                marginBottom: { xs: "1rem", md: "0" },
+                                color: theme.palette.mode === 'dark' ? 'white' : 'black'
+
+
+                            }}
+
+                        >
+                            <BsPencilSquare style={{ fontSize: "1.2rem", marginBottom: ".3rem" }} />  WRITE
+                        </Typography>}
+                    </Box>
+
+                    <Box sx={{ marginBottom: { xs: "1rem", md: "0" } }}>
                         {currentUser ? (
                             <Box onClick={handleOpenUserMenu} sx={avatarNavbar}>
                                 <img src={currentUser.image} alt="" style={{
@@ -162,9 +199,9 @@ function Navbar() {
                                     borderRadius: "50%",
                                     marginTop: "1.5rem"
                                 }} />
-                                <Typography>
+                                {/* <Typography>
                                     {`${currentUser.firstName}  ${currentUser.lastName}`}
-                                </Typography>
+                                </Typography> */}
                             </Box>
                         ) : (
                             <Tooltip title="Open Menu">
@@ -172,7 +209,9 @@ function Navbar() {
                                     <img src={avatar} alt="" style={{
                                         width: "40px",
                                         height: "40px",
-                                        borderRadius: "50%"
+                                        borderRadius: "50%",
+                                        marginTop: "1.5rem"
+
                                     }} />
                                 </IconButton>
                             </Tooltip>
@@ -211,7 +250,7 @@ function Navbar() {
                     </Box>
                 </Toolbar>
             </Container>
-        </AppBar>
+        </Box >
     );
 }
 export default Navbar;

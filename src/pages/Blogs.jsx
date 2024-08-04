@@ -9,6 +9,7 @@ import BlogModal from "../components/blog/BlogModal";
 import loadingGif from '../assets/loading.gif'
 import useCategoryCall from "../hooks/useCategoryCall";
 import TrendBlogs from "../components/blog/TrendBlogs";
+import { BsPencilSquare } from "react-icons/bs";
 
 
 const Blogs = () => {
@@ -46,20 +47,25 @@ const Blogs = () => {
 
   return (
     <Box sx={{ backgroundColor: "primary.main", paddingTop: "1.5rem" }}>
-      <Button
+      {/* <Box
         onClick={handleOpen}
         variant="contained"
         sx={{
-          backgroundColor: "primary.light",
-          display: "block",
-          marginLeft: "auto",
-          marginRight: "3.5rem",
+          // backgroundColor: "cornflowerblue",
+          // display: "block",
+          // marginLeft: "auto",
+          cursor: "pointer",
+          textAlign: "end",
+          marginRight: "2.5rem",
+          fontSize: "1.2rem",
+          marginBottom: "1rem",
+          marginTop: "-1rem"
 
         }}
 
       >
-        New Blog
-      </Button>
+        <BsPencilSquare />  Write
+      </Box> */}
       <TrendBlogs />
       <Container maxWidth="100vw" sx={{
         minHeight: "90vh",

@@ -28,11 +28,18 @@ export default function BlogModal({ open, handleClose, initialState, categories 
   const [info, setInfo] = useState(initialState)
   const tinyMceApiKey = 'ac9cwhopnulcef9wks894b69d3qa7bknbma3g19u30dkybq7';
   const editorRef = useRef(null);
+  const [titleError, setTitleError] = useState('');
 
   const theme = useTheme()
 
   const handleChange = (e) => {
     setInfo({ ...info, [e.target.name]: e.target.value })
+
+    if (e.target.name === 'title' && e.target.value.length > 30) {
+      setTitleError('Title cannot exceed 30 characters');
+    } else {
+      setTitleError('');
+    }
 
 
   }
@@ -47,11 +54,11 @@ export default function BlogModal({ open, handleClose, initialState, categories 
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // const contentLength = info.content.trim().split(/\s+/).length;
-    // if (contentLength < 30) {
-    //   toastWarnNotify("Content must be least 30 words")
-    //   return;
-    // }
+    const contentLength = info.content.trim().split(/\s+/).length;
+    if (contentLength < 30) {
+      toastWarnNotify("Content must be least 30 words")
+      return;
+    }
     // console.log("submit", info);
     postBlog("blogs", info)
     handleClose()
@@ -93,6 +100,9 @@ export default function BlogModal({ open, handleClose, initialState, categories 
             value={info.image}
             onChange={handleChange}
             color="success"
+            error={!!titleError}
+            helperText={titleError}
+            inputProps={{ maxLength: 30 }}
           />
 
           <FormControl fullWidth>
