@@ -7,8 +7,8 @@ import { useState } from 'react';
 import useBlogCall from '../../hooks/useBlogCall';
 import { toastWarnNotify } from '../../helper/ToastNotify';
 import { useRef } from 'react';
-import { Editor } from '@tinymce/tinymce-react';
 import { useTheme } from '@mui/material/styles';
+import TinyMce from './TinyMce';
 
 
 const style = {
@@ -16,19 +16,22 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 700,
+  width: { xs: 350, sm: 500, md: 800 },
+  maxHeight: '90vh',
+  overflowY: 'auto',
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
 };
 
+
 export default function BlogModal({ open, handleClose, initialState, categories }) {
   const { postBlog } = useBlogCall()
   const [info, setInfo] = useState(initialState)
-  const tinyMceApiKey = 'ac9cwhopnulcef9wks894b69d3qa7bknbma3g19u30dkybq7';
-  const editorRef = useRef(null);
+
   const [titleError, setTitleError] = useState('');
+  console.log(info);
 
   const theme = useTheme()
 
@@ -40,16 +43,7 @@ export default function BlogModal({ open, handleClose, initialState, categories 
     } else {
       setTitleError('');
     }
-
-
   }
-
-  const handleEditorChange = (content) => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(content, 'text/html');
-    const text = doc.body.textContent || "";
-    setInfo((prevInfo) => ({ content: text, ...prevInfo }));
-  };
 
 
   const handleSubmit = (e) => {
@@ -102,7 +96,6 @@ export default function BlogModal({ open, handleClose, initialState, categories 
             color="success"
             error={!!titleError}
             helperText={titleError}
-            inputProps={{ maxLength: 30 }}
           />
 
           <FormControl fullWidth>
@@ -154,30 +147,7 @@ export default function BlogModal({ open, handleClose, initialState, categories 
             type='text'
             onChange={handleChange}
           />
-          {/* <Editor apiKey={tinyMceApiKey}
-            onInit={(evt, editor) => (editorRef.current = editor)}
-            initialValue={info.content}
-            init={{
-              height: 250,
-              menubar: false,
-              plugins: [
-                'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
-                'lists', 'link', 'image', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
-                'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount'
-              ],
-              toolbar: 'undo redo | casechange blocks | bold italic backcolor | ' +
-                'alignleft aligncenter alignright alignjustify | ' + ' image ' +
-                'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help',
-              content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px; text-align: left; }',
-            }} 
- 
-
-          onEditorChange={handleEditorChange}
-          // onChange={handleChange}
-          // value={info.content}
-
-          /> */}
-
+          {/* <TinyMce content={info.content} setInfo={setInfo} /> */}
           <Button
             sx={{ backgroundColor: "secondary.main" }}
             variant="contained"

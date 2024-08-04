@@ -64,7 +64,7 @@ const TrendBlogs = () => {
                         const { _id, content, image, title, userId, createdAt, likes, countOfVisitors, categoryId } = blog
                         return (
                             <SwiperSlide key={blog._id}>
-                                <Card sx={{ width: 210, height: 250, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                                <Card sx={{ width: 210, height: 270, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                                     <CardMedia
                                         component="img"
                                         height="120"
@@ -73,11 +73,13 @@ const TrendBlogs = () => {
 
                                     />
                                     <CardContent>
+                                        <Typography sx={{ fontSize: ".8rem" }}>
+                                            {new Date(createdAt).toLocaleString("de-DE")}
+                                        </Typography>
+                                        <hr />
                                         <Typography sx={{ textAlign: "center" }}>
                                             {title}
                                         </Typography>
-                                        <hr />
-
                                     </CardContent>
                                     <Button
                                         variant='contained' sx={{ color: "neutral.light", backgroundColor: "primary.light", cursor: "pointer", display: "flex", justifyContent: "space-between" }}>
