@@ -4,5 +4,19 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+    width: 20px;
+    /* Set the width */
+    height: 20px;
+    /* Set the height */
+
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+    font-size: 20px;
 }

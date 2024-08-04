@@ -16,6 +16,16 @@ import axios from 'axios';
 import ShowsCard from '../components/home/ShowsCard';
 import NewsCard from '../components/home/NewsCard';
 
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Pagination, Navigation, A11y } from 'swiper/modules';
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
+import "swiper/css/autoplay";
+import '../../index.css'
+import CustomSwiper from '../components/home/CustomSwiper';
+
 const url = 'https://api.tvmaze.com/shows'
 const Dashboard = () => {
     const isDashboard = '/'
@@ -84,33 +94,21 @@ const Dashboard = () => {
                     {loading ? (
                         <img src={loadingGif} alt="loading..." height={500} style={{ display: "flex", margin: "auto" }} />
                     ) : (
-                        <Slide>
-                            {blogs.map((blog) => (
-                                <HomeCard key={blog._id} {...blog} />
-                            ))}
-                        </Slide>
+                        <CustomSwiper items={blogs} ItemComponent={HomeCard} />
                     )}
                 </Box>
-                {/* <Box>
-                    {loading ? (
-                        ""
-                    ) : (
-                        <Slide>
-                            {news?.map((news, id) => (
-                                <NewsCard key={id} {...news} />
-                            ))}
-                        </Slide>
-                    )}
-                </Box> */}
                 <Box>
                     {loading ? (
                         ""
                     ) : (
-                        <Slide>
-                            {shows?.map((show) => (
-                                <ShowsCard key={show.id} {...show} />
-                            ))}
-                        </Slide>
+                        <CustomSwiper items={news} ItemComponent={NewsCard} />
+                    )}
+                </Box>
+                <Box>
+                    {loading ? (
+                        ""
+                    ) : (
+                        <CustomSwiper items={shows} ItemComponent={ShowsCard} />
                     )}
                 </Box>
             </Container >

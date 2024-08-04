@@ -24,6 +24,7 @@ import { useState } from 'react';
 import { avatarNavbar } from '../../styles/globalStyles'
 import { toastWarnNotify } from '../../helper/ToastNotify';
 import { BsPencilSquare } from "react-icons/bs";
+import { FaRegBell } from "react-icons/fa6";
 import { useEffect } from 'react';
 import BlogModal from '../blog/BlogModal';
 
@@ -207,6 +208,15 @@ function Navbar() {
                         >
                             <BsPencilSquare style={{ fontSize: "1.2rem", marginBottom: ".3rem" }} />  WRITE
                         </Typography>}
+                    </Box>
+                    <Box sx={{
+                        color: navbarTextColor, cursor: "pointer",
+                        marginRight: "2rem",
+                        marginTop: "1.7rem",
+                        fontSize: "1.2rem",
+                        marginBottom: { xs: "1rem", md: "0" },
+                    }}>
+                        <FaRegBell />
                     </Box>
 
                     <Box sx={{ marginBottom: { xs: "1rem", md: "0" } }}>
