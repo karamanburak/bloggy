@@ -35,7 +35,7 @@ const MyBlogsContainer = ({ _id }) => {
             flexDirection: "column",
             justifyContent: "space-between",
             alignItems: "center",
-            minHeight:"100vh"
+            minHeight: "100vh",
         }}>
             {loading ? (
                 <img src={loadingGif} alt="loading..." height={500} />
@@ -47,7 +47,7 @@ const MyBlogsContainer = ({ _id }) => {
                     }
                 </Box>
             )}
-            <Typography style={{ marginTop: "20px", textAlign: "center"}}>
+            <Typography style={{ marginTop: "20px", textAlign: "center" }}>
                 {Array.from({ length: Math.ceil(blogs.length / blogsPerPage) }).map(
                     (_, index) => (
                         <Button

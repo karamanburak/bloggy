@@ -25,6 +25,7 @@ import { avatarNavbar } from '../../styles/globalStyles'
 import { toastWarnNotify } from '../../helper/ToastNotify';
 import { BsPencilSquare } from "react-icons/bs";
 import { useEffect } from 'react';
+import BlogModal from '../blog/BlogModal';
 
 
 const pages = [
@@ -41,12 +42,27 @@ function Navbar() {
     const colorMode = useContext(ColorModeContext)
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
+    const { categories } = useSelector(state => state.category)
     const navigate = useNavigate()
     const [navbarBg, setNavbarBg] = useState({
         backgroundColor: 'transparent',
         opacity: 1
     });
     const [navbarTextColor, setNavbarTextColor] = useState('white');
+
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => {
+        setOpen(false)
+    }
+    const [initialState, setInitialState] = useState({
+        categoryId: "",
+        title: "",
+        content: "",
+        image: "",
+        isPublish: "",
+    })
+
 
     const settings = currentUser ? [
         // { name: `${currentUser.firstName}  ${currentUser.lastName}` },
@@ -184,11 +200,9 @@ function Navbar() {
                                 // fontSize: "1.2rem",
                                 // opacity: ".8"
                                 marginBottom: { xs: "1rem", md: "0" },
-                                color: navbarTextColor
-
-
-
+                                color: navbarTextColor,
                             }}
+                            onClick={handleOpen}
 
                         >
                             <BsPencilSquare style={{ fontSize: "1.2rem", marginBottom: ".3rem" }} />  WRITE
@@ -254,6 +268,14 @@ function Navbar() {
                         </Menu>
                     </Box>
                 </Toolbar>
+                {open && (
+                    <BlogModal
+                        open={open}
+                        categories={categories}
+                        handleClose={handleClose}
+                        initialState={initialState}
+                    />
+                )}
             </Container>
         </Box >
     );
