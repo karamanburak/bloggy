@@ -10,7 +10,7 @@ import loadingGif from '../assets/loading.gif'
 import useCategoryCall from "../hooks/useCategoryCall";
 import TrendBlogs from "../components/blog/TrendBlogs";
 import { BsPencilSquare } from "react-icons/bs";
-import blogRatings from '../assets/blog-ratings.mp4'
+import blogRatings from '../assets/blog-video.mp4'
 
 
 

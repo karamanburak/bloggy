@@ -3,7 +3,7 @@ import { Box, Container, Grid, Typography } from "@mui/material";
 import Footer from './../components/home/Footer';
 import { flex } from "../styles/globalStyles";
 import { useTheme } from "@emotion/react";
-import bloggyAbout from '../assets/bloggy-about.mp4'
+import bloggyAbout from '../assets/about-video.mp4'
 
 
 const avatars = [

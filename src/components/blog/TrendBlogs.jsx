@@ -16,7 +16,6 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-
 const TrendBlogs = () => {
     const { getTrendsData } = useBlogCall()
     const { trendings, blogs } = useSelector(state => state.blog)
@@ -36,23 +35,29 @@ const TrendBlogs = () => {
             <Box>
                 <Typography variant='h5' sx={{ color: "neutral.light" }}> <FaChartBar />  Trendings on Bloggy </Typography> <hr />
             </Box>
-            <Box>
+            <Box >
                 <Swiper
-                    modules={[Navigation, Pagination, A11y, Autoplay]}
+                    modules={[Autoplay, Pagination, Navigation, A11y]}
                     pagination={{ clickable: true }}
-                    autoplay={{ delay: 3000 }}
+                    autoplay={{ delay: 2500 }}
+                    // centeredSlides={true}
+                    // navigation={true}
                     breakpoints={{
                         300: {
                             slidesPerView: 1,
                             spaceBetween: 5,
                         },
-                        700: {
-                            slidesPerView: 3,
+                        576: {
+                            slidesPerView: 2,
                             spaceBetween: 10,
                         },
-                        900: {
-                            slidesPerView: 4,
+                        768: {
+                            slidesPerView: 3,
                             spaceBetween: 15,
+                        },
+                        992: {
+                            slidesPerView: 4,
+                            spaceBetween: 18,
                         },
                         1400: {
                             slidesPerView: 5,
@@ -63,7 +68,7 @@ const TrendBlogs = () => {
                     {[...trendings].sort((a, b) => b.countOfVisitors - a.countOfVisitors).map((blog) => {
                         const { _id, content, image, title, userId, createdAt, likes, countOfVisitors, categoryId } = blog
                         return (
-                            <SwiperSlide key={blog._id}>
+                            <SwiperSlide key={blog._id} style={{ display: "flex", justifyContent: "center" }}>
                                 <Card sx={{ width: 210, height: 270, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                                     <CardMedia
                                         component="img"
