@@ -10,6 +10,8 @@ import loadingGif from '../assets/loading.gif'
 import useCategoryCall from "../hooks/useCategoryCall";
 import TrendBlogs from "../components/blog/TrendBlogs";
 import { BsPencilSquare } from "react-icons/bs";
+import blogRatings from '../assets/blog-ratings.mp4'
+
 
 
 const Blogs = () => {
@@ -46,7 +48,7 @@ const Blogs = () => {
 
 
   return (
-    <Box sx={{ backgroundColor: "primary.main", paddingTop: "1.5rem" }}>
+    <Box sx={{ backgroundColor: "primary.main" }}>
       {/* <Box
         onClick={handleOpen}
         variant="contained"
@@ -66,6 +68,17 @@ const Blogs = () => {
       >
         <BsPencilSquare />  Write
       </Box> */}
+      <video
+        src={blogRatings}
+        alt="home video"
+        width="100%"
+        height="500px"
+        autoPlay
+        loop
+        muted
+        playsInline
+        style={{ objectFit: 'cover', marginBottom: "1rem" }}
+      />
       <TrendBlogs />
       <Container maxWidth="100vw" sx={{
         minHeight: "90vh",

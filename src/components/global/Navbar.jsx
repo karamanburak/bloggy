@@ -46,6 +46,7 @@ function Navbar() {
         backgroundColor: 'transparent',
         opacity: 1
     });
+    const [navbarTextColor, setNavbarTextColor] = useState('white');
 
     const settings = currentUser ? [
         // { name: `${currentUser.firstName}  ${currentUser.lastName}` },
@@ -86,10 +87,14 @@ function Navbar() {
         if (window.scrollY > 300) {
             setNavbarBg({
                 backgroundColor: theme.palette.neutral.dark,
-                opacity: 0.9
+                opacity: 0.9,
             });
+            setNavbarTextColor(theme.palette.mode === 'dark' ? 'white' : 'black');
         } else {
-            setNavbarBg('transparent');
+            setNavbarBg({
+                backgroundColor: "transparent",
+            });
+            setNavbarTextColor('white');
         }
     };
 
@@ -99,7 +104,6 @@ function Navbar() {
             window.removeEventListener('scroll', handleScroll);
         };
     }, [theme]);
-
 
 
 
@@ -121,7 +125,7 @@ function Navbar() {
                             aria-controls="menu-appbar"
                             aria-haspopup="true"
                             onClick={handleOpenNavMenu}
-                            color='white'
+                            color="white"
                         >
                             <MenuIcon />
                         </IconButton>
@@ -141,13 +145,13 @@ function Navbar() {
                             onClose={handleCloseNavMenu}
                             sx={{
                                 display: { xs: 'block', md: 'none' },
-                                color: "white"
+                                color: navbarBg.color
                             }}
                         >
                             {pages.map((page) => (
                                 <MenuItem key={page.src}
                                     onClick={() => { !currentUser && page.name === "Blogs" ? (toastWarnNotify("You must login")) : (navigate(page.src)) }} >
-                                    <Typography textAlign="center" >{page.name}</Typography>
+                                    <Typography textAlign="center" sx={{ color: navbarTextColor }} >{page.name}</Typography>
                                 </MenuItem>
                             ))}
                         </Menu>
@@ -159,11 +163,11 @@ function Navbar() {
                                 key={page.src}
 
                                 onClick={() => { !currentUser && page.name === "Blogs" ? (toastWarnNotify("You must login")) : (navigate(page.src)) }}
-                                sx={{ my: 2, color: "white", display: 'block' }}
+                                sx={{ my: 2, display: 'block' }}
                             >
                                 <Typography sx={{
                                     marginTop: "1rem",
-                                    color: theme.palette.mode === 'dark' ? 'white' : 'black'
+                                    color: navbarTextColor
                                 }}>
 
                                     {page.name}
@@ -180,7 +184,8 @@ function Navbar() {
                                 // fontSize: "1.2rem",
                                 // opacity: ".8"
                                 marginBottom: { xs: "1rem", md: "0" },
-                                color: theme.palette.mode === 'dark' ? 'white' : 'black'
+                                color: navbarTextColor
+
 
 
                             }}

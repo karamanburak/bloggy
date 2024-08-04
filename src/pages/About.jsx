@@ -3,6 +3,8 @@ import { Box, Container, Grid, Typography } from "@mui/material";
 import Footer from './../components/home/Footer';
 import { flex } from "../styles/globalStyles";
 import { useTheme } from "@emotion/react";
+import bloggyAbout from '../assets/bloggy-about.mp4'
+
 
 const avatars = [
   {
@@ -37,6 +39,17 @@ const About = () => {
 
   return (
     <Box sx={{ backgroundColor: "primary.main" }}>
+      <video
+        src={bloggyAbout}
+        alt="home video"
+        width="100%"
+        height="500px"
+        autoPlay
+        loop
+        muted
+        playsInline
+        style={{ objectFit: 'cover', marginBottom: "1rem" }}
+      />
       <Container>
         <Typography variant="h3" sx={{
           fontStyle: "italic",
