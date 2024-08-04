@@ -6,24 +6,14 @@ import Footer from '../components/home/Footer';
 import { useEffect } from "react";
 import useBlogCall from '../hooks/useBlogCall';
 import { useSelector } from 'react-redux';
-import { spanStyle, wellcomeMessage } from '../styles/globalStyles';
-import { Slide } from 'react-slideshow-image';
+import { wellcomeMessage } from '../styles/globalStyles';
 import 'react-slideshow-image/dist/styles.css'
 import Quotes from '../components/home/Quotes';
-import loadingGif from '../assets/loading.gif'
+import loadingGif from '../assets/flickr-loading.gif'
 import { useState } from 'react';
 import axios from 'axios';
 import ShowsCard from '../components/home/ShowsCard';
 import NewsCard from '../components/home/NewsCard';
-
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination, Navigation, A11y } from 'swiper/modules';
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/scrollbar";
-import "swiper/css/autoplay";
-import '../../index.css'
 import CustomSwiper from '../components/home/CustomSwiper';
 
 const url = 'https://api.tvmaze.com/shows'
@@ -92,24 +82,16 @@ const Dashboard = () => {
                 </Box>
                 <Box>
                     {loading ? (
-                        <img src={loadingGif} alt="loading..." height={500} style={{ display: "flex", margin: "auto" }} />
+                        <img src={loadingGif} alt="loading..." height={100} style={{ display: "flex", margin: "auto" }} />
                     ) : (
                         <CustomSwiper items={blogs} ItemComponent={HomeCard} />
                     )}
                 </Box>
                 <Box>
-                    {loading ? (
-                        ""
-                    ) : (
-                        <CustomSwiper items={news} ItemComponent={NewsCard} />
-                    )}
+                    <CustomSwiper items={news} ItemComponent={NewsCard} />
                 </Box>
                 <Box>
-                    {loading ? (
-                        ""
-                    ) : (
-                        <CustomSwiper items={shows} ItemComponent={ShowsCard} />
-                    )}
+                    <CustomSwiper items={shows} ItemComponent={ShowsCard} />
                 </Box>
             </Container >
             <Box sx={{ marginTop: "2rem" }}>

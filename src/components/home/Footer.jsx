@@ -1,25 +1,31 @@
-import { Box, Button, IconButton, Toolbar, Typography } from '@mui/material';
+import { Box, Toolbar, Typography } from '@mui/material';
 import WeatherCard from './WeatherCard';
+import { FaSquareGithub } from "react-icons/fa6";
+import { FaLinkedin } from "react-icons/fa6";
+import { SiGmail } from "react-icons/si";
+import { MdHome } from "react-icons/md";
+import { useTheme } from '@emotion/react';
+
 
 
 const links = [
     {
         address: "/",
-        src: "https://img.icons8.com/bubbles/50/home.png",
+        icon: MdHome,
     },
     {
         address: "https://mailto:karaman.buraak@gmail.com",
-        src: "https://img.icons8.com/bubbles/50/new-post.png",
+        icon: SiGmail,
         target: "_blank"
     },
     {
         address: "https://github.com/karamanburak",
-        src: "https://img.icons8.com/bubbles/50/github.png",
+        icon: FaSquareGithub,
         target: "_blank"
     },
     {
         address: "https://www.linkedin.com/in/karamanburak/",
-        src: "https://img.icons8.com/bubbles/50/linkedin.png",
+        icon: FaLinkedin,
         target: "_blank"
     },
 ]
@@ -27,7 +33,7 @@ const links = [
 const currentYear = new Date().getFullYear();
 
 const Footer = ({ isDashboard }) => {
-
+    const theme = useTheme();
     return (
         <Toolbar sx={{ backgroundColor: "neutral.dark" }}>
             <Box sx={{ display: { xs: "none", md: 'block' } }}>
@@ -42,20 +48,24 @@ const Footer = ({ isDashboard }) => {
 
 
 
-            {links.map((link, index) => (
-                <Typography key={index} sx={{
-                    margin: "auto",
-                    '&:hover': {
-                        transform: "scale( 1.10)"
-                    }
-                }}>
-                    {(isDashboard !== '/' || link.address !== '/') && (
-                        <a href={link.address} target={link.target}>
-                            <img width="50" height="50" src={link.src} alt="new-post" />
-                        </a>
-                    )}
-                </Typography>
-            ))}
+            {links.map((link, index) => {
+                const IconComponent = link.icon;
+                return (
+                    <Typography key={index} sx={{
+                        margin: "auto",
+                        marginLeft: ".5rem",
+                        '&:hover': {
+                            transform: "scale(1.10)"
+                        }
+                    }}>
+                        {(isDashboard !== '/' || link.address !== '/') && (
+                            <a href={link.address} target={link.target}>
+                                <IconComponent size={25} style={{ color: theme.palette.neutral.light, opacity: 0.8 }} />
+                            </a>
+                        )}
+                    </Typography>
+                );
+            })}
         </Toolbar>
     )
 };
