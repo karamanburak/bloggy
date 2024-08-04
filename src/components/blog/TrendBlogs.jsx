@@ -80,13 +80,15 @@ const TrendBlogs = () => {
 
                                     </CardContent>
                                     <Button
-                                        onClick={() => navigate(`/blog/detail/${_id}`, { state: { _id, content, image, title, userId, createdAt, likes, countOfVisitors, categoryId } })}
                                         variant='contained' sx={{ color: "neutral.light", backgroundColor: "primary.light", cursor: "pointer", display: "flex", justifyContent: "space-between" }}>
                                         <Typography>
                                             <MdOutlineVisibility />
                                             <sup>{countOfVisitors}</sup>
                                         </Typography>
-                                        More...
+                                        <Typography onClick={() => navigate(`/blog/detail/${_id}`, { state: { _id, content, image, title, userId, createdAt, likes, countOfVisitors, categoryId } })}>
+
+                                            More...
+                                        </Typography>
                                     </Button>
                                 </Card>
                             </SwiperSlide>

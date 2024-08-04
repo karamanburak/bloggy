@@ -43,7 +43,7 @@ const About = () => {
         src={bloggyAbout}
         alt="home video"
         width="100%"
-        height="500px"
+        height="720px"
         autoPlay
         loop
         muted
