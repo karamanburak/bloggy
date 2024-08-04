@@ -100,7 +100,7 @@ function Navbar() {
     };
 
     const handleScroll = () => {
-        if (window.scrollY > 300) {
+        if (window.scrollY > window.innerHeight) {
             setNavbarBg({
                 backgroundColor: theme.palette.neutral.dark,
                 opacity: 0.9,
