@@ -60,7 +60,7 @@ const Blogs = () => {
       >
         New Blog
       </Button>
-      {/* <TrendBlogs /> */}
+      <TrendBlogs />
       <Container maxWidth="100vw" sx={{
         minHeight: "90vh",
         paddingBottom: "1rem",

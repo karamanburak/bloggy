@@ -1,5 +1,6 @@
 import { Box, Container, Typography } from '@mui/material';
 import home from '../assets/home.png'
+import homeVideo from '../assets/home-video.mp4'
 import HomeCard from '../components/home/HomeCard';
 import Footer from '../components/home/Footer';
 import { useEffect } from "react";
@@ -59,12 +60,23 @@ const Dashboard = () => {
     return (
         <Box
             sx={{ backgroundColor: "primary.main" }} >
-            <img src={home} alt="image" width="100%" height="500px" />
+            {/* <img src={home} alt="image" width="100%" height="500px" /> */}
+            <video
+                src={homeVideo}
+                alt="home video"
+                width="100%"
+                height="500px"
+                autoPlay
+                loop
+                muted
+                playsInline
+                style={{ objectFit: 'cover' }}
+            />
 
             <Container maxWidth="xl">
-                <Box sx={{ ...wellcomeMessage }}>
+                {/* <Box sx={{ ...wellcomeMessage }}>
                     <Typography variant='span' style={{ ...spanStyle, fontFamily: "Dancing Script, cursive", fontSize: "2rem" }}>Welcome to the Bloggy</Typography>
-                </Box>
+                </Box> */}
                 <Box sx={wellcomeMessage}>
                     {/* <Quotes /> */}
                 </Box>
