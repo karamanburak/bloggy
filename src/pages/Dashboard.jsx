@@ -59,7 +59,7 @@ const Dashboard = () => {
 
     useEffect(() => {
         getBlogData("blogs")
-        getNews()
+        // getNews() //* just development enviroment
         getShows()
     }, [])
 
