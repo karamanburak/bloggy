@@ -8,6 +8,8 @@ import 'swiper/css/autoplay';
 import '../../../index.css';
 
 const CustomSwiper = ({ items, ItemComponent }) => {
+    // console.log(items);
+
     return (
         <Swiper
             spaceBetween={30}
@@ -15,9 +17,9 @@ const CustomSwiper = ({ items, ItemComponent }) => {
             modules={[Autoplay, Pagination, Navigation, A11y]}
             // pagination={{ clickable: true }}
             navigation={true}
-            autoplay={{ delay: 2500 }}
+            autoplay={{ delay: 3500 }}
         >
-            {items.map((item, index) => (
+            {items?.map((item, index) => (
                 <SwiperSlide key={index}>
                     <ItemComponent {...item} />
                 </SwiperSlide>

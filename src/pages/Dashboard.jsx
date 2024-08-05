@@ -8,7 +8,6 @@ import useBlogCall from '../hooks/useBlogCall';
 import { useSelector } from 'react-redux';
 import { wellcomeMessage } from '../styles/globalStyles';
 import 'react-slideshow-image/dist/styles.css'
-import Quotes from '../components/home/Quotes';
 import loadingGif from '../assets/flickr-loading.gif'
 import { useState } from 'react';
 import axios from 'axios';
@@ -17,6 +16,7 @@ import NewsCard from '../components/home/NewsCard';
 import CustomSwiper from '../components/home/CustomSwiper';
 
 const url = 'https://api.tvmaze.com/shows'
+const newsUrl = `https://newsdata.io/api/1/latest?language=en&apikey=${import.meta.env.VITE_NEWS_apiKey}`
 const Dashboard = () => {
     const isDashboard = '/'
     const { getBlogData } = useBlogCall()
@@ -44,22 +44,22 @@ const Dashboard = () => {
         }
     }
 
-    // const getNews = async () => {
-    //     try {
-    //         const { data } = await axios(newsUrl)
-    //         setNews(data.articles)
-    //         console.log(data.data);
+    const getNews = async () => {
+        try {
+            const { data } = await axios(newsUrl)
+            setNews(data.results)
+            // console.log(data.results);
 
-    //     } catch (error) {
-    //         console.log(error);
+        } catch (error) {
+            console.log(error);
 
-    //     }
-    // }
+        }
+    }
 
 
     useEffect(() => {
         getBlogData("blogs")
-        // getNews()
+        getNews()
         getShows()
     }, [])
 

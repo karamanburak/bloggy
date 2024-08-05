@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 const defaultImage = "https://t3.ftcdn.net/jpg/03/27/55/60/360_F_327556002_99c7QmZmwocLwF7ywQ68ChZaBry1DbtD.jpg"
 
 
-const NewsCard = ({ title, author, content, description, source, urlToImage, url }) => {
+const NewsCard = ({ title, source_name, link, description, image_url, category }) => {
     const { currentUser } = useSelector(state => state.auth)
 
 
@@ -15,7 +15,7 @@ const NewsCard = ({ title, author, content, description, source, urlToImage, url
         if (!currentUser) {
             toastWarnNotify("You must Login");
         } else {
-            window.open(url, '_blank')
+            window.open(link, '_blank')
         }
     }
 
@@ -37,6 +37,8 @@ const NewsCard = ({ title, author, content, description, source, urlToImage, url
                             justifyContent: "space-between",
                             my: 3
                         }}>
+                        <Typography variant='outlined' sx={{ marginRight: "auto", marginLeft: "1rem", marginBottom: "-4rem", color: "cornflowerblue" }}>Category: {category[0]}</Typography>
+
                         <CardHeader
                             sx={{
                                 color: "seagreen",
@@ -47,7 +49,8 @@ const NewsCard = ({ title, author, content, description, source, urlToImage, url
 
                             }}
                             title={title}
-                            subheader={author}
+                            subheader={source_name}
+
                         />
                         <CardContent>
                             <Typography variant="body2" sx={{
@@ -84,13 +87,13 @@ const NewsCard = ({ title, author, content, description, source, urlToImage, url
                             }}
                             component="img"
                             height="374"
-                            image={urlToImage ? urlToImage : defaultImage}
+                            image={image_url ? image_url : defaultImage}
                             alt="image"
                         />
                     </Grid>
                 </Grid>
             </Card>
-        </Container>
+        </Container >
     )
 };
 

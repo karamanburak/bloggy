@@ -5,7 +5,7 @@ import { toastWarnNotify } from '../../helper/ToastNotify';
 import { useSelector } from 'react-redux';
 
 
-const ShowsCard = ({ name, genres, image, summary, url }) => {
+const ShowsCard = ({ name, genres, image, summary, url, rating }) => {
     const { currentUser } = useSelector(state => state.auth)
 
 
@@ -47,6 +47,8 @@ const ShowsCard = ({ name, genres, image, summary, url }) => {
                             title={name}
                             subheader={`${genres[0]} - ${genres[1]} - ${genres[2]}`}
                         />
+                        <Typography variant='outlined' sx={{ marginTop: "-4.5rem", marginRight: "auto", color: "cornflowerblue", marginLeft: "1.2rem" }}>Rating: {rating.average}</Typography>
+
                         <CardContent>
                             <Typography variant="body2" sx={{
                                 maxHeight: "100px",
