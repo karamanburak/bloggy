@@ -25,15 +25,22 @@ const Dashboard = () => {
     const [news, setNews] = useState([])
 
 
+    const stripHtml = (html) => {
+        let doc = new DOMParser().parseFromString(html, 'text/html');
+        return doc.body.textContent || "";
+    }
+
     const getShows = async () => {
         try {
             const { data } = await axios(url)
-            setShows(data.slice(0, 10))
-            // console.log(data);
+            const cleanedData = data.slice(0, 20).map(show => ({
+                ...show,
+                summary: stripHtml(show.summary)
+            }));
+            setShows(cleanedData);
 
         } catch (error) {
             console.log(error);
-
         }
     }
 
