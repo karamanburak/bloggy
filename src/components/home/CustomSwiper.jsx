@@ -13,7 +13,7 @@ const CustomSwiper = ({ items, ItemComponent }) => {
             spaceBetween={30}
             slidesPerView={1}
             modules={[Autoplay, Pagination, Navigation, A11y]}
-            pagination={{ clickable: true }}
+            // pagination={{ clickable: true }}
             navigation={true}
             autoplay={{ delay: 2500 }}
         >
