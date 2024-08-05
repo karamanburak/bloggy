@@ -31,7 +31,7 @@ const TrendBlogs = () => {
 
 
     return (
-        <Container maxWidth={'xl'}  >
+        <Container maxWidth={'100vw'}  >
             <Box>
                 <Typography variant='h5' sx={{ color: "neutral.light" }}> <FaChartBar />  Trendings on Bloggy </Typography> <hr />
             </Box>
