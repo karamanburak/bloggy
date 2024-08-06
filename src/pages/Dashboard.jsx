@@ -95,10 +95,18 @@ const Dashboard = () => {
                     )}
                 </Box>
                 <Box>
-                    <CustomSwiper items={news} ItemComponent={NewsCard} />
+                    {loading ? (
+                        <img src={loadingGif} alt="loading..." height={100} style={{ display: "flex", margin: "auto" }} />
+                    ) : (
+                        <CustomSwiper items={news} ItemComponent={NewsCard} />
+                    )}
                 </Box>
                 <Box>
-                    <CustomSwiper items={shows} ItemComponent={ShowsCard} />
+                    {loading ? (
+                        <img src={loadingGif} alt="loading..." height={100} style={{ display: "flex", margin: "auto" }} />
+                    ) : (
+                        <CustomSwiper items={shows} ItemComponent={ShowsCard} />
+                    )}
                 </Box>
             </Container >
             <Box sx={{ marginTop: "2rem" }}>

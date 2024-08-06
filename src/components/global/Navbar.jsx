@@ -27,6 +27,7 @@ import { BsPencilSquare } from "react-icons/bs";
 import { FaRegBell } from "react-icons/fa6";
 import { useEffect } from 'react';
 import BlogModal from '../blog/BlogModal';
+import { useLocation } from 'react-router-dom';
 
 
 const pages = [
@@ -45,6 +46,7 @@ function Navbar() {
     const [anchorElUser, setAnchorElUser] = useState(null);
     const { categories } = useSelector(state => state.category)
     const navigate = useNavigate()
+    const location = useLocation()
     const [navbarBg, setNavbarBg] = useState({
         backgroundColor: 'transparent',
         opacity: 1
@@ -116,12 +118,27 @@ function Navbar() {
     };
 
     useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, [theme]);
+        if (location.pathname === '/profile') {
+            setNavbarBg({
+                backgroundColor: theme.palette.neutral.dark,
+                opacity: 0.9,
+            });
+            setNavbarTextColor(theme.palette.text.primary);
+        } else {
+            window.addEventListener('scroll', handleScroll);
+            return () => {
+                window.removeEventListener('scroll', handleScroll);
+            };
+        }
+    }, [location, theme]);
 
+    // Check if the current path is a blog detail page
+    const isDetailPage = location.pathname.includes('/blog/detail');
+
+    // Do not render the navbar on the detail page
+    if (isDetailPage) {
+        return null;
+    }
 
 
     return (

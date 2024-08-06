@@ -85,9 +85,9 @@ const Detail = () => {
 
     return (
         <Card sx={{ backgroundColor: "primary.main", padding: "2rem", margin: "auto" }}>
-            {/* <Button onClick={() => navigate(-1)} variant="contained" sx={{ backgroundColor: "primary.light", mb: 5, display: flex, gap: 1, marginTop: "4rem", marginLeft: "3rem" }} >
+            <Button onClick={() => navigate(-1)} variant="contained" sx={{ backgroundColor: "primary.light", mb: 5, display: "flex", gap: 1, marginLeft: "3rem" }} >
                 <ArrowBackIcon /> GO BACK
-            </Button> */}
+            </Button>
             <Box sx={{ width: { xs: "80vw", md: "50vw" }, margin: "auto", marginTop: "4rem" }}>
                 <CardMedia
                     sx={{

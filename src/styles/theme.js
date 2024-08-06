@@ -77,7 +77,7 @@ export const tokens = (mode) => ({
                 100: "#CCDDD3",
                 200: "#080b12",
                 300: "#0c101b",
-                400: "#E7E2E1",
+                400: "#FFF",
                 500: "#141b2d",
                 600: "#1F2A40",
                 700: "#727681",
@@ -130,7 +130,7 @@ export const themeSettings = (mode) => {
                 ? {
                     // palette values for dark mode
                     primary: {
-                        main: colors.primary[400],
+                        main: colors.primary[600],
                     },
                     secondary: {
                         main: colors.greenAccent[500],

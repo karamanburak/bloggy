@@ -47,7 +47,7 @@ const ShowsCard = ({ name, genres, image, summary, url, rating }) => {
                             title={name}
                             subheader={`${genres[0]} - ${genres[1]} - ${genres[2]}`}
                         />
-                        <Typography variant='outlined' sx={{ marginTop: "-4.5rem", marginRight: "auto", color: "cornflowerblue", marginLeft: "1.2rem" }}>Rating: {rating.average}</Typography>
+                        <Typography variant='outlined' sx={{ marginTop: { xs: "-5rem", sm: "-4rem" }, marginRight: "auto", color: "cornflowerblue", marginLeft: "1rem" }}>Rating: {rating.average}</Typography>
 
                         <CardContent>
                             <Typography variant="body2" sx={{
@@ -56,7 +56,8 @@ const ShowsCard = ({ name, genres, image, summary, url, rating }) => {
                                 textOverflow: 'ellipsis',
                                 display: '-webkit-box',
                                 WebkitLineClamp: '3',
-                                WebkitBoxOrient: 'vertical'
+                                WebkitBoxOrient: 'vertical',
+                                marginTop: "3rem"
                             }} >
                                 {summary}
                             </Typography>
