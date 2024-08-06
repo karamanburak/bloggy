@@ -16,32 +16,29 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-const TrendBlogs = () => {
+const TrendBlogs = ({ detailCard }) => {
     const { getTrendsData } = useBlogCall()
     const { trendings, blogs } = useSelector(state => state.blog)
     // console.log(trendings);
     const navigate = useNavigate()
 
-
-
-
     useEffect(() => {
         getTrendsData()
     }, [])
 
-
     return (
-        <Container maxWidth={'100vw'}  >
+        <Container maxWidth={'100vw'}>
             <Box>
                 <Typography variant='h5' sx={{ color: "neutral.light" }}> <FaChartBar />  Trendings on Bloggy </Typography> <hr />
             </Box>
-            <Box >
+            <Box>
                 <Swiper
+                    style={{
+                        "--swiper-pagination-bullet-inactive-color": "#999999"
+                    }}
                     modules={[Autoplay, Pagination, Navigation, A11y]}
                     pagination={{ clickable: true }}
                     autoplay={{ delay: 2500 }}
-                    // centeredSlides={true}
-                    // navigation={true}
                     breakpoints={{
                         300: {
                             slidesPerView: 1,
@@ -75,7 +72,6 @@ const TrendBlogs = () => {
                                         height="120"
                                         image={image}
                                         alt={image}
-
                                     />
                                     <CardContent>
                                         <Typography sx={{ fontSize: ".8rem" }}>
@@ -100,18 +96,10 @@ const TrendBlogs = () => {
                                 </Card>
                             </SwiperSlide>
                         );
-
                     })}
-
-
-                    <CardActions>
-                        <Button size="small">Share</Button>
-                        <Button size="small">Learn More</Button>
-                    </CardActions>
-
                 </Swiper>
             </Box>
-        </Container >
+        </Container>
     )
 };
 

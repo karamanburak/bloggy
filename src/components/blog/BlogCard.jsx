@@ -133,7 +133,7 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
         </Box>
       </CardActions>
       <Box sx={{ display: "flex", justifyContent: "flex-end", marginRight: "1rem" }}>
-        <Button onClick={() => navigate(`/blog/detail/${_id}`, { state: { _id, content, image, title, userId, createdAt, likes, countOfVisitors, categoryId } })} variant="contained" sx={{ marginBottom: "1rem", backgroundColor: "primary.light" }} >
+        <Button onClick={() => navigate(`/blog/detail/${_id}`, { state: { _id, content, image, title, userId, createdAt, likes, countOfVisitors, categoryId, readingTime } })} variant="contained" sx={{ marginBottom: "1rem", backgroundColor: "primary.light" }} >
           Read More
         </Button>
       </Box>
