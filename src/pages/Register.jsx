@@ -10,10 +10,10 @@ import Footer from "../components/home/Footer";
 import useAuthCall from "../hooks/useAuthCall";
 
 const Register = () => {
-  const {register} = useAuthCall()
+  const { register } = useAuthCall()
   return (
     <>
-      <Container sx={{ backgroundColor: "primary.main", minWidth:"100%"}}>
+      <Container sx={{ backgroundColor: "primary.main", minWidth: "100%" }}>
         <Grid
           container
           justifyContent="center"
@@ -33,7 +33,7 @@ const Register = () => {
                 m: "auto",
                 width: 40,
                 height: 40,
-                marginTop: "2rem"
+                marginTop: "8rem"
               }}
             >
               <AppRegistrationSharpIcon />

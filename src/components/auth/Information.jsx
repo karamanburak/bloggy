@@ -8,10 +8,10 @@ const Information = () => {
     const navigate = useNavigate()
     return (
         <Box backgroundColor="neutral.dark" sx={{
-            marginTop: { xs: "2rem", md: "8.5rem" },
+            marginTop: { xs: "6rem", md: "14.5rem" },
             padding: "2rem",
             borderRadius: "5px",
-            height: "605px",
+            height: "640px",
 
         }}>
             <Typography variant="h5" component="h1" marginBottom="1rem" color="secondary.light" fontWeight="bold">
@@ -34,16 +34,16 @@ const Information = () => {
                 <strong><i>Note:</i></strong> Those who do not follow the rules will be banned from the site indefinitely.
             </Typography>
             <Box textAlign="center">
-            <Button onClick={() => navigate("/login")}
-                sx={{
-                    backgroundColor: "secondary.main", color: "white",
-                    '&:hover': {
-                        backgroundColor: "secondary.dark",
-                    },
+                <Button onClick={() => navigate("/login")}
+                    sx={{
+                        backgroundColor: "secondary.main", color: "white",
+                        '&:hover': {
+                            backgroundColor: "secondary.dark",
+                        },
 
-                }}>
-                Do You Have an Account ?
-            </Button>
+                    }}>
+                    Do You Have an Account ?
+                </Button>
             </Box>
         </Box>
     )

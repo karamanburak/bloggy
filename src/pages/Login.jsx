@@ -13,7 +13,7 @@ import image from '../assets/login.png'
 import Footer from "../components/home/Footer";
 
 const Login = () => {
-  const { login} = useAuthCall();
+  const { login } = useAuthCall();
 
   return (
     <>
@@ -26,7 +26,7 @@ const Login = () => {
           sx={{
             minHeight: "100vh",
             p: 2,
-            gap:6
+            gap: 6
           }}
         >
           <Grid item xs={12} sm={10} md={5} lg={4}>
@@ -36,7 +36,7 @@ const Login = () => {
                 m: "auto",
                 width: 40,
                 height: 40,
-                marginTop:"2rem"
+                marginTop: "6rem"
               }}
             >
               <PeopleSharpIcon />
@@ -54,19 +54,19 @@ const Login = () => {
                 actions.setSubmitting(false);
               }}
               component={props => <LoginForm {...props} />}
-              >
+            >
 
             </Formik>
-            <Box sx={{ textAlign: "center", mt:-6 }}>
-              <Link to="/register" style={{ color: "cornflowerblue"}}>
+            <Box sx={{ textAlign: "center", mt: -6 }}>
+              <Link to="/register" style={{ color: "cornflowerblue" }}>
                 Don't have an account? Sign up for Bloggy
               </Link>
             </Box>
           </Grid>
-          <AuthImage image={image}/>
+          <AuthImage image={image} />
         </Grid>
       </Container>
-        <Footer/>
+      <Footer />
     </>
   );
 };

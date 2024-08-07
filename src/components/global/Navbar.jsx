@@ -24,7 +24,6 @@ import { useState } from 'react';
 import { avatarNavbar } from '../../styles/globalStyles'
 import { toastWarnNotify } from '../../helper/ToastNotify';
 import { BsPencilSquare } from "react-icons/bs";
-import { FaRegBell } from "react-icons/fa6";
 import { useEffect } from 'react';
 import BlogModal from '../blog/BlogModal';
 import { useLocation } from 'react-router-dom';
@@ -68,7 +67,7 @@ function Navbar() {
 
 
     const settings = currentUser ? [
-        // { name: `${currentUser.firstName}  ${currentUser.lastName}` },
+        { name: `${currentUser.firstName}  ${currentUser.lastName}`, withDivider: true },
         { name: 'Profile', src: '/profile' },
         { name: 'Sign Out', src: 'login' },
     ] : [
@@ -118,7 +117,7 @@ function Navbar() {
     };
 
     useEffect(() => {
-        if (location.pathname === '/profile') {
+        if (location.pathname === '/profile' || location.pathname === '/login' || location.pathname === '/register') {
             setNavbarBg({
                 backgroundColor: theme.palette.neutral.dark,
                 opacity: 0.9,
@@ -133,7 +132,7 @@ function Navbar() {
     }, [location, theme]);
 
     // Check if the current path is a blog detail page
-    const isDetailPage = location.pathname.includes('/blog/detail');
+    const isDetailPage = location.pathname.includes('/blog/detail')
 
     // Do not render the navbar on the detail page
     if (isDetailPage) {
@@ -178,7 +177,7 @@ function Navbar() {
                             onClose={handleCloseNavMenu}
                             sx={{
                                 display: { xs: 'block', md: 'none' },
-                                color: navbarBg.color
+                                color: navbarBg.color,
                             }}
                         >
                             {pages.map((page) => (
@@ -194,7 +193,6 @@ function Navbar() {
                         {pages.map((page) => (
                             <Button
                                 key={page.src}
-
                                 onClick={() => { !currentUser && page.name === "Blogs" ? (toastWarnNotify("You must login")) : (navigate(page.src)) }}
                                 sx={{ my: 2, display: 'block' }}
                             >
@@ -202,7 +200,6 @@ function Navbar() {
                                     marginTop: "1rem",
                                     color: navbarTextColor
                                 }}>
-
                                     {page.name}
                                 </Typography>
                             </Button>
@@ -225,18 +222,24 @@ function Navbar() {
                             <BsPencilSquare style={{ fontSize: "1.2rem", marginBottom: ".3rem" }} />  WRITE
                         </Typography>}
                     </Box>
-                    <Box sx={{
-                        color: navbarTextColor, cursor: "pointer",
-                        marginRight: "2rem",
-                        marginTop: "1.7rem",
-                        fontSize: "1.2rem",
-                        marginBottom: { xs: "1rem", md: "0" },
-                    }}>
-                        <FaRegBell />
-                    </Box>
+                    <IconButton
+                        sx={{
+                            width: "40px", height: "40px", color: navbarTextColor, cursor: "pointer",
+                            marginRight: "2rem",
+                            marginTop: "1.7rem",
+                            fontSize: "1.2rem",
+                            marginBottom: { xs: "1rem", md: "0" },
+                        }}
+                        onClick={colorMode.toggleColorMode}>
+                        {theme.palette.mode === "dark" ? (
+                            <NightsStayIcon />
+                        ) : (
+                            <LightModeSharpIcon />
+                        )}
+                    </IconButton>
 
                     <Box sx={{ marginBottom: { xs: "1rem", md: "0" } }}>
-                        {currentUser ? (
+                        {currentUser?.image ? (
                             <Box onClick={handleOpenUserMenu} sx={avatarNavbar}>
                                 <img src={currentUser.image} alt="" style={{
                                     width: "40px",
@@ -244,14 +247,12 @@ function Navbar() {
                                     borderRadius: "50%",
                                     marginTop: "1.5rem"
                                 }} />
-                                {/* <Typography>
-                                    {`${currentUser.firstName}  ${currentUser.lastName}`}
-                                </Typography> */}
+
                             </Box>
                         ) : (
                             <Tooltip title="Open Menu">
                                 <IconButton onClick={handleOpenUserMenu} >
-                                    <img src={avatar} alt="" style={{
+                                    <img src={avatar} alt="image" style={{
                                         width: "40px",
                                         height: "40px",
                                         borderRadius: "50%",
@@ -277,15 +278,6 @@ function Navbar() {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                            <IconButton
-                                sx={{ width: "40px", height: "40px", marginLeft: "1.5rem" }}
-                                onClick={colorMode.toggleColorMode}>
-                                {theme.palette.mode === "dark" ? (
-                                    <NightsStayIcon />
-                                ) : (
-                                    <LightModeSharpIcon />
-                                )}
-                            </IconButton>
                             {settings.map((setting, index) => (
                                 <MenuItem key={index} onClick={() => handleSettingClick(setting.src)}>
                                     <Typography textAlign="center">{setting.name}</Typography>

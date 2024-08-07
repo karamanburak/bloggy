@@ -30,7 +30,7 @@ const Profile = () => {
 
       <Container maxWidth="false" sx={{
         ...flex, backgroundColor: "primary.main", minHeight: "100vh",
-        paddingTop: "3rem"
+        paddingTop: "5rem"
       }}>
         <Grid container sx={{ padding: { lg: "3rem" }, m: 4 }}>
           <Grid item xs={12} lg={6} sx={{
