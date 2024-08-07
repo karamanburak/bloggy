@@ -19,11 +19,11 @@ const CustomSwiper = ({ items, ItemComponent }) => {
             navigation={true}
             autoplay={{ delay: 3500 }}
         >
-            {/* {items?.map((item, index) => (
+            {items?.map((item, index) => (
                 <SwiperSlide key={index}>
                     <ItemComponent {...item} />
                 </SwiperSlide>
-            ))} */}
+            ))}
         </Swiper>
     );
 };
