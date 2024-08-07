@@ -25,8 +25,6 @@ import useCategoryCall from '../hooks/useCategoryCall';
 import SocialShare from '../components/blog/SocialShare';
 
 
-
-
 const Detail = () => {
     const navigate = useNavigate()
     const { state } = useLocation()
@@ -118,13 +116,20 @@ const Detail = () => {
                             image={image}
                             alt="image"
                         />
+                        <Box sx={{
+                            display: "flex", gap: ".5rem", mt: 2, justifyContent: { xs: "center", lg: "flex-end" }
+                        }}>
+                            <SocialShare />
+                        </Box>
                         <Typography variant='h6' component="h1" sx={{ textAlign: "center", marginTop: "2rem", marginBottom: "1rem" }}>{title}</Typography>
                         <Typography variant="body2" sx={{ textAlign: "justify", marginLeft: "1.5rem", fontSize: "1.1rem", color: "gray" }} >
                             {content}
                         </Typography>
-                        <Box sx={{ display: { xs: "block", lg: "flex" }, opacity: ".7", justifyContent: "space-between", m: 4, cursor: "pointer" }}>
-                            <Box sx={{ display: "flex", gap: ".5rem", mt: 2 }} >
-                                <Typography >
+                        <Box sx={{ display: { xs: "block", lg: "flex" }, opacity: ".7", justifyContent: "space-between", m: 4, cursor: "pointer", alignItems: "center", margin: "auto" }}>
+                            <Box sx={{
+                                display: "flex", gap: ".5rem", mt: 2, ml: { sx: 0, md: 4 }, justifyContent: { xs: "center", lg: "flex-end" }
+                            }}>
+                                <Typography>
                                     <FavoriteIcon
                                         sx={{
                                             color: liked ? "red" : "",
@@ -150,13 +155,8 @@ const Detail = () => {
                                     <sup>{countOfVisitors + 1}</sup>
                                 </Typography>
                             </Box>
-                            <Box sx={{
-                                display: "flex", gap: ".5rem", mt: 1
-                            }}>
-                                <SocialShare />
-                            </Box>
                             {isCurrentUserOwner && (
-                                <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
+                                <Box sx={{ display: "flex", gap: 2, mt: 2, justifyContent: { xs: "center", lg: "flex-end" } }}>
                                     {/* <Button variant='contained' sx={{ backgroundColor: "cornflowerblue" }}>
                                 <EditNoteIcon />Edit Blog</Button> */}
                                     <Button
@@ -179,7 +179,7 @@ const Detail = () => {
                                 </Box>
                             )}
                         </Box>
-                        <Box>
+                        <Box sx={{ mt: 2 }} >
                             <CardContent sx={{ margin: "auto", marginLeft: "-1rem" }}>
                                 <CommentForm blogId={_id} />
                                 {showComments && (
