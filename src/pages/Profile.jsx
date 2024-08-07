@@ -1,4 +1,4 @@
-import { Button, Container, Grid, Typography } from "@mui/material";
+import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import React from "react";
 import { useSelector } from "react-redux";
 import { flex, profileStyle } from "../styles/globalStyles";
@@ -41,49 +41,44 @@ const Profile = () => {
           }}>
             <Button
               onClick={handleOpen}
-              variant="contained" sx={{ backgroundColor: "primary.light", display: "block", marginLeft: "auto", marginBottom: "3rem" }}>
-              Update Profile
+              variant="contained" sx={{ backgroundColor: "#4182F9", color: "#FFF", display: "block", marginLeft: "auto", marginBottom: "3rem" }}>
+              Edit
             </Button>
-            <img src={image} alt="profilePhoto" style={{
-              width: "150px",
-              height: "150px",
-              borderRadius: "50%",
-              display: "block",
-              margin: "auto",
-              marginBottom: "3rem",
-            }} />
+            <Box sx={{ display: "flex", gap: "1rem" }}>
+              <img src={image} alt="profilePhoto" style={{
+                width: "100px",
+                height: "100px",
+                borderRadius: "50%",
+                // display: "block",
+                // margin: "auto",
+                marginBottom: "3rem",
+              }} />
+              <Box>
+                <Typography sx={{ ...profileStyle, marginTop: { xs: "1rem", sm: "1.5rem" } }}>
+                  {firstName} {lastName}
+                </Typography>
+                {/* <Typography sx={profileStyle}>
+                {username}
+              </Typography> */}
+                <Typography sx={{ display: "block" }}>
+                  {email}
+                </Typography>
+              </Box>
 
-            <Typography sx={profileStyle}>
-              First Name:
-              <Typography variant="span" color="red">{firstName}</Typography>
-            </Typography>
-            <Typography sx={profileStyle}>
-              Last Name:
-              <Typography variant="span" color="red">{lastName}</Typography>
-            </Typography>
-            <Typography sx={profileStyle}>
-              Username:
-              <Typography variant="span" color="red">{username}</Typography>
-            </Typography>
-            <Typography sx={profileStyle}>
-              Email:
-              <Typography variant="span" color="red">{email}</Typography>
-            </Typography>
-            <Typography sx={{ ...profileStyle, marginBottom: "1rem" }}>
-              City:
-              <Typography variant="span" color="red">{city}</Typography>
-            </Typography>
+              {/* <Typography sx={{ ...profileStyle, marginBottom: "1rem" }}>
+                {city}
+              </Typography> */}
+            </Box>
             <Typography sx={{
               display: "flex",
               justifyContent: "end",
-              marginBottom: "1rem",
-              color: "blue",
-              fontSize: "1.2rem",
+              // fontSize: "1.2rem",
+              marginTop: "-2rem"
             }}>
               {`Created Date: ${localDate()}`}
             </Typography>
             <Typography sx={{ ...profileStyle, textAlign: "justify" }}>
-              <Typography variant="span" sx={{ fontSize: "1.2rem", mt: 8 }}>{bio}</Typography>
+              <Typography variant="span" sx={{ mt: 8 }}>Personal Information <br />{bio}</Typography>
             </Typography>
           </Grid>
           <Grid item xs={12} lg={6} sx={{
