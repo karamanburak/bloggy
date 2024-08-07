@@ -107,15 +107,15 @@ const Detail = () => {
                             }
                             title={
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: ".5rem" }}>
-                                    <Typography sx={{ fontWeight: 'bold' }}>
+                                    <Typography variant='p'>
                                         {blog ? `${blog?.userId?.firstName} ${blog?.userId?.lastName}` : title}
                                     </Typography>
                                     |
-                                    <Typography sx={{ color: 'gray' }}>
+                                    <Typography variant='p' sx={{ color: 'gray' }}>
                                         {`Published Date: ${formatDate(createdAt)}`}
                                     </Typography>
                                     |
-                                    <Typography>{readingTime}</Typography>
+                                    <Typography variant="p">{readingTime}</Typography>
                                 </Box>
                             }
                         />

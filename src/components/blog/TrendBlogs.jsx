@@ -8,18 +8,15 @@ import { Navigation, Pagination, A11y, Autoplay } from "swiper/modules";
 import useBlogCall from "../../hooks/useBlogCall";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
-import { useState } from "react";
 import { Box, Button, Card, CardActions, CardContent, CardMedia, Container, Typography } from "@mui/material";
 import { FaChartBar } from "react-icons/fa";
 import { MdOutlineVisibility } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
 
 
-
-const TrendBlogs = ({ detailCard }) => {
+const TrendBlogs = () => {
     const { getTrendsData } = useBlogCall()
     const { trendings, blogs } = useSelector(state => state.blog)
-    // console.log(trendings);
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -34,7 +31,7 @@ const TrendBlogs = ({ detailCard }) => {
             <Box>
                 <Swiper
                     style={{
-                        "--swiper-pagination-bullet-inactive-color": "#999999"
+                        "--swiper-pagination-bullet-inactive-color": "#999999",
                     }}
                     modules={[Autoplay, Pagination, Navigation, A11y]}
                     pagination={{ clickable: true }}
@@ -65,7 +62,7 @@ const TrendBlogs = ({ detailCard }) => {
                     {[...trendings].sort((a, b) => b.countOfVisitors - a.countOfVisitors).map((blog) => {
                         const { _id, content, image, title, userId, createdAt, likes, countOfVisitors, categoryId } = blog
                         return (
-                            <SwiperSlide key={blog._id} style={{ display: "flex", justifyContent: "center" }}>
+                            <SwiperSlide key={blog._id} style={{ display: "flex", justifyContent: "center", height: "320px" }}>
                                 <Card sx={{ width: 210, height: 270, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                                     <CardMedia
                                         component="img"
@@ -84,7 +81,7 @@ const TrendBlogs = ({ detailCard }) => {
                                     </CardContent>
                                     <Button
                                         onClick={() => navigate(`/blog/detail/${_id}`, { state: { _id, content, image, title, userId, createdAt, likes, countOfVisitors, categoryId } })}
-                                        variant='contained' sx={{ color: "neutral.light", backgroundColor: "primary.light", cursor: "pointer", display: "flex", justifyContent: "space-between" }}>
+                                        variant='contained' sx={{ cursor: "pointer", display: "flex", justifyContent: "space-between", backgroundColor: "neutral.dark" }}>
                                         <Typography>
                                             <MdOutlineVisibility />
                                             <sup>{countOfVisitors}</sup>
