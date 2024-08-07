@@ -22,7 +22,7 @@ const ShowsCard = ({ name, genres, image, summary, url, rating }) => {
             <PageHeader text="Tv-Shows" />
             <Card
                 sx={{
-                    height: { xs: 650, md: 400 },
+                    height: { xs: 730, md: 400 },
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",
@@ -40,7 +40,7 @@ const ShowsCard = ({ name, genres, image, summary, url, rating }) => {
                                 sx={{
                                     color: "seagreen",
                                     '& .MuiTypography-root': {
-                                        fontSize: 15,
+                                        fontSize: 16,
                                         fontWeight: "bold"
                                     }
 
@@ -48,7 +48,7 @@ const ShowsCard = ({ name, genres, image, summary, url, rating }) => {
                                 title={name}
                                 subheader={`${genres[0]} - ${genres[1]} - ${genres[2]}`}
                             />
-                            <Typography variant='outlined' sx={{ marginRight: "auto", color: "cornflowerblue", marginLeft: "1rem" }}>Rating: {rating.average}</Typography>
+                            <Typography variant='outlined' sx={{ color: "cornflowerblue", marginLeft: "1rem" }}>Rating: {rating.average}</Typography>
                         </Box>
 
                         <CardContent>

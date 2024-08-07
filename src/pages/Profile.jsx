@@ -34,7 +34,8 @@ const Profile = () => {
       }}>
         <Grid container sx={{ padding: { lg: "3rem" }, m: 4 }}>
           <Grid item xs={12} lg={6} sx={{
-            backgroundColor: "#FFD500",
+            backgroundColor: "#FFD506",
+            // backgroundColor: "#FFF",
             padding: "2rem",
             borderTopLeftRadius: "2rem",
             borderBottomLeftRadius: "2rem",
@@ -87,19 +88,6 @@ const Profile = () => {
             borderTopRightRadius: "2rem",
             borderBottomRightRadius: "2rem"
           }}>
-            <Button
-              onClick={() => navigate("/blog")}
-              variant="contained"
-              sx={{
-                backgroundColor: "primary.light",
-                display: "block",
-                marginLeft: "auto",
-                marginBottom: "1rem",
-              }}
-
-            >
-              Blogs
-            </Button>
             <UpdateProfileModal
               open={open}
               handleClose={handleClose}

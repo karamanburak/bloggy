@@ -16,7 +16,7 @@ import NewsCard from '../components/home/NewsCard';
 import CustomSwiper from '../components/home/CustomSwiper';
 
 const url = 'https://api.tvmaze.com/shows'
-const newsUrl = `https://newsdata.io/api/1/latest?language=en&apikey=${import.meta.env.VITE_NEWS_apiKey}`
+const newsUrl = `https://newsdata.io/api/1/news?apikey=pub_501441ed8ff166a7c3eaaf49a432d41877dde&q=news&country=de&language=en&category=technology `
 const Dashboard = () => {
     const isDashboard = '/'
     const { getBlogData } = useBlogCall()
@@ -47,8 +47,8 @@ const Dashboard = () => {
     const getNews = async () => {
         try {
             const { data } = await axios(newsUrl)
-            setNews(data.results)
-            // console.log(data.results);
+            setNews(data)
+            console.log(data);
 
         } catch (error) {
             console.log(error);

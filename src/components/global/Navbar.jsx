@@ -117,12 +117,22 @@ function Navbar() {
     };
 
     useEffect(() => {
-        if (location.pathname === '/profile' || location.pathname === '/login' || location.pathname === '/register') {
-            setNavbarBg({
-                backgroundColor: theme.palette.neutral.dark,
-                opacity: 0.9,
-            });
-            setNavbarTextColor(theme.palette.text.primary);
+        const isDetailPage = location.pathname.startsWith('/blog/detail/');
+        if (location.pathname === '/profile' || location.pathname === '/login' || location.pathname === '/register' || isDetailPage) {
+            if (isDetailPage) {
+                setNavbarBg({
+                    backgroundColor: theme.palette.neutral.dark,
+                    opacity: 0.9,
+                });
+                setNavbarTextColor(theme.palette.mode === 'dark' ? 'white' : 'black')
+            } else {
+                setNavbarBg({
+                    backgroundColor: theme.palette.neutral.dark,
+                    opacity: 0.9,
+                });
+                setNavbarTextColor(theme.palette.mode === 'dark' ? 'white' : 'black')
+
+            }
         } else {
             window.addEventListener('scroll', handleScroll);
             return () => {
@@ -130,14 +140,6 @@ function Navbar() {
             };
         }
     }, [location, theme]);
-
-    // Check if the current path is a blog detail page
-    const isDetailPage = location.pathname.includes('/blog/detail')
-
-    // Do not render the navbar on the detail page
-    if (isDetailPage) {
-        return null;
-    }
 
 
     return (
@@ -206,19 +208,16 @@ function Navbar() {
                         ))}
                     </Box>
                     <Box>
+
                         {currentUser && <Typography
                             sx={{
                                 cursor: "pointer",
                                 marginRight: "2rem",
                                 marginTop: "1.7rem",
-                                // fontSize: "1.2rem",
-                                // opacity: ".8"
                                 marginBottom: { xs: "1rem", md: "0" },
                                 color: navbarTextColor,
                             }}
-                            onClick={handleOpen}
-
-                        >
+                            onClick={handleOpen}>
                             <BsPencilSquare style={{ fontSize: "1.2rem", marginBottom: ".3rem" }} />  WRITE
                         </Typography>}
                     </Box>
@@ -241,7 +240,7 @@ function Navbar() {
                     <Box sx={{ marginBottom: { xs: "1rem", md: "0" } }}>
                         {currentUser?.image ? (
                             <Box onClick={handleOpenUserMenu} sx={avatarNavbar}>
-                                <img src={currentUser.image} alt="" style={{
+                                <img src={currentUser.image} alt="image" style={{
                                     width: "40px",
                                     height: "40px",
                                     borderRadius: "50%",

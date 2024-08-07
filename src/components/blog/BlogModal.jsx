@@ -112,7 +112,7 @@ export default function BlogModal({ open, handleClose, initialState, categories 
 
             >
               {
-                categories.map(category => <MenuItem key={category._id} value={category._id}>{category.name}</MenuItem>)
+                categories?.map(category => <MenuItem key={category._id} value={category?._id}>{category?.name}</MenuItem>)
               }
             </Select>
           </FormControl>

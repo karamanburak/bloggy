@@ -1,3 +1,4 @@
+
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
@@ -18,17 +19,18 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { flex } from '../styles/globalStyles'
 import { useState } from 'react';
 import CommentForm from '../components/blog/CommentForm';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import useCategoryCall from '../hooks/useCategoryCall';
-import TrendBlogs from '../components/blog/TrendBlogs';
+import SocialShare from '../components/blog/SocialShare';
+
+
 
 
 const Detail = () => {
     const navigate = useNavigate()
     const { state } = useLocation()
-    const { content, image, createdAt, userId, title, _id, likes: initialLikes, categoryId, countOfVisitors, readingTime } = state;
+    const { content, image, createdAt, userId, title, _id, likes: initialLikes, categoryId, countOfVisitors } = state;
     const { deleteBlog, getBlogDetail } = useBlogCall()
     const { currentUser } = useSelector(state => state.auth)
     const { blog } = useSelector(state => state.blog)
@@ -82,49 +84,32 @@ const Detail = () => {
         return category ? category.name : "Unknown Category";
     };
 
-
-
     return (
         <Card sx={{ backgroundColor: "primary.main", padding: "2rem", margin: "auto", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-            <Button onClick={() => navigate(-1)} variant="contained" sx={{ backgroundColor: "primary.light", mb: 5, display: "flex", gap: 1, marginRight: "auto" }} >
-                <ArrowBackIcon /> GO BACK
-            </Button>
             <Grid container spacing={2} mt={9} sx={{ flex }}>
-                <Grid item xs={12} md={9} sx={{}}>
-                    <Box sx={{ ...flex, justifyContent: "center" }}>
-                        <CardHeader
-                            sx={{
-                                color: "indianred",
-                                '& .MuiTypography-root': {
-                                    fontSize: 18,
-                                    fontWeight: "bold"
-                                }
-                            }}
-                            avatar={
-                                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                                    {blog ? <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${blog?.userId?.firstName}`} alt="image" /> : "R"}
-                                </Avatar>
-                            }
-                            title={
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: ".5rem" }}>
-                                    <Typography variant='p'>
-                                        {blog ? `${blog?.userId?.firstName} ${blog?.userId?.lastName}` : title}
-                                    </Typography>
-                                    |
-                                    <Typography variant='p' sx={{ color: 'gray' }}>
-                                        {`Published Date: ${formatDate(createdAt)}`}
-                                    </Typography>
-                                    |
-                                    <Typography variant="p">{readingTime}</Typography>
-                                </Box>
-                            }
-                        />
+                <Grid item xs={12} md={9} sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                    <Box sx={{ width: { xs: "80vw", md: "50vw" } }}>
+                        <Box sx={{ marginY: "2rem", fontSize: "1.2rem", display: "flex", justifyContent: "center" }}>
+                            <Typography variant='p'>
+                                <Typography variant='span' sx={{ color: "gray" }}>Written By</Typography>    {blog ? `${blog?.userId?.firstName} ${blog?.userId?.lastName}` : title}
+                            </Typography>
+
+                        </Box>
+                        <Box sx={{ display: "flex", justifyContent: "space-between", marginBottom: "1rem" }}>
+                            <Typography>
+                                {`${formatDate(createdAt)}`}
+                            </Typography>
+                            <Typography >
+                                Category:{getCategoryName()}
+                            </Typography>
+                        </Box>
                     </Box>
+
                     <Box sx={{ width: { xs: "80vw", md: "50vw" }, margin: "auto" }}>
                         <CardMedia
                             sx={{
                                 margin: "auto",
-                                borderRadius: "50px",
+                                borderRadius: "20px",
                                 objectFit: "cover",
 
                             }}
@@ -133,9 +118,8 @@ const Detail = () => {
                             image={image}
                             alt="image"
                         />
-                        <Typography sx={{ padding: "1rem", display: "flex", justifyContent: "end" }}> Category:{getCategoryName()}</Typography>
-                        <Typography variant='h6' component="h1" sx={{ textTransform: "uppercase", fontWeight: "bold", marginLeft: "1.5rem", color: "indianred" }}>{title}</Typography>
-                        <Typography variant="body2" sx={{ textAlign: "justify", marginLeft: "1.5rem", fontSize: "1.1rem" }} >
+                        <Typography variant='h6' component="h1" sx={{ textAlign: "center", marginTop: "2rem", marginBottom: "1rem" }}>{title}</Typography>
+                        <Typography variant="body2" sx={{ textAlign: "justify", marginLeft: "1.5rem", fontSize: "1.1rem", color: "gray" }} >
                             {content}
                         </Typography>
                         <Box sx={{ display: { xs: "block", lg: "flex" }, opacity: ".7", justifyContent: "space-between", m: 4, cursor: "pointer" }}>
@@ -166,6 +150,11 @@ const Detail = () => {
                                     <sup>{countOfVisitors + 1}</sup>
                                 </Typography>
                             </Box>
+                            <Box sx={{
+                                display: "flex", gap: ".5rem", mt: 1
+                            }}>
+                                <SocialShare />
+                            </Box>
                             {isCurrentUserOwner && (
                                 <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
                                     {/* <Button variant='contained' sx={{ backgroundColor: "cornflowerblue" }}>
@@ -191,15 +180,14 @@ const Detail = () => {
                             )}
                         </Box>
                         <Box>
-                            <CardContent sx={{ margin: "auto", marginLeft: "-2rem" }}>
-
+                            <CardContent sx={{ margin: "auto", marginLeft: "-1rem" }}>
                                 <CommentForm blogId={_id} />
                                 {showComments && (
                                     blog?.comments?.length > 0 ? (
                                         blog.comments.map(comment => {
                                             if (comment.blogId === _id) {
                                                 return (
-                                                    <Box key={comment._id} sx={{ margin: "auto", width: { xs: "80vw", sm: "50vw" }, backgroundColor: "primary.light", padding: "2rem", borderRadius: "1rem", my: 6 }}>
+                                                    <Box key={comment._id} sx={{ margin: "auto", width: { xs: "80vw", sm: "50vw" }, backgroundColor: "primary.light", padding: "1rem", borderRadius: "1rem", my: 6, border: "2px solid gray" }}>
                                                         <CardHeader
                                                             sx={{
                                                                 color: "seagreen",

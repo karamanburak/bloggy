@@ -45,11 +45,12 @@ const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, com
     return (
         <Container sx={{
             paddingBottom: "2rem",
-            textAlign: "justify",
             width: { xs: "120%", sm: "80%" },
             marginLeft: { xs: "-2rem", sm: "auto" },
         }}>
-            <Card sx={{ borderRadius: "10px" }}>
+            <Card sx={{
+                borderRadius: "10px", backgroundColor: "white"
+            }}>
                 <CardMedia
                     sx={{
                         marginTop: "1rem",
@@ -67,7 +68,8 @@ const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, com
                         color: "seagreen",
                         '& .MuiTypography-root': {
                             fontSize: 15,
-                            fontWeight: "bold"
+                            fontWeight: "bold",
+                            color: "gray"
                         }
 
                     }}
@@ -79,20 +81,29 @@ const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, com
                     title={title}
                     subheader={`Published Date: ${localDate()}`}
                 />
-                <Box sx={{ display: "inline-block", marginLeft: "1rem" }}>
+                <Box sx={{ textAlign: "end", marginRight: "2rem" }}>
                     {readingTime && (
-                        <Typography variant="body2" sx={{ marginLeft: "3rem", backgroundColor: "primary.light", padding: ".5rem", borderRadius: "5px" }}>
+                        <Typography variant="body2" sx={{ color: "gray" }}>
                             {readingTime}
                         </Typography>
                     )}
                 </Box>
                 <CardContent>
-                    <Typography variant="body2" sx={{ maxHeight: "100px", overflow: "hidden" }} >
+                    <Typography variant="body2" sx={{
+                        maxHeight: "100px",
+                        // textAlign: "justify",
+                        overflow: "hidden",
+                        textOverflow: 'ellipsis',
+                        display: '-webkit-box',
+                        WebkitLineClamp: '3',
+                        WebkitBoxOrient: 'vertical',
+                        color: "gray"
+                    }} >
                         {content}
                     </Typography>
                 </CardContent>
-                <Box sx={{ display: { xs: "block", sm: "flex" }, justifyContent: "space-between" }}>
-                    <Box sx={{ ...flex, opacity: ".7", gap: ".3rem", marginLeft: "1rem" }}>
+                <Box sx={{ display: { xs: "block", sm: "flex" }, justifyContent: "space-between", paddingBottom: ".5rem" }}>
+                    <Box sx={{ ...flex, gap: ".3rem", marginLeft: "1rem", color: "gray" }}>
                         <Typography >
                             <FavoriteIcon />
                             <sup>{likes.length}</sup>
@@ -106,9 +117,9 @@ const MyBlogsCard = ({ _id, content, image, title, userId, createdAt, likes, com
                             <sup>{countOfVisitors}</sup>
                         </Typography>
                     </Box>
-                    <Button onClick={() => navigate(`/blog/detail/${_id}`, { state: { content, image, title, userId, createdAt, likes, _id, categoryId, countOfVisitors } })} variant="contained" sx={{ marginLeft: { xs: "3.5rem", sm: "1rem" }, marginRight: "1rem", marginBottom: "1rem", backgroundColor: "primary.light" }} >
+                    <Box onClick={() => navigate(`/blog/detail/${_id}`, { state: { content, image, title, userId, createdAt, likes, _id, categoryId, countOfVisitors } })} variant="contained" sx={{ marginLeft: { xs: "3.5rem", sm: "1rem" }, marginRight: "1rem", marginBottom: ".5rem", color: "gray", cursor: "pointer" }} >
                         Read More
-                    </Button>
+                    </Box>
                 </Box>
             </Card>
         </Container>
