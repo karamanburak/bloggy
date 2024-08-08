@@ -138,7 +138,7 @@ const Detail = () => {
                         <Box sx={{
                             display: "flex", gap: ".5rem", mt: 2, justifyContent: { xs: "center", lg: "flex-end" }
                         }}>
-                            <SocialShare />
+                            <SocialShare {...state} />
                         </Box>
                         <Typography variant='h6' component="h1" sx={{ textAlign: "center", marginTop: "2rem", marginBottom: "1rem" }}>{title}</Typography>
                         <Typography variant="body2" sx={{ textAlign: "justify", marginLeft: "1.5rem", fontSize: "1.1rem", color: "gray" }} >

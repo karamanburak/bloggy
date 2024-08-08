@@ -12,26 +12,23 @@ import { useSelector } from 'react-redux';
 
 
 
-const SocialShare = () => {
-    const { blogs } = useSelector(state => state.blog)
-    // console.log(blogs);
+const SocialShare = ({ content, image, title }) => {
+
 
     const shareUrl = window.location.href; // URL to share
-    const shareTitle = blogs.map(blog => blog.title)// Title to share
-    const shareContent = blogs.map(blog => blog.content)// Content to share
 
     return (
         <>
-            <TwitterShareButton url={shareUrl} title={shareTitle}>
+            <TwitterShareButton url={shareUrl} summary={content} title={title}>
                 <XIcon size={28} round />
             </TwitterShareButton>
-            <EmailShareButton url={shareUrl} subject={shareTitle} body={`Check out this blog post: ${shareUrl}`}>
+            <EmailShareButton url={shareUrl} subject={title} summary={content} body={`Check out this blog post: ${shareUrl}`}>
                 <EmailIcon size={28} round />
             </EmailShareButton>
-            <WhatsappShareButton url={shareUrl} title={shareTitle} separator=":: ">
+            <WhatsappShareButton url={shareUrl} title={title} summary={content} separator=":: ">
                 <WhatsappIcon size={28} round />
             </WhatsappShareButton>
-            <RedditShareButton url={shareUrl} title={shareTitle} summary={shareContent} source={shareUrl}>
+            <RedditShareButton url={shareUrl} title={title} summary={content} source={shareUrl}>
                 <RedditIcon size={28} round />
             </RedditShareButton>
         </>
