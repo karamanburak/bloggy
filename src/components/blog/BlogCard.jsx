@@ -72,7 +72,7 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
       />
 
       <CardContent>
-        <Typography sx={{ color: "indianred", fontWeight: "bold", textAlign: "center", textTransform: "uppercase" }}>{title}</Typography>
+        <Typography sx={{ fontWeight: "bold", textAlign: "center" }}>{title}</Typography>
         <Typography variant="body2"
           sx={{
             // maxHeight: "100px",

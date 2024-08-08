@@ -8,7 +8,6 @@ import {
     RedditShareButton,
     RedditIcon,
 } from 'react-share';
-import { useSelector } from 'react-redux';
 
 
 
@@ -22,15 +21,15 @@ const SocialShare = ({ content, image, title }) => {
             <TwitterShareButton url={shareUrl} summary={content} title={title}>
                 <XIcon size={28} round />
             </TwitterShareButton>
-            <EmailShareButton url={shareUrl} subject={title} summary={content} body={`Check out this blog post: ${shareUrl}`}>
-                <EmailIcon size={28} round />
-            </EmailShareButton>
             <WhatsappShareButton url={shareUrl} title={title} summary={content} separator=":: ">
                 <WhatsappIcon size={28} round />
             </WhatsappShareButton>
             <RedditShareButton url={shareUrl} title={title} summary={content} source={shareUrl}>
                 <RedditIcon size={28} round />
             </RedditShareButton>
+            <EmailShareButton url={shareUrl} subject={title} summary={content} body={`Check out this blog post: ${shareUrl}`}>
+                <EmailIcon size={28} round />
+            </EmailShareButton>
         </>
     )
 };

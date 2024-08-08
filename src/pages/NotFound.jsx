@@ -15,23 +15,23 @@ const ErrorPage = () => {
     return <Navigate to="/" replace />;
   }
   return (
-    <Box 
-    sx={{ 
-      // position:"absolute", 
-      // top:"50%", 
-      // left:"50%", 
-      // transform: "translate(-50%, -50%)", 
-      width:"100%", 
-      display: "flex", 
-      flexDirection: "column", 
-      alignItems: "center", 
-      justifyContent:"center",
-      backgroundColor:"primary.dark",
-      color:"neutral.light",
-      height:"90vh"
+    <Box
+      sx={{
+        // position:"absolute", 
+        // top:"50%", 
+        // left:"50%", 
+        // transform: "translate(-50%, -50%)", 
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        // backgroundColor: "primary.main",
+        // color: "primary.main",
+        height: "90vh"
 
       }}
-      >
+    >
       <Typography variant="h5">
         404 Error
       </Typography>
@@ -45,10 +45,10 @@ const ErrorPage = () => {
         Within <strong>{count}</strong> seconds, you will be redirected to
         the home page!
       </Typography>
-      </Box>
-        );
+    </Box>
+  );
 };
 
-        export default ErrorPage;
+export default ErrorPage;
 
 

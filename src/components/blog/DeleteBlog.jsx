@@ -21,7 +21,7 @@ const DeleteBlog = ({ id }) => {
 
 
     return (
-        <Box sx={{ display: "flex", gap: 2, mt: 2, justifyContent: { xs: "center", lg: "flex-end" } }}>
+        <Box sx={{ display: "flex", gap: 2, justifyContent: { xs: "center", lg: "flex-end" } }}>
             <Typography
                 onClick={() => setOpen(true)}>
                 <FiDelete style={{ marginRight: ".5rem" }} />  Delete Blog

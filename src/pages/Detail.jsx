@@ -6,7 +6,7 @@ import CardContent from '@mui/material/CardContent';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
-import { Box, Grid, IconButton, Menu, MenuItem } from "@mui/material";
+import { Box, Divider, Grid, IconButton, Menu, MenuItem } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -24,6 +24,7 @@ import { BsThreeDots } from "react-icons/bs";
 import DeleteBlog from '../components/blog/DeleteBlog';
 import EditBlog from '../components/blog/EditBlog';
 import { MdEditNote } from "react-icons/md";
+import { IoIosLink } from "react-icons/io";
 
 
 
@@ -99,6 +100,12 @@ const Detail = () => {
 
     const handleEditClose = () => {
         setOpenEditModal(false);
+    };
+
+    const handleCopyLink = () => {
+        const link = `${window.location.origin}/`;
+        navigator.clipboard.writeText(link);
+        handleMenuClose();
     };
 
     return (
@@ -179,13 +186,19 @@ const Detail = () => {
                                     <BsThreeDots />
                                 </IconButton>
                                 <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+                                    <MenuItem key="copy" onClick={handleCopyLink}>
+                                        <IoIosLink style={{ marginRight: '.5rem' }} />   Copy Link
+                                    </MenuItem>
                                     {isCurrentUserOwner && [
-                                        <MenuItem key="edit" onClick={handleEditClick}>
-                                            <MdEditNote style={{ marginRight: '.5rem' }} /> Edit Blog
-                                        </MenuItem>,
-                                        <MenuItem key="delete">
-                                            <DeleteBlog id={_id} />
-                                        </MenuItem>,
+                                        <Box sx={{ display: "flex", flexDirection: "column" }}>
+                                            <Divider />
+                                            <MenuItem key="edit" onClick={handleEditClick}>
+                                                <MdEditNote style={{ marginRight: '.5rem' }} /> Edit Blog
+                                            </MenuItem>
+                                            <MenuItem key="delete">
+                                                <DeleteBlog id={_id} />
+                                            </MenuItem>
+                                        </Box>
                                     ]}
                                 </Menu>
                             </Box>

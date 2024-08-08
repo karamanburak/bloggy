@@ -32,9 +32,6 @@ export default function BlogModal({ open, handleClose, initialState, categories 
 
   const [titleError, setTitleError] = useState('');
   // console.log(info);
-
-  const theme = useTheme()
-
   const handleChange = (e) => {
     setInfo({ ...info, [e.target.name]: e.target.value })
 
