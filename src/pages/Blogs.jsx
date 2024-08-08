@@ -1,34 +1,34 @@
 import { useEffect } from "react";
 import useBlogCall from "../hooks/useBlogCall";
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 import BlogCard from "../components/blog/BlogCard";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import Footer from "../components/home/Footer";
 import { useState } from "react";
 import BlogModal from "../components/blog/BlogModal";
-import loadingGif from '../assets/loading.gif'
+import loadingGif from "../assets/loading.gif";
 import useCategoryCall from "../hooks/useCategoryCall";
 import TrendBlogs from "../components/blog/TrendBlogs";
-import blogRatings from '../assets/blog-video.mp4'
-
-
+import blogRatings from "../assets/blog-video.mp4";
 
 const Blogs = () => {
-  const { getBlogData } = useBlogCall()
-  const { blogs, loading } = useSelector(state => state.blog)
-  const { categories } = useSelector(state => state.category)
-  const { getCategory } = useCategoryCall()
+  const { getBlogData } = useBlogCall();
+  const { blogs, loading } = useSelector((state) => state.blog);
+  const { categories } = useSelector((state) => state.category);
+  const { getCategory } = useCategoryCall();
   const [open, setOpen] = useState(false);
   const handleClose = () => {
-    setOpen(false)
-  }
+    setOpen(false);
+  };
+  // console.log(blogs);
+
   const [initialState, setInitialState] = useState({
     categoryId: "",
     title: "",
     content: "",
     image: "",
     isPublish: "",
-  })
+  });
   const [currentPage, setCurrentPage] = useState(1);
   const blogsPerPage = 8;
 
@@ -38,14 +38,16 @@ const Blogs = () => {
   const currentBlogs = blogs.slice(indexOfFirstBlog, indexOfLastBlog);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  const nextPage = () => setCurrentPage((prev) => Math.min(prev + 1, Math.ceil(blogs.length / blogsPerPage)));
+  const nextPage = () =>
+    setCurrentPage((prev) =>
+      Math.min(prev + 1, Math.ceil(blogs.length / blogsPerPage))
+    );
   const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
 
   useEffect(() => {
-    getBlogData("blogs")
-    getCategory("categories")
-  }, [])
-
+    getBlogData("blogs");
+    getCategory("categories");
+  }, []);
 
   return (
     <Box sx={{ backgroundColor: "primary.main" }}>
@@ -58,27 +60,36 @@ const Blogs = () => {
         loop
         muted
         playsInline
-        style={{ objectFit: 'cover', marginBottom: "1rem", minHeight: "100vh" }}
+        style={{ objectFit: "cover", marginBottom: "1rem", minHeight: "100vh" }}
       />
       <TrendBlogs />
-      <Container maxWidth="100vw" sx={{
-        minHeight: "90vh",
-        paddingBottom: "1rem",
-        margin: "auto",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        alignItems: "center",
-      }}>
-        <Grid container spacing={1} mt={3} >
+      <Container
+        maxWidth="100vw"
+        sx={{
+          minHeight: "90vh",
+          paddingBottom: "1rem",
+          margin: "auto",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Grid container spacing={1} mt={3}>
           {loading ? (
-            <img src={loadingGif} alt="loading..." height={500} style={{ margin: "auto" }} />
+            <img
+              src={loadingGif}
+              alt="loading..."
+              height={500}
+              style={{ margin: "auto" }}
+            />
           ) : (
             currentBlogs.map((blog) => (
               <Grid item xs={12} md={6} lg={4} xl={3} key={blog._id}>
                 <BlogCard {...blog} />
               </Grid>
-            )))}
+            ))
+          )}
         </Grid>
         <Typography style={{ marginTop: "20px", textAlign: "center" }}>
           <Button
@@ -98,7 +109,8 @@ const Blogs = () => {
                 sx={{
                   margin: "5px",
                   color: "indianred",
-                  backgroundColor: currentPage === index + 1 ? "neutral.dark" : "",
+                  backgroundColor:
+                    currentPage === index + 1 ? "neutral.dark" : "",
                   borderRadius: "50%",
                   minWidth: "36px",
                   minHeight: "36px",
@@ -129,7 +141,7 @@ const Blogs = () => {
 
       <Footer />
     </Box>
-  )
+  );
 };
 
 export default Blogs;

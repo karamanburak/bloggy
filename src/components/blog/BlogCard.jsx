@@ -1,35 +1,50 @@
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
-import Avatar from '@mui/material/Avatar';
-import Typography from '@mui/material/Typography';
-import { red } from '@mui/material/colors';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import { Box, Button } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
-import { flex } from '../../styles/globalStyles';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
-import useBlogCall from '../../hooks/useBlogCall';
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import CardMedia from "@mui/material/CardMedia";
+import CardContent from "@mui/material/CardContent";
+import CardActions from "@mui/material/CardActions";
+import Avatar from "@mui/material/Avatar";
+import Typography from "@mui/material/Typography";
+import { red } from "@mui/material/colors";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import { Box, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { flex } from "../../styles/globalStyles";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import useBlogCall from "../../hooks/useBlogCall";
+import { MdArrowOutward } from "react-icons/md";
 
-
-const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countOfVisitors, comments, categoryId }) => {
-  const navigate = useNavigate()
+const BlogCard = ({
+  _id,
+  content,
+  image,
+  title,
+  userId,
+  createdAt,
+  likes,
+  countOfVisitors,
+  comments,
+  categoryId,
+}) => {
+  const navigate = useNavigate();
   const [readingTime, setReadingTime] = useState(null);
-  const { postLike, getLike } = useBlogCall()
-  const { currentUser } = useSelector(state => state.auth)
+  const { postLike, getLike } = useBlogCall();
+  const { currentUser } = useSelector((state) => state.auth);
   const [liked, setLiked] = useState(false);
 
   const localDate = () => {
     if (createdAt) {
-      return new Date(createdAt).toLocaleString("de-DE")
+      const date = new Date(createdAt);
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
+      return `${day}.${month}.${year}`;
     }
-  }
+  };
 
   useEffect(() => {
     if (currentUser && likes.includes(currentUser._id)) {
@@ -38,20 +53,16 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
       setLiked(false);
     }
 
-    const words = content.split(' ').length;
+    const words = content.split(" ").length;
     const minutes = Math.ceil(words / 150);
     if (minutes >= 1) {
       setReadingTime(`${minutes} min read`);
     }
-
-
   }, [likes, currentUser, getLike]);
-
-
 
   const handleLike = () => {
     postLike("blogs", _id);
-  }
+  };
 
   return (
     <Card
@@ -61,84 +72,128 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
         justifyContent: "space-between",
         margin: "auto",
         // width: 500,
-        height: 600,
+        height: 500,
       }}
     >
-      <CardMedia
+      {/* <CardMedia
         component="img"
         height="194"
         image={image}
         alt={image}
-      />
-
-      <CardContent>
-        <Typography sx={{ fontWeight: "bold", textAlign: "center" }}>{title}</Typography>
-        <Typography variant="body2"
-          sx={{
-            // maxHeight: "100px",
-            overflow: "hidden",
-            extAlign: "justify",
-            textOverflow: 'ellipsis',
-            display: '-webkit-box',
-            WebkitLineClamp: '4',
-            WebkitBoxOrient: 'vertical',
-            textAlign: "justify"
-
-          }}>
-          {content}
-        </Typography>
-      </CardContent>
-      <CardHeader
-        sx={{
-          '& .MuiTypography-root': {
-            fontSize: 15,
-            fontWeight: "bold"
-          }
-        }}
-        avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            {_id ? <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${userId}`} alt="image" /> : "R"}
-          </Avatar>
-        }
-        subheader={`Published Date: ${localDate()}`}
+      /> */}
+      <img
+        src={image}
+        alt={title}
+        style={{ height: "250px", padding: "1rem" }}
       />
       <CardActions disableSpacing>
-        <Box sx={{ ...flex, opacity: ".7", gap: ".3rem", marginLeft: "1rem" }}>
-          <Typography >
+        <Box
+          sx={{
+            ...flex,
+            opacity: ".7",
+            gap: ".3rem",
+            marginLeft: "1rem",
+          }}
+        >
+          <Typography>
             <FavoriteIcon
               sx={{
                 color: liked ? "red" : "",
-                cursor: "pointer"
+                cursor: "pointer",
+                fontSize: "1.2rem",
               }}
               onClick={handleLike}
             />
             <sup>{likes.length}</sup>
           </Typography>
-          <ChatBubbleOutlineIcon />
+          <ChatBubbleOutlineIcon sx={{ fontSize: "1.2rem" }} />
           <Typography>
             <sup>{comments.length}</sup>
           </Typography>
-          <RemoveRedEyeIcon />
+          <RemoveRedEyeIcon sx={{ fontSize: "1.2rem" }} />
           <Typography>
             <sup>{countOfVisitors}</sup>
           </Typography>
         </Box>
-        <Box sx={{ display: "inline-block", marginLeft: "auto", marginRight: "1rem" }}>
+        <Box
+          sx={{
+            display: "inline-block",
+            marginLeft: "auto",
+            marginRight: "1rem",
+            marginBottom: ".5rem",
+          }}
+        >
           {readingTime && (
-            <Typography variant="body2" sx={{ backgroundColor: "neutral.dark", padding: ".5rem", borderRadius: "5px" }}>
-              {readingTime}
-            </Typography>
+            <Typography variant="body2">{readingTime}</Typography>
           )}
         </Box>
       </CardActions>
-      <Box sx={{ display: "flex", justifyContent: "flex-end", marginRight: "1rem" }}>
-        <Button onClick={() => navigate(`/blog/detail/${_id}`, { state: { _id, content, image, title, userId, createdAt, likes, countOfVisitors, categoryId, readingTime } })} variant="contained" sx={{ marginBottom: "1rem", backgroundColor: "primary.light" }} >
-          Read More
-        </Button>
-      </Box>
+      <CardContent>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography sx={{ fontWeight: "bold" }}>{title}</Typography>
+          <Typography
+            onClick={() =>
+              navigate(`/blog/detail/${_id}`, {
+                state: {
+                  _id,
+                  content,
+                  image,
+                  title,
+                  userId,
+                  createdAt,
+                  likes,
+                  countOfVisitors,
+                  categoryId,
+                  readingTime,
+                },
+              })
+            }
+            sx={{
+              marginBottom: "1rem",
+              marginRight: "1rem",
+              cursor: "pointer",
+            }}
+          >
+            <MdArrowOutward />
+          </Typography>
+        </Box>
+        <Typography
+          variant="body2"
+          sx={{
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            display: "-webkit-box",
+            WebkitLineClamp: "3",
+            WebkitBoxOrient: "vertical",
+            // textAlign: "justify",
+          }}
+        >
+          {content}
+        </Typography>
+      </CardContent>
+      <CardHeader
+        sx={{
+          "& .MuiTypography-root": {
+            fontSize: 15,
+            fontWeight: "bold",
+          },
+        }}
+        avatar={
+          <Avatar aria-label="recipe">
+            {_id ? (
+              <img
+                src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${userId}`}
+                alt="image"
+              />
+            ) : (
+              "R"
+            )}
+          </Avatar>
+        }
+        subheader={` ${localDate()}`}
+      />
     </Card>
-
-  )
+  );
 };
 
 export default BlogCard;
