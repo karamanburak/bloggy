@@ -1,15 +1,13 @@
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import { red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { flex } from "../../styles/globalStyles";
@@ -34,7 +32,13 @@ const BlogCard = ({
   const [readingTime, setReadingTime] = useState(null);
   const { postLike, getLike } = useBlogCall();
   const { currentUser } = useSelector((state) => state.auth);
+  const { categories } = useSelector((state) => state.category);
   const [liked, setLiked] = useState(false);
+
+  const getCategoryName = () => {
+    const category = categories.find((cat) => cat._id === categoryId);
+    return category ? category.name : "Unknown Category";
+  };
 
   const localDate = () => {
     if (createdAt) {
@@ -71,16 +75,9 @@ const BlogCard = ({
         flexDirection: "column",
         justifyContent: "space-between",
         margin: "auto",
-        // width: 500,
         height: 500,
       }}
     >
-      {/* <CardMedia
-        component="img"
-        height="194"
-        image={image}
-        alt={image}
-      /> */}
       <img
         src={image}
         alt={title}
@@ -89,31 +86,11 @@ const BlogCard = ({
       <CardActions disableSpacing>
         <Box
           sx={{
-            ...flex,
             opacity: ".7",
-            gap: ".3rem",
             marginLeft: "1rem",
           }}
         >
-          <Typography>
-            <FavoriteIcon
-              sx={{
-                color: liked ? "red" : "",
-                cursor: "pointer",
-                fontSize: "1.2rem",
-              }}
-              onClick={handleLike}
-            />
-            <sup>{likes.length}</sup>
-          </Typography>
-          <ChatBubbleOutlineIcon sx={{ fontSize: "1.2rem" }} />
-          <Typography>
-            <sup>{comments.length}</sup>
-          </Typography>
-          <RemoveRedEyeIcon sx={{ fontSize: "1.2rem" }} />
-          <Typography>
-            <sup>{countOfVisitors}</sup>
-          </Typography>
+          {getCategoryName()}
         </Box>
         <Box
           sx={{
@@ -130,7 +107,9 @@ const BlogCard = ({
       </CardActions>
       <CardContent>
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography sx={{ fontWeight: "bold" }}>{title}</Typography>
+          <Typography sx={{ fontWeight: "bold", marginLeft: ".5rem" }}>
+            {title}
+          </Typography>
           <Typography
             onClick={() =>
               navigate(`/blog/detail/${_id}`, {
@@ -165,7 +144,6 @@ const BlogCard = ({
             display: "-webkit-box",
             WebkitLineClamp: "3",
             WebkitBoxOrient: "vertical",
-            // textAlign: "justify",
           }}
         >
           {content}
