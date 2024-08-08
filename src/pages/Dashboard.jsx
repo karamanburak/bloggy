@@ -8,7 +8,7 @@ import useBlogCall from '../hooks/useBlogCall';
 import { useSelector } from 'react-redux';
 import { wellcomeMessage } from '../styles/globalStyles';
 import 'react-slideshow-image/dist/styles.css'
-import loadingGif from '../assets/flickr-loading.gif'
+import loadingGif from '../assets/loading.gif'
 import { useState } from 'react';
 import axios from 'axios';
 import ShowsCard from '../components/home/ShowsCard';
@@ -89,24 +89,13 @@ const Dashboard = () => {
                 </Box>
                 <Box>
                     {loading ? (
-                        <img src={loadingGif} alt="loading..." height={100} style={{ display: "flex", margin: "auto" }} />
+                        <img src={loadingGif} alt="loading..." height={500} style={{ display: "flex", margin: "auto" }} />
                     ) : (
                         <CustomSwiper items={blogs} ItemComponent={HomeCard} />
                     )}
-                </Box>
-                <Box>
-                    {loading ? (
-                        <img src={loadingGif} alt="loading..." height={100} style={{ display: "flex", margin: "auto" }} />
-                    ) : (
-                        <CustomSwiper items={news} ItemComponent={NewsCard} />
-                    )}
-                </Box>
-                <Box>
-                    {loading ? (
-                        <img src={loadingGif} alt="loading..." height={100} style={{ display: "flex", margin: "auto" }} />
-                    ) : (
-                        <CustomSwiper items={shows} ItemComponent={ShowsCard} />
-                    )}
+                    <CustomSwiper items={news} ItemComponent={NewsCard} />
+                    <CustomSwiper items={shows} ItemComponent={ShowsCard} />
+
                 </Box>
             </Container >
             <Box sx={{ marginTop: "2rem" }}>

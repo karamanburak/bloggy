@@ -23,47 +23,55 @@
 ## Installation
 
 1. Clone the repository:
+
 ```
 git clone https://github.com/karamanburak/bloggy-app.git
 cd bloggy-app
 ```
- 2.  Install dependencies:
+
+2.  Install dependencies:
 
 ```
 pnpm install
 ```
+
 3. Set up environment variables:
 
 Create a .env file in the root directory and add the following:
+
 ```
-VITE_BASE_URL = 
+VITE_BASE_URL =
 VITE_WEATHER_apiKey =
 ```
 
 4. Run the development server:
+
 ```
 pnpm dev
 ```
-  
+
 # Usage
+
 ### Register and Login
+
 1. Navigate to the registration page to create a new account.
 2. After registering, log in with your new account credentials.
 
 ### Creating a Blog Post
+
 1. After logging in, navigate to the "Blogs" page.
 2. Write your blog post in the provided editor.
 3. Choose to save the post as a draft or publish it publicly.
-   
+
 ### Managing Blog Posts
+
 - Drafts: View and edit your drafts from your profile page.
 - Public Posts: Edit or delete your public posts.
-  
+
 ### Interacting with Other Users
+
 - Like/Unlike: Click the like button on a blog post to like or unlike it.
 - Comments: Leave comments on blog posts to engage with other users.
-
-
 
 ## Project Skeleton
 
@@ -87,14 +95,21 @@ SOLUTION
 |    │   │   ├── BlogCard.jsx
 |    │   │   ├── BlogModal.jsx
 |    │   │   ├── CommentForm.jsx
+|    │   │   ├── DeleteBlog.jsx
+|    │   │   ├── EditBlog.jsx
+|    │   │   ├── Editor.jsx
 |    │   │   ├── NewBlog.jsx
-|    │   │   └── UpdateModal.jsx
+|    │   │   ├── SocialShare.jsx
+|    │   │   ├── TinyMCE.jsx
+|    │   │   └── TrendBlog.jsx
 |    │   ├── global
 |    │   │   ├── AuthImage.jsx
 |    │   │   └── Navbar.jsx
 |    │   ├── home
+|    │   │   ├── CustomSwiper.jsx
 |    │   │   ├── Footer.jsx
 |    │   │   ├── HomeCard.jsx
+|    │   │   ├── NewsCard.jsx
 |    │   │   ├── PageHeader.jsx
 |    │   │   ├── Quotes.jsx
 |    │   │   ├── ShowsCard.jsx
@@ -143,7 +158,6 @@ SOLUTION
 └──   vite.config.js
 ```
 
-
 ## Outcome
 
 ![Bloggy App](https://github.com/karamanburak/bloggy-app/assets/150926922/4debf7a8-ae66-4115-af9c-165191974f19)
@@ -151,4 +165,3 @@ SOLUTION
 ## Postman Documentation
 
 [View Postman Documentation](https://documenter.getpostman.com/view/32987022/2sA3Qv7AFa)
-

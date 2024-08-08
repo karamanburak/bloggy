@@ -98,7 +98,7 @@ export default function UpdateProfileModal({
 
                     ))}
                     <Button
-                        sx={{ backgroundColor: "secondary.main" }}
+                        sx={{ backgroundColor: "neutral.dark" }}
                         variant="contained"
                         type="submit">
                         UPDATE PROFILE

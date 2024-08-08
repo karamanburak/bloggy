@@ -30,7 +30,7 @@ import { MdEditNote } from "react-icons/md";
 const Detail = () => {
     const { state } = useLocation()
     const { content, image, createdAt, userId, title, _id, likes: initialLikes, categoryId, countOfVisitors } = state;
-    const { getBlogDetail } = useBlogCall()
+    const { getBlogDetail, getBlogData } = useBlogCall()
     const { currentUser } = useSelector(state => state.auth)
     const { blog } = useSelector(state => state.blog)
     const { categories } = useSelector(state => state.category)
@@ -41,6 +41,11 @@ const Detail = () => {
     const [showComments, setShowComments] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const [openEditModal, setOpenEditModal] = useState(false);
+    const [initialState, setInitialState] = useState({
+        title: title,
+        content: content,
+        image: image,
+    })
 
 
     const handleToggleComments = () => {
@@ -231,7 +236,8 @@ const Detail = () => {
                 <EditBlog
                     open={openEditModal}
                     onClose={handleEditClose}
-                    blog={state} // Pass the blog data to the EditBlog component
+                    blog={state}
+                    initialState={initialState} // Pass the blog data to the EditBlog component
                 />
             )}
         </Card >

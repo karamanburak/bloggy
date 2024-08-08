@@ -8,24 +8,18 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 700,
+    width: { xs: 350, sm: 500, md: 700 },
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
 };
 
-const EditBlog = ({ open, onClose, blog }) => {
-    const [title, setTitle] = useState(blog.title);
-    const [content, setContent] = useState(blog.content);
-    const [image, setImage] = useState(blog.image);
+const EditBlog = ({ open, onClose, blog, initialState }) => {
     const { putBlog } = useBlogCall();
 
-    const [info, setInfo] = useState({
-        title: title,
-        content: content,
-        image: image,
-    })
+    const [info, setInfo] = useState(initialState)
+
 
     const updateFormField = [
         { id: "title", name: "title", label: "Title ", type: "text" },
@@ -38,26 +32,19 @@ const EditBlog = ({ open, onClose, blog }) => {
         setInfo({ ...info, [e.target.name]: e.target.value })
     }
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        await putBlog("blogs", blog._id, info)
+        putBlog("blogs", blog._id, info)
         onClose();
     };
 
-    useEffect(() => {
-        if (blog) {
-            setTitle(blog.title || '');
-            setContent(blog.content || '');
-            setImage(blog.image || '');
-        }
-    }, [blog]);
 
     return (
         <Modal open={open}
             onClose={onClose}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description">
-            <Box sx={{ ...style, backgroundColor: "primary.main" }}>
+            <Box sx={{ ...style, backgroundColor: "neutral.dark" }}>
                 <Box
                     component="form"
                     onSubmit={handleSubmit}

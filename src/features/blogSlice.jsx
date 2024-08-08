@@ -32,7 +32,6 @@ const blogSlice = createSlice({
             state.blogs = payload.data
         },
 
-
         fetchFail: state => {
             state.loading = false;
             state.error = true;

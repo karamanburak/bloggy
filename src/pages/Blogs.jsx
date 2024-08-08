@@ -9,7 +9,6 @@ import BlogModal from "../components/blog/BlogModal";
 import loadingGif from '../assets/loading.gif'
 import useCategoryCall from "../hooks/useCategoryCall";
 import TrendBlogs from "../components/blog/TrendBlogs";
-import { BsPencilSquare } from "react-icons/bs";
 import blogRatings from '../assets/blog-video.mp4'
 
 

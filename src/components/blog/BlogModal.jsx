@@ -6,7 +6,6 @@ import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/mater
 import { useState } from 'react';
 import useBlogCall from '../../hooks/useBlogCall';
 import { toastWarnNotify } from '../../helper/ToastNotify';
-import { useRef } from 'react';
 import { useTheme } from '@mui/material/styles';
 import TinyMce from './TinyMce';
 
@@ -19,7 +18,6 @@ const style = {
   width: { xs: 350, sm: 500, md: 800 },
   maxHeight: '90vh',
   overflowY: 'auto',
-  bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
@@ -70,7 +68,7 @@ export default function BlogModal({ open, handleClose, initialState, categories 
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description">
-      <Box sx={{ ...style, backgroundColor: "primary.main" }}>
+      <Box sx={{ ...style, backgroundColor: "neutral.dark" }}>
         <Box
           component="form"
           onSubmit={handleSubmit}
