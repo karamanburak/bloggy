@@ -11,7 +11,7 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 700,
+    width: { xs: 350, md: 500, lg: 800 },
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -74,7 +74,7 @@ export default function UpdateProfileModal({
             onClose={handleClose}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description">
-            <Box sx={{ ...style, backgroundColor: "primary.main" }}>
+            <Box sx={{ ...style, backgroundColor: "neutral.dark" }}>
                 <Box
                     component="form"
                     onSubmit={handleSubmit}
@@ -98,7 +98,7 @@ export default function UpdateProfileModal({
 
                     ))}
                     <Button
-                        sx={{ backgroundColor: "neutral.dark" }}
+                        sx={{ backgroundColor: "secondary.main" }}
                         variant="contained"
                         type="submit">
                         UPDATE PROFILE

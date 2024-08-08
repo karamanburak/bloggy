@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Button, TextField, Modal } from '@mui/material';
 import useBlogCall from '../../hooks/useBlogCall';
 import { useEffect } from 'react';
+import TinyMce from './TinyMce';
 
 const style = {
     position: 'absolute',
@@ -23,7 +24,6 @@ const EditBlog = ({ open, onClose, blog, initialState }) => {
 
     const updateFormField = [
         { id: "title", name: "title", label: "Title ", type: "text" },
-        { id: "content", name: "content", label: "Content ", type: "text" },
         { id: "image", name: "image", label: "Image URL", type: "text" },
 
     ]
@@ -61,8 +61,8 @@ const EditBlog = ({ open, onClose, blog, initialState }) => {
                             value={info[field.name]}
                             onChange={handleChange}
                         />
-
                     ))}
+                    <TinyMce content={initialState.content} setInfo={setInfo} />
                     <Button
                         sx={{ backgroundColor: "secondary.main" }}
                         variant="contained"

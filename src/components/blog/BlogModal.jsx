@@ -132,20 +132,7 @@ export default function BlogModal({ open, handleClose, initialState, categories 
               }
             </Select>
           </FormControl>
-
-          <TextField
-            id="content"
-            name='content'
-            label="Content *"
-            rows={4}
-            value={info.content}
-            multiline
-            variant="filled"
-            color='success'
-            type='text'
-            onChange={handleChange}
-          />
-          {/* <TinyMce content={info.content} setInfo={setInfo} /> */}
+          <TinyMce content={initialState.content} setInfo={setInfo} />
           <Button
             sx={{ backgroundColor: "secondary.main" }}
             variant="contained"
