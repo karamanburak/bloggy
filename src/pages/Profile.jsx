@@ -23,8 +23,6 @@ const Profile = () => {
   }
 
 
-
-
   return (
     <>
 
@@ -35,7 +33,6 @@ const Profile = () => {
         <Grid container sx={{ padding: { lg: "3rem" }, m: 4 }}>
           <Grid item xs={12} lg={6} sx={{
             backgroundColor: "#FFD506",
-            // backgroundColor: "#FFF",
             padding: "2rem",
             borderTopLeftRadius: "2rem",
             borderBottomLeftRadius: "2rem",
@@ -50,30 +47,20 @@ const Profile = () => {
                 width: "100px",
                 height: "100px",
                 borderRadius: "50%",
-                // display: "block",
-                // margin: "auto",
                 marginBottom: "3rem",
               }} />
               <Box>
                 <Typography sx={{ ...profileStyle, marginTop: { xs: "1rem", sm: "1.5rem" } }}>
                   {firstName} {lastName}
                 </Typography>
-                {/* <Typography sx={profileStyle}>
-                {username}
-              </Typography> */}
                 <Typography sx={{ display: "block" }}>
                   {email}
                 </Typography>
               </Box>
-
-              {/* <Typography sx={{ ...profileStyle, marginBottom: "1rem" }}>
-                {city}
-              </Typography> */}
             </Box>
             <Typography sx={{
               display: "flex",
               justifyContent: "end",
-              // fontSize: "1.2rem",
               marginTop: "-2rem"
             }}>
               {`Created Date: ${localDate()}`}

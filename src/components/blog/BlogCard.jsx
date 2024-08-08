@@ -16,7 +16,6 @@ import { flex } from '../../styles/globalStyles';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import useBlogCall from '../../hooks/useBlogCall';
-// import UpdateModal from './UpdateModal';ove
 
 
 const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countOfVisitors, comments, categoryId }) => {
@@ -137,7 +136,6 @@ const BlogCard = ({ _id, content, image, title, userId, createdAt, likes, countO
           Read More
         </Button>
       </Box>
-      {/* <UpdateModal /> */}
     </Card>
 
   )

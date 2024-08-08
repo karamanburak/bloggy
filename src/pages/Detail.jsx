@@ -6,9 +6,8 @@ import CardContent from '@mui/material/CardContent';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid } from "@mui/material";
+import { Box, Grid, IconButton, Menu, MenuItem } from "@mui/material";
 import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import useBlogCall from "../hooks/useBlogCall";
@@ -19,35 +18,33 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { flex } from '../styles/globalStyles'
 import { useState } from 'react';
 import CommentForm from '../components/blog/CommentForm';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import EditNoteIcon from '@mui/icons-material/EditNote';
 import useCategoryCall from '../hooks/useCategoryCall';
 import SocialShare from '../components/blog/SocialShare';
+import { BsThreeDots } from "react-icons/bs";
+import DeleteBlog from '../components/blog/DeleteBlog';
+import EditBlog from '../components/blog/EditBlog';
+import { MdEditNote } from "react-icons/md";
+
 
 
 const Detail = () => {
-    const navigate = useNavigate()
     const { state } = useLocation()
     const { content, image, createdAt, userId, title, _id, likes: initialLikes, categoryId, countOfVisitors } = state;
-    const { deleteBlog, getBlogDetail } = useBlogCall()
+    const { getBlogDetail } = useBlogCall()
     const { currentUser } = useSelector(state => state.auth)
     const { blog } = useSelector(state => state.blog)
     const { categories } = useSelector(state => state.category)
     const { getCategory } = useCategoryCall();
-    const [open, setOpen] = useState(false);
     const { postLike } = useBlogCall()
     const [likes, setLikes] = useState(initialLikes);
     const [liked, setLiked] = useState(initialLikes.includes(currentUser._id));
     const [showComments, setShowComments] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [openEditModal, setOpenEditModal] = useState(false);
+
 
     const handleToggleComments = () => {
         setShowComments(prevState => !prevState);
-    };
-
-    const handleDelete = () => {
-        setOpen(false);
-        deleteBlog("blogs", _id)
-        navigate(-1)
     };
 
 
@@ -82,6 +79,23 @@ const Detail = () => {
         return category ? category.name : "Unknown Category";
     };
 
+    const handleMenuOpen = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    }
+
+    const handleEditClick = () => {
+        setOpenEditModal(true);
+        handleMenuClose();
+    };
+
+    const handleEditClose = () => {
+        setOpenEditModal(false);
+    };
+
     return (
         <Card sx={{ backgroundColor: "primary.main", padding: "2rem", margin: "auto", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
             <Grid container spacing={2} mt={9} sx={{ flex }}>
@@ -89,7 +103,7 @@ const Detail = () => {
                     <Box sx={{ width: { xs: "80vw", md: "50vw" } }}>
                         <Box sx={{ marginY: "2rem", fontSize: "1.2rem", display: "flex", justifyContent: "center" }}>
                             <Typography variant='p'>
-                                <Typography variant='span' sx={{ color: "gray" }}>Written By</Typography>    {blog ? `${blog?.userId?.firstName} ${blog?.userId?.lastName}` : title}
+                                <Typography variant='span' sx={{ color: "gray", marginRight: ".5rem" }}>Written By </Typography>    {blog ? `${blog?.userId?.firstName} ${blog?.userId?.lastName}` : title}
                             </Typography>
 
                         </Box>
@@ -125,9 +139,9 @@ const Detail = () => {
                         <Typography variant="body2" sx={{ textAlign: "justify", marginLeft: "1.5rem", fontSize: "1.1rem", color: "gray" }} >
                             {content}
                         </Typography>
-                        <Box sx={{ display: { xs: "block", lg: "flex" }, opacity: ".7", justifyContent: "space-between", m: 4, cursor: "pointer", alignItems: "center", margin: "auto" }}>
+                        <Box sx={{ display: "flex", opacity: ".7", justifyContent: "space-between", m: 4, cursor: "pointer", alignItems: "center", }}>
                             <Box sx={{
-                                display: "flex", gap: ".5rem", mt: 2, ml: { sx: 0, md: 4 }, justifyContent: { xs: "center", lg: "flex-end" }
+                                display: "flex", gap: ".5rem", mt: 2
                             }}>
                                 <Typography>
                                     <FavoriteIcon
@@ -155,29 +169,21 @@ const Detail = () => {
                                     <sup>{countOfVisitors + 1}</sup>
                                 </Typography>
                             </Box>
-                            {isCurrentUserOwner && (
-                                <Box sx={{ display: "flex", gap: 2, mt: 2, justifyContent: { xs: "center", lg: "flex-end" } }}>
-                                    {/* <Button variant='contained' sx={{ backgroundColor: "cornflowerblue" }}>
-                                <EditNoteIcon />Edit Blog</Button> */}
-                                    <Button
-                                        variant='contained'
-                                        sx={{ backgroundColor: "red", color: "white" }}
-                                        onClick={() => setOpen(true)}
-                                    >
-                                        <DeleteForeverIcon /> Delete Blog
-                                    </Button>
-                                    <Dialog open={open} onClose={() => setOpen(false)}>
-                                        <DialogTitle>Confirm Delete</DialogTitle>
-                                        <DialogContent>
-                                            Are you sure you want to delete this blog post?
-                                        </DialogContent>
-                                        <DialogActions>
-                                            <Button onClick={() => setOpen(false)} sx={{ color: 'gray' }}>Cancel</Button>
-                                            <Button onClick={handleDelete} sx={{ color: 'red' }}>Delete</Button>
-                                        </DialogActions>
-                                    </Dialog>
-                                </Box>
-                            )}
+                            <Box>
+                                <IconButton onClick={handleMenuOpen}>
+                                    <BsThreeDots />
+                                </IconButton>
+                                <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+                                    {isCurrentUserOwner && [
+                                        <MenuItem key="edit" onClick={handleEditClick}>
+                                            <MdEditNote style={{ marginRight: '.5rem' }} /> Edit Blog
+                                        </MenuItem>,
+                                        <MenuItem key="delete">
+                                            <DeleteBlog id={_id} />
+                                        </MenuItem>,
+                                    ]}
+                                </Menu>
+                            </Box>
                         </Box>
                         <Box sx={{ mt: 2 }} >
                             <CardContent sx={{ margin: "auto", marginLeft: "-1rem" }}>
@@ -220,10 +226,14 @@ const Detail = () => {
                         </Box>
                     </Box>
                 </Grid>
-                {/* <Grid item xs={12} md={3} sx={{}}>
-                    <TrendBlogs />
-                </Grid> */}
             </Grid>
+            {openEditModal && (
+                <EditBlog
+                    open={openEditModal}
+                    onClose={handleEditClose}
+                    blog={state} // Pass the blog data to the EditBlog component
+                />
+            )}
         </Card >
     )
 };

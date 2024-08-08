@@ -51,25 +51,6 @@ const Blogs = () => {
 
   return (
     <Box sx={{ backgroundColor: "primary.main" }}>
-      {/* <Box
-        onClick={handleOpen}
-        variant="contained"
-        sx={{
-          // backgroundColor: "cornflowerblue",
-          // display: "block",
-          // marginLeft: "auto",
-          cursor: "pointer",
-          textAlign: "end",
-          marginRight: "2.5rem",
-          fontSize: "1.2rem",
-          marginBottom: "1rem",
-          marginTop: "-1rem"
-
-        }}
-
-      >
-        <BsPencilSquare />  Write
-      </Box> */}
       <video
         src={blogRatings}
         alt="home video"

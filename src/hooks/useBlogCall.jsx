@@ -77,10 +77,10 @@ const useBlogCall = () => {
         }
     };
 
-    const putBlog = async (url, info) => {
+    const putBlog = async (url, id, info) => {
         dispatch(fetchStart());
         try {
-            await axiosWithToken.put(`${url}/${info._id}`, info)
+            await axiosWithToken.put(`${url}/${id}`, info)
             toastSuccessNotify("Blog successfully changed")
         } catch (error) {
             console.log(error);
