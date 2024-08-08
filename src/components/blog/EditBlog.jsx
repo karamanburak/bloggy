@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Button, TextField, Modal } from '@mui/material';
 import useBlogCall from '../../hooks/useBlogCall';
-import { useEffect } from 'react';
 import TinyMce from './TinyMce';
 
 const style = {

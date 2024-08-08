@@ -4,6 +4,7 @@ import Footer from './../components/home/Footer';
 import { flex } from "../styles/globalStyles";
 import { useTheme } from "@emotion/react";
 import bloggyAbout from '../assets/about-video.mp4'
+import useCategoryCall from "../hooks/useCategoryCall";
 
 
 const avatars = [
@@ -36,6 +37,12 @@ const avatars = [
 
 const About = () => {
   const theme = useTheme()
+  const { getCategory } = useCategoryCall()
+
+
+  React.useEffect(() => {
+    getCategory("categories")
+  }, [])
 
   return (
     <Box sx={{ backgroundColor: "primary.main" }}>

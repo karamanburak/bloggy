@@ -19,7 +19,6 @@ const Blogs = () => {
   const { categories } = useSelector(state => state.category)
   const { getCategory } = useCategoryCall()
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false)
   }

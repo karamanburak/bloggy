@@ -1,5 +1,4 @@
-import { Box, Container, Typography } from '@mui/material';
-import home from '../assets/home.png'
+import { Box, Container } from '@mui/material';
 import homeVideo from '../assets/home-video.mp4'
 import HomeCard from '../components/home/HomeCard';
 import Footer from '../components/home/Footer';
@@ -14,12 +13,14 @@ import axios from 'axios';
 import ShowsCard from '../components/home/ShowsCard';
 import NewsCard from '../components/home/NewsCard';
 import CustomSwiper from '../components/home/CustomSwiper';
+import useCategoryCall from '../hooks/useCategoryCall';
 
 const url = 'https://api.tvmaze.com/shows'
 const newsUrl = `https://newsdata.io/api/1/news?apikey=pub_501441ed8ff166a7c3eaaf49a432d41877dde&q=news&country=de&language=en&category=technology `
 const Dashboard = () => {
     const isDashboard = '/'
     const { getBlogData } = useBlogCall()
+    const { getCategory } = useCategoryCall()
     const { blogs, loading } = useSelector(state => state.blog)
     const [shows, setShows] = useState([])
     const [news, setNews] = useState([])
@@ -59,6 +60,7 @@ const Dashboard = () => {
 
     useEffect(() => {
         getBlogData("blogs")
+        getCategory("categories")
         // getNews() //* just development enviroment
         getShows()
     }, [])

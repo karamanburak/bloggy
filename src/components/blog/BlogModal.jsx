@@ -25,6 +25,8 @@ const style = {
 
 
 export default function BlogModal({ open, handleClose, initialState, categories }) {
+  console.log(categories);
+
   const { postBlog } = useBlogCall()
   const [info, setInfo] = useState(initialState)
 
@@ -105,13 +107,13 @@ export default function BlogModal({ open, handleClose, initialState, categories 
               name="categoryId"
               onChange={handleChange}
               color="success"
-              value={info.categoryId || ""}
-
-
+              value={info?.categoryId || ""}
             >
-              {
-                categories?.map(category => <MenuItem key={category._id} value={category?._id}>{category?.name}</MenuItem>)
-              }
+              {categories?.length > 0 ? (
+                categories?.map(category => <MenuItem key={category?._id} value={category?._id}>{category?.name}</MenuItem>)
+              ) : (
+                <MenuItem disabled>Loading...</MenuItem>
+              )}
             </Select>
           </FormControl>
 

@@ -1,6 +1,6 @@
 
 import { useDispatch } from 'react-redux';
-import{
+import {
     fetchStart,
     fetchFail,
     getCategories
@@ -15,13 +15,14 @@ const useCategoryCall = () => {
     const getCategory = async (url) => {
         dispatch(fetchStart());
         try {
-            const {data} = await axiosWithToken(`${url}`)
+            const { data } = await axiosWithToken(`${url}`)
             // console.log(data);
             dispatch(getCategories(data))
         } catch (error) {
+            console.error("Error fetching categories:", error);
             dispatch(fetchFail())
-        } 
+        }
     }
-    return {getCategory}
+    return { getCategory }
 }
 export default useCategoryCall

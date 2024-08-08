@@ -2,7 +2,6 @@ import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import React from "react";
 import { useSelector } from "react-redux";
 import { flex, profileStyle } from "../styles/globalStyles";
-import { useNavigate } from "react-router-dom";
 import UpdateProfileModal from "../components/profile/UpdateProfileModal";
 import MyBlogsContainer from "../components/profile/MyBlogsContainer";
 import Footer from "../components/home/Footer";
@@ -11,10 +10,10 @@ const Profile = () => {
   const { currentUser } = useSelector(state => state.auth)
   const { image, username, email, bio, city, createdAt, firstName, lastName } = currentUser
   // console.log(currentUser);
-  const navigate = useNavigate()
   const [open, setOpen] = React.useState(false);
   const handleClose = () => setOpen(false);
   const handleOpen = () => setOpen(true)
+
 
   const localDate = () => {
     if (createdAt) {
@@ -66,7 +65,7 @@ const Profile = () => {
               {`Created Date: ${localDate()}`}
             </Typography>
             <Typography sx={{ ...profileStyle, textAlign: "justify" }}>
-              <Typography variant="span" sx={{ mt: 8 }}>Personal Information <br />{bio}</Typography>
+              <Typography variant="span" sx={{ mt: 6 }}>Personal Information <br />{bio}</Typography>
             </Typography>
           </Grid>
           <Grid item xs={12} lg={6} sx={{

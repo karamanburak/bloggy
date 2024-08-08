@@ -29,11 +29,6 @@ import BlogModal from '../blog/BlogModal';
 import { useLocation } from 'react-router-dom';
 
 
-const pages = [
-    { name: 'Dashboard', src: '/' },
-    { name: 'Blogs', src: '/blog' },
-    { name: 'About Us', src: '/about' },
-];
 
 function Navbar() {
     const { logout } = useAuthCall()
@@ -66,6 +61,12 @@ function Navbar() {
     })
 
 
+    const pages = [
+        { name: 'Dashboard', src: '/' },
+        { name: 'Blogs', src: '/blog' },
+        { name: 'About Us', src: '/about' },
+    ];
+
     const settings = currentUser ? [
         { name: `${currentUser.firstName}  ${currentUser.lastName}`, withDivider: true },
         { name: 'Profile', src: '/profile' },
@@ -73,9 +74,8 @@ function Navbar() {
     ] : [
         { name: 'Sign In', src: '/login' },
         { name: 'Register', src: '/register' },
-
-
     ]
+
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -117,7 +117,7 @@ function Navbar() {
     };
 
     useEffect(() => {
-        const isDetailPage = location.pathname.startsWith('/blog/detail/');
+        const isDetailPage = location.pathname.startsWith('/blog/detail/')
         if (location.pathname === '/profile' || location.pathname === '/login' || location.pathname === '/register' || isDetailPage) {
             if (isDetailPage) {
                 setNavbarBg({
@@ -140,7 +140,6 @@ function Navbar() {
             };
         }
     }, [location, theme]);
-
 
     return (
         <Box position="fixed" sx={{ backgroundColor: navbarBg, transition: 'background-color 0.5s ease', zIndex: 99, width: "100vw" }}>
@@ -209,7 +208,7 @@ function Navbar() {
                     </Box>
                     <Box>
 
-                        {currentUser && <Typography
+                        {currentUser && (<Typography
                             sx={{
                                 cursor: "pointer",
                                 marginRight: "2rem",
@@ -219,7 +218,7 @@ function Navbar() {
                             }}
                             onClick={handleOpen}>
                             <BsPencilSquare style={{ fontSize: "1.2rem", marginBottom: ".3rem" }} />  WRITE
-                        </Typography>}
+                        </Typography>)}
                     </Box>
                     <IconButton
                         sx={{
