@@ -83,7 +83,9 @@ const MyBlogsCard = ({
             paddingX: 3,
           }}
         >
-          <Typography sx={{ fontWeight: "bold" }}>{title}</Typography>
+          <Typography sx={{ fontWeight: "bold", color: "black" }}>
+            {title}
+          </Typography>
           <Typography
             onClick={() =>
               navigate(`/blog/detail/${_id}`, {
@@ -107,7 +109,7 @@ const MyBlogsCard = ({
               cursor: "pointer",
             }}
           >
-            <MdArrowOutward />
+            <MdArrowOutward style={{ color: "black" }} />
           </Typography>
         </Box>
         <CardContent>

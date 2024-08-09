@@ -168,7 +168,12 @@ function Navbar() {
             onClick={() => navigate("/")}
             sx={{ display: { xs: "none", md: "block", cursor: "pointer" } }}
           >
-            <img src={logo} alt="register image" width="150px" />
+            <img
+              src={logo}
+              alt="register image"
+              width="50px"
+              style={{ marginTop: "1rem" }}
+            />
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>

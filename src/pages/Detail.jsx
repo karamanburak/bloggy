@@ -168,7 +168,7 @@ const Detail = () => {
               }}
             >
               <Typography>{`${formatDate(createdAt)}`}</Typography>
-              <Typography>Category:{getCategoryName()}</Typography>
+              <Typography>{getCategoryName()}</Typography>
             </Box>
           </Box>
 
