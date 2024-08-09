@@ -170,7 +170,7 @@ function Navbar() {
           >
             <img
               src={logo}
-              alt="register image"
+              alt="logo"
               width="50px"
               style={{ marginTop: "1rem" }}
             />

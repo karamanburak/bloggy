@@ -158,9 +158,9 @@ SOLUTION
 └──   vite.config.js
 ```
 
-## Outcome
+<!-- ## Outcome -->
 
-![Bloggy App](https://github.com/karamanburak/bloggy-app/assets/150926922/4debf7a8-ae66-4115-af9c-165191974f19)
+<!-- ![Bloggy App]() -->
 
 ## Postman Documentation
 
