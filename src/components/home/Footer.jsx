@@ -9,6 +9,11 @@ import logo from "../../assets/logo.png";
 
 const links = [
   {
+    address: "mailto:karaman.buraak@gmail.com",
+    icon: SiGmail,
+    target: "_blank",
+  },
+  {
     address: "https://github.com/karamanburak",
     icon: FaSquareGithub,
     target: "_blank",
@@ -19,12 +24,7 @@ const links = [
     target: "_blank",
   },
   {
-    address: "mailto:karaman.buraak@gmail.com",
-    icon: SiGmail,
-    target: "_blank",
-  },
-  {
-    address: "mailto:karaman.buraak@gmail.com",
+    address: "https://www.instagram.com/karamanburaak/",
     icon: FaInstagram,
     target: "_blank",
   },
@@ -44,14 +44,14 @@ const grid2 = [
   { name: "Careers" },
   { name: "Press" },
   { name: "News" },
-  { name: "Media Kit" },
+  { name: "Media" },
 ];
 const grid3 = [
   { name: "Blog" },
   { name: "NewsLetter" },
   { name: "Events" },
   { name: "Support" },
-  { name: "MarketPlaces" },
+  { name: "Places" },
 ];
 const grid4 = [
   { name: "Terms" },
@@ -115,6 +115,7 @@ const Footer = ({ isDashboard }) => {
                   margin: "auto",
                   marginLeft: "2rem",
                   gap: { xs: "2rem" },
+                  marginTop: "1rem",
                   "&:hover": {
                     transform: "scale(1.10)",
                   },

@@ -36,16 +36,6 @@ const BlogCard = ({
     return category ? category.name : "Unknown Category";
   };
 
-  const localDate = () => {
-    if (createdAt) {
-      const date = new Date(createdAt);
-      const day = date.getDate();
-      const month = date.getMonth() + 1;
-      const year = date.getFullYear();
-      return `${day}.${month}.${year}`;
-    }
-  };
-
   useEffect(() => {
     if (currentUser && likes.includes(currentUser._id)) {
       setLiked(true);
@@ -164,7 +154,7 @@ const BlogCard = ({
             )}
           </Avatar>
         }
-        subheader={` ${localDate()}`}
+        subheader={new Date(createdAt).toLocaleDateString("de-DE")}
       />
     </Card>
   );

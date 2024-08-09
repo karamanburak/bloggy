@@ -8,11 +8,11 @@ import { Navigation, Pagination, A11y, Autoplay } from "swiper/modules";
 import useBlogCall from "../../hooks/useBlogCall";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import { MdArrowOutward } from "react-icons/md";
 import {
   Box,
   Button,
   Card,
-  CardActions,
   CardContent,
   CardMedia,
   Container,
@@ -41,9 +41,8 @@ const TrendBlogs = () => {
             marginLeft: { xs: "4rem", md: "2.5rem" },
           }}
         >
-          {" "}
-          <FaChartBar /> Trendings on Bloggy{" "}
-        </Typography>{" "}
+          <FaChartBar /> Trendings on Bloggy
+        </Typography>
         <hr />
       </Box>
       <Box>
@@ -117,7 +116,7 @@ const TrendBlogs = () => {
                     />
                     <CardContent>
                       <Typography sx={{ fontSize: ".8rem" }}>
-                        {new Date(createdAt).toLocaleString("de-DE")}
+                        {new Date(createdAt).toLocaleDateString("de-DE")}
                       </Typography>
                       <hr />
                       <Typography sx={{ textAlign: "center" }}>
@@ -152,8 +151,8 @@ const TrendBlogs = () => {
                         <MdOutlineVisibility />
                         <sup>{countOfVisitors}</sup>
                       </Typography>
-                      <Typography sx={{ textTransform: "lowercase" }}>
-                        More...
+                      <Typography>
+                        <MdArrowOutward />
                       </Typography>
                     </Button>
                   </Card>

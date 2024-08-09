@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { MdArrowOutward } from "react-icons/md";
 import { useSelector } from "react-redux";
+import useCategoryCall from "../../hooks/useCategoryCall";
 
 const MyBlogsCard = ({
   _id,
@@ -21,23 +22,12 @@ const MyBlogsCard = ({
   userId,
   createdAt,
   likes,
-  comments,
   countOfVisitors,
   categoryId,
 }) => {
   const navigate = useNavigate();
   const [readingTime, setReadingTime] = useState(null);
   const { currentUser } = useSelector((state) => state.auth);
-
-  const localDate = () => {
-    if (createdAt) {
-      const date = new Date(createdAt);
-      const day = date.getDate();
-      const month = date.getMonth() + 1;
-      const year = date.getFullYear();
-      return `${day}.${month}.${year}`;
-    }
-  };
 
   const calcReadingTime = () => {
     const words = content.split(" ").length;
@@ -158,7 +148,7 @@ const MyBlogsCard = ({
             </Avatar>
           }
           title={`${currentUser.firstName} ${currentUser.lastName}`}
-          subheader={` ${localDate()}`}
+          subheader={new Date(createdAt).toLocaleDateString("de-DE")}
         />{" "}
       </Card>
     </Container>
