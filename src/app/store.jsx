@@ -14,6 +14,7 @@ import storage from "redux-persist/lib/storage"; // defaults to localStorage for
 import authReducer from "../features/authSlice";
 import blogReducer from "../features/blogSlice";
 import categoryReducer from "../features/categorySlice";
+import newsShowsReducer from "../features/newsShowsSlice";
 
 const persistConfig = {
   key: "root",
@@ -22,12 +23,12 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, authReducer);
 
-
 const store = configureStore({
   reducer: {
     auth: persistedReducer,
     blog: blogReducer,
     category: categoryReducer,
+    newsShows: newsShowsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

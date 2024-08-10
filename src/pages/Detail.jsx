@@ -38,7 +38,7 @@ const Detail = () => {
     categoryId,
     countOfVisitors,
   } = state;
-  const { getBlogDetail, getBlogData } = useBlogCall();
+  const { getBlogDetail } = useBlogCall();
   const { currentUser } = useSelector((state) => state.auth);
   const { blog } = useSelector((state) => state.blog);
   const { categories } = useSelector((state) => state.category);
@@ -79,10 +79,6 @@ const Detail = () => {
         ? prevLikes.filter((id) => id !== currentUser._id)
         : [...prevLikes, currentUser._id]
     );
-  };
-
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleString("de-DE");
   };
 
   const isCurrentUserOwner = currentUser && userId === currentUser._id;
@@ -165,9 +161,12 @@ const Detail = () => {
                 display: "flex",
                 justifyContent: "space-between",
                 marginBottom: "1rem",
+                marginX: { xs: "1rem", sm: "2rem" },
               }}
             >
-              <Typography>{`${formatDate(createdAt)}`}</Typography>
+              <Typography>
+                {new Date(createdAt).toLocaleDateString("de-DE")}
+              </Typography>
               <Typography>{getCategoryName()}</Typography>
             </Box>
           </Box>

@@ -6,14 +6,24 @@ import CardContent from "@mui/material/CardContent";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
-import { Box, Container } from "@mui/material";
+import {
+  Box,
+  Container,
+  Divider,
+  IconButton,
+  Menu,
+  MenuItem,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useState } from "react";
 import { MdArrowOutward } from "react-icons/md";
 import { useSelector } from "react-redux";
-import useCategoryCall from "../../hooks/useCategoryCall";
-
+import { BsThreeDots } from "react-icons/bs";
+import DeleteBlog from "../blog/DeleteBlog";
+import { MdEditNote } from "react-icons/md";
+import { IoIosLink } from "react-icons/io";
+import EditBlogModal from "../blog/EditBlogModal";
 const MyBlogsCard = ({
   _id,
   content,
@@ -28,6 +38,7 @@ const MyBlogsCard = ({
   const navigate = useNavigate();
   const [readingTime, setReadingTime] = useState(null);
   const { currentUser } = useSelector((state) => state.auth);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const calcReadingTime = () => {
     const words = content.split(" ").length;
@@ -35,6 +46,20 @@ const MyBlogsCard = ({
     if (minutes >= 1) {
       setReadingTime(`${minutes} min read`);
     }
+  };
+
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleCopyLink = () => {
+    const link = `${window.location.origin}/`;
+    navigator.clipboard.writeText(link);
+    handleMenuClose();
   };
 
   useEffect(() => {
@@ -126,30 +151,53 @@ const MyBlogsCard = ({
             paddingBottom: ".5rem",
           }}
         ></Box>
-        <CardHeader
-          sx={{
-            color: "seagreen",
-            "& .MuiTypography-root": {
-              fontSize: 15,
-              fontWeight: "bold",
-              color: "gray",
-            },
-          }}
-          avatar={
-            <Avatar sx={{ bgcolor: red[500] }} aria-label="image">
-              {_id ? (
-                <img
-                  src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${userId}`}
-                  alt="image"
-                />
-              ) : (
-                "R"
-              )}
-            </Avatar>
-          }
-          title={`${currentUser.firstName} ${currentUser.lastName}`}
-          subheader={new Date(createdAt).toLocaleDateString("de-DE")}
-        />{" "}
+
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <CardHeader
+            sx={{
+              color: "seagreen",
+              "& .MuiTypography-root": {
+                fontSize: 15,
+                fontWeight: "bold",
+                color: "gray",
+              },
+            }}
+            avatar={
+              <Avatar sx={{ bgcolor: red[500] }} aria-label="image">
+                {_id ? (
+                  <img
+                    src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${userId}`}
+                    alt="image"
+                  />
+                ) : (
+                  "R"
+                )}
+              </Avatar>
+            }
+            title={`${currentUser.firstName} ${currentUser.lastName}`}
+            subheader={new Date(createdAt).toLocaleDateString("de-DE")}
+          />
+          <Box sx={{ marginRight: "1rem", marginTop: "1rem" }}>
+            <IconButton onClick={handleMenuOpen}>
+              <BsThreeDots />
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem key="copy" onClick={handleCopyLink}>
+                <IoIosLink style={{ marginRight: ".5rem" }} /> Copy Link
+              </MenuItem>
+              <Box sx={{ display: "flex", flexDirection: "column" }}>
+                <Divider />
+                <MenuItem key="delete">
+                  <DeleteBlog id={_id} />
+                </MenuItem>
+              </Box>
+            </Menu>
+          </Box>
+        </Box>
       </Card>
     </Container>
   );

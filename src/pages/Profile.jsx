@@ -5,9 +5,12 @@ import { flex, profileStyle } from "../styles/globalStyles";
 import UpdateProfileModal from "../components/profile/UpdateProfileModal";
 import MyBlogsContainer from "../components/profile/MyBlogsContainer";
 import Footer from "../components/home/Footer";
+import useCategoryCall from "../hooks/useCategoryCall";
+import { useEffect } from "react";
 
 const Profile = () => {
   const { currentUser } = useSelector((state) => state.auth);
+  const { getCategory } = useCategoryCall();
   const { image, username, email, bio, city, createdAt, firstName, lastName } =
     currentUser;
   // console.log(currentUser);
@@ -24,6 +27,10 @@ const Profile = () => {
       return `${day}.${month}.${year}`;
     }
   };
+
+  useEffect(() => {
+    getCategory("categories");
+  }, []);
 
   return (
     <>
