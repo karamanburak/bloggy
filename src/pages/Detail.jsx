@@ -325,9 +325,9 @@ const Detail = () => {
                                 </Avatar>
                               }
                               title={`${comment.userId.firstName} ${comment.userId.lastName}`}
-                              subheader={`Published Date: ${formatDate(
+                              subheader={`${new Date(
                                 comment.createdAt
-                              )}`}
+                              ).toLocaleDateString("de-DE")}`}
                             />
                             <Typography sx={{ marginLeft: "1.2rem" }}>
                               {comment.comment}

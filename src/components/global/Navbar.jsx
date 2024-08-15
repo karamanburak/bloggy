@@ -72,11 +72,10 @@ function Navbar() {
   const settings = currentUser
     ? [
         {
-          icon: <FaUser />,
           name: `${currentUser.username}  `,
           withDivider: true,
         },
-        { icon: <ImProfile />, name: "Profile", src: "/profile" },
+        { icon: <FaUser />, name: "Profile", src: "/profile" },
         { icon: <CiLogout />, name: "Logout", src: "login" },
       ]
     : [
@@ -333,8 +332,12 @@ function Navbar() {
                   onClick={() => handleSettingClick(setting.src)}
                 >
                   <Box sx={{ display: "flex", gap: 1 }}>
-                    <Typography>{setting.icon}</Typography>
-                    <Typography>{setting.name}</Typography>
+                    {setting.icon && <Typography>{setting.icon}</Typography>}
+                    <Typography
+                      sx={{ marginLeft: !setting.icon ? "1.4rem" : 0 }}
+                    >
+                      {setting.name}
+                    </Typography>
                   </Box>
                 </MenuItem>
               ))}

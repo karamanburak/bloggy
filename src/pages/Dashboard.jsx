@@ -25,7 +25,7 @@ const Dashboard = () => {
   useEffect(() => {
     getBlogData("blogs");
     getCategory("categories");
-    // getNewsData();
+    getNewsData();
     getShowsData();
   }, []);
 
@@ -56,7 +56,7 @@ const Dashboard = () => {
           ) : (
             <CustomSwiper items={blogs} ItemComponent={HomeCard} />
           )}
-          <CustomSwiper items={news} ItemComponent={NewsCard} />
+          {/* <CustomSwiper items={news} ItemComponent={NewsCard} /> */}
           <CustomSwiper items={shows} ItemComponent={ShowsCard} />
         </Box>
       </Container>

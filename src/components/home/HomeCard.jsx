@@ -209,13 +209,12 @@ const HomeCard = ({
               </Box>
               <Typography
                 onClick={handleReadMore}
-                variant="contained"
                 sx={{
                   marginRight: "2rem",
                   marginBottom: ".5rem",
                 }}
               >
-                <MdArrowOutward />
+                Read More <MdArrowOutward />
               </Typography>
             </Box>
           </Grid>

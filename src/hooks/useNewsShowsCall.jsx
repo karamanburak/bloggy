@@ -7,6 +7,8 @@ import {
 } from "../features/newsShowsSlice";
 import axios from "axios";
 
+const newsApiKey = import.meta.env.VITE_NEWS_apiKey;
+
 const useNewsShowsCall = () => {
   const dispatch = useDispatch();
 
@@ -29,17 +31,27 @@ const useNewsShowsCall = () => {
       dispatch(fetchFail());
     }
   };
+
   const getNewsData = async () => {
     dispatch(fetchStart());
     try {
-      const { data } = await axios();
-      dispatch(getNewsSuccess(data));
-      console.log(data);
+      const { data } = await axios.get(
+        "https://flixster.p.rapidapi.com/news/list",
+        {
+          headers: {
+            "x-rapidapi-key": newsApiKey,
+            "x-rapidapi-host": "flixster.p.rapidapi.com",
+          },
+        }
+      );
+      dispatch(getNewsSuccess(data.data.newsStories));
+      console.log(data.data.newsStories);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       dispatch(fetchFail());
     }
   };
+
   return {
     getShowsData,
     getNewsData,

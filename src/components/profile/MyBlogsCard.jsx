@@ -179,7 +179,7 @@ const MyBlogsCard = ({
           />
           <Box sx={{ marginRight: "1rem", marginTop: "1rem" }}>
             <IconButton onClick={handleMenuOpen}>
-              <BsThreeDots />
+              <BsThreeDots style={{ color: "gray" }} />
             </IconButton>
             <Menu
               anchorEl={anchorEl}
