@@ -22,6 +22,10 @@ const Dashboard = () => {
   const { blogs, loading } = useSelector((state) => state.blog);
   const { news, shows } = useSelector((state) => state.newsShows);
 
+  const topTrendingBlogs = [...blogs].sort(
+    (a, b) => b.countOfVisitors - a.countOfVisitors
+  );
+
   useEffect(() => {
     getBlogData("blogs");
     getCategory("categories");
@@ -55,7 +59,7 @@ const Dashboard = () => {
           ) : (
             <>
               <Box sx={wellcomeMessage}>{/* <Quotes /> */}</Box>
-              <CustomSwiper items={blogs} ItemComponent={HomeCard} />
+              <CustomSwiper items={topTrendingBlogs} ItemComponent={HomeCard} />
               {/* <CustomSwiper items={news} ItemComponent={NewsCard} /> */}
               <CustomSwiper items={shows} ItemComponent={ShowsCard} />
             </>

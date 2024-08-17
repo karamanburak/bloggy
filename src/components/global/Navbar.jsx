@@ -70,7 +70,7 @@ function Navbar() {
   const settings = currentUser
     ? [
         {
-          name: `${currentUser.username}  `,
+          name: `@${currentUser.username}  `,
           withDivider: true,
         },
         { icon: <FaUser />, name: "Profile", src: "/profile" },

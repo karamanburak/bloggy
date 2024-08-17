@@ -1,7 +1,7 @@
 # Bloggy App
 
-[Bloggy App Live](https://bloggiie.vercel.app/)
-[Bloggy Api Live](https://bloggy-api-v8e5.onrender.com/)
+- [Bloggy App Live](https://bloggiie.vercel.app/)
+- [Bloggy Api Live](https://bloggy-api-v8e5.onrender.com/)
 
 ## Description
 
