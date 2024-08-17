@@ -2,8 +2,6 @@ import "react-slideshow-image/dist/styles.css";
 import {
   Box,
   Card,
-  CardContent,
-  CardHeader,
   CardMedia,
   Container,
   Grid,
@@ -19,6 +17,7 @@ const defaultImage =
 
 const NewsCard = ({ title, url, image, content, publishedAt, source }) => {
   const { currentUser } = useSelector((state) => state.auth);
+
   const handleReadMore = () => {
     if (!currentUser) {
       toastWarnNotify("You must Login");
@@ -30,101 +29,105 @@ const NewsCard = ({ title, url, image, content, publishedAt, source }) => {
   const splittedContent = content.split("[")[0];
 
   return (
-    <Container
-      maxWidth="xl"
-      sx={{ backgroundColor: "neutral.dark", paddingBottom: "2rem" }}
-    >
+    <Container maxWidth="lg" sx={{ paddingBottom: "2rem" }}>
       <PageHeader text="News" />
       <Card
         sx={{
-          height: { xs: 650, md: 400 },
+          height: { xs: 750, md: 450 },
           display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
+          flexDirection: { xs: "column", md: "row" },
+          borderRadius: "16px",
+          boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
+          overflow: "hidden",
+          padding: "1rem",
         }}
       >
         <Grid container>
           <Grid
             item
-            sm={12}
+            xs={12}
             md={6}
-            order={{ xs: 2, md: 2 }}
+            order={{ xs: 1, md: 2 }}
             sx={{
               display: "flex",
               flexDirection: "column",
-              justifyContent: "space-around",
-              my: 3,
+              justifyContent: "space-between",
+              p: 3,
             }}
           >
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                paddingX: "1.5rem",
-              }}
-            >
-              <Typography sx={{ fontWeight: "bold" }}>
-                📰 {source.name}
+            <Box>
+              <Typography
+                variant="caption"
+                sx={{ fontWeight: "bold", color: "text.secondary" }}
+              >
+                {source.name.toUpperCase()}
               </Typography>
-              <Typography>
-                {` ${new Date(publishedAt).toLocaleDateString("de-DE")}`}
-              </Typography>
-            </Box>
-            <CardHeader
-              sx={{
-                // color: "gray",
-                "& .MuiTypography-root": {
-                  fontSize: 15,
+              <Typography
+                variant="h5"
+                sx={{
                   fontWeight: "bold",
-                },
-              }}
-              title={title}
-            />
-
-            <CardContent>
+                  mt: 1,
+                  mb: 2,
+                }}
+              >
+                {title}
+              </Typography>
               <Typography
                 variant="body2"
                 sx={{
-                  // maxHeight: "100px",
-                  marginTop: { xs: "-1rem", md: "-3rem" },
+                  color: "text.primary",
+                  mb: 3,
+                  display: "-webkit-box",
+                  WebkitLineClamp: { xs: 4, md: 6 },
+                  WebkitBoxOrient: "vertical",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
-                  display: "-webkit-box",
-                  WebkitLineClamp: "3",
-                  WebkitBoxOrient: "vertical",
                 }}
               >
                 {splittedContent || "No description available."}
               </Typography>
-            </CardContent>
-            <Typography
-              onClick={handleReadMore}
+            </Box>
+            <Box
               sx={{
-                marginRight: "2rem",
-                marginBottom: { md: "-1rem" },
-                marginLeft: "auto",
                 display: "flex",
-                gap: 1,
-                cursor: "pointer",
+                justifyContent: "space-between",
+                alignItems: "center",
+                mt: "auto",
               }}
             >
-              Read More <MdArrowOutward style={{ marginTop: ".3rem" }} />
-            </Typography>
+              <Typography variant="caption" sx={{ color: "text.secondary" }}>
+                {new Date(publishedAt).toLocaleDateString("de-DE")}
+              </Typography>
+              <Typography
+                onClick={handleReadMore}
+                sx={{
+                  marginRight: "2rem",
+                  marginLeft: "auto",
+                  display: "flex",
+                  gap: 1,
+                  cursor: "pointer",
+                }}
+              >
+                Read More <MdArrowOutward style={{ marginTop: ".3rem" }} />
+              </Typography>
+            </Box>
           </Grid>
           <Grid
             item
-            sm={12}
+            xs={12}
             md={6}
-            // order={{ xs: 1, md: 2 }}
-            sx={{ margin: "auto", marginBottom: "1rem" }}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "background.paper",
+            }}
           >
             <CardMedia
               sx={{
-                marginTop: "1rem",
-                marginRight: "1rem",
-                padding: "1rem",
-                borderRadius: "1rem",
+                width: "100%",
                 objectFit: "fill",
+                borderRadius: "1rem",
               }}
               component="img"
               height="374"

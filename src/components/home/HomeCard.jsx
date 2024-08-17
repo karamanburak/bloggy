@@ -10,12 +10,10 @@ import { useNavigate } from "react-router-dom";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
-import { flex } from "../../styles/globalStyles";
 import PageHeader from "./PageHeader";
 import { toastWarnNotify } from "../../helper/ToastNotify";
 import { useSelector } from "react-redux";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import useBlogCall from "../../hooks/useBlogCall";
 import { MdArrowOutward } from "react-icons/md";
 
@@ -33,30 +31,9 @@ const HomeCard = ({
 }) => {
   const { postLike } = useBlogCall();
   const { currentUser } = useSelector((state) => state.auth);
-  const { blogs } = useSelector((state) => state.blog);
   const navigate = useNavigate();
   const [readingTime, setReadingTime] = useState(null);
   const [liked, setLiked] = useState(false);
-
-  const handleReadMore = () => {
-    if (!currentUser) {
-      toastWarnNotify("You must Login");
-    } else {
-      navigate(`/blog/detail/${_id}`, {
-        state: {
-          content,
-          image,
-          title,
-          userId,
-          createdAt,
-          _id,
-          likes,
-          countOfVisitors,
-          categoryId,
-        },
-      });
-    }
-  };
 
   useEffect(() => {
     if (currentUser && likes.includes(currentUser._id)) {
@@ -81,26 +58,42 @@ const HomeCard = ({
     postLike("blogs", _id);
   };
 
+  const handleReadMore = () => {
+    if (!currentUser) {
+      toastWarnNotify("You must Login");
+    } else {
+      navigate(`/blog/detail/${_id}`, {
+        state: {
+          content,
+          image,
+          title,
+          userId,
+          createdAt,
+          _id,
+          likes,
+          countOfVisitors,
+          categoryId,
+        },
+      });
+    }
+  };
+
   const { image: userImage, firstName, lastName } = userId;
 
   return (
-    <Container
-      maxWidth="xl"
-      sx={{ backgroundColor: "neutral.dark", paddingBottom: "2rem" }}
-    >
+    <Container maxWidth="lg" sx={{ paddingBottom: "2rem" }}>
       <PageHeader text="Blogs" />
       <Card
         sx={{
           minHeight: "300px",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
+          flexDirection: { xs: "column", md: "row" },
+          padding: "1rem",
         }}
       >
         <Grid container>
           <Grid
             item
-            sm={12}
+            xs={12}
             md={6}
             order={{ xs: 2, md: 1 }}
             sx={{
@@ -108,21 +101,15 @@ const HomeCard = ({
               flexDirection: "column",
               justifyContent: "space-between",
               my: 3,
+              p: 2,
+              borderRadius: "12px",
             }}
           >
-            <Box
-              sx={{
-                display: {
-                  xs: "block",
-                  sm: "flex",
-                  justifyContent: "space-between",
-                },
-              }}
-            >
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               <CardHeader
                 sx={{
                   "& .MuiTypography-root": {
-                    fontSize: 15,
+                    fontSize: 18,
                     fontWeight: "bold",
                   },
                 }}
@@ -139,117 +126,84 @@ const HomeCard = ({
                     )}
                   </Avatar>
                 }
-                title={`${firstName} ${lastName} `}
-                subheader={` ${new Date(createdAt).toLocaleDateString(
-                  "de-DE"
-                )}`}
+                title={`${firstName} ${lastName}`}
+                subheader={new Date(createdAt).toLocaleDateString("de-DE")}
               />
-              <Box sx={{ display: "inline-block", mt: 3 }}>
-                {readingTime && (
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      padding: ".5rem",
-                      borderRadius: "5px",
-                      display: "inline-block",
-                      marginLeft: "1rem",
-                      marginRight: { xs: "0", sm: "1.5rem" },
-                    }}
-                  >
-                    {readingTime}
-                  </Typography>
-                )}
-              </Box>
-            </Box>
-            <CardContent>
-              <CardHeader
-                sx={{
-                  // color: "gray",
-                  "& .MuiTypography-root": {
-                    fontSize: 15,
-                    fontWeight: "bold",
-                    marginLeft: "-1rem",
-                  },
-                }}
-                title={title}
-              />
-
               <Typography
                 variant="body2"
                 sx={{
-                  maxHeight: "100px",
+                  fontSize: "0.9rem",
+                  fontWeight: "bold",
+                  mt: 3,
+                }}
+              >
+                {readingTime}
+              </Typography>
+            </Box>
+            <CardContent>
+              <Typography
+                variant="body2"
+                sx={{
+                  maxHeight: "80px",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   display: "-webkit-box",
                   WebkitLineClamp: "3",
                   WebkitBoxOrient: "vertical",
+                  lineHeight: 1.5,
                 }}
               >
                 {content}
               </Typography>
-            </CardContent>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                cursor: "pointer",
-              }}
-            >
-              <Box
-                sx={{
-                  ...flex,
-                  opacity: ".7",
-                  gap: ".3rem",
-                  marginLeft: "1rem",
-                }}
-              >
-                <Typography>
-                  <FavoriteIcon
-                    sx={{
-                      color: liked ? "red" : "",
-                    }}
-                    onClick={handleLike}
-                  />
-                  <sup>{likes?.length}</sup>
-                </Typography>
-                <ChatBubbleOutlineIcon />
-                <Typography>
-                  <sup>{comments?.length}</sup>
-                </Typography>
-                <RemoveRedEyeIcon />
-                <Typography>
-                  <sup>{countOfVisitors}</sup>
-                </Typography>
+              <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
+                <FavoriteIcon
+                  sx={{ color: liked ? "red" : "", cursor: "pointer" }}
+                  onClick={handleLike}
+                />
+                <Typography sx={{ ml: 1 }}>{likes?.length}</Typography>
+                <ChatBubbleOutlineIcon sx={{ ml: 2 }} />
+                <Typography sx={{ ml: 1 }}>{comments?.length}</Typography>
+                <RemoveRedEyeIcon sx={{ ml: 2 }} />
+                <Typography sx={{ ml: 1 }}>{countOfVisitors}</Typography>
               </Box>
+            </CardContent>
+
+            <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
               <Typography
                 onClick={handleReadMore}
                 sx={{
-                  marginRight: "2rem",
-                  marginBottom: ".5rem",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  cursor: "pointer",
+                  fontWeight: 500,
                 }}
               >
-                Read More <MdArrowOutward />
+                Read More <MdArrowOutward style={{ marginTop: ".2rem" }} />
               </Typography>
             </Box>
           </Grid>
           <Grid
             item
-            sm={12}
+            xs={12}
             md={6}
             order={{ xs: 1, md: 2 }}
-            sx={{ margin: "auto", marginBottom: "1rem" }}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
           >
             <CardMedia
-              sx={{
-                marginTop: "1rem",
-                marginRight: "1rem",
-                padding: "1rem",
-                objectFit: "fill",
-              }}
               component="img"
-              height="274"
+              height="374"
               image={image}
               alt="image"
+              sx={{
+                width: "100%",
+                objectFit: "fill",
+                borderRadius: "1rem",
+              }}
             />
           </Grid>
         </Grid>

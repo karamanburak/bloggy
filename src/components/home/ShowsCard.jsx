@@ -1,9 +1,8 @@
 import "react-slideshow-image/dist/styles.css";
 import {
   Box,
+  Button,
   Card,
-  CardContent,
-  CardHeader,
   CardMedia,
   Container,
   Grid,
@@ -26,83 +25,71 @@ const ShowsCard = ({ name, genres, image, summary, url, rating }) => {
   };
 
   return (
-    <Container
-      maxWidth="xl"
-      sx={{ backgroundColor: "neutral.dark", paddingBottom: "2rem" }}
-    >
-      <PageHeader text="Tv-Shows" />
+    <Container maxWidth="lg" sx={{ paddingBottom: "2rem" }}>
+      <PageHeader text="TV Shows" />
       <Card
         sx={{
           height: { xs: 730, md: 400 },
           display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
+          flexDirection: { xs: "column", md: "row" },
+          borderRadius: "16px",
+          boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
+          overflow: "hidden",
+          padding: "1rem",
         }}
       >
         <Grid container>
           <Grid
             item
-            sm={12}
+            xs={12}
             md={6}
-            order={{ xs: 2, md: 2 }}
             sx={{
               display: "flex",
               flexDirection: "column",
-              justifyContent: "center",
-              my: 3,
-              p: 2,
-              borderRadius: "12px",
+              justifyContent: "space-between",
+              p: 3,
             }}
           >
             <Box>
-              <CardHeader
+              <Typography
+                variant="caption"
+                sx={{ fontWeight: "bold", color: "text.secondary" }}
+              >
+                {genres.slice(0, 3).join(" • ")}
+              </Typography>
+              <Typography
+                variant="h5"
                 sx={{
-                  "& .MuiTypography-root": {
-                    fontSize: 18,
-                    fontWeight: "bold",
-                    color: "text.primary",
-                  },
+                  fontWeight: "bold",
+                  mt: 1,
+                  mb: 2,
                 }}
-                title={name}
-                subheader={
-                  <Typography
-                    variant="subtitle2"
-                    sx={{ color: "text.secondary", mt: 1 }}
-                  >
-                    {genres.slice(0, 3).join(" • ")}
-                  </Typography>
-                }
-              />
-            </Box>
-
-            <CardContent sx={{ mt: 2 }}>
+              >
+                {name}
+              </Typography>
               <Typography
                 variant="body2"
                 sx={{
-                  maxHeight: "80px",
+                  mb: 3,
+                  display: "-webkit-box",
+                  WebkitLineClamp: { xs: 4, md: 6 },
+                  WebkitBoxOrient: "vertical",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
-                  display: "-webkit-box",
-                  WebkitLineClamp: "3",
-                  WebkitBoxOrient: "vertical",
-                  color: "text.secondary",
-                  lineHeight: 1.5,
                 }}
               >
                 {summary}
               </Typography>
               <Typography
                 sx={{
-                  fontSize: "0.9rem",
+                  fontSize: "1rem",
                   fontWeight: "bold",
-                  mt: 1,
                 }}
               >
                 Rating: {rating.average}
               </Typography>
-            </CardContent>
-
-            <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
+            </Box>
+            <Box sx={{ marginLeft: "auto" }}>
               <Typography
                 onClick={handleReadMore}
                 sx={{
@@ -120,23 +107,24 @@ const ShowsCard = ({ name, genres, image, summary, url, rating }) => {
 
           <Grid
             item
-            sm={12}
+            xs={12}
             md={6}
-            order={{ xs: 1, md: 2 }}
-            sx={{ margin: "auto", marginBottom: "1rem" }}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
           >
             <CardMedia
-              sx={{
-                marginTop: "1rem",
-                marginRight: "1rem",
-                padding: "1rem",
-                borderRadius: "1rem",
-                objectFit: "fill",
-              }}
               component="img"
-              height="374"
               image={image?.original || image?.medium}
-              alt="image"
+              height="374"
+              alt="tv show image"
+              sx={{
+                width: "100%",
+                objectFit: "fill",
+                borderRadius: "1rem",
+              }}
             />
           </Grid>
         </Grid>

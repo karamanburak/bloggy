@@ -63,6 +63,10 @@ const grid4 = [
 
 const Footer = ({ isDashboard }) => {
   const theme = useTheme();
+  const boxShadow =
+    theme.palette.mode === "dark"
+      ? "0 4px 12px rgba(10, 10, 10, 0.7)"
+      : "0 4px 12px rgba(0, 0, 0, 0.5)";
   return (
     <>
       <Grid
@@ -73,26 +77,48 @@ const Footer = ({ isDashboard }) => {
         justifyContent="center"
         alignItems="center"
         sx={{
-          padding: { xs: "2rem" },
           textAlign: "center",
+          boxShadow: boxShadow,
+          paddingX: "2rem",
+          paddingY: "1rem",
         }}
       >
-        <Grid item xs={3} sm={2}>
+        <Grid
+          sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}
+          item
+          xs={3}
+          sm={2}
+        >
           {grid1.map((item, index) => (
             <Box key={index}>{item.name}</Box>
           ))}
         </Grid>
-        <Grid item xs={3} sm={2}>
+        <Grid
+          sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}
+          item
+          xs={3}
+          sm={2}
+        >
           {grid2.map((item, index) => (
             <Box key={index}>{item.name}</Box>
           ))}
         </Grid>
-        <Grid item xs={3} sm={2}>
+        <Grid
+          sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}
+          item
+          xs={3}
+          sm={2}
+        >
           {grid3.map((item, index) => (
             <Box key={index}>{item.name}</Box>
           ))}
         </Grid>
-        <Grid item xs={3} sm={2}>
+        <Grid
+          sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}
+          item
+          xs={3}
+          sm={2}
+        >
           {grid4.map((item, index) => (
             <Box key={index}>{item.name}</Box>
           ))}
@@ -114,7 +140,6 @@ const Footer = ({ isDashboard }) => {
                 sx={{
                   margin: "auto",
                   marginLeft: "2rem",
-                  gap: { xs: "2rem" },
                   marginTop: "1rem",
                   "&:hover": {
                     transform: "scale(1.10)",

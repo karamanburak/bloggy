@@ -12,12 +12,15 @@ const CustomSwiper = ({ items, ItemComponent }) => {
 
   return (
     <Swiper
+      style={{
+        "--swiper-pagination-bullet-inactive-color": "#999999",
+      }}
       spaceBetween={30}
       slidesPerView={1}
       modules={[Autoplay, Pagination, Navigation, A11y]}
-      // pagination={{ clickable: true }}
-      navigation={true}
-      autoplay={{ delay: 3500 }}
+      pagination={{ clickable: true }}
+      // navigation={true}
+      autoplay={{ delay: 3000 }}
     >
       {items?.map((item, index) => (
         <SwiperSlide key={index}>

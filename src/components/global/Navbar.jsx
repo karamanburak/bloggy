@@ -70,7 +70,7 @@ function Navbar() {
   const settings = currentUser
     ? [
         {
-          name: `@${currentUser.username}  `,
+          name: `@ ${currentUser.username}  `,
           withDivider: true,
         },
         { icon: <FaUser />, name: "Profile", src: "/profile" },
@@ -332,11 +332,7 @@ function Navbar() {
                 >
                   <Box sx={{ display: "flex", gap: 1 }}>
                     {setting.icon && <Typography>{setting.icon}</Typography>}
-                    <Typography
-                      sx={{ marginLeft: !setting.icon ? "1.4rem" : 0 }}
-                    >
-                      {setting.name}
-                    </Typography>
+                    <Typography>{setting.name}</Typography>
                   </Box>
                 </MenuItem>
               ))}

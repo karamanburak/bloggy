@@ -5,7 +5,6 @@ import Footer from "../components/home/Footer";
 import { useEffect } from "react";
 import useBlogCall from "../hooks/useBlogCall";
 import { useSelector } from "react-redux";
-import { wellcomeMessage } from "../styles/globalStyles";
 import "react-slideshow-image/dist/styles.css";
 import loadingGif from "../assets/loading.gif";
 import ShowsCard from "../components/home/ShowsCard";
@@ -13,7 +12,6 @@ import NewsCard from "../components/home/NewsCard";
 import CustomSwiper from "../components/home/CustomSwiper";
 import useCategoryCall from "../hooks/useCategoryCall";
 import useNewsShowsCall from "../hooks/useNewsShowsCall";
-import axios from "axios";
 
 const Dashboard = () => {
   const isDashboard = "/";
@@ -40,7 +38,6 @@ const Dashboard = () => {
         src={homeVideo}
         alt="home video"
         width="100%"
-        // height="720px"
         autoPlay
         loop
         muted
@@ -59,14 +56,27 @@ const Dashboard = () => {
             />
           ) : (
             <>
-              <Box sx={wellcomeMessage}>{/* <Quotes /> */}</Box>
-              <CustomSwiper items={topTrendingBlogs} ItemComponent={HomeCard} />
-              <CustomSwiper items={news} ItemComponent={NewsCard} />
-              <CustomSwiper items={shows} ItemComponent={ShowsCard} />
+              <Box
+                sx={{
+                  padding: "2rem 0",
+                  backgroundColor: "background.paper",
+                  borderRadius: "10px",
+                  boxShadow: 3,
+                  mb: "2rem",
+                }}
+              >
+                <CustomSwiper
+                  items={topTrendingBlogs}
+                  ItemComponent={HomeCard}
+                />
+                <CustomSwiper items={news} ItemComponent={NewsCard} />
+                <CustomSwiper items={shows} ItemComponent={ShowsCard} />
+              </Box>
             </>
           )}
         </Box>
       </Container>
+
       <Box sx={{ marginTop: "2rem" }}>
         <Footer isDashboard={isDashboard} />
       </Box>

@@ -60,7 +60,12 @@ const MyBlogsContainer = ({ userId }) => {
       )}
 
       {userBlogs?.length > 0 && (
-        <Typography style={{ marginTop: "20px", textAlign: "center" }}>
+        <Typography
+          style={{
+            marginTop: "1.5rem",
+            textAlign: "center",
+          }}
+        >
           <Button
             onClick={prevPage}
             variant="outlined"
@@ -83,7 +88,6 @@ const MyBlogsContainer = ({ userId }) => {
                   currentPage === index + 1 ? "primary.light" : "",
                 borderRadius: "50%",
                 minWidth: "36px",
-                minHeight: "36px",
               }}
             >
               {index + 1}

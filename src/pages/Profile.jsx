@@ -77,7 +77,8 @@ const Profile = () => {
                 sx={{
                   borderRadius: "50%",
                   width: "150px",
-                  // objectFit: "cover",
+                  height: "150px",
+                  objectFit: "fill",
                 }}
               />
               <CardContent sx={{ padding: "2rem 0" }}>

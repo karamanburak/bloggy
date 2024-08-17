@@ -24,7 +24,6 @@ import { MdEditNote } from "react-icons/md";
 import { IoIosLink } from "react-icons/io";
 import EditBlogModal from "../components/blog/EditBlogModal";
 import CustomCardHeader from "../components/blog/CustomCardHeader ";
-import TinyMce from "../components/blog/TinyMce";
 
 const Detail = () => {
   const { state } = useLocation();
@@ -45,8 +44,10 @@ const Detail = () => {
   const { categories } = useSelector((state) => state.category);
   const { getCategory } = useCategoryCall();
   const { postLike } = useBlogCall();
-  const [likes, setLikes] = useState(initialLikes);
-  const [liked, setLiked] = useState(initialLikes.includes(currentUser._id));
+  const [likes, setLikes] = useState(initialLikes || []);
+  const [liked, setLiked] = useState(
+    (initialLikes || []).includes(currentUser._id)
+  );
   const [showComments, setShowComments] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [openEditModal, setOpenEditModal] = useState(false);
