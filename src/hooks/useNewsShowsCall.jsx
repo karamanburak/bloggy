@@ -26,6 +26,7 @@ const useNewsShowsCall = () => {
         summary: stripHtml(show.summary),
         key: `show-${index}`,
       }));
+      // console.log(cleanedData);
       dispatch(getShowsSuccess(cleanedData));
     } catch (error) {
       console.log(error);
@@ -36,17 +37,11 @@ const useNewsShowsCall = () => {
   const getNewsData = async () => {
     dispatch(fetchStart());
     try {
-      const { data } = await axios.get(
-        "https://flixster.p.rapidapi.com/news/list",
-        {
-          headers: {
-            "x-rapidapi-key": newsApiKey,
-            "x-rapidapi-host": "flixster.p.rapidapi.com",
-          },
-        }
+      const { data } = await axios(
+        `https://gnews.io/api/v4/top-headlines?category=technology&lang=en&apikey=${newsApiKey}`
       );
-      dispatch(getNewsSuccess(data.data.newsStories));
-      // console.log(data.data.newsStories);
+      dispatch(getNewsSuccess(data.articles));
+      // console.log(data.articles);
     } catch (error) {
       console.error(error);
       dispatch(fetchFail());

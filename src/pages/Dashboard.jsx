@@ -13,6 +13,7 @@ import NewsCard from "../components/home/NewsCard";
 import CustomSwiper from "../components/home/CustomSwiper";
 import useCategoryCall from "../hooks/useCategoryCall";
 import useNewsShowsCall from "../hooks/useNewsShowsCall";
+import axios from "axios";
 
 const Dashboard = () => {
   const isDashboard = "/";
@@ -60,7 +61,7 @@ const Dashboard = () => {
             <>
               <Box sx={wellcomeMessage}>{/* <Quotes /> */}</Box>
               <CustomSwiper items={topTrendingBlogs} ItemComponent={HomeCard} />
-              {/* <CustomSwiper items={news} ItemComponent={NewsCard} /> */}
+              <CustomSwiper items={news} ItemComponent={NewsCard} />
               <CustomSwiper items={shows} ItemComponent={ShowsCard} />
             </>
           )}

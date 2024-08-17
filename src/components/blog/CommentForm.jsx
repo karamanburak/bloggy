@@ -1,10 +1,11 @@
-import { Button, Container, TextField, Box } from "@mui/material";
+import { Button, Container, TextField, Box, Input } from "@mui/material";
 import useBlogCall from "../../hooks/useBlogCall";
 import { useState } from "react";
 
 const CommentForm = ({ blogId, userId }) => {
   const { postComment } = useBlogCall();
   const [commentText, setCommentText] = useState("");
+  const [showCommentField, setShowCommentField] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -15,8 +16,13 @@ const CommentForm = ({ blogId, userId }) => {
     };
     postComment("comments", commentData);
     console.log(commentData);
-
     setCommentText("");
+    setShowCommentField(false);
+  };
+
+  const handleCancel = () => {
+    setCommentText("");
+    setShowCommentField(false);
   };
 
   return (
@@ -39,44 +45,68 @@ const CommentForm = ({ blogId, userId }) => {
           marginLeft: { xs: "-.8rem", sm: 0 },
         }}
       >
-        <TextField
-          variant="outlined"
-          multiline
-          rows={6}
-          placeholder="Write your comment here..."
-          value={commentText}
-          onChange={(e) => setCommentText(e.target.value)}
-          sx={{
-            borderRadius: "12px",
-            backgroundColor: "primary.ligth",
-            "& .MuiOutlinedInput-root": {
-              borderRadius: "12px",
-            },
-            "& .MuiInputBase-input": {
-              padding: "1rem",
-            },
-            "& .MuiOutlinedInput-notchedOutline": {
-              borderColor: "#ddd",
-            },
-            "&:hover .MuiOutlinedInput-notchedOutline": {
-              borderColor: "#bbb",
-            },
-          }}
-        />
-        <Button
-          type="submit"
-          variant="contained"
-          // color="secondary"
-          sx={{
-            alignSelf: "flex-end",
-            borderRadius: "12px",
-            padding: "0.75rem 1.5rem",
-            textTransform: "none",
-            fontWeight: "bold",
-          }}
-        >
-          Add Comment
-        </Button>
+        {!showCommentField && (
+          <Input
+            sx={{ fontWeight: "bold" }}
+            placeholder="Write your comment here..."
+            onClick={() => setShowCommentField(true)}
+            fullWidth
+          />
+        )}
+        {showCommentField && (
+          <>
+            <TextField
+              variant="outlined"
+              multiline
+              rows={6}
+              placeholder="Write your comment here..."
+              value={commentText}
+              onChange={(e) => setCommentText(e.target.value)}
+              sx={{
+                borderRadius: "12px",
+                backgroundColor: "primary.ligth",
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "12px",
+                },
+                "& .MuiInputBase-input": {
+                  padding: "1rem",
+                },
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#ddd",
+                },
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#bbb",
+                },
+              }}
+            />
+            <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+              <Button
+                variant="contained"
+                onClick={handleCancel}
+                sx={{
+                  borderRadius: "12px",
+                  padding: "0.75rem 1.5rem",
+                  textTransform: "none",
+                  fontWeight: "bold",
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{
+                  borderRadius: "12px",
+                  padding: "0.75rem 1.5rem",
+                  textTransform: "none",
+                  fontWeight: "bold",
+                }}
+              >
+                Save
+              </Button>
+            </Box>
+          </>
+        )}
       </Box>
     </Container>
   );

@@ -1,6 +1,6 @@
 import "react-slideshow-image/dist/styles.css";
 import {
-  Button,
+  Box,
   Card,
   CardContent,
   CardHeader,
@@ -17,15 +17,17 @@ import { MdArrowOutward } from "react-icons/md";
 const defaultImage =
   "https://t3.ftcdn.net/jpg/03/27/55/60/360_F_327556002_99c7QmZmwocLwF7ywQ68ChZaBry1DbtD.jpg";
 
-const NewsCard = ({ title, link, mainImage, text }) => {
+const NewsCard = ({ title, url, image, content, publishedAt, source }) => {
   const { currentUser } = useSelector((state) => state.auth);
   const handleReadMore = () => {
     if (!currentUser) {
       toastWarnNotify("You must Login");
     } else {
-      window.open(link, "_blank");
+      window.open(url, "_blank");
     }
   };
+
+  const splittedContent = content.split("[")[0];
 
   return (
     <Container
@@ -50,38 +52,41 @@ const NewsCard = ({ title, link, mainImage, text }) => {
             sx={{
               display: "flex",
               flexDirection: "column",
-              justifyContent: "space-between",
+              justifyContent: "space-around",
               my: 3,
             }}
           >
-            {/* <Typography
-              variant="outlined"
+            <Box
               sx={{
-                marginRight: "auto",
-                marginLeft: "1rem",
-                marginBottom: "-4rem",
-                color: "cornflowerblue",
+                display: "flex",
+                justifyContent: "space-between",
+                paddingX: "1.5rem",
               }}
             >
-              Category: {category[0]}
-            </Typography> */}
-
+              <Typography sx={{ fontWeight: "bold" }}>
+                📰 {source.name}
+              </Typography>
+              <Typography>
+                {` ${new Date(publishedAt).toLocaleDateString("de-DE")}`}
+              </Typography>
+            </Box>
             <CardHeader
               sx={{
-                color: "seagreen",
+                // color: "gray",
                 "& .MuiTypography-root": {
                   fontSize: 15,
                   fontWeight: "bold",
                 },
               }}
               title={title}
-              // subheader={source.name}
             />
+
             <CardContent>
               <Typography
                 variant="body2"
                 sx={{
-                  maxHeight: "100px",
+                  // maxHeight: "100px",
+                  marginTop: "-3rem",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   display: "-webkit-box",
@@ -89,14 +94,14 @@ const NewsCard = ({ title, link, mainImage, text }) => {
                   WebkitBoxOrient: "vertical",
                 }}
               >
-                {text?.plainText || "No description available."}
+                {splittedContent || "No description available."}
               </Typography>
             </CardContent>
             <Typography
               onClick={handleReadMore}
               sx={{
                 marginRight: "2rem",
-                marginBottom: "1rem",
+                marginBottom: "-1rem",
                 marginLeft: "auto",
                 display: "flex",
                 gap: 1,
@@ -110,7 +115,7 @@ const NewsCard = ({ title, link, mainImage, text }) => {
             item
             sm={12}
             md={6}
-            order={{ xs: 1, md: 2 }}
+            // order={{ xs: 1, md: 2 }}
             sx={{ margin: "auto", marginBottom: "1rem" }}
           >
             <CardMedia
@@ -123,7 +128,7 @@ const NewsCard = ({ title, link, mainImage, text }) => {
               }}
               component="img"
               height="374"
-              image={mainImage?.url ? mainImage?.url : defaultImage}
+              image={image ? image : defaultImage}
               alt="image"
             />
           </Grid>

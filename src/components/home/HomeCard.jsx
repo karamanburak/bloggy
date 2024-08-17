@@ -162,6 +162,18 @@ const HomeCard = ({
               </Box>
             </Box>
             <CardContent>
+              <CardHeader
+                sx={{
+                  // color: "gray",
+                  "& .MuiTypography-root": {
+                    fontSize: 15,
+                    fontWeight: "bold",
+                    marginLeft: "-1rem",
+                  },
+                }}
+                title={title}
+              />
+
               <Typography
                 variant="body2"
                 sx={{

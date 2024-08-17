@@ -36,7 +36,7 @@ const ShowsCard = ({ name, genres, image, summary, url, rating }) => {
           height: { xs: 730, md: 400 },
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between",
+          justifyContent: "center",
         }}
       >
         <Grid container>
@@ -48,65 +48,84 @@ const ShowsCard = ({ name, genres, image, summary, url, rating }) => {
             sx={{
               display: "flex",
               flexDirection: "column",
-              justifyContent: "space-between",
+              justifyContent: "center",
               my: 3,
+              p: 2,
+              borderRadius: "12px",
             }}
           >
             <Box>
               <CardHeader
                 sx={{
-                  color: "seagreen",
                   "& .MuiTypography-root": {
-                    fontSize: 16,
+                    fontSize: 18,
                     fontWeight: "bold",
+                    color: "text.primary",
                   },
                 }}
                 title={name}
-                subheader={`${genres[0]} - ${genres[1]} - ${genres[2]}`}
+                subheader={
+                  <Typography
+                    variant="subtitle2"
+                    sx={{ color: "text.secondary", mt: 1 }}
+                  >
+                    {genres.slice(0, 3).join(" • ")}
+                  </Typography>
+                }
               />
-              <Typography
-                variant="outlined"
-                sx={{ color: "cornflowerblue", marginLeft: "1rem" }}
-              >
-                Rating: {rating.average}
-              </Typography>
             </Box>
 
-            <CardContent>
+            <CardContent sx={{ mt: 2 }}>
               <Typography
                 variant="body2"
                 sx={{
-                  maxHeight: "100px",
+                  maxHeight: "80px",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   display: "-webkit-box",
                   WebkitLineClamp: "3",
                   WebkitBoxOrient: "vertical",
-                  marginTop: "3rem",
+                  color: "text.secondary",
+                  lineHeight: 1.5,
                 }}
               >
                 {summary}
               </Typography>
+              <Typography
+                sx={{
+                  fontSize: "0.9rem",
+                  fontWeight: "bold",
+                  mt: 1,
+                }}
+              >
+                Rating: {rating.average}
+              </Typography>
             </CardContent>
-            <Typography
-              onClick={handleReadMore}
-              sx={{
-                marginRight: "2rem",
-                marginBottom: "1rem",
-                marginLeft: "auto",
-                display: "flex",
-                gap: 1,
-                cursor: "pointer",
-              }}
-            >
-              Read More <MdArrowOutward style={{ marginTop: ".3rem" }} />
-            </Typography>
+
+            <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
+              <Typography
+                onClick={handleReadMore}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  cursor: "pointer",
+                  fontWeight: 500,
+                  "&:hover": {
+                    textDecoration: "underline",
+                  },
+                }}
+              >
+                Read More <MdArrowOutward style={{ marginTop: ".2rem" }} />
+              </Typography>
+            </Box>
           </Grid>
+
           <Grid
             item
             sm={12}
             md={6}
-            order={{ xs: 1, md: 1 }}
+            order={{ xs: 1, md: 2 }}
             sx={{ margin: "auto", marginBottom: "1rem" }}
           >
             <CardMedia
