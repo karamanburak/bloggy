@@ -86,7 +86,7 @@ const NewsCard = ({ title, url, image, content, publishedAt, source }) => {
                 variant="body2"
                 sx={{
                   // maxHeight: "100px",
-                  marginTop: "-3rem",
+                  marginTop: { xs: "-1rem", md: "-3rem" },
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   display: "-webkit-box",
@@ -101,7 +101,7 @@ const NewsCard = ({ title, url, image, content, publishedAt, source }) => {
               onClick={handleReadMore}
               sx={{
                 marginRight: "2rem",
-                marginBottom: "-1rem",
+                marginBottom: { md: "-1rem" },
                 marginLeft: "auto",
                 display: "flex",
                 gap: 1,

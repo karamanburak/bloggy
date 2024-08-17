@@ -54,7 +54,7 @@ const Dashboard = () => {
             <img
               src={loadingGif}
               alt="loading..."
-              height={500}
+              height={300}
               style={{ display: "flex", margin: "auto" }}
             />
           ) : (

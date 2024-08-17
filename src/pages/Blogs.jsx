@@ -79,8 +79,8 @@ const Blogs = () => {
             <img
               src={loadingGif}
               alt="loading..."
-              height={500}
-              style={{ margin: "auto" }}
+              height={300}
+              style={{ display: "flex", margin: "auto" }}
             />
           ) : (
             currentBlogs.map((blog) => (

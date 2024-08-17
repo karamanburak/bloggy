@@ -111,9 +111,6 @@ const ShowsCard = ({ name, genres, image, summary, url, rating }) => {
                   gap: 1,
                   cursor: "pointer",
                   fontWeight: 500,
-                  "&:hover": {
-                    textDecoration: "underline",
-                  },
                 }}
               >
                 Read More <MdArrowOutward style={{ marginTop: ".2rem" }} />
