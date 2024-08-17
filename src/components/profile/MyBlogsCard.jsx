@@ -1,29 +1,25 @@
-import React from "react";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import Avatar from "@mui/material/Avatar";
-import Typography from "@mui/material/Typography";
-import { red } from "@mui/material/colors";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import {
-  Box,
-  Container,
-  Divider,
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  CardHeader,
   IconButton,
   Menu,
   MenuItem,
+  Avatar,
+  Divider,
+  Box,
+  Container,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-import { useState } from "react";
-import { MdArrowOutward } from "react-icons/md";
-import { useSelector } from "react-redux";
 import { BsThreeDots } from "react-icons/bs";
-import DeleteBlog from "../blog/DeleteBlog";
-import { MdEditNote } from "react-icons/md";
 import { IoIosLink } from "react-icons/io";
-import EditBlogModal from "../blog/EditBlogModal";
+import { MdArrowOutward } from "react-icons/md";
+import DeleteBlog from "../blog/DeleteBlog";
+
 const MyBlogsCard = ({
   _id,
   content,
@@ -43,9 +39,7 @@ const MyBlogsCard = ({
   const calcReadingTime = () => {
     const words = content.split(" ").length;
     const minutes = Math.ceil(words / 150);
-    if (minutes >= 1) {
-      setReadingTime(`${minutes} min read`);
-    }
+    setReadingTime(minutes >= 1 ? `${minutes} min read` : "Quick read");
   };
 
   const handleMenuOpen = (event) => {
@@ -57,7 +51,7 @@ const MyBlogsCard = ({
   };
 
   const handleCopyLink = () => {
-    const link = `${window.location.origin}/`;
+    const link = `${window.location.origin}/blog/detail/${_id}`;
     navigator.clipboard.writeText(link);
     handleMenuClose();
   };
@@ -70,14 +64,14 @@ const MyBlogsCard = ({
     <Container
       sx={{
         paddingBottom: "2rem",
-        width: { xs: "120%", sm: "80%" },
+        width: { xs: "120%", sm: "100%" },
         marginLeft: { xs: "-2rem", sm: "auto" },
       }}
     >
       <Card
         sx={{
           borderRadius: "10px",
-          backgroundColor: "white",
+          // backgroundColor: "primary.dark",
         }}
       >
         <CardMedia
@@ -85,6 +79,7 @@ const MyBlogsCard = ({
             marginTop: "1rem",
             padding: "1rem",
             borderRadius: "1.5rem",
+            objectFit: "fill",
           }}
           component="img"
           height="214"
@@ -98,9 +93,7 @@ const MyBlogsCard = ({
             paddingX: 3,
           }}
         >
-          <Typography sx={{ fontWeight: "bold", color: "black" }}>
-            {title}
-          </Typography>
+          <Typography sx={{ fontWeight: "bold" }}>{title}</Typography>
           <Typography
             onClick={() =>
               navigate(`/blog/detail/${_id}`, {
@@ -119,12 +112,10 @@ const MyBlogsCard = ({
               })
             }
             sx={{
-              marginBottom: "1rem",
-              marginRight: "1rem",
               cursor: "pointer",
             }}
           >
-            <MdArrowOutward style={{ color: "black" }} />
+            <MdArrowOutward style={{ color: "#ff6f61" }} />
           </Typography>
         </Box>
         <CardContent>
@@ -138,7 +129,6 @@ const MyBlogsCard = ({
               display: "-webkit-box",
               WebkitLineClamp: "3",
               WebkitBoxOrient: "vertical",
-              color: "gray",
             }}
           >
             {content}
@@ -155,23 +145,18 @@ const MyBlogsCard = ({
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <CardHeader
             sx={{
-              color: "seagreen",
               "& .MuiTypography-root": {
                 fontSize: 15,
                 fontWeight: "bold",
-                color: "gray",
               },
             }}
             avatar={
-              <Avatar sx={{ bgcolor: red[500] }} aria-label="image">
-                {_id ? (
-                  <img
-                    src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${userId}`}
-                    alt="image"
-                  />
-                ) : (
-                  "R"
-                )}
+              <Avatar sx={{ bgcolor: "#ff6f61" }} aria-label="image">
+                <img
+                  src={currentUser?.image}
+                  alt="user"
+                  style={{ width: "100%" }}
+                />
               </Avatar>
             }
             title={`${currentUser.firstName} ${currentUser.lastName}`}
@@ -179,7 +164,7 @@ const MyBlogsCard = ({
           />
           <Box sx={{ marginRight: "1rem", marginTop: "1rem" }}>
             <IconButton onClick={handleMenuOpen}>
-              <BsThreeDots style={{ color: "gray" }} />
+              <BsThreeDots style={{ color: "#ff6f61" }} />
             </IconButton>
             <Menu
               anchorEl={anchorEl}

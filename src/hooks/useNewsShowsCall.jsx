@@ -21,9 +21,10 @@ const useNewsShowsCall = () => {
     dispatch(fetchStart());
     try {
       const { data } = await axios("https://api.tvmaze.com/shows");
-      const cleanedData = data.slice(0, 20).map((show) => ({
+      const cleanedData = data.slice(0, 20).map((show, index) => ({
         ...show,
         summary: stripHtml(show.summary),
+        key: `show-${index}`,
       }));
       dispatch(getShowsSuccess(cleanedData));
     } catch (error) {
@@ -45,7 +46,7 @@ const useNewsShowsCall = () => {
         }
       );
       dispatch(getNewsSuccess(data.data.newsStories));
-      console.log(data.data.newsStories);
+      // console.log(data.data.newsStories);
     } catch (error) {
       console.error(error);
       dispatch(fetchFail());

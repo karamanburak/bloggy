@@ -1,41 +1,85 @@
-import { Button, Container, FormControl, Input } from "@mui/material";
+import { Button, Container, TextField, Box } from "@mui/material";
 import useBlogCall from "../../hooks/useBlogCall";
 import { useState } from "react";
 
-const ariaLabel = { 'aria-label': 'description' };
-
-const CommentForm = ({ blogId}) => {
-  const { postComment } = useBlogCall()
-  const [commentText, setCommentText] = useState("")
-
+const CommentForm = ({ blogId, userId }) => {
+  const { postComment } = useBlogCall();
+  const [commentText, setCommentText] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const commentData = {
-      "blogId": blogId,
-      "comment": commentText
+      blogId: blogId,
+      userId: userId,
+      comment: commentText,
     };
     postComment("comments", commentData);
-    // console.log(commentData);
-    
-    setCommentText("")
+    console.log(commentData);
+
+    setCommentText("");
   };
-  
 
   return (
-    <Container>
-      <FormControl
+    <Container sx={{ mt: 4 }}>
+      <Box
         component="form"
-        fullWidth
-        variant="outlined"
         onSubmit={handleSubmit}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+          backgroundColor: "primary.ligth",
+          padding: 2,
+          borderRadius: "12px",
+          boxShadow: (theme) =>
+            theme.palette.mode === "dark"
+              ? "0 4px 12px rgba(0, 0, 0, 0.5)"
+              : "0 4px 12px rgba(0, 0, 0, 0.1)",
+          width: { xs: "70vw", md: "45vw" },
+          marginLeft: { xs: "-.8rem", sm: 0 },
+        }}
       >
-
-        <Input sx={{ fontWeight: "bold" }} placeholder="Add Comment" inputProps={ariaLabel} value={commentText} onChange={(e) => setCommentText( e.target.value)} />
-        <Button type="submit" variant="contained" sx={{ mt: 1, backgroundColor: "primary.light" }}>Add Comment</Button>
-      </FormControl>
+        <TextField
+          variant="outlined"
+          multiline
+          rows={6}
+          placeholder="Write your comment here..."
+          value={commentText}
+          onChange={(e) => setCommentText(e.target.value)}
+          sx={{
+            borderRadius: "12px",
+            backgroundColor: "primary.ligth",
+            "& .MuiOutlinedInput-root": {
+              borderRadius: "12px",
+            },
+            "& .MuiInputBase-input": {
+              padding: "1rem",
+            },
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#ddd",
+            },
+            "&:hover .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#bbb",
+            },
+          }}
+        />
+        <Button
+          type="submit"
+          variant="contained"
+          // color="secondary"
+          sx={{
+            alignSelf: "flex-end",
+            borderRadius: "12px",
+            padding: "0.75rem 1.5rem",
+            textTransform: "none",
+            fontWeight: "bold",
+          }}
+        >
+          Add Comment
+        </Button>
+      </Box>
     </Container>
-  )
+  );
 };
 
 export default CommentForm;

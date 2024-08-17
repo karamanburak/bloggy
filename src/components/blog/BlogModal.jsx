@@ -12,7 +12,6 @@ import {
 import { useState } from "react";
 import useBlogCall from "../../hooks/useBlogCall";
 import { toastWarnNotify } from "../../helper/ToastNotify";
-import { useTheme } from "@mui/material/styles";
 import TinyMce from "./TinyMce";
 
 const style = {
@@ -34,7 +33,7 @@ export default function BlogModal({
   initialState,
   categories,
 }) {
-  console.log(categories);
+  // console.log(categories);
 
   const { postBlog } = useBlogCall();
   const [info, setInfo] = useState(initialState);

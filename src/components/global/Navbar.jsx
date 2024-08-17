@@ -1,5 +1,4 @@
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
@@ -28,7 +27,6 @@ import { useEffect } from "react";
 import BlogModal from "../blog/BlogModal";
 import { useLocation } from "react-router-dom";
 import { FaUser } from "react-icons/fa";
-import { ImProfile } from "react-icons/im";
 import { CiLogout } from "react-icons/ci";
 import { MdLogin } from "react-icons/md";
 import { FaRegRegistered } from "react-icons/fa";
@@ -149,6 +147,7 @@ function Navbar() {
         window.removeEventListener("scroll", handleScroll);
       };
     }
+    setNavbarTextColor(theme.palette.mode === "dark" ? "white" : "black");
   }, [location, theme]);
 
   return (
@@ -201,7 +200,7 @@ function Navbar() {
               onClose={handleCloseNavMenu}
               sx={{
                 display: { xs: "block", md: "none" },
-                color: navbarBg.color,
+                // color: "white",
               }}
             >
               {pages.map((page) => (

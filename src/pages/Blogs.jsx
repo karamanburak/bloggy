@@ -20,7 +20,6 @@ const Blogs = () => {
   const handleClose = () => {
     setOpen(false);
   };
-  // console.log(blogs);
 
   const [initialState, setInitialState] = useState({
     categoryId: "",

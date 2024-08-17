@@ -5,8 +5,7 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import { red } from "@mui/material/colors";
-import { Box, Button, Container, Grid } from "@mui/material";
+import { Box, Container, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
@@ -29,11 +28,12 @@ const HomeCard = ({
   createdAt,
   likes,
   countOfVisitors,
-  comments,
   categoryId,
+  comments,
 }) => {
   const { postLike } = useBlogCall();
   const { currentUser } = useSelector((state) => state.auth);
+  const { blogs } = useSelector((state) => state.blog);
   const navigate = useNavigate();
   const [readingTime, setReadingTime] = useState(null);
   const [liked, setLiked] = useState(false);
@@ -81,6 +81,8 @@ const HomeCard = ({
     postLike("blogs", _id);
   };
 
+  const { image: userImage, firstName, lastName } = userId;
+
   return (
     <Container
       maxWidth="xl"
@@ -119,28 +121,28 @@ const HomeCard = ({
             >
               <CardHeader
                 sx={{
-                  color: "seagreen",
                   "& .MuiTypography-root": {
                     fontSize: 15,
                     fontWeight: "bold",
                   },
                 }}
                 avatar={
-                  <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                    {_id ? (
+                  <Avatar aria-label="recipe">
+                    {userImage ? (
                       <img
-                        src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${userId}`}
-                        alt="image"
+                        src={userImage}
+                        alt="user"
+                        style={{ width: "100%" }}
                       />
                     ) : (
-                      "R"
+                      "A"
                     )}
                   </Avatar>
                 }
-                title={title}
-                subheader={`Published Date:  ${new Date(
-                  createdAt
-                ).toLocaleDateString("de-DE")}`}
+                title={`${firstName} ${lastName} `}
+                subheader={` ${new Date(createdAt).toLocaleDateString(
+                  "de-DE"
+                )}`}
               />
               <Box sx={{ display: "inline-block", mt: 3 }}>
                 {readingTime && (
@@ -196,11 +198,11 @@ const HomeCard = ({
                     }}
                     onClick={handleLike}
                   />
-                  <sup>{likes.length}</sup>
+                  <sup>{likes?.length}</sup>
                 </Typography>
                 <ChatBubbleOutlineIcon />
                 <Typography>
-                  <sup>{comments.length}</sup>
+                  <sup>{comments?.length}</sup>
                 </Typography>
                 <RemoveRedEyeIcon />
                 <Typography>
@@ -230,6 +232,7 @@ const HomeCard = ({
                 marginTop: "1rem",
                 marginRight: "1rem",
                 padding: "1rem",
+                objectFit: "fill",
               }}
               component="img"
               height="274"

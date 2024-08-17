@@ -44,7 +44,6 @@ const Dashboard = () => {
       />
 
       <Container maxWidth="xl">
-        <Box sx={wellcomeMessage}>{/* <Quotes /> */}</Box>
         <Box>
           {loading ? (
             <img
@@ -54,10 +53,13 @@ const Dashboard = () => {
               style={{ display: "flex", margin: "auto" }}
             />
           ) : (
-            <CustomSwiper items={blogs} ItemComponent={HomeCard} />
+            <>
+              <Box sx={wellcomeMessage}>{/* <Quotes /> */}</Box>
+              <CustomSwiper items={blogs} ItemComponent={HomeCard} />
+              {/* <CustomSwiper items={news} ItemComponent={NewsCard} /> */}
+              <CustomSwiper items={shows} ItemComponent={ShowsCard} />
+            </>
           )}
-          {/* <CustomSwiper items={news} ItemComponent={NewsCard} /> */}
-          <CustomSwiper items={shows} ItemComponent={ShowsCard} />
         </Box>
       </Container>
       <Box sx={{ marginTop: "2rem" }}>

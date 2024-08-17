@@ -4,7 +4,6 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import { red } from "@mui/material/colors";
 import { Box, Divider, Grid, IconButton, Menu, MenuItem } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -24,9 +23,14 @@ import DeleteBlog from "../components/blog/DeleteBlog";
 import { MdEditNote } from "react-icons/md";
 import { IoIosLink } from "react-icons/io";
 import EditBlogModal from "../components/blog/EditBlogModal";
+import CustomCardHeader from "../components/blog/CustomCardHeader ";
+import TinyMce from "../components/blog/TinyMce";
 
 const Detail = () => {
   const { state } = useLocation();
+  const { getBlogDetail } = useBlogCall();
+  const { currentUser } = useSelector((state) => state.auth);
+  const { blog } = useSelector((state) => state.blog);
   const {
     content,
     image,
@@ -38,9 +42,6 @@ const Detail = () => {
     categoryId,
     countOfVisitors,
   } = state;
-  const { getBlogDetail } = useBlogCall();
-  const { currentUser } = useSelector((state) => state.auth);
-  const { blog } = useSelector((state) => state.blog);
   const { categories } = useSelector((state) => state.category);
   const { getCategory } = useCategoryCall();
   const { postLike } = useBlogCall();
@@ -54,6 +55,10 @@ const Detail = () => {
     content: content,
     image: image,
   });
+
+  // console.log(blog);
+  // console.log(comments);
+  // console.log(currentUser);
 
   const handleToggleComments = () => {
     setShowComments((prevState) => !prevState);
@@ -81,10 +86,10 @@ const Detail = () => {
     );
   };
 
-  const isCurrentUserOwner = currentUser && userId === currentUser._id;
+  const isCurrentUserOwner = currentUser && userId._id === currentUser._id;
 
   const getCategoryName = () => {
-    const category = categories.find((cat) => cat._id === categoryId);
+    const category = categories.find((cat) => cat._id === categoryId._id);
     return category ? category.name : "Unknown Category";
   };
 
@@ -106,7 +111,7 @@ const Detail = () => {
   };
 
   const handleCopyLink = () => {
-    const link = `${window.location.origin}/`;
+    const link = `${window.location.origin}/blog/detail/${_id}`;
     navigator.clipboard.writeText(link);
     handleMenuClose();
   };
@@ -138,36 +143,23 @@ const Detail = () => {
           <Box sx={{ width: { xs: "80vw", md: "50vw" } }}>
             <Box
               sx={{
-                marginY: "2rem",
-                fontSize: "1.2rem",
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              <Typography variant="p">
-                <Typography
-                  variant="span"
-                  sx={{ color: "gray", marginRight: ".5rem" }}
-                >
-                  Written By{" "}
-                </Typography>{" "}
-                {blog
-                  ? `${blog?.userId?.firstName} ${blog?.userId?.lastName}`
-                  : title}
-              </Typography>
-            </Box>
-            <Box
-              sx={{
                 display: "flex",
                 justifyContent: "space-between",
-                marginBottom: "1rem",
-                marginX: { xs: "1rem", sm: "2rem" },
+                gap: { xs: "5rem", sm: "0" },
               }}
             >
-              <Typography>
-                {new Date(createdAt).toLocaleDateString("de-DE")}
-              </Typography>
-              <Typography>{getCategoryName()}</Typography>
+              <CustomCardHeader {...userId} createdAt={createdAt} />
+              <Box>
+                <Typography
+                  sx={{
+                    marginTop: "2rem",
+                    fontWeight: "bold",
+                    marginRight: "1rem",
+                  }}
+                >
+                  {getCategoryName()}
+                </Typography>
+              </Box>
             </Box>
           </Box>
 
@@ -210,7 +202,8 @@ const Detail = () => {
                 textAlign: "justify",
                 marginLeft: "1.5rem",
                 fontSize: "1.1rem",
-                color: "gray",
+                // color: "gray",
+                opacity: ".8",
               }}
             >
               {content}
@@ -266,17 +259,20 @@ const Detail = () => {
                   open={Boolean(anchorEl)}
                   onClose={handleMenuClose}
                 >
-                  <MenuItem key="copy" onClick={handleCopyLink}>
+                  <MenuItem key="copy-link" onClick={handleCopyLink}>
                     <IoIosLink style={{ marginRight: ".5rem" }} /> Copy Link
                   </MenuItem>
                   {isCurrentUserOwner && [
-                    <Box sx={{ display: "flex", flexDirection: "column" }}>
+                    <Box
+                      key="owner-actions"
+                      sx={{ display: "flex", flexDirection: "column" }}
+                    >
                       <Divider />
-                      <MenuItem key="edit" onClick={handleEditClick}>
+                      <MenuItem key="edit-blog" onClick={handleEditClick}>
                         <MdEditNote style={{ marginRight: ".5rem" }} /> Edit
                         Blog
                       </MenuItem>
-                      <MenuItem key="delete">
+                      <MenuItem key="delete-blog">
                         <DeleteBlog id={_id} />
                       </MenuItem>
                     </Box>,
@@ -285,66 +281,70 @@ const Detail = () => {
               </Box>
             </Box>
             <Box sx={{ mt: 2 }}>
-              <CardContent sx={{ margin: "auto", marginLeft: "-1rem" }}>
-                <CommentForm blogId={_id} />
-                {showComments &&
-                  (blog?.comments?.length > 0 ? (
-                    blog.comments.map((comment) => {
-                      if (comment.blogId === _id) {
-                        return (
-                          <Box
-                            key={comment._id}
-                            sx={{
-                              margin: "auto",
-                              width: { xs: "80vw", sm: "50vw" },
-                              backgroundColor: "primary.light",
-                              padding: "1rem",
-                              borderRadius: "1rem",
-                              my: 6,
-                              border: "2px solid gray",
-                            }}
-                          >
-                            <CardHeader
-                              sx={{
-                                color: "seagreen",
-                                "& .MuiTypography-root": {
-                                  fontSize: 15,
-                                  fontWeight: "bold",
-                                },
-                              }}
-                              avatar={
-                                <Avatar
-                                  sx={{ bgcolor: red[500] }}
-                                  aria-label="recipe"
-                                >
-                                  <img
-                                    key={comment._id}
-                                    src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${comment.userId.firstName}`}
-                                    alt="image"
-                                  />
-                                </Avatar>
-                              }
-                              title={`${comment.userId.firstName} ${comment.userId.lastName}`}
-                              subheader={`${new Date(
-                                comment.createdAt
-                              ).toLocaleDateString("de-DE")}`}
-                            />
-                            <Typography sx={{ marginLeft: "1.2rem" }}>
-                              {comment.comment}
-                            </Typography>
-                          </Box>
-                        );
-                      } else {
-                        return null;
-                      }
-                    })
+              <CardContent sx={{ margin: "auto", padding: "1rem" }}>
+                <CommentForm blogId={_id} userId={currentUser?._id} />
+                {showComments ? (
+                  blog?.comments?.length > 0 ? (
+                    blog?.comments?.map((comment) => (
+                      <Box
+                        key={comment._id}
+                        sx={{
+                          margin: "auto",
+                          width: { xs: "70vw", md: "45vw" },
+                          backgroundColor: "primary.ligth",
+                          padding: ".8rem",
+                          borderRadius: "1rem",
+                          my: 4,
+                          border: "1px solid #e0e0e0",
+                          boxShadow: 2,
+                        }}
+                      >
+                        <CardHeader
+                          sx={{
+                            paddingBottom: "0.5rem",
+                            "& .MuiTypography-root": {
+                              fontSize: 14,
+                              fontWeight: "bold",
+                            },
+                          }}
+                          avatar={
+                            <Avatar aria-label="recipe">
+                              {comment?.userId?.image ? (
+                                <img
+                                  src={comment?.userId?.image}
+                                  alt="user"
+                                  style={{ width: "100%" }}
+                                />
+                              ) : (
+                                comment?.userId?.firstName
+                                  .charAt(0)
+                                  .toUpperCase()
+                              )}
+                            </Avatar>
+                          }
+                          title={`${comment.userId.firstName} ${comment.userId.lastName}`}
+                          subheader={`${new Date(
+                            comment.createdAt
+                          ).toLocaleDateString("de-DE")}`}
+                        />
+                        <Typography sx={{ mt: 1, ml: 4 }}>
+                          {comment.comment}
+                        </Typography>
+                      </Box>
+                    ))
                   ) : (
                     <Typography
-                      sx={{ textAlign: "center", mt: 5, fontSize: "2rem" }}
+                      sx={{
+                        textAlign: "center",
+                        mt: 5,
+                        fontSize: "1.2rem",
+                        color: "text.secondary",
+                      }}
                     >
                       There are no comments yet...
                     </Typography>
-                  ))}
+                  )
+                ) : null}
               </CardContent>
             </Box>
           </Box>

@@ -28,6 +28,7 @@ export default function UpdateProfileModal({
   city,
   firstName,
   lastName,
+  _id,
 }) {
   const { updateUser } = useAuthCall();
   const [info, setInfo] = useState({
@@ -58,7 +59,7 @@ export default function UpdateProfileModal({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateUser(info);
+    updateUser(info, _id);
     handleClose();
   };
 

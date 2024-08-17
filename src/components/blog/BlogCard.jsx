@@ -21,18 +21,18 @@ const BlogCard = ({
   createdAt,
   likes,
   countOfVisitors,
-  comments,
   categoryId,
 }) => {
   const navigate = useNavigate();
   const [readingTime, setReadingTime] = useState(null);
-  const { postLike, getLike } = useBlogCall();
+  const { getLike } = useBlogCall();
   const { currentUser } = useSelector((state) => state.auth);
   const { categories } = useSelector((state) => state.category);
   const [liked, setLiked] = useState(false);
+  // console.log(categories);
 
   const getCategoryName = () => {
-    const category = categories.find((cat) => cat._id === categoryId);
+    const category = categories.find((cat) => cat._id === categoryId._id);
     return category ? category.name : "Unknown Category";
   };
 
@@ -50,9 +50,7 @@ const BlogCard = ({
     }
   }, [likes, currentUser, getLike]);
 
-  const handleLike = () => {
-    postLike("blogs", _id);
-  };
+  const { image: userImage, firstName, lastName } = userId;
 
   return (
     <Card
@@ -83,7 +81,6 @@ const BlogCard = ({
             display: "inline-block",
             marginLeft: "auto",
             marginRight: "1rem",
-            marginBottom: ".5rem",
           }}
         >
           {readingTime && (
@@ -93,9 +90,44 @@ const BlogCard = ({
       </CardActions>
       <CardContent>
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography sx={{ fontWeight: "bold", marginLeft: ".5rem" }}>
+          <Typography sx={{ fontWeight: "bold", marginBottom: ".5rem" }}>
             {title}
           </Typography>
+        </Box>
+        <Typography
+          variant="body2"
+          sx={{
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            display: "-webkit-box",
+            WebkitLineClamp: "3",
+            WebkitBoxOrient: "vertical",
+          }}
+        >
+          {content}
+        </Typography>
+      </CardContent>
+      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <CardHeader
+          sx={{
+            "& .MuiTypography-root": {
+              fontSize: 13,
+              fontWeight: "bold",
+            },
+          }}
+          avatar={
+            <Avatar aria-label="recipe">
+              {userImage ? (
+                <img src={userImage} alt="user" style={{ width: "100%" }} />
+              ) : (
+                firstName.charAt(0).toUpperCase()
+              )}
+            </Avatar>
+          }
+          title={`${firstName} ${lastName} `}
+          subheader={` ${new Date(createdAt).toLocaleDateString("de-DE")}`}
+        />
+        <Box>
           <Typography
             onClick={() =>
               navigate(`/blog/detail/${_id}`, {
@@ -114,48 +146,15 @@ const BlogCard = ({
               })
             }
             sx={{
-              marginBottom: "1rem",
-              marginRight: "1rem",
+              marginTop: "1rem",
+              marginRight: "2rem",
               cursor: "pointer",
             }}
           >
             <MdArrowOutward />
           </Typography>
         </Box>
-        <Typography
-          variant="body2"
-          sx={{
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            display: "-webkit-box",
-            WebkitLineClamp: "3",
-            WebkitBoxOrient: "vertical",
-          }}
-        >
-          {content}
-        </Typography>
-      </CardContent>
-      <CardHeader
-        sx={{
-          "& .MuiTypography-root": {
-            fontSize: 15,
-            fontWeight: "bold",
-          },
-        }}
-        avatar={
-          <Avatar aria-label="recipe">
-            {_id ? (
-              <img
-                src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${userId}`}
-                alt="image"
-              />
-            ) : (
-              "R"
-            )}
-          </Avatar>
-        }
-        subheader={new Date(createdAt).toLocaleDateString("de-DE")}
-      />
+      </Box>
     </Card>
   );
 };
