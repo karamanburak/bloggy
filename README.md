@@ -1,6 +1,7 @@
 # Bloggy App
 
 [Bloggy App Live](https://bloggiie.vercel.app/)
+[Bloggy Api Live](https://bloggy-api-v8e5.onrender.com/)
 
 ## Description
 
@@ -121,14 +122,16 @@ SOLUTION
 |    ├── features
 |    │   │   ├── autSlice.jsx
 |    │   │   ├── blogSlice.jsx
-|    │   │   └── categorySlice.jsx
+|    │   │   ├── categorySlice.jsx
+|    │   │   └── newsShowsSlice.jsx
 |    ├── helper
 |    │   │   └── ToastNotify.js
 |    ├── hooks
 |    │   │   ├── useAuthCall.jsx
 |    │   │   ├── useAxios.jsx
 |    │   │   ├── useBlogCall.jsx
-|    │   │   └── useCategoryCall.jsx
+|    │   │   ├── useCategoryCall.jsx
+|    │   │   └── useNewsShowsCall.jsx
 |    ├── pages
 |    │   ├── About.jsx
 |    │   ├── Blogs.jsx
@@ -164,4 +167,4 @@ SOLUTION
 
 ## Postman Documentation
 
-[View Postman Documentation](https://documenter.getpostman.com/view/32987022/2sA3Qv7AFa)
+[View Postman Documentation](https://documenter.getpostman.com/view/32987022/2sA3s9BnRX#677d706d-bc2c-401f-9808-d56288077f3a)
