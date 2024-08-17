@@ -161,9 +161,9 @@ SOLUTION
 └──   vite.config.js
 ```
 
-<!-- ## Outcome -->
+ ## Outcome 
 
-<!-- ![Bloggy App]() -->
+ ![Bloggy Gif](https://github.com/user-attachments/assets/1b87e17a-c46e-4958-8f7c-fea27a1a33b1) 
 
 ## Postman Documentation
 
