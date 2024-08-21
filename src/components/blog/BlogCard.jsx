@@ -129,22 +129,7 @@ const BlogCard = ({
         />
         <Box>
           <Typography
-            onClick={() =>
-              navigate(`/blog/detail/${_id}`, {
-                state: {
-                  _id,
-                  content,
-                  image,
-                  title,
-                  userId,
-                  createdAt,
-                  likes,
-                  countOfVisitors,
-                  categoryId,
-                  readingTime,
-                },
-              })
-            }
+            onClick={() => navigate(`/blog/detail/${_id}`)}
             sx={{
               marginTop: "1rem",
               marginRight: "2rem",

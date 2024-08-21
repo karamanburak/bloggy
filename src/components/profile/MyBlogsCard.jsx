@@ -20,17 +20,7 @@ import { IoIosLink } from "react-icons/io";
 import { MdArrowOutward } from "react-icons/md";
 import DeleteBlog from "../blog/DeleteBlog";
 
-const MyBlogsCard = ({
-  _id,
-  content,
-  image,
-  title,
-  userId,
-  createdAt,
-  likes,
-  countOfVisitors,
-  categoryId,
-}) => {
+const MyBlogsCard = ({ _id, content, image, title, createdAt }) => {
   const navigate = useNavigate();
   const [readingTime, setReadingTime] = useState(null);
   const { currentUser } = useSelector((state) => state.auth);
@@ -64,7 +54,7 @@ const MyBlogsCard = ({
     <Container
       sx={{
         paddingBottom: "2rem",
-        width: { xs: "120%", sm: "100%" },
+        width: { xs: "120%", sm: "80%" },
         marginLeft: { xs: "-2rem", sm: "auto" },
       }}
     >
@@ -79,7 +69,7 @@ const MyBlogsCard = ({
             marginTop: "1rem",
             padding: "1rem",
             borderRadius: "1.5rem",
-            objectFit: "fill",
+            objectFit: "cover",
           }}
           component="img"
           height="214"
@@ -95,22 +85,7 @@ const MyBlogsCard = ({
         >
           <Typography sx={{ fontWeight: "bold" }}>{title}</Typography>
           <Typography
-            onClick={() =>
-              navigate(`/blog/detail/${_id}`, {
-                state: {
-                  _id,
-                  content,
-                  image,
-                  title,
-                  userId,
-                  createdAt,
-                  likes,
-                  countOfVisitors,
-                  categoryId,
-                  readingTime,
-                },
-              })
-            }
+            onClick={() => navigate(`/blog/detail/${_id}`)}
             sx={{
               cursor: "pointer",
             }}

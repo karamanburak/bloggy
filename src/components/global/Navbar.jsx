@@ -130,14 +130,12 @@ function Navbar() {
     ) {
       if (isDetailPage) {
         setNavbarBg({
-          backgroundColor: theme.palette.neutral.dark,
-          opacity: 0.9,
+          display: "none",
         });
-        setNavbarTextColor(theme.palette.mode === "dark" ? "white" : "black");
       } else {
         setNavbarBg({
-          backgroundColor: theme.palette.neutral.dark,
-          opacity: 0.9,
+          backgroundColor: "transparent",
+          position: "absolute",
         });
         setNavbarTextColor(theme.palette.mode === "dark" ? "white" : "black");
       }
@@ -200,7 +198,7 @@ function Navbar() {
               onClose={handleCloseNavMenu}
               sx={{
                 display: { xs: "block", md: "none" },
-                // color: "white",
+                color: "white",
               }}
             >
               {pages.map((page) => (

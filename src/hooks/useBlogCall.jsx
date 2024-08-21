@@ -38,10 +38,10 @@ const useBlogCall = () => {
     }
   };
 
-  const getBlogDetail = async (url, id) => {
+  const getBlogDetail = async (id) => {
     dispatch(fetchStart());
     try {
-      const { data } = await axiosWithToken(`${url}/${id}`);
+      const { data } = await axiosWithToken(`blogs/${id}`);
       dispatch(getBlogDetailSuccess(data));
       //   console.log(data);
     } catch (error) {

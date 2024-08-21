@@ -62,19 +62,7 @@ const HomeCard = ({
     if (!currentUser) {
       toastWarnNotify("You must Login");
     } else {
-      navigate(`/blog/detail/${_id}`, {
-        state: {
-          content,
-          image,
-          title,
-          userId,
-          createdAt,
-          _id,
-          likes,
-          countOfVisitors,
-          categoryId,
-        },
-      });
+      navigate(`/blog/detail/${_id}`);
     }
   };
 
