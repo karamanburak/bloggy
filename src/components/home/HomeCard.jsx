@@ -142,17 +142,21 @@ const HomeCard = ({
               >
                 {content}
               </Typography>
-              <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
+              <Box sx={{ display: "flex", alignItems: "center", mt: 3 }}>
                 <FavoriteIcon
                   sx={{ color: liked ? "red" : "", cursor: "pointer" }}
                   onClick={handleLike}
                 />
-                <Typography sx={{ ml: 1 }}>{likes?.length}</Typography>
-                <ChatBubbleOutlineIcon sx={{ ml: 2 }} />
-                <Typography sx={{ ml: 1 }}>{comments?.length}</Typography>
-                <RemoveRedEyeIcon sx={{ ml: 2 }} />
-                <Typography sx={{ ml: 1 }}>
-                  {formatNumber(countOfVisitors)}
+                <Typography>
+                  <sup> {likes?.length} </sup>
+                </Typography>
+                <ChatBubbleOutlineIcon sx={{ ml: 1 }} />
+                <Typography>
+                  <sup>{comments?.length}</sup>
+                </Typography>
+                <RemoveRedEyeIcon sx={{ ml: 1 }} />
+                <Typography>
+                  <sup> {formatNumber(countOfVisitors)} </sup>
                 </Typography>
               </Box>
             </CardContent>

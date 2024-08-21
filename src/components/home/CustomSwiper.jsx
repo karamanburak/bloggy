@@ -19,8 +19,8 @@ const CustomSwiper = ({ items, ItemComponent }) => {
       slidesPerView={1}
       modules={[Autoplay, Pagination, Navigation, A11y]}
       pagination={{ clickable: true }}
-      // navigation={true}
-      autoplay={{ delay: 3000 }}
+      navigation={true}
+      autoplay={{ delay: 4000 }}
     >
       {items?.map((item, index) => (
         <SwiperSlide key={index}>

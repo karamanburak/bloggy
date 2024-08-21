@@ -52,7 +52,7 @@ const Detail = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [initialState, setInitialState] = useState();
-  console.log(blog);
+  // console.log(blog);
 
   const handleGoBack = () => {
     navigate(-1);
