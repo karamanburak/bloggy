@@ -16,17 +16,16 @@ import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import useBlogCall from "../../hooks/useBlogCall";
 import { MdArrowOutward } from "react-icons/md";
+import { formatNumber } from "../../helper/formatNumber";
 
 const HomeCard = ({
   _id,
   content,
   image,
-  title,
   userId,
   createdAt,
   likes,
   countOfVisitors,
-  categoryId,
   comments,
 }) => {
   const { postLike } = useBlogCall();
@@ -152,7 +151,9 @@ const HomeCard = ({
                 <ChatBubbleOutlineIcon sx={{ ml: 2 }} />
                 <Typography sx={{ ml: 1 }}>{comments?.length}</Typography>
                 <RemoveRedEyeIcon sx={{ ml: 2 }} />
-                <Typography sx={{ ml: 1 }}>{countOfVisitors}</Typography>
+                <Typography sx={{ ml: 1 }}>
+                  {formatNumber(countOfVisitors)}
+                </Typography>
               </Box>
             </CardContent>
 
