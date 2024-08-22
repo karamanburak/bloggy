@@ -74,7 +74,7 @@ const Detail = () => {
   useEffect(() => {
     if (blog) {
       setLikes(blog.likes || []);
-      setLiked((blog.likes || []).includes(currentUser._id));
+      setLiked((blog.likes || []).includes(currentUser?._id));
       setInitialState({
         title: blog?.title,
         content: blog?.content,
