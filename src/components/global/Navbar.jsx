@@ -204,10 +204,13 @@ function Navbar() {
               {pages.map((page) => (
                 <MenuItem
                   key={page.src}
+                  // onClick={() => {
+                  //   !currentUser && page.name === "Blogs"
+                  //     ? toastWarnNotify("You must login")
+                  //     : navigate(page.src);
+                  // }}
                   onClick={() => {
-                    !currentUser && page.name === "Blogs"
-                      ? toastWarnNotify("You must login")
-                      : navigate(page.src);
+                    navigate(page.src);
                   }}
                 >
                   <Typography textAlign="center">{page.name}</Typography>
@@ -220,10 +223,13 @@ function Navbar() {
             {pages.map((page) => (
               <Button
                 key={page.src}
+                // onClick={() => {
+                //   !currentUser && page.name === "Blogs"
+                //     ? toastWarnNotify("You must login")
+                //     : navigate(page.src);
+                // }}
                 onClick={() => {
-                  !currentUser && page.name === "Blogs"
-                    ? toastWarnNotify("You must login")
-                    : navigate(page.src);
+                  navigate(page.src);
                 }}
                 sx={{ my: 2, display: "block" }}
               >

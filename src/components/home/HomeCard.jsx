@@ -57,12 +57,16 @@ const HomeCard = ({
     postLike("blogs", _id);
   };
 
+  // const handleReadMore = () => {
+  //   if (!currentUser) {
+  //     toastWarnNotify("You must Login");
+  //   } else {
+  //     navigate(`/blog/detail/${_id}`);
+  //   }
+  // };
+
   const handleReadMore = () => {
-    if (!currentUser) {
-      toastWarnNotify("You must Login");
-    } else {
-      navigate(`/blog/detail/${_id}`);
-    }
+    navigate(`/blog/detail/${_id}`);
   };
 
   const { image: userImage, firstName, lastName } = userId;
