@@ -15,7 +15,7 @@ const CommentForm = ({ blogId, userId }) => {
 
     if (!currentUser) {
       toastWarnNotify(
-        "You need to be logged in to like this blog. Please sign in or register."
+        "You need to be logged in to comment this blog. Please sign in or register."
       );
       return;
     }
@@ -26,22 +26,16 @@ const CommentForm = ({ blogId, userId }) => {
       comment: commentText,
     };
 
-    // Set a loading state or similar indicator if needed
-    // setLoading(true);
-
     try {
       const success = await postComment("comments", commentData);
 
       if (success) {
-        setCommentText(""); // Clear the comment text if successful
-        setShowCommentField(false); // Hide the comment field if successful
+        setCommentText("");
+        setShowCommentField(false);
       }
     } catch (error) {
-      // Handle any additional errors if needed
       console.error("Error posting comment:", error);
     } finally {
-      // Reset any loading states or similar indicators if used
-      // setLoading(false);
     }
   };
 
