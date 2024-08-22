@@ -1,23 +1,48 @@
 import { Button, Container, TextField, Box, Input } from "@mui/material";
 import useBlogCall from "../../hooks/useBlogCall";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { toastWarnNotify } from "../../helper/ToastNotify";
 
 const CommentForm = ({ blogId, userId }) => {
   const { postComment } = useBlogCall();
   const [commentText, setCommentText] = useState("");
   const [showCommentField, setShowCommentField] = useState(false);
+  const { currentUser } = useSelector((state) => state.auth);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!currentUser) {
+      toastWarnNotify(
+        "You need to be logged in to like this blog. Please sign in or register."
+      );
+      return;
+    }
+
     const commentData = {
       blogId: blogId,
       userId: userId,
       comment: commentText,
     };
-    postComment("comments", commentData);
-    console.log(commentData);
-    setCommentText("");
-    setShowCommentField(false);
+
+    // Set a loading state or similar indicator if needed
+    // setLoading(true);
+
+    try {
+      const success = await postComment("comments", commentData);
+
+      if (success) {
+        setCommentText(""); // Clear the comment text if successful
+        setShowCommentField(false); // Hide the comment field if successful
+      }
+    } catch (error) {
+      // Handle any additional errors if needed
+      console.error("Error posting comment:", error);
+    } finally {
+      // Reset any loading states or similar indicators if used
+      // setLoading(false);
+    }
   };
 
   const handleCancel = () => {

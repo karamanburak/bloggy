@@ -21,7 +21,6 @@ import useAuthCall from "../../hooks/useAuthCall";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { avatarNavbar } from "../../styles/globalStyles";
-import { toastWarnNotify } from "../../helper/ToastNotify";
 import { BsPencilSquare } from "react-icons/bs";
 import { useEffect } from "react";
 import BlogModal from "../blog/BlogModal";
@@ -30,6 +29,7 @@ import { FaUser } from "react-icons/fa";
 import { CiLogout } from "react-icons/ci";
 import { MdLogin } from "react-icons/md";
 import { FaRegRegistered } from "react-icons/fa";
+import { toastWarnNotify } from "../../helper/ToastNotify";
 
 function Navbar() {
   const { logout } = useAuthCall();
@@ -105,6 +105,14 @@ function Navbar() {
     }
   };
 
+  const handleOpenClick = () => {
+    if (currentUser) {
+      handleOpen();
+    } else {
+      toastWarnNotify("To start writing, please sign in to your account.");
+    }
+  };
+
   const handleScroll = () => {
     if (window.scrollY > window.innerHeight) {
       setNavbarBg({
@@ -121,30 +129,25 @@ function Navbar() {
   };
 
   useEffect(() => {
-    const isDetailPage = location.pathname.startsWith("/blog/detail/");
+    const showNavbarOnRoutes = ["/profile", "/login", "/register"];
+    const currentPath = location.pathname;
+
     if (
-      location.pathname === "/profile" ||
-      location.pathname === "/login" ||
-      location.pathname === "/register" ||
-      isDetailPage
+      showNavbarOnRoutes.includes(currentPath) ||
+      currentPath.includes("detail")
     ) {
-      if (isDetailPage) {
-        setNavbarBg({
-          display: "none",
-        });
-      } else {
-        setNavbarBg({
-          backgroundColor: "transparent",
-          position: "absolute",
-        });
-        setNavbarTextColor(theme.palette.mode === "dark" ? "white" : "black");
-      }
+      setNavbarBg({
+        backgroundColor: "transparent",
+        position: "absolute",
+      });
+      setNavbarTextColor(theme.palette.mode === "dark" ? "white" : "black");
     } else {
       window.addEventListener("scroll", handleScroll);
       return () => {
         window.removeEventListener("scroll", handleScroll);
       };
     }
+
     setNavbarTextColor(theme.palette.mode === "dark" ? "white" : "black");
   }, [location, theme]);
 
@@ -245,23 +248,25 @@ function Navbar() {
             ))}
           </Box>
           <Box>
-            {currentUser && (
-              <Typography
-                sx={{
-                  cursor: "pointer",
-                  marginRight: "2rem",
-                  marginTop: "1.7rem",
-                  marginBottom: { xs: "1rem", md: "0" },
-                  color: navbarTextColor,
+            <Typography
+              sx={{
+                cursor: "pointer",
+                marginRight: "2rem",
+                marginTop: "1.7rem",
+                marginBottom: { xs: "1rem", md: "0" },
+                color: navbarTextColor,
+              }}
+              onClick={handleOpenClick}
+            >
+              <BsPencilSquare
+                style={{
+                  fontSize: "1.2rem",
+                  marginBottom: ".3rem",
+                  marginRight: ".5rem",
                 }}
-                onClick={handleOpen}
-              >
-                <BsPencilSquare
-                  style={{ fontSize: "1.2rem", marginBottom: ".3rem" }}
-                />{" "}
-                WRITE
-              </Typography>
-            )}
+              />
+              WRITE
+            </Typography>
           </Box>
           <IconButton
             sx={{

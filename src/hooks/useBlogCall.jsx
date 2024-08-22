@@ -54,7 +54,7 @@ const useBlogCall = () => {
     dispatch(fetchStart());
     try {
       await axiosWithToken.delete(`${url}/${id}`);
-      toastSuccessNotify("Blog successfully deleted");
+      toastSuccessNotify("Success! The blog has been deleted.");
     } catch (error) {
       console.log(error);
       dispatch(fetchFail());
@@ -70,7 +70,7 @@ const useBlogCall = () => {
     dispatch(fetchStart());
     try {
       await axiosWithToken.post(url, info);
-      toastSuccessNotify("Blog successfully added!");
+      toastSuccessNotify("Success! The blog has been added.");
     } catch (error) {
       console.log(error);
       dispatch(fetchFail());
@@ -86,7 +86,7 @@ const useBlogCall = () => {
     dispatch(fetchStart());
     try {
       await axiosWithToken.put(`${url}/${id}`, info);
-      toastSuccessNotify("Blog successfully changed");
+      toastSuccessNotify("Success! The blog has been updated.");
     } catch (error) {
       console.log(error);
       dispatch(fetchFail());
@@ -116,7 +116,7 @@ const useBlogCall = () => {
     dispatch(fetchStart());
     try {
       await axiosWithToken.post(`${url}`, info);
-      toastSuccessNotify("Comment successfully added!");
+      toastSuccessNotify("Your comment has been successfully posted!");
       getBlogDetail("blogs", info.blogId);
     } catch (error) {
       console.log(error);

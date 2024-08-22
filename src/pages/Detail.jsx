@@ -4,15 +4,7 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import {
-  Box,
-  CircularProgress,
-  Divider,
-  Grid,
-  IconButton,
-  Menu,
-  MenuItem,
-} from "@mui/material";
+import { Box, Divider, Grid, IconButton, Menu, MenuItem } from "@mui/material";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import useBlogCall from "../hooks/useBlogCall";
@@ -32,31 +24,23 @@ import { IoIosLink } from "react-icons/io";
 import EditBlogModal from "../components/blog/EditBlogModal";
 import CustomCardHeader from "../components/blog/CustomCardHeader ";
 import { useParams } from "react-router-dom";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useNavigate } from "react-router-dom";
 import loadingGif from "../assets/loading.gif";
 import { formatNumber } from "../helper/formatNumber";
+import { toastWarnNotify } from "../helper/ToastNotify";
 
 const Detail = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const { getBlogDetail, postLike } = useBlogCall();
   const { currentUser } = useSelector((state) => state.auth);
   const { blog, loading } = useSelector((state) => state.blog);
   const { categories } = useSelector((state) => state.category);
   const { getCategory } = useCategoryCall();
-
   const [likes, setLikes] = useState([]);
   const [liked, setLiked] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [initialState, setInitialState] = useState();
-  // console.log(blog);
-
-  const handleGoBack = () => {
-    navigate(-1);
-  };
 
   const handleToggleComments = () => {
     setShowComments((prevState) => !prevState);
@@ -84,15 +68,20 @@ const Detail = () => {
   }, []);
 
   const handleLike = () => {
+    if (!currentUser) {
+      toastWarnNotify(
+        "You need to be logged in to like this blog. Please sign in or register."
+      );
+      return;
+    }
     postLike("blogs", id);
     setLiked(!liked);
     setLikes((prevLikes) =>
       liked
-        ? prevLikes.filter((id) => id !== currentUser._id)
+        ? prevLikes.filter((userId) => userId !== currentUser._id)
         : [...prevLikes, currentUser._id]
     );
   };
-
   const isCurrentUserOwner =
     currentUser && blog?.userId?._id === currentUser?._id;
 
@@ -132,7 +121,7 @@ const Detail = () => {
         <img
           src={loadingGif}
           alt="loading..."
-          height={300}
+          // height={300}
           style={{
             display: "flex",
             margin: "auto",
@@ -150,17 +139,6 @@ const Detail = () => {
             alignItems: "center",
           }}
         >
-          <IconButton
-            onClick={handleGoBack}
-            sx={{
-              position: "absolute",
-              top: "1rem",
-              left: "1rem",
-              zIndex: 1000, // Ensure it's above other elements
-            }}
-          >
-            <ArrowBackIcon />
-          </IconButton>
           <Grid container spacing={2} mt={9} sx={{ flex }}>
             <Grid
               item
@@ -368,7 +346,14 @@ const Detail = () => {
                                 comment.createdAt
                               ).toLocaleDateString("de-DE")}`}
                             />
-                            <Typography sx={{ mt: 1, ml: 4 }}>
+                            <Typography
+                              sx={{
+                                mt: 1,
+                                ml: 9,
+                                paddingRight: "1rem",
+                                textAlign: "justify",
+                              }}
+                            >
                               {comment.comment}
                             </Typography>
                           </Box>
