@@ -1,16 +1,16 @@
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
-import AppRegistrationSharpIcon from '@mui/icons-material/AppRegistrationSharp';
+import AppRegistrationSharpIcon from "@mui/icons-material/AppRegistrationSharp";
 import Grid from "@mui/material/Grid";
-import { Formik } from 'formik';
+import { Formik } from "formik";
 import RegisterForm, { SignupSchema } from "../components/auth/RegisterForm";
 import Information from "../components/auth/Information";
 import Footer from "../components/home/Footer";
 import useAuthCall from "../hooks/useAuthCall";
 
 const Register = () => {
-  const { register } = useAuthCall()
+  const { register } = useAuthCall();
   return (
     <>
       <Container sx={{ backgroundColor: "primary.main", minWidth: "100%" }}>
@@ -33,7 +33,7 @@ const Register = () => {
                 m: "auto",
                 width: 40,
                 height: 40,
-                marginTop: "8rem"
+                marginTop: "8rem",
               }}
             >
               <AppRegistrationSharpIcon />

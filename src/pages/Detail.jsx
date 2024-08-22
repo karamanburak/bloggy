@@ -121,7 +121,7 @@ const Detail = () => {
         <img
           src={loadingGif}
           alt="loading..."
-          // height={300}
+          height={300}
           style={{
             display: "flex",
             margin: "auto",
@@ -139,7 +139,7 @@ const Detail = () => {
             alignItems: "center",
           }}
         >
-          <Grid container spacing={2} mt={9} sx={{ flex }}>
+          <Grid container spacing={2} mt={9} sx={{ flex, width: "100%" }}>
             <Grid
               item
               xs={12}
@@ -149,6 +149,7 @@ const Detail = () => {
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
+                width: "100%",
               }}
             >
               <Box sx={{ width: { xs: "80vw", md: "50vw" } }}>
@@ -180,6 +181,7 @@ const Detail = () => {
               <Box sx={{ width: { xs: "80vw", md: "50vw" }, margin: "auto" }}>
                 <CardMedia
                   sx={{
+                    width: "100%",
                     margin: "auto",
                     borderRadius: "20px",
                     objectFit: "cover",

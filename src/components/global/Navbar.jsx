@@ -155,13 +155,14 @@ function Navbar() {
     <Box
       position="fixed"
       sx={{
+        // width: "100%",
+        width: "98.9vw",
         backgroundColor: navbarBg,
         transition: "background-color 0.5s ease",
         zIndex: 99,
-        width: "100vw",
       }}
     >
-      <Container sx={{ minWidth: "95vw" }}>
+      <Container maxWidth="false">
         <Toolbar disableGutters>
           <Typography
             onClick={() => navigate("/")}
@@ -222,7 +223,12 @@ function Navbar() {
             </Menu>
           </Box>
 
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: "none", md: "flex" },
+            }}
+          >
             {pages.map((page) => (
               <Button
                 key={page.src}
@@ -239,6 +245,7 @@ function Navbar() {
                 <Typography
                   sx={{
                     marginTop: "1rem",
+                    marginLeft: "1rem",
                     color: navbarTextColor,
                   }}
                 >
@@ -299,6 +306,7 @@ function Navbar() {
                     height: "40px",
                     borderRadius: "50%",
                     marginTop: "1.5rem",
+                    // marginRight: "3rem",
                   }}
                 />
               </Box>
@@ -319,7 +327,7 @@ function Navbar() {
               </Tooltip>
             )}
             <Menu
-              sx={{ mt: "45px" }}
+              sx={{ mt: "60px" }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
