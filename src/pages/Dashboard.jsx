@@ -12,14 +12,15 @@ import NewsCard from "../components/home/NewsCard";
 import CustomSwiper from "../components/home/CustomSwiper";
 import useCategoryCall from "../hooks/useCategoryCall";
 import useNewsShowsCall from "../hooks/useNewsShowsCall";
+import BooksCard from "../components/home/BooksCard";
 
 const Dashboard = () => {
   const isDashboard = "/";
   const { getBlogData } = useBlogCall();
   const { getCategory } = useCategoryCall();
-  const { getShowsData, getNewsData } = useNewsShowsCall();
+  const { getShowsData, getNewsData, getBooksData } = useNewsShowsCall();
   const { blogs, loading } = useSelector((state) => state.blog);
-  const { news, shows } = useSelector((state) => state.newsShows);
+  const { news, shows, books } = useSelector((state) => state.newsShows);
 
   const topTrendingBlogs = [...blogs].sort(
     (a, b) => b.countOfVisitors - a.countOfVisitors
@@ -30,6 +31,7 @@ const Dashboard = () => {
     getCategory("categories");
     getNewsData();
     getShowsData();
+    getBooksData();
   }, []);
 
   return (
@@ -71,6 +73,7 @@ const Dashboard = () => {
                 />
                 <CustomSwiper items={news} ItemComponent={NewsCard} />
                 <CustomSwiper items={shows} ItemComponent={ShowsCard} />
+                <CustomSwiper items={books} ItemComponent={BooksCard} />
               </Box>
             </>
           )}

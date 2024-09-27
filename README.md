@@ -1,7 +1,7 @@
 # Bloggy App
 
 - [Bloggy App Live](https://bloggiie.vercel.app/)
-- [Bloggy Api Live](https://bloggy-api-v8e5.onrender.com/)
+- [Bloggy Api Live](https://bloggy-api-xa7p.onrender.com/)
 
 ## Description
 
@@ -161,9 +161,9 @@ SOLUTION
 └──   vite.config.js
 ```
 
- ## Outcome 
+## Outcome
 
- ![Bloggy Gif](https://github.com/user-attachments/assets/1b87e17a-c46e-4958-8f7c-fea27a1a33b1) 
+![Bloggy Gif](https://github.com/user-attachments/assets/1b87e17a-c46e-4958-8f7c-fea27a1a33b1)
 
 ## Postman Documentation
 

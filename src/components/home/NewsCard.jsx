@@ -47,6 +47,29 @@ const NewsCard = ({ title, url, image, content, publishedAt, source }) => {
             item
             xs={12}
             md={6}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "background.paper",
+            }}
+          >
+            <CardMedia
+              sx={{
+                width: "100%",
+                objectFit: "fill",
+                borderRadius: "1rem",
+              }}
+              component="img"
+              height="374"
+              image={image ? image : defaultImage}
+              alt="image"
+            />
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            md={6}
             order={{ xs: 1, md: 2 }}
             sx={{
               display: "flex",
@@ -111,29 +134,6 @@ const NewsCard = ({ title, url, image, content, publishedAt, source }) => {
                 Read More <MdArrowOutward style={{ marginTop: ".3rem" }} />
               </Typography>
             </Box>
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            md={6}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor: "background.paper",
-            }}
-          >
-            <CardMedia
-              sx={{
-                width: "100%",
-                objectFit: "fill",
-                borderRadius: "1rem",
-              }}
-              component="img"
-              height="374"
-              image={image ? image : defaultImage}
-              alt="image"
-            />
           </Grid>
         </Grid>
       </Card>
