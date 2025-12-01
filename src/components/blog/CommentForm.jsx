@@ -1,42 +1,24 @@
-import { Button, Container, TextField, Box, Input } from "@mui/material";
-import useBlogCall from "../../hooks/useBlogCall";
 import { useState } from "react";
-import { useSelector } from "react-redux";
-import { toastWarnNotify } from "../../helper/ToastNotify";
+import useBlogCall from "../../hooks/useBlogCall";
+import { HiChatAlt } from "react-icons/hi";
 
 const CommentForm = ({ blogId, userId }) => {
   const { postComment } = useBlogCall();
   const [commentText, setCommentText] = useState("");
   const [showCommentField, setShowCommentField] = useState(false);
-  const { currentUser } = useSelector((state) => state.auth);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (!currentUser) {
-      toastWarnNotify(
-        "You need to be logged in to comment this blog. Please sign in or register."
-      );
-      return;
-    }
+    if (!commentText.trim()) return;
 
     const commentData = {
       blogId: blogId,
       userId: userId,
       comment: commentText,
     };
-
-    try {
-      const success = await postComment("comments", commentData);
-
-      if (success) {
-        setCommentText("");
-        setShowCommentField(false);
-      }
-    } catch (error) {
-      console.error("Error posting comment:", error);
-    } finally {
-    }
+    postComment("comments", commentData);
+    setCommentText("");
+    setShowCommentField(false);
   };
 
   const handleCancel = () => {
@@ -44,90 +26,66 @@ const CommentForm = ({ blogId, userId }) => {
     setShowCommentField(false);
   };
 
+  if (!userId) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-gray-600 dark:text-gray-400">
+          Please log in to leave a comment
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <Container sx={{ mt: 4 }}>
-      <Box
-        component="form"
-        onSubmit={handleSubmit}
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-          backgroundColor: "primary.ligth",
-          padding: 2,
-          borderRadius: "12px",
-          boxShadow: (theme) =>
-            theme.palette.mode === "dark"
-              ? "0 4px 12px rgba(0, 0, 0, 0.5)"
-              : "0 4px 12px rgba(0, 0, 0, 0.1)",
-          width: { xs: "70vw", md: "45vw" },
-          marginLeft: { xs: "-.8rem", sm: 0 },
-        }}
-      >
-        {!showCommentField && (
-          <Input
-            sx={{ fontWeight: "bold" }}
-            placeholder="Write your comment here..."
-            onClick={() => setShowCommentField(true)}
-            fullWidth
-          />
-        )}
-        {showCommentField && (
-          <>
-            <TextField
-              variant="outlined"
-              multiline
+    <div className="card p-6 mb-8">
+      {!showCommentField ? (
+        <button
+          onClick={() => setShowCommentField(true)}
+          className="w-full text-left p-4 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-700 hover:border-primary-500 dark:hover:border-primary-500 transition-colors text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+        >
+          <div className="flex items-center space-x-3">
+            <HiChatAlt className="w-5 h-5" />
+            <span>Write your comment here...</span>
+          </div>
+        </button>
+      ) : (
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label
+              htmlFor="comment"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >
+              Your Comment
+            </label>
+            <textarea
+              id="comment"
               rows={6}
-              placeholder="Write your comment here..."
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
-              sx={{
-                borderRadius: "12px",
-                backgroundColor: "primary.ligth",
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: "12px",
-                },
-                "& .MuiInputBase-input": {
-                  padding: "1rem",
-                },
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#ddd",
-                },
-                "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#bbb",
-                },
-              }}
+              className="input-field resize-none"
+              placeholder="Share your thoughts..."
+              autoFocus
             />
-            <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
-              <Button
-                variant="contained"
-                onClick={handleCancel}
-                sx={{
-                  borderRadius: "12px",
-                  padding: "0.75rem 1.5rem",
-                  textTransform: "none",
-                  fontWeight: "bold",
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                variant="contained"
-                sx={{
-                  borderRadius: "12px",
-                  padding: "0.75rem 1.5rem",
-                  textTransform: "none",
-                  fontWeight: "bold",
-                }}
-              >
-                Save
-              </Button>
-            </Box>
-          </>
-        )}
-      </Box>
-    </Container>
+          </div>
+          <div className="flex justify-end space-x-3">
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="px-6 py-2 rounded-lg border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors font-medium"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="btn-primary"
+              disabled={!commentText.trim()}
+            >
+              Post Comment
+            </button>
+          </div>
+        </form>
+      )}
+    </div>
   );
 };
 

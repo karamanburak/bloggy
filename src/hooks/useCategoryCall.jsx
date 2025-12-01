@@ -10,10 +10,10 @@ const useCategoryCall = () => {
   const dispatch = useDispatch();
   const axiosWithToken = useAxios();
 
-  const getCategory = async () => {
+  const getCategory = async (url) => {
     dispatch(fetchStart());
     try {
-      const { data } = await axiosWithToken("categories");
+      const { data } = await axiosWithToken(`${url}`);
       //   console.log(data.data);
       dispatch(getCategories({ data: data.data }));
     } catch (error) {

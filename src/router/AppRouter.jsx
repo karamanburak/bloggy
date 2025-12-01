@@ -10,6 +10,7 @@ import Profile from "../pages/Profile";
 import Navbar from "../components/global/Navbar";
 import NotFound from "../pages/NotFound";
 import Detail from "../pages/Detail";
+import CreateBlog from "../pages/CreateBlog";
 
 const AppRouter = () => {
   return (
@@ -21,10 +22,11 @@ const AppRouter = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="*" element={<NotFound />} />
-        <Route path="/blog" element={<Blogs />} />
-        <Route path="/blog/detail/:id" element={<Detail />} />
         <Route path="" element={<PrivateRouter />}>
           <Route path="/profile" element={<Profile />} />
+          <Route path="/blog" element={<Blogs />} />
+          <Route path="/blog/create" element={<CreateBlog />} />
+          <Route path="/blog/detail/:id" element={<Detail />} />
         </Route>
       </Routes>
     </Router>

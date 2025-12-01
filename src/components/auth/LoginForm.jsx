@@ -1,141 +1,165 @@
-import { Button, CircularProgress, Container, IconButton } from "@mui/material";
-import Box from "@mui/material/Box"
-import TextField from "@mui/material/TextField"
-import { Form } from "formik"
+import { Form } from "formik";
 import { useSelector } from "react-redux";
 import { object, string } from "yup";
 import { useState } from "react";
-import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { EmailOutlined } from "@mui/icons-material";
-import { KeyOutlined } from "@mui/icons-material";
+import { HiEye, HiEyeOff, HiMail, HiLockClosed, HiUser } from "react-icons/hi";
 
 export const SignInScheme = object({
-  email: string()
-    .email('Invalid email!')
-    .required("Email is required!"),
-  password: string()
-    .required("Password is required!")
-})
+  usernameOrEmail: string()
+    .required("Username or Email is required!")
+    .test(
+      "is-email-or-username",
+      "Please enter a valid username or email",
+      (value) => {
+        if (!value) return false;
+        // Check if it's a valid email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        // Check if it's a valid username (3-15 characters, alphanumeric and underscore)
+        const usernameRegex = /^[a-zA-Z0-9_]{3,15}$/;
+        return emailRegex.test(value) || usernameRegex.test(value);
+      }
+    ),
+  password: string().required("Password is required!"),
+});
 
-
-const LoginForm = ({ values, handleChange, errors, touched, handleBlur, isSubmitting }) => {
-  const { loading } = useSelector(state => state.auth)
+const LoginForm = ({
+  values,
+  handleChange,
+  errors,
+  touched,
+  handleBlur,
+  isSubmitting,
+}) => {
+  const { loading } = useSelector((state) => state.auth);
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
-    if (password) {
-      setShowPassword(!showPassword);
-    }
+    setShowPassword(!showPassword);
   };
 
-  const endAdornment = () => {
-    return (
-      <IconButton onClick={() => togglePasswordVisibility()}>
-        {showPassword ? <VisibilityOffIcon /> : <RemoveRedEyeIcon />}
-      </IconButton>
-    )
-  }
-
+  // Determine if input is email or username
+  const isEmailFormat = values.usernameOrEmail?.includes("@");
+  const InputIcon = isEmailFormat ? HiMail : HiUser;
 
   return (
-    <Form>
-                
-      <Container  sx={{  marginBottom:"5rem", borderRadius: "10px"}}>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-          <TextField
-            label="Email"
-            name="email"
-            id="email"
-            inputProps={{
-              autoComplete: "off"
-            }}
-            type="email"
-            variant="standard"
-            color="secondary"
-            value={values.email}
+    <Form className="space-y-6">
+      {/* Username or Email Field */}
+      <div>
+        <label
+          htmlFor="usernameOrEmail"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+        >
+          Username or Email
+        </label>
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <InputIcon className="h-5 w-5 text-gray-400" />
+          </div>
+          <input
+            id="usernameOrEmail"
+            name="usernameOrEmail"
+            type="text"
+            autoComplete="username"
+            value={values.usernameOrEmail}
             onChange={handleChange}
             onBlur={handleBlur}
-            helperText={touched.email && errors.email}
-            error={touched.email && Boolean(errors.email)}
-            InputLabelProps={{
-              sx: {
-                textAlign: 'left',
-                left: values.email ? "5px" : "36px",
-                top: "23px",
-                fontSize: values.email ? "1.2rem" : "1.4rem",
-                position: values.email ? 'relative' : 'absolute',
-                transition: 'top 0.2s, left 0.2s, font-size 0.3s'
-              }
-            }}
-            InputProps={{
-              sx: {
-                gap: ".8rem"
-              },
-              startAdornment: (
-                <EmailOutlined color="action" />
-              )
-            }}
+            className={`input-field pl-10 ${
+              touched.usernameOrEmail && errors.usernameOrEmail
+                ? "border-red-500 focus:ring-red-500"
+                : ""
+            }`}
+            placeholder="Enter your username or email"
           />
-          <TextField
-            label="Password"
-            name="password"
+        </div>
+        {touched.usernameOrEmail && errors.usernameOrEmail && (
+          <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+            {errors.usernameOrEmail}
+          </p>
+        )}
+      </div>
+
+      {/* Password Field */}
+      <div>
+        <label
+          htmlFor="password"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+        >
+          Password
+        </label>
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <HiLockClosed className="h-5 w-5 text-gray-400" />
+          </div>
+          <input
             id="password"
+            name="password"
             type={showPassword ? "text" : "password"}
-            variant="standard"
-            color="secondary"
-            inputProps={{
-              autoComplete: "off"
-            }}
+            autoComplete="off"
             value={values.password}
             onChange={handleChange}
             onBlur={handleBlur}
-            helperText={touched.password && errors.password}
-            error={touched.password && Boolean(errors.password)}
-            InputLabelProps={{
-              sx: {
-                textAlign: 'left',
-                left: values.password ? "5px" : "36px",
-                top: "25px",
-                fontSize: values.password ? "1.2rem" : "1.4rem",
-                position: values.password ? 'relative' : 'absolute',
-                transition: 'top 0.2s, left 0.2s, font-size 0.3s'
-              }
-            }}
-            InputProps={{
-              sx: {
-                gap: ".5rem"
-              },
-              startAdornment: (
-                <KeyOutlined color="action" />
-              ),
-              endAdornment: (
-                endAdornment()
-              )
-            }}
-
+            className={`input-field pl-10 pr-10 ${
+              touched.password && errors.password
+                ? "border-red-500 focus:ring-red-500"
+                : ""
+            }`}
+            placeholder="Enter your password"
           />
+          <button
+            type="button"
+            onClick={togglePasswordVisibility}
+            className="absolute inset-y-0 right-0 pr-3 flex items-center"
+          >
+            {showPassword ? (
+              <HiEyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" />
+            ) : (
+              <HiEye className="h-5 w-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" />
+            )}
+          </button>
+        </div>
+        {touched.password && errors.password && (
+          <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+            {errors.password}
+          </p>
+        )}
+      </div>
 
-          {!loading ? (
-            <Button
-              type="submit"
-              variant="contained"
-              size="large"
-              disabled={isSubmitting}
-              color="secondary"
+      {/* Submit Button */}
+      <button
+        type="submit"
+        disabled={isSubmitting || loading}
+        className="btn-primary w-full flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {loading || isSubmitting ? (
+          <>
+            <svg
+              className="animate-spin h-5 w-5 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
             >
-              {isSubmitting ? "Loading..." : "Sign In"}
-            </Button>
-          ) : (
-            <Button variant="contained" disabled={loading}>
-              <CircularProgress />
-            </Button>
-          )}
-
-        </Box>
-      </Container>
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              />
+            </svg>
+            <span>Signing in...</span>
+          </>
+        ) : (
+          <span>Sign In</span>
+        )}
+      </button>
     </Form>
   );
-}
+};
 
-export default LoginForm
+export default LoginForm;

@@ -1,8 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import '../index.css'
-import 'mdb-react-ui-kit/dist/css/mdb.min.css';
-import "@fortawesome/fontawesome-free/css/all.min.css";
+import "../index.css";
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+// Initialize theme on app load
+const savedTheme = localStorage.getItem("theme") || "light";
+document.documentElement.classList.remove("light", "dark");
+document.documentElement.classList.add(savedTheme);
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);

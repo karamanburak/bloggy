@@ -1,19 +1,9 @@
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Typography,
-} from "@mui/material";
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import useBlogCall from "../../hooks/useBlogCall";
 import { useNavigate } from "react-router-dom";
-import { FiDelete } from "react-icons/fi";
+import { FiTrash2 } from "react-icons/fi";
 
-const DeleteBlog = ({ id }) => {
+const DeleteBlog = ({ id, isMenuItem = false }) => {
   const [open, setOpen] = useState(false);
   const { deleteBlog } = useBlogCall();
   const navigate = useNavigate();
@@ -24,32 +14,99 @@ const DeleteBlog = ({ id }) => {
     navigate(-1);
   };
 
+  if (isMenuItem) {
+    return (
+      <>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            setOpen(true);
+          }}
+          className="w-full flex items-center space-x-3 px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+        >
+          <FiTrash2 className="w-4 h-4" />
+          <span>Delete Blog</span>
+        </button>
+
+        {open && (
+          <>
+            <div
+              className="fixed inset-0 bg-black/50 z-50"
+              onClick={() => setOpen(false)}
+            />
+            <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+                  Confirm Delete
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400 mb-6">
+                  Are you sure you want to delete this blog post? This action cannot be undone.
+                </p>
+                <div className="flex items-center justify-end space-x-3">
+                  <button
+                    onClick={() => setOpen(false)}
+                    className="px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleDelete}
+                    className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors font-medium"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+      </>
+    );
+  }
+
   return (
-    <Box
-      sx={{
-        display: "flex",
-        gap: 2,
-        justifyContent: { xs: "center", lg: "flex-end" },
-      }}
-    >
-      <Typography onClick={() => setOpen(true)}>
-        <FiDelete style={{ marginRight: ".5rem" }} /> Delete Blog
-      </Typography>
-      <Dialog open={open} onClose={() => setOpen(false)}>
-        <DialogTitle>Confirm Delete</DialogTitle>
-        <DialogContent>
-          Are you sure you want to delete this blog post?
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpen(false)} sx={{ color: "gray" }}>
-            Cancel
-          </Button>
-          <Button onClick={handleDelete} sx={{ color: "red" }}>
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Box>
+    <div className="flex gap-2 justify-center lg:justify-end">
+      <button
+        onClick={() => setOpen(true)}
+        className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+      >
+        <FiTrash2 className="w-4 h-4" />
+        <span>Delete Blog</span>
+      </button>
+
+      {open && (
+        <>
+          <div
+            className="fixed inset-0 bg-black/50 z-50"
+            onClick={() => setOpen(false)}
+          />
+          <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+                Confirm Delete
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 mb-6">
+                Are you sure you want to delete this blog post? This action cannot be undone.
+              </p>
+              <div className="flex items-center justify-end space-x-3">
+                <button
+                  onClick={() => setOpen(false)}
+                  className="px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleDelete}
+                  className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors font-medium"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
   );
 };
 

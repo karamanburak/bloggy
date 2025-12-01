@@ -23,7 +23,6 @@ import {
 import { FaChartBar } from "react-icons/fa";
 import { MdOutlineVisibility } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import { formatNumber } from "../../helper/formatNumber";
 
 const TrendBlogs = () => {
   const { getTrendsData } = useBlogCall();
@@ -86,8 +85,11 @@ const TrendBlogs = () => {
           {topTrendingBlogs.map((blog) => {
             const {
               _id,
+              content,
               image,
               title,
+              userId,
+              createdAt,
               likes,
               countOfVisitors,
               categoryId,
@@ -162,7 +164,21 @@ const TrendBlogs = () => {
                     </Typography>
                   </CardContent>
                   <Button
-                    onClick={() => navigate(`/blog/detail/${_id}`)}
+                    onClick={() =>
+                      navigate(`/blog/detail/${_id}`, {
+                        state: {
+                          _id,
+                          content,
+                          image,
+                          title,
+                          userId,
+                          createdAt,
+                          likes,
+                          countOfVisitors,
+                          categoryId,
+                        },
+                      })
+                    }
                     variant="contained"
                     sx={{
                       cursor: "pointer",
@@ -181,7 +197,7 @@ const TrendBlogs = () => {
                     <Box sx={{ display: "flex", gap: 1 }}>
                       <Typography>
                         <MdOutlineVisibility />
-                        <sup>{formatNumber(countOfVisitors)}</sup>
+                        <sup>{countOfVisitors}</sup>
                       </Typography>
                       <Typography>
                         <FavoriteIcon style={{ fontSize: "1rem" }} />

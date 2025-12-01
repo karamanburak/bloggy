@@ -9,14 +9,24 @@ import {
   Typography,
 } from "@mui/material";
 import PageHeader from "./PageHeader";
+import { toastWarnNotify } from "../../helper/ToastNotify";
+import { useSelector } from "react-redux";
+import { MdArrowOutward } from "react-icons/md";
 
-const defaultImage =
-  "https://images.unsplash.com/photo-1581905764498-f1b60bae941a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=700&q=80";
+const ShowsCard = ({ name, genres, image, summary, url, rating }) => {
+  const { currentUser } = useSelector((state) => state.auth);
 
-const ShowsCard = ({ title, poster_path, overview, vote_average }) => {
+  const handleReadMore = () => {
+    if (!currentUser) {
+      toastWarnNotify("You must Login");
+    } else {
+      window.open(url, "_blank");
+    }
+  };
+
   return (
     <Container maxWidth="lg" sx={{ paddingBottom: "2rem" }}>
-      <PageHeader text="Now Playing" />
+      <PageHeader text="TV Shows" />
       <Card
         sx={{
           height: { xs: 730, md: 400 },
@@ -42,6 +52,12 @@ const ShowsCard = ({ title, poster_path, overview, vote_average }) => {
           >
             <Box>
               <Typography
+                variant="caption"
+                sx={{ fontWeight: "bold", color: "text.secondary" }}
+              >
+                {genres.slice(0, 3).join(" • ")}
+              </Typography>
+              <Typography
                 variant="h5"
                 sx={{
                   fontWeight: "bold",
@@ -49,7 +65,7 @@ const ShowsCard = ({ title, poster_path, overview, vote_average }) => {
                   mb: 2,
                 }}
               >
-                {title}
+                {name}
               </Typography>
               <Typography
                 variant="body2"
@@ -62,15 +78,29 @@ const ShowsCard = ({ title, poster_path, overview, vote_average }) => {
                   textOverflow: "ellipsis",
                 }}
               >
-                {overview}
+                {summary}
               </Typography>
               <Typography
                 sx={{
+                  fontSize: "1rem",
                   fontWeight: "bold",
-                  fontSize: ".8rem",
                 }}
               >
-                Rating: {vote_average}
+                Rating: {rating.average}
+              </Typography>
+            </Box>
+            <Box sx={{ marginLeft: "auto" }}>
+              <Typography
+                onClick={handleReadMore}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  cursor: "pointer",
+                  fontWeight: 500,
+                }}
+              >
+                Read More <MdArrowOutward style={{ marginTop: ".2rem" }} />
               </Typography>
             </Box>
           </Grid>
@@ -87,13 +117,9 @@ const ShowsCard = ({ title, poster_path, overview, vote_average }) => {
           >
             <CardMedia
               component="img"
-              image={
-                poster_path
-                  ? "https://image.tmdb.org/t/p/w1280" + poster_path
-                  : defaultImage
-              }
+              image={image?.original || image?.medium}
               height="374"
-              alt={`image for ${title}`}
+              alt="tv show image"
               sx={{
                 width: "100%",
                 objectFit: "fill",

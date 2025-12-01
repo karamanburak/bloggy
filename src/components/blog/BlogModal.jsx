@@ -9,10 +9,12 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useBlogCall from "../../hooks/useBlogCall";
 import { toastWarnNotify } from "../../helper/ToastNotify";
 import TinyMce from "./TinyMce";
+import { useSelector } from "react-redux";
+import useCategoryCall from "../../hooks/useCategoryCall";
 
 const style = {
   position: "absolute",
@@ -31,12 +33,19 @@ export default function BlogModal({
   open,
   handleClose,
   initialState,
-  categories,
+  categories: categoriesProp,
 }) {
-  // console.log(categories);
-
   const { postBlog } = useBlogCall();
+  const { getCategory } = useCategoryCall();
+  const { categories: categoriesFromRedux, loading } = useSelector((state) => state.category);
+  const categories = categoriesProp || categoriesFromRedux;
   const [info, setInfo] = useState(initialState);
+
+  useEffect(() => {
+    if (open && (!categories || categories.length === 0) && !loading) {
+      getCategory("categories");
+    }
+  }, [open, categories, loading, getCategory]);
 
   const [titleError, setTitleError] = useState("");
   // console.log(info);
@@ -114,8 +123,10 @@ export default function BlogModal({
               color="info"
               value={info?.categoryId || ""}
             >
-              {categories?.length > 0 ? (
-                categories?.map((category) => (
+              {loading || !categories || categories.length === 0 ? (
+                <MenuItem disabled>Loading...</MenuItem>
+              ) : (
+                categories.map((category) => (
                   <MenuItem
                     key={category?._id}
                     color="info"
@@ -124,8 +135,6 @@ export default function BlogModal({
                     {category?.name}
                   </MenuItem>
                 ))
-              ) : (
-                <MenuItem disabled>Loading...</MenuItem>
               )}
             </Select>
           </FormControl>

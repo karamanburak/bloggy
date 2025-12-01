@@ -16,16 +16,17 @@ import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import useBlogCall from "../../hooks/useBlogCall";
 import { MdArrowOutward } from "react-icons/md";
-import { formatNumber } from "../../helper/formatNumber";
 
 const HomeCard = ({
   _id,
   content,
   image,
+  title,
   userId,
   createdAt,
   likes,
   countOfVisitors,
+  categoryId,
   comments,
 }) => {
   const { postLike } = useBlogCall();
@@ -50,23 +51,31 @@ const HomeCard = ({
 
   const handleLike = () => {
     if (!currentUser) {
-      toastWarnNotify("Please log in to like this blog post.");
+      toastWarnNotify("You must login to like the blog.");
       return;
     }
 
     postLike("blogs", _id);
   };
 
-  // const handleReadMore = () => {
-  //   if (!currentUser) {
-  //     toastWarnNotify("Please log in to like this blog post.");
-  //   } else {
-  //     navigate(`/blog/detail/${_id}`);
-  //   }
-  // };
-
   const handleReadMore = () => {
-    navigate(`/blog/detail/${_id}`);
+    if (!currentUser) {
+      toastWarnNotify("You must Login");
+    } else {
+      navigate(`/blog/detail/${_id}`, {
+        state: {
+          content,
+          image,
+          title,
+          userId,
+          createdAt,
+          _id,
+          likes,
+          countOfVisitors,
+          categoryId,
+        },
+      });
+    }
   };
 
   const { image: userImage, firstName, lastName } = userId;
@@ -146,22 +155,16 @@ const HomeCard = ({
               >
                 {content}
               </Typography>
-              <Box sx={{ display: "flex", alignItems: "center", mt: 3 }}>
+              <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
                 <FavoriteIcon
                   sx={{ color: liked ? "red" : "", cursor: "pointer" }}
                   onClick={handleLike}
                 />
-                <Typography>
-                  <sup> {likes?.length} </sup>
-                </Typography>
-                <ChatBubbleOutlineIcon sx={{ ml: 1 }} />
-                <Typography>
-                  <sup>{comments?.length}</sup>
-                </Typography>
-                <RemoveRedEyeIcon sx={{ ml: 1 }} />
-                <Typography>
-                  <sup> {formatNumber(countOfVisitors)} </sup>
-                </Typography>
+                <Typography sx={{ ml: 1 }}>{likes?.length}</Typography>
+                <ChatBubbleOutlineIcon sx={{ ml: 2 }} />
+                <Typography sx={{ ml: 1 }}>{comments?.length}</Typography>
+                <RemoveRedEyeIcon sx={{ ml: 2 }} />
+                <Typography sx={{ ml: 1 }}>{countOfVisitors}</Typography>
               </Box>
             </CardContent>
 

@@ -1,57 +1,75 @@
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import { Form } from "formik";
 import * as Yup from "yup";
-import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useState } from "react";
-import { IconButton, InputAdornment } from "@mui/material";
-import { EmailOutlined } from "@mui/icons-material";
-import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
-import { KeyOutlined } from "@mui/icons-material";
-import LocationCityIcon from '@mui/icons-material/LocationCity';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import {
+  HiEye,
+  HiEyeOff,
+  HiMail,
+  HiLockClosed,
+  HiUser,
+} from "react-icons/hi";
 
 export const SignupSchema = Yup.object().shape({
-  username: Yup.string()
-    .min(3)
-    .max(15)
-    .required(),
-  firstName: Yup.string()
-    .min(2, 'Too Short!')
-    .max(20, 'Too Long!')
-    .required(),
-  lastName: Yup.string()
-    .min(2, 'Too Short!')
-    .max(20, 'Too Long!')
-    .required(),
-  email: Yup.string().email('Invalid email').required(),
+  username: Yup.string().min(3).max(15).required("Username is required"),
+  email: Yup.string()
+    .email("Invalid email")
+    .required("Email is required"),
   password: Yup.string()
     .min(8, "The password must be at least 8 characters long")
     .max(20, "The password may be a maximum of 20 characters long")
     .matches(/\d+/, "The password must contain at least one number!")
-    .matches(/[a-z]/, "The password must contain at least one lowercase letter")
-    .matches(/[A-Z]/, "The password must contain at least one capital letter")
-    .matches(/[@$?!%&*.]+/, "The password must contain at least one special character (@$!%*?&.)")
-    .required(),
+    .matches(
+      /[a-z]/,
+      "The password must contain at least one lowercase letter"
+    )
+    .matches(
+      /[A-Z]/,
+      "The password must contain at least one capital letter"
+    )
+    .matches(
+      /[@$?!%&*.]+/,
+      "The password must contain at least one special character (@$!%*?&.)"
+    )
+    .required("Password is required"),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password'), null], 'Please make sure your passwords match')
-    .required("Confirm Password is a required field")
+    .oneOf([Yup.ref("password"), null], "Please make sure your passwords match")
+    .required("Confirm Password is a required field"),
 });
 
 const registerFormField = [
-  { id: "username", name: "username", label: "Username *", type: "text", icon: <PersonAddIcon /> },
-  { id: "firstName", name: "firstName", label: "First Name *", type: "text", icon: <PersonAddIcon /> },
-  { id: "lastName", name: "lastName", label: "Last Name *", type: "text", icon: <PersonAddIcon /> },
-  { id: "email", name: "email", label: "Email Address *", type: "text", icon: <EmailOutlined/> },
-  { id: "image", name: "image", label: "Image ", type: "text", icon: <AddPhotoAlternateIcon/> },
-  { id: "bio", name: "bio", label: "Biography ", type: "text",  icon: <HistoryEduIcon/> },
-  { id: "city", name: "city", label: "City ", type: "text", icon: <LocationCityIcon /> },
-  { id: "password", name: "password", label: "Password *", type: "password", icon: <KeyOutlined/> },
-  { id: "confirmPassword", name: "confirmPassword", label: "Confirm Password *", type: "password", icon: <KeyOutlined /> },
-]
+  {
+    id: "username",
+    name: "username",
+    label: "Username",
+    type: "text",
+    icon: HiUser,
+    required: true,
+  },
+  {
+    id: "email",
+    name: "email",
+    label: "Email Address",
+    type: "email",
+    icon: HiMail,
+    required: true,
+  },
+  {
+    id: "password",
+    name: "password",
+    label: "Password",
+    type: "password",
+    icon: HiLockClosed,
+    required: true,
+  },
+  {
+    id: "confirmPassword",
+    name: "confirmPassword",
+    label: "Confirm Password",
+    type: "password",
+    icon: HiLockClosed,
+    required: true,
+  },
+];
 
 const RegisterForm = ({
   values,
@@ -64,77 +82,124 @@ const RegisterForm = ({
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-
   const togglePasswordVisibility = (field) => {
-    if (field === 'password') {
+    if (field === "password") {
       setShowPassword(!showPassword);
-    } else if (field === 'confirmPassword') {
+    } else if (field === "confirmPassword") {
       setShowConfirmPassword(!showConfirmPassword);
     }
   };
-  
-  const endAdornment = (field) => {
-    return (
-      <InputAdornment position="end">
-        <IconButton onClick={() => togglePasswordVisibility(field)}>
-          {field === 'password' ? (showPassword ? <VisibilityOffIcon /> : <RemoveRedEyeIcon />) : null}
-          {field === 'confirmPassword' ? (showConfirmPassword ? <VisibilityOffIcon /> : <RemoveRedEyeIcon />) : null}
-        </IconButton>
-      </InputAdornment>
-    )
-  }
 
   return (
-    <Form>
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        {registerFormField.map((field) => (
-          <TextField
-            key={field.id}
-            label={field.label}
-            name={field.name}
-            id={field.id}
-            variant="standard"
-            color="secondary"
-            inputProps={{
-              autoComplete: "off"
-            }}
-            type={field.type === 'password' ? (field.name === 'password' ? (showPassword ? 'text' : 'password') : (showConfirmPassword ? 'text' : 'password')) : field.type}
-            value={values[field.name]}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            helperText={touched[field.name] && errors[field.name]}
-            error={touched[field.name] && Boolean(errors[field.name])}
-            InputLabelProps={{
-              sx: {
-                textAlign: 'left',
-                left:values[field.name] ? "5px" : "35px",
-                top: "23px",
-                fontSize: values[field.name] ? "1rem" : "1.2rem",
-                position: values[field.name] ? 'relative' : 'absolute',
-                transition: 'top 0.2s, left 0.2s, font-size 0.3s'
-              },
-            }}
-            InputProps={{
-              startAdornment: field.icon && ( 
-                <InputAdornment position="start">
-                  {field.icon}
-                </InputAdornment>
-              ),
-              endAdornment: endAdornment(field.name),
-            }}
-          />
+    <Form className="space-y-4">
+      <div className="space-y-4">
+        {registerFormField.map((field) => {
+          const IconComponent = field.icon;
+          const isPasswordField =
+            field.type === "password" &&
+            (field.name === "password" || field.name === "confirmPassword");
+          const showPasswordState =
+            field.name === "password"
+              ? showPassword
+              : field.name === "confirmPassword"
+              ? showConfirmPassword
+              : false;
 
-        ))}
+          return (
+            <div key={field.id}>
+              <label
+                htmlFor={field.id}
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+              >
+                {field.label}
+                {field.required && (
+                  <span className="text-red-500 ml-1">*</span>
+                )}
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <IconComponent className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  id={field.id}
+                  name={field.name}
+                  type={
+                    isPasswordField
+                      ? showPasswordState
+                        ? "text"
+                        : "password"
+                      : field.type
+                  }
+                  autoComplete="off"
+                  value={values[field.name]}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  className={`input-field pl-10 ${
+                    isPasswordField ? "pr-10" : ""
+                  } ${
+                    touched[field.name] && errors[field.name]
+                      ? "border-red-500 focus:ring-red-500"
+                      : ""
+                  }`}
+                  placeholder={`Enter your ${field.label.toLowerCase()}`}
+                />
+                {isPasswordField && (
+                  <button
+                    type="button"
+                    onClick={() => togglePasswordVisibility(field.name)}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  >
+                    {showPasswordState ? (
+                      <HiEyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" />
+                    ) : (
+                      <HiEye className="h-5 w-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" />
+                    )}
+                  </button>
+                )}
+              </div>
+              {touched[field.name] && errors[field.name] && (
+                <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                  {errors[field.name]}
+                </p>
+              )}
+            </div>
+          );
+        })}
+      </div>
 
-        <Button
-          type="submit"
-          variant="contained"
-          size="large"
-          disabled={isSubmitting}
-          color="secondary">
-          {isSubmitting ? "Loading..." : "Sign Up"}
-        </Button>
-      </Box>
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="btn-primary w-full mt-6 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {isSubmitting ? (
+          <>
+            <svg
+              className="animate-spin h-5 w-5 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              />
+            </svg>
+            <span>Creating account...</span>
+          </>
+        ) : (
+          <span>Sign Up</span>
+        )}
+      </button>
     </Form>
   );
 };

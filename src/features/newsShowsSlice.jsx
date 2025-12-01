@@ -5,7 +5,6 @@ const newsShowsSlice = createSlice({
   initialState: {
     news: [],
     shows: [],
-    books: [],
     loading: false,
     error: false,
   },
@@ -22,10 +21,6 @@ const newsShowsSlice = createSlice({
       state.loading = false;
       state.shows = payload;
     },
-    getBooksSuccess: (state, { payload }) => {
-      state.loading = false;
-      state.books = payload;
-    },
     fetchFail: (state) => {
       state.loading = false;
       state.error = true;
@@ -33,12 +28,7 @@ const newsShowsSlice = createSlice({
   },
 });
 
-export const {
-  fetchStart,
-  getNewsSuccess,
-  getShowsSuccess,
-  getBooksSuccess,
-  fetchFail,
-} = newsShowsSlice.actions;
+export const { fetchStart, getNewsSuccess, getShowsSuccess, fetchFail } =
+  newsShowsSlice.actions;
 
 export default newsShowsSlice.reducer;

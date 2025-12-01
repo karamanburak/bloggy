@@ -6,116 +6,116 @@ export const tokens = (mode) => ({
     ...(mode === "dark"
         ? {
             grey: {
-                100: "#e0e0e0",
-                200: "#c2c2c2",
-                300: "#a3a3a3",
-                400: "#858585",
-                500: "#666666",
-                600: "#525252",
-                700: "#222222",
-                800: "#292929",
-                900: "#141414",
+                100: "#f1f5f9", // slate-100
+                200: "#e2e8f0", // slate-200
+                300: "#cbd5e1", // slate-300
+                400: "#94a3b8", // slate-400
+                500: "#64748b", // slate-500
+                600: "#475569", // slate-600
+                700: "#334155", // slate-700
+                800: "#1e293b", // slate-800
+                900: "#0f172a", // slate-900
             },
             primary: {
-                100: "#d0d1d5",
-                200: "#a1a4ab",
-                300: "#727681",
-                400: "#1F2A40",
-                500: "#141b2d",
-                600: "#101624",
-                700: "#0c101b",
-                800: "#080b12",
-                900: "#040509",
+                100: "#e0e7ff", // indigo-100
+                200: "#c7d2fe", // indigo-200
+                300: "#a5b4fc", // indigo-300
+                400: "#818cf8", // indigo-400
+                500: "#6366f1", // indigo-500
+                600: "#4f46e5", // indigo-600
+                700: "#4338ca", // indigo-700
+                800: "#3730a3", // indigo-800
+                900: "#312e81", // indigo-900
             },
             greenAccent: {
-                100: "#dbf5ee",
-                200: "#b7ebde",
-                300: "#94e2cd",
-                400: "#70d8bd",
-                500: "#4cceac",
-                600: "#3da58a",
-                700: "#2e7c67",
-                800: "#1e5245",
-                900: "#0f2922",
+                100: "#d1fae5",
+                200: "#a7f3d0",
+                300: "#6ee7b7",
+                400: "#34d399",
+                500: "#10b981",
+                600: "#059669",
+                700: "#047857",
+                800: "#065f46",
+                900: "#064e3b",
             },
             redAccent: {
-                100: "#f8dcdb",
-                200: "#f1b9b7",
-                300: "#e99592",
-                400: "#e2726e",
-                500: "#db4f4a",
-                600: "#af3f3b",
-                700: "#832f2c",
-                800: "#58201e",
-                900: "#2c100f",
+                100: "#ffe4e6",
+                200: "#fecdd3",
+                300: "#fda4af",
+                400: "#fb7185",
+                500: "#f43f5e",
+                600: "#e11d48",
+                700: "#be123c",
+                800: "#9f1239",
+                900: "#881337",
             },
             blueAccent: {
-                100: "#e1e2fe",
-                200: "#c3c6fd",
-                300: "#a4a9fc",
-                400: "#868dfb",
-                500: "#6870fa",
-                600: "#535ac8",
-                700: "#3e4396",
-                800: "#2a2d64",
-                900: "#151632",
+                100: "#dbeafe",
+                200: "#bfdbfe",
+                300: "#93c5fd",
+                400: "#60a5fa",
+                500: "#3b82f6",
+                600: "#2563eb",
+                700: "#1d4ed8",
+                800: "#1e40af",
+                900: "#1e3a8a",
             },
         }
         : {
             grey: {
-                100: "#141414",
-                200: "#292929",
-                300: "#3d3d3d",
-                400: "#525252",
-                500: "#666666",
-                600: "#858585",
-                700: "#E0ECFF",
-                800: "#c2c2c2",
-                900: "#e0e0e0",
+                100: "#0f172a",
+                200: "#1e293b",
+                300: "#334155",
+                400: "#475569",
+                500: "#64748b",
+                600: "#94a3b8",
+                700: "#cbd5e1",
+                800: "#e2e8f0",
+                900: "#f1f5f9",
             },
             primary: {
-                100: "#CCDDD3",
-                200: "#080b12",
-                300: "#0c101b",
-                400: "#FFF",
-                500: "#141b2d",
-                600: "#1F2A40",
-                700: "#727681",
-                800: "#a1a4ab",
-                900: "#d0d1d5",
+                100: "#312e81",
+                200: "#3730a3",
+                300: "#4338ca",
+                400: "#4f46e5",
+                500: "#6366f1",
+                600: "#818cf8",
+                700: "#a5b4fc",
+                800: "#c7d2fe",
+                900: "#e0e7ff",
             },
             greenAccent: {
-                100: "#0f2922",
-                200: "#1e5245",
-                300: "#2e7c67",
-                400: "#3da58a",
-                500: "#4cceac",
-                600: "#70d8bd",
-                700: "#94e2cd",
-                800: "#b7ebde",
-                900: "#dbf5ee",
+                100: "#064e3b",
+                200: "#065f46",
+                300: "#047857",
+                400: "#059669",
+                500: "#10b981",
+                600: "#34d399",
+                700: "#6ee7b7",
+                800: "#a7f3d0",
+                900: "#d1fae5",
             },
             redAccent: {
-                100: "#2c100f",
-                200: "#58201e",
-                300: "#832f2c",
-                400: "#af3f3b",
-                500: "#db4f4a",
-                600: "#e2726e",
-                700: "#e99592",
-                800: "#f1b9b7",
-                900: "#f8dcdb",
+                100: "#881337",
+                200: "#9f1239",
+                300: "#be123c",
+                400: "#e11d48",
+                500: "#f43f5e",
+                600: "#fb7185",
+                700: "#fda4af",
+                800: "#fecdd3",
+                900: "#ffe4e6",
             },
             blueAccent: {
-                100: "#151632",
-                200: "#2a2d64",
-                300: "#3e4396",
-                400: "#535ac8",
-                500: "#6870fa",
-                600: "#868dfb",
-                700: "#a4a9fc",
-                800: "#c3c6fd",
-                900: "#e1e2fe",
+                100: "#1e3a8a",
+                200: "#1e40af",
+                300: "#1d4ed8",
+                400: "#2563eb",
+                500: "#3b82f6",
+                600: "#60a5fa",
+                700: "#93c5fd",
+                800: "#bfdbfe",
+                900: "#dbeafe",
             },
         }),
 });
@@ -130,7 +130,7 @@ export const themeSettings = (mode) => {
                 ? {
                     // palette values for dark mode
                     primary: {
-                        main: colors.primary[700],
+                        main: colors.primary[500],
                     },
                     secondary: {
                         main: colors.greenAccent[500],
@@ -141,13 +141,14 @@ export const themeSettings = (mode) => {
                         light: colors.grey[100],
                     },
                     background: {
-                        default: colors.primary[500],
+                        default: colors.grey[900],
+                        paper: colors.grey[800],
                     },
                 }
                 : {
                     // palette values for light mode
                     primary: {
-                        main: colors.primary[400],
+                        main: colors.primary[500],
                     },
                     secondary: {
                         main: colors.greenAccent[500],
@@ -158,11 +159,39 @@ export const themeSettings = (mode) => {
                         light: colors.grey[100],
                     },
                     background: {
-                        default: "#fcfcfc",
+                        default: "#f8fafc", // slate-50
+                        paper: "#ffffff",
                     },
                 }),
         },
-
+        typography: {
+            fontFamily: ["Plus Jakarta Sans", "sans-serif"].join(","),
+            fontSize: 12,
+            h1: {
+                fontFamily: ["Plus Jakarta Sans", "sans-serif"].join(","),
+                fontSize: 40,
+            },
+            h2: {
+                fontFamily: ["Plus Jakarta Sans", "sans-serif"].join(","),
+                fontSize: 32,
+            },
+            h3: {
+                fontFamily: ["Plus Jakarta Sans", "sans-serif"].join(","),
+                fontSize: 24,
+            },
+            h4: {
+                fontFamily: ["Plus Jakarta Sans", "sans-serif"].join(","),
+                fontSize: 20,
+            },
+            h5: {
+                fontFamily: ["Plus Jakarta Sans", "sans-serif"].join(","),
+                fontSize: 16,
+            },
+            h6: {
+                fontFamily: ["Plus Jakarta Sans", "sans-serif"].join(","),
+                fontSize: 14,
+            },
+        },
     };
 };
 
@@ -172,9 +201,14 @@ export const ColorModeContext = createContext({
 });
 
 export const useMode = () => {
-    const [mode, setMode] = useState(
-        localStorage.getItem("theme") ||
-        "light");
+    const [mode, setMode] = useState(() => {
+        const savedTheme = localStorage.getItem("theme") || "light";
+        // Ensure class is set on initial load
+        const htmlElement = document.documentElement;
+        htmlElement.classList.remove("light", "dark");
+        htmlElement.classList.add(savedTheme);
+        return savedTheme;
+    });
 
     const colorMode = useMemo(
         () => ({
@@ -182,13 +216,11 @@ export const useMode = () => {
                 setMode((prev) => {
                     const newMode = prev === "light" ? "dark" : "light";
                     const htmlElement = document.documentElement;
-                    htmlElement.classList.remove(prev);
+                    htmlElement.classList.remove("light", "dark");
                     htmlElement.classList.add(newMode);
                     localStorage.setItem("theme", newMode);
-                    return newMode
-
+                    return newMode;
                 })
-
         }),
         []
     );

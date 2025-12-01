@@ -2,10 +2,19 @@ import { Container } from "@mui/material";
 import { Formik } from "formik";
 import BlogModal from "./BlogModal";
 import useBlogCall from "../../hooks/useBlogCall";
+import { useSelector } from "react-redux";
+import useCategoryCall from "../../hooks/useCategoryCall";
+import { useEffect } from "react";
 
 const NewBlog = () => {
     const { postBlog } = useBlogCall();
-    console.log(postBlog);
+    const { categories } = useSelector((state) => state.category);
+    const { getCategory } = useCategoryCall();
+
+    useEffect(() => {
+        getCategory("categories");
+    }, []);
+
     return (
         <Container >
             <Formik
@@ -17,12 +26,11 @@ const NewBlog = () => {
                     isPublish: true,
                 }}
                 onSubmit={(values, actions) => {
-                    createBlog("blogs", values);
+                    postBlog("blogs", values);
                     actions.resetForm();
                     actions.setSubmitting(false);
                 }}
-                validationSchema={SignupSchema}
-                component={(props) => <BlogModal{...props} />}
+                component={(props) => <BlogModal {...props} categories={categories} />}
             ></Formik>
         </Container>
     );

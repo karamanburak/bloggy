@@ -1,394 +1,375 @@
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import Avatar from "@mui/material/Avatar";
-import Typography from "@mui/material/Typography";
-import { Box, Divider, Grid, IconButton, Menu, MenuItem } from "@mui/material";
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
 import useBlogCall from "../hooks/useBlogCall";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import MarkUnreadChatAltOutlinedIcon from "@mui/icons-material/MarkUnreadChatAltOutlined";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
-import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
-import { flex } from "../styles/globalStyles";
-import { useState } from "react";
-import CommentForm from "../components/blog/CommentForm";
 import useCategoryCall from "../hooks/useCategoryCall";
+import CommentForm from "../components/blog/CommentForm";
 import SocialShare from "../components/blog/SocialShare";
-import { BsThreeDots } from "react-icons/bs";
 import DeleteBlog from "../components/blog/DeleteBlog";
-import { MdEditNote } from "react-icons/md";
-import { IoIosLink } from "react-icons/io";
 import EditBlogModal from "../components/blog/EditBlogModal";
-import CustomCardHeader from "../components/blog/CustomCardHeader ";
-import { useParams } from "react-router-dom";
-import loadingGif from "../assets/loading.gif";
-import { formatNumber } from "../helper/formatNumber";
-import { toastWarnNotify } from "../helper/ToastNotify";
+import {
+  HiHeart,
+  HiOutlineHeart,
+  HiChatAlt,
+  HiEye,
+  HiDotsVertical,
+  HiPencil,
+  HiLink,
+  HiArrowLeft,
+  HiClock,
+} from "react-icons/hi";
+import DOMPurify from "dompurify";
 
 const Detail = () => {
-  const { id } = useParams();
+  const { state } = useLocation();
+  const navigate = useNavigate();
   const { getBlogDetail, postLike } = useBlogCall();
   const { currentUser } = useSelector((state) => state.auth);
-  const { blog, loading } = useSelector((state) => state.blog);
+  const { blog } = useSelector((state) => state.blog);
   const { categories } = useSelector((state) => state.category);
   const { getCategory } = useCategoryCall();
-  const [likes, setLikes] = useState([]);
-  const [liked, setLiked] = useState(false);
+
+  const {
+    content,
+    image,
+    createdAt,
+    userId,
+    title,
+    _id,
+    likes: initialLikes,
+    categoryId,
+    countOfVisitors,
+  } = state || {};
+
+  const [likes, setLikes] = useState(initialLikes || []);
+  const [liked, setLiked] = useState(
+    currentUser && (initialLikes || []).includes(currentUser._id)
+  );
   const [showComments, setShowComments] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
-  const [initialState, setInitialState] = useState();
 
-  const handleToggleComments = () => {
-    setShowComments((prevState) => !prevState);
-  };
-
-  useEffect(() => {
-    if (!categories.length) {
-      getCategory();
-    }
-    if (id) {
-      getBlogDetail(id);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (blog) {
-      setLikes(blog.likes || []);
-      setLiked((blog.likes || []).includes(currentUser?._id));
-      setInitialState({
-        title: blog?.title,
-        content: blog?.content,
-        image: blog?.image,
-      });
-    }
-  }, []);
-
-  const handleLike = () => {
-    if (!currentUser) {
-      toastWarnNotify(
-        "You need to be logged in to like this blog. Please sign in or register."
-      );
-      return;
-    }
-    postLike("blogs", id);
-    setLiked(!liked);
-    setLikes((prevLikes) =>
-      liked
-        ? prevLikes.filter((userId) => userId !== currentUser._id)
-        : [...prevLikes, currentUser._id]
-    );
-  };
-  const isCurrentUserOwner =
-    currentUser && blog?.userId?._id === currentUser?._id;
+  const isCurrentUserOwner = currentUser && userId?._id === currentUser._id;
 
   const getCategoryName = () => {
-    const category = categories.find(
-      (cat) => cat._id === blog?.categoryId?._id
-    );
+    const category = categories.find((cat) => cat._id === categoryId?._id);
     return category ? category.name : "Unknown Category";
   };
 
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  useEffect(() => {
+    if (currentUser && likes.includes(currentUser._id)) {
+      setLiked(true);
+    } else {
+      setLiked(false);
+    }
+    if (!categories.length) {
+      getCategory("categories");
+    }
+    if (_id) {
+      getBlogDetail("blogs", _id);
+    }
+  }, [_id, currentUser, likes, categories.length]);
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleEditClick = () => {
-    setOpenEditModal(true);
-    handleMenuClose();
-  };
-
-  const handleEditClose = () => {
-    setOpenEditModal(false);
+  const handleLike = () => {
+    if (!currentUser) {
+      navigate("/login");
+      return;
+    }
+    postLike("blogs", _id);
+    setLiked(!liked);
+    setLikes((prevLikes) =>
+      liked
+        ? prevLikes.filter((id) => id !== currentUser._id)
+        : [...prevLikes, currentUser._id]
+    );
   };
 
   const handleCopyLink = () => {
-    const link = `${window.location.origin}/blog/detail/${id}`;
+    const link = `${window.location.origin}/blog/detail/${_id}`;
     navigator.clipboard.writeText(link);
-    handleMenuClose();
+    setMenuOpen(false);
+    // You might want to show a toast notification here
   };
 
+  const sanitizedContent = DOMPurify.sanitize(content || "");
+
+  const calculateReadingTime = () => {
+    if (!content) return "1 min";
+    const text = content.replace(/<[^>]*>/g, "");
+    const words = text.split(/\s+/).length;
+    const minutes = Math.ceil(words / 200);
+    return `${minutes} min read`;
+  };
+
+  if (!state) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900">
+        <p className="text-gray-600 dark:text-gray-400">Blog not found</p>
+      </div>
+    );
+  }
+
   return (
-    <>
-      {loading ? (
+    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
+      {/* Hero Image Section - Full Width */}
+      <div className="relative w-full h-[60vh] min-h-[500px] max-h-[700px] overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80 z-10" />
         <img
-          src={loadingGif}
-          alt="loading..."
-          height={300}
-          style={{
-            display: "flex",
-            margin: "auto",
+          src={image}
+          alt={title}
+          className="w-full h-full object-cover"
+        />
+        
+        {/* Back Button */}
+        <button
+          onClick={() => navigate(-1)}
+          className="absolute top-6 left-6 z-20 flex items-center space-x-2 px-4 py-2 bg-white/10 dark:bg-gray-900/30 backdrop-blur-md rounded-lg text-white hover:bg-white/20 dark:hover:bg-gray-900/50 transition-all duration-300 border border-white/20"
+        >
+          <HiArrowLeft className="w-5 h-5" />
+          <span className="font-medium">Back</span>
+        </button>
+
+        {/* Category Badge */}
+        <div className="absolute top-6 right-6 z-20">
+          <span className="px-4 py-2 bg-white/10 dark:bg-gray-900/30 backdrop-blur-md text-white text-sm font-semibold rounded-full border border-white/20">
+            {getCategoryName()}
+          </span>
+        </div>
+
+        {/* Hero Content Overlay */}
+        <div className="absolute inset-0 z-10 flex flex-col justify-end pb-12 px-4 sm:px-6 lg:px-12">
+          <div className="max-w-5xl mx-auto w-full">
+            {/* Author Info */}
+            <div className="flex items-center space-x-4 mb-6">
+              <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-white/30 bg-gradient-to-br from-primary-400 to-accent-500 shrink-0">
+                {userId?.image ? (
+                  <img
+                    src={userId.image}
+                    alt={`${userId.firstName} ${userId.lastName}`}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-white font-bold text-lg">
+                    {userId?.firstName?.charAt(0)?.toUpperCase() || "U"}
+                    {userId?.lastName?.charAt(0)?.toUpperCase() || ""}
+                  </div>
+                )}
+              </div>
+              <div className="text-white">
+                <p className="font-semibold text-lg">
+                  {userId?.firstName} {userId?.lastName}
+                </p>
+                <div className="flex items-center space-x-3 text-sm text-white/80">
+                  <span>
+                    {new Date(createdAt).toLocaleDateString("en-US", {
+                      month: "long",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
+                  </span>
+                  <span>•</span>
+                  <div className="flex items-center space-x-1">
+                    <HiClock className="w-4 h-4" />
+                    <span>{calculateReadingTime()}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Title */}
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight drop-shadow-lg">
+              {title}
+            </h1>
+
+            {/* Stats */}
+            <div className="flex items-center space-x-6 text-white/90">
+              <button
+                onClick={handleLike}
+                className="flex items-center space-x-2 hover:text-red-400 transition-colors"
+              >
+                {liked ? (
+                  <HiHeart className="w-6 h-6 text-red-400" />
+                ) : (
+                  <HiOutlineHeart className="w-6 h-6" />
+                )}
+                <span className="font-medium">{likes.length}</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  setShowComments(!showComments);
+                  setTimeout(() => {
+                    document.getElementById("comments-section")?.scrollIntoView({ behavior: "smooth" });
+                  }, 100);
+                }}
+                className="flex items-center space-x-2 hover:text-primary-300 transition-colors"
+              >
+                <HiChatAlt className="w-6 h-6" />
+                <span className="font-medium">{blog?.comments?.length || 0}</span>
+              </button>
+
+              <div className="flex items-center space-x-2">
+                <HiEye className="w-6 h-6" />
+                <span className="font-medium">{countOfVisitors + 1}</span>
+              </div>
+
+              {/* Menu */}
+              <div className="relative ml-auto">
+                <button
+                  onClick={() => setMenuOpen(!menuOpen)}
+                  className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+                >
+                  <HiDotsVertical className="w-6 h-6 text-white" />
+                </button>
+
+                {menuOpen && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-40"
+                      onClick={() => setMenuOpen(false)}
+                    />
+                    <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 py-2 z-50">
+                      <button
+                        onClick={handleCopyLink}
+                        className="w-full flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      >
+                        <HiLink className="w-4 h-4" />
+                        <span>Copy Link</span>
+                      </button>
+                      {isCurrentUserOwner && (
+                        <>
+                          <div className="border-t border-gray-200 dark:border-gray-700 my-1" />
+                          <button
+                            onClick={() => {
+                              setOpenEditModal(true);
+                              setMenuOpen(false);
+                            }}
+                            className="w-full flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                          >
+                            <HiPencil className="w-4 h-4" />
+                            <span>Edit Blog</span>
+                          </button>
+                          <DeleteBlog id={_id} isMenuItem={true} />
+                        </>
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Content Section - Full Width with Max Width for Readability */}
+      <div className="w-full pt-12 pb-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Social Share */}
+          <div className="flex justify-end mb-8">
+            <SocialShare content={content} image={image} title={title} />
+          </div>
+
+          {/* Article Content */}
+          <article
+            className="prose prose-lg dark:prose-invert max-w-none mb-12 text-gray-700 dark:text-gray-300 leading-relaxed prose-headings:text-gray-900 dark:prose-headings:text-gray-100 prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-a:text-primary-600 dark:prose-a:text-primary-400 prose-strong:text-gray-900 dark:prose-strong:text-gray-100 prose-img:rounded-2xl prose-img:shadow-xl"
+            dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+          />
+
+          {/* Comments Section */}
+          <div id="comments-section" className="mt-16 pt-8 border-t border-gray-200 dark:border-gray-700">
+            {currentUser && (
+              <div className="mb-12">
+                <CommentForm blogId={_id} userId={currentUser._id} />
+              </div>
+            )}
+
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                Comments ({blog?.comments?.length || 0})
+              </h2>
+              {!showComments && blog?.comments?.length > 0 && (
+                <button
+                  onClick={() => setShowComments(true)}
+                  className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium transition-colors"
+                >
+                  Show Comments
+                </button>
+              )}
+            </div>
+
+            {showComments && (
+              <div className="space-y-6">
+                {blog?.comments?.length > 0 ? (
+                  blog.comments.map((comment) => (
+                    <div
+                      key={comment._id}
+                      className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 animate-fade-in"
+                    >
+                      <div className="flex items-start space-x-4">
+                        <div className="w-12 h-12 rounded-full overflow-hidden bg-gradient-to-br from-primary-500 to-accent-500 shrink-0">
+                          {comment?.userId?.image ? (
+                            <img
+                              src={comment.userId.image}
+                              alt={`${comment.userId.firstName} ${comment.userId.lastName}`}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-white font-semibold">
+                              {comment.userId.firstName.charAt(0).toUpperCase()}
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-3 mb-2">
+                            <h4 className="font-semibold text-gray-900 dark:text-gray-100">
+                              {comment.userId.firstName} {comment.userId.lastName}
+                            </h4>
+                            <span className="text-sm text-gray-500 dark:text-gray-400">
+                              {new Date(comment.createdAt).toLocaleDateString(
+                                "en-US",
+                                {
+                                  month: "short",
+                                  day: "numeric",
+                                  year: "numeric",
+                                }
+                              )}
+                            </span>
+                          </div>
+                          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                            {comment.comment}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-16 bg-gray-50 dark:bg-gray-800/50 rounded-2xl">
+                    <HiChatAlt className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-600 dark:text-gray-400 text-lg">
+                      No comments yet. Be the first to comment!
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Edit Modal */}
+      {openEditModal && (
+        <EditBlogModal
+          open={openEditModal}
+          onClose={() => setOpenEditModal(false)}
+          blog={state}
+          initialState={{
+            title: title,
+            content: content,
+            image: image,
           }}
         />
-      ) : (
-        <Card
-          sx={{
-            backgroundColor: "primary.main",
-            padding: "2rem",
-            margin: "auto",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Grid container spacing={2} mt={9} sx={{ flex, width: "100%" }}>
-            <Grid
-              item
-              xs={12}
-              md={9}
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
-              }}
-            >
-              <Box sx={{ width: { xs: "80vw", md: "50vw" } }}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    gap: { xs: "2rem", sm: "0" },
-                  }}
-                >
-                  <CustomCardHeader
-                    {...blog?.userId}
-                    createdAt={blog?.createdAt}
-                  />
-                  <Box>
-                    <Typography
-                      sx={{
-                        marginTop: { xs: "1.5rem", sm: "2rem" },
-                        fontWeight: { sm: "bold" },
-                        marginRight: "1rem",
-                      }}
-                    >
-                      {getCategoryName()}
-                    </Typography>
-                  </Box>
-                </Box>
-              </Box>
-
-              <Box sx={{ width: { xs: "80vw", md: "50vw" }, margin: "auto" }}>
-                <CardMedia
-                  sx={{
-                    width: "100%",
-                    margin: "auto",
-                    borderRadius: "20px",
-                    objectFit: "cover",
-                  }}
-                  component="img"
-                  height="400"
-                  image={blog?.image}
-                  alt="image"
-                />
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: ".5rem",
-                    mt: 2,
-                    justifyContent: { xs: "center", lg: "flex-end" },
-                  }}
-                >
-                  <SocialShare {...blog} />
-                </Box>
-                <Typography
-                  variant="h6"
-                  component="h1"
-                  sx={{
-                    textAlign: "center",
-                    marginTop: "2rem",
-                    marginBottom: "1rem",
-                  }}
-                >
-                  {blog?.title}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  sx={{
-                    textAlign: "justify",
-                    marginLeft: "1.5rem",
-                    fontSize: "1.1rem",
-                    // color: "gray",
-                    opacity: ".8",
-                  }}
-                >
-                  {blog?.content}
-                </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    opacity: ".7",
-                    justifyContent: "space-between",
-                    m: 4,
-                    alignItems: "center",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      gap: ".5rem",
-                      mt: 2,
-                    }}
-                  >
-                    <Typography>
-                      <FavoriteIcon
-                        sx={{
-                          color: liked ? "red" : "",
-                          cursor: "pointer",
-                        }}
-                        onClick={handleLike}
-                      />
-                      <sup>{formatNumber(likes.length)}</sup>
-                    </Typography>
-
-                    <Typography
-                      sx={{
-                        cursor: "pointer",
-                      }}
-                      onClick={handleToggleComments}
-                    >
-                      {showComments ? (
-                        <ChatBubbleOutlineIcon />
-                      ) : (
-                        <MarkUnreadChatAltOutlinedIcon />
-                      )}
-                    </Typography>
-                    <Typography>
-                      <sup>{formatNumber(blog?.comments?.length)}</sup>
-                    </Typography>
-                    <RemoveRedEyeIcon />
-                    <Typography>
-                      <sup>{formatNumber(blog?.countOfVisitors)}</sup>
-                    </Typography>
-                  </Box>
-                  <Box>
-                    <IconButton onClick={handleMenuOpen}>
-                      <BsThreeDots />
-                    </IconButton>
-                    <Menu
-                      anchorEl={anchorEl}
-                      open={Boolean(anchorEl)}
-                      onClose={handleMenuClose}
-                    >
-                      <MenuItem key="copy-link" onClick={handleCopyLink}>
-                        <IoIosLink style={{ marginRight: ".5rem" }} /> Copy Link
-                      </MenuItem>
-                      {isCurrentUserOwner && [
-                        <Box
-                          key="owner-actions"
-                          sx={{ display: "flex", flexDirection: "column" }}
-                        >
-                          <Divider />
-                          <MenuItem key="edit-blog" onClick={handleEditClick}>
-                            <MdEditNote style={{ marginRight: ".5rem" }} /> Edit
-                            Blog
-                          </MenuItem>
-                          <MenuItem key="delete-blog">
-                            <DeleteBlog id={blog?._id} />
-                          </MenuItem>
-                        </Box>,
-                      ]}
-                    </Menu>
-                  </Box>
-                </Box>
-                <Box sx={{ mt: 2 }}>
-                  <CardContent sx={{ margin: "auto", padding: "1rem" }}>
-                    <CommentForm blogId={blog?._id} userId={currentUser?._id} />
-                    {showComments ? (
-                      blog?.comments?.length > 0 ? (
-                        blog?.comments?.map((comment) => (
-                          <Box
-                            key={comment._id}
-                            sx={{
-                              margin: "auto",
-                              width: { xs: "70vw", md: "45vw" },
-                              backgroundColor: "primary.ligth",
-                              padding: ".8rem",
-                              borderRadius: "1rem",
-                              my: 4,
-                              border: "1px solid #e0e0e0",
-                              boxShadow: 2,
-                            }}
-                          >
-                            <CardHeader
-                              sx={{
-                                paddingBottom: "0.5rem",
-                                "& .MuiTypography-root": {
-                                  fontSize: 14,
-                                  fontWeight: "bold",
-                                },
-                              }}
-                              avatar={
-                                <Avatar aria-label="recipe">
-                                  {comment?.userId?.image ? (
-                                    <img
-                                      src={comment?.userId?.image}
-                                      alt="user"
-                                      style={{ width: "100%" }}
-                                    />
-                                  ) : (
-                                    comment?.userId?.firstName
-                                      .charAt(0)
-                                      .toUpperCase()
-                                  )}
-                                </Avatar>
-                              }
-                              title={`${comment.userId.firstName} ${comment.userId.lastName}`}
-                              subheader={`${new Date(
-                                comment.createdAt
-                              ).toLocaleDateString("de-DE")}`}
-                            />
-                            <Typography
-                              sx={{
-                                mt: 1,
-                                ml: 9,
-                                paddingRight: "1rem",
-                                textAlign: "justify",
-                              }}
-                            >
-                              {comment.comment}
-                            </Typography>
-                          </Box>
-                        ))
-                      ) : (
-                        <Typography
-                          sx={{
-                            textAlign: "center",
-                            mt: 5,
-                            fontSize: "1.2rem",
-                            color: "text.secondary",
-                          }}
-                        >
-                          There are no comments yet...
-                        </Typography>
-                      )
-                    ) : null}
-                  </CardContent>
-                </Box>
-              </Box>
-            </Grid>
-          </Grid>
-          {openEditModal && (
-            <EditBlogModal
-              open={openEditModal}
-              onClose={handleEditClose}
-              blog={blog}
-              initialState={initialState}
-            />
-          )}
-        </Card>
       )}
-    </>
+    </div>
   );
 };
 

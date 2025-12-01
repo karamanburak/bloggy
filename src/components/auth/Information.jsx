@@ -1,82 +1,80 @@
-import { Box, Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { infoMessage } from "../../styles/globalStyles";
+import { HiInformationCircle, HiCheckCircle, HiExclamationCircle } from "react-icons/hi";
 
 const Information = () => {
   const navigate = useNavigate();
+
   return (
-    <Box
-      backgroundColor="neutral.dark"
-      sx={{
-        marginTop: { xs: "6rem", md: "14.5rem" },
-        padding: "2rem",
-        borderRadius: "5px",
-        height: "610px",
-      }}
-    >
-      <Typography
-        variant="h5"
-        component="h1"
-        marginBottom="1rem"
-        color="secondary.light"
-        fontWeight="bold"
-      >
-        INFORMATION
-      </Typography>
-      <Typography sx={infoMessage}>
-        <strong>
-          <i>On this blog site</i>
-        </strong>
-        , you can freely share your thoughts and get ideas by reading blogs on
-        topics you are curious about. This blog site is created for everyone to
-        express their ideas.
-        <br />
-      </Typography>
-      <Typography
-        sx={{
-          ...infoMessage,
-          "@media screen and (max-width: 320px)": {
-            display: "none",
-          },
-        }}
-      >
-        These are the rules to be followed when using the site; <br />
-        <strong>
-          <i>1-)</i>
-        </strong>{" "}
-        When quoting from someone else's blog, reference should be given.
-        <br />
-        <strong>
-          <i>2-)</i>
-        </strong>{" "}
-        Personal rights should be respected.
-        <br />
-        <strong>
-          <i>3-)</i>
-        </strong>{" "}
-        Advertising content should not be written.
-        <br />
-        <strong>
-          <i>Note:</i>
-        </strong>{" "}
-        Those who do not follow the rules will be banned from the site
-        indefinitely.
-      </Typography>
-      <Box textAlign="center">
-        <Button
-          onClick={() => navigate("/login")}
-          sx={{
-            backgroundColor: "secondary.main",
-            color: "white",
-            "&:hover": {
-              backgroundColor: "secondary.dark",
-            },
-          }}
-        >
-          Do You Have an Account ?
-        </Button>
-      </Box>
-    </Box>
+    <div className="card p-8 max-w-2xl mx-auto animate-slide-up">
+      <div className="flex items-center space-x-3 mb-6">
+        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center">
+          <HiInformationCircle className="w-6 h-6 text-white" />
+        </div>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+          Welcome to Bloggy
+        </h2>
+      </div>
+
+      <div className="space-y-6">
+        <div>
+          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+            <strong className="text-primary-600 dark:text-primary-400 italic">
+              On this blog site
+            </strong>
+            , you can freely share your thoughts and get ideas by reading blogs
+            on topics you are curious about. This blog site is created for
+            everyone to express their ideas.
+          </p>
+        </div>
+
+        <div className="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 rounded-r-lg">
+          <div className="flex items-start space-x-3">
+            <HiExclamationCircle className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
+            <div>
+              <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
+                Rules to Follow
+              </h3>
+              <ul className="space-y-2 text-sm text-blue-800 dark:text-blue-200">
+                <li className="flex items-start space-x-2">
+                  <HiCheckCircle className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                  <span>
+                    <strong>1-)</strong> When quoting from someone else's blog,
+                    reference should be given.
+                  </span>
+                </li>
+                <li className="flex items-start space-x-2">
+                  <HiCheckCircle className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                  <span>
+                    <strong>2-)</strong> Personal rights should be respected.
+                  </span>
+                </li>
+                <li className="flex items-start space-x-2">
+                  <HiCheckCircle className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                  <span>
+                    <strong>3-)</strong> Advertising content should not be
+                    written.
+                  </span>
+                </li>
+              </ul>
+              <p className="mt-3 text-xs text-blue-700 dark:text-blue-300 font-medium">
+                <strong>Note:</strong> Those who do not follow the rules will be
+                banned from the site indefinitely.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="pt-4">
+          <button
+            onClick={() => navigate("/login")}
+            className="btn-primary w-full"
+          >
+            Already have an account? Sign In
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
+
 export default Information;

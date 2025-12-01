@@ -1,7 +1,6 @@
 import React from "react";
 import CardHeader from "@mui/material/CardHeader";
 import Avatar from "@mui/material/Avatar";
-import { Box, Typography } from "@mui/material";
 
 const CustomCardHeader = ({
   image: userImage,
@@ -16,9 +15,6 @@ const CustomCardHeader = ({
           fontSize: 15,
           fontWeight: "bold",
         },
-        "& .MuiCardHeader-subheader": {
-          display: { xs: "none", sm: "block" },
-        },
       }}
       avatar={
         <Avatar aria-label="recipe">
@@ -29,18 +25,7 @@ const CustomCardHeader = ({
           )}
         </Avatar>
       }
-      title={
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: "0.5rem",
-          }}
-        >
-          <Typography>{firstName}</Typography>
-          <Typography>{lastName}</Typography>
-        </Box>
-      }
+      title={`${firstName} ${lastName} `}
       subheader={` ${new Date(createdAt).toLocaleDateString("de-DE")}`}
     />
   );
