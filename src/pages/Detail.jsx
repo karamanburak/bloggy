@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import useBlogCall from "../hooks/useBlogCall";
 import useCategoryCall from "../hooks/useCategoryCall";
@@ -33,6 +33,7 @@ import SkeletonLoader from "../components/global/SkeletonLoader";
 
 const Detail = () => {
   const { state } = useLocation();
+  const { id } = useParams();
   const navigate = useNavigate();
   const { getBlogDetail, postLike, deleteComment, updateComment, postCommentLike, postCommentDislike, refreshComments } = useBlogCall();
   const dispatch = useDispatch();
@@ -44,20 +45,27 @@ const Detail = () => {
   // Tüm veriler gelene kadar loading state'i
   const isLoading = blogLoading || categoriesLoading;
 
+  // Get blog ID from URL params if state is not available (direct URL access)
+  const blogId = id || state?._id || blog?._id;
+
   // Use Redux store blog data if available and ID matches, otherwise use state from location
-  const blogData = blog?._id === state?._id ? blog : state;
+  const blogData = blog?._id === blogId ? blog : (state || (blogId === blog?._id ? blog : null));
   
+  // Use blogId as fallback for _id when blogData is not available
   const {
     content,
     image,
     createdAt,
     userId,
     title,
-    _id,
+    _id: blogDataId,
     likes: initialLikes,
     categoryId,
     countOfVisitors,
   } = blogData || {};
+  
+  // Use blogDataId if available, otherwise use blogId from URL
+  const _id = blogDataId || blogId;
 
   const [likes, setLikes] = useState(initialLikes || []);
   const [liked, setLiked] = useState(
@@ -97,47 +105,55 @@ const Detail = () => {
   
   // Separate useEffect for blog detail and view count
   useEffect(() => {
-    if (!_id) return;
+    // Use blogId from URL params if _id is not available (direct URL access)
+    const targetId = _id || blogId;
+    if (!targetId) return;
     
-    const storageKey = `blog_viewed_${_id}`;
+    const storageKey = `blog_viewed_${targetId}`;
     const hasViewed = sessionStorage.getItem(storageKey);
     
     // Backend's getBlogDetail auto-increments view count on every call
     // So we only call it once per session (first visit)
     // For subsequent visits, we only refresh comments without calling getBlogDetail
     
-    if (!hasViewed && isFirstLoad.current) {
-      // First visit: getBlogDetail will increment view count and load comments
-      sessionStorage.setItem(storageKey, "true");
-      isFirstLoad.current = false;
-      getBlogDetail("blogs", _id);
-    } else if (hasViewed) {
-      // Already viewed: only refresh comments without calling getBlogDetail
-      // This prevents view count from incrementing again
-      const currentBlog = blog?._id === _id ? blog : blogData;
-      
-      refreshComments(_id).then(comments => {
-        if (currentBlog && currentBlog._id === _id) {
-          dispatch(getBlogDetailSuccess({
-            data: {
-              ...currentBlog,
-              comments: comments || []
-            }
-          }));
-        } else if (!currentBlog) {
-          // If blog is not available, fetch it (this will increment view count but it's necessary)
-          getBlogDetail("blogs", _id);
-        }
-      }).catch(() => {
-        // If refresh fails, fetch full blog detail
-        getBlogDetail("blogs", _id);
-      });
-    } else {
-      // If no hasViewed flag and not first load, fetch blog detail
-      getBlogDetail("blogs", _id);
+    // If we don't have blogData and we have an ID, fetch it (direct URL access)
+    if (!blogData && targetId) {
+      getBlogDetail("blogs", targetId);
+      return;
+    }
+    
+    // If we have blogData, handle view count logic
+    if (blogData) {
+      if (!hasViewed && isFirstLoad.current) {
+        // First visit: getBlogDetail will increment view count and load comments
+        sessionStorage.setItem(storageKey, "true");
+        isFirstLoad.current = false;
+        getBlogDetail("blogs", targetId);
+      } else if (hasViewed) {
+        // Already viewed: only refresh comments without calling getBlogDetail
+        // This prevents view count from incrementing again
+        const currentBlog = blog?._id === targetId ? blog : blogData;
+        
+        refreshComments(targetId).then(comments => {
+          if (currentBlog && currentBlog._id === targetId) {
+            dispatch(getBlogDetailSuccess({
+              data: {
+                ...currentBlog,
+                comments: comments || []
+              }
+            }));
+          } else if (!currentBlog) {
+            // If blog is not available, fetch it (this will increment view count but it's necessary)
+            getBlogDetail("blogs", targetId);
+          }
+        }).catch(() => {
+          // If refresh fails, fetch full blog detail
+          getBlogDetail("blogs", targetId);
+        });
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [_id]);
+  }, [blogId, _id, blogData]);
 
   // Separate useEffect for categories
   useEffect(() => {
@@ -262,8 +278,8 @@ const Detail = () => {
     return `${minutes} min read`;
   };
 
-  // Loading skeleton
-  if (isLoading && !blogData) {
+  // Loading skeleton - show if loading or if we have blogId but no blogData yet
+  if ((isLoading && !blogData) || (blogId && !blogData && !isLoading)) {
     return (
       <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
         {/* Hero Image Skeleton */}
@@ -323,10 +339,72 @@ const Detail = () => {
     );
   }
 
-  if (!blogData) {
+  // Only show "not found" if we have no blogId and no blogData
+  if (!blogData && !blogId) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900">
         <p className="text-gray-600 dark:text-gray-400">Blog not found</p>
+      </div>
+    );
+  }
+  
+  // If we have blogId but no blogData yet, show loading (handled above)
+  if (!blogData && blogId) {
+    return (
+      <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
+        {/* Hero Image Skeleton */}
+        <div className="relative w-full h-[60vh] min-h-[500px] max-h-[700px] overflow-hidden bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 animate-pulse">
+          <div className="absolute top-6 left-6 w-24 h-10 bg-white/20 dark:bg-gray-900/30 rounded-lg"></div>
+          <div className="absolute top-6 right-6 w-32 h-10 bg-white/20 dark:bg-gray-900/30 rounded-full"></div>
+          <div className="absolute inset-0 flex flex-col justify-end pb-12 px-4 sm:px-6 lg:px-12">
+            <div className="max-w-5xl mx-auto w-full space-y-6">
+              <div className="flex items-center space-x-4">
+                <div className="w-14 h-14 rounded-full bg-white/20 dark:bg-gray-900/30"></div>
+                <div className="space-y-2">
+                  <div className="h-5 w-48 bg-white/20 dark:bg-gray-900/30 rounded"></div>
+                  <div className="h-4 w-32 bg-white/20 dark:bg-gray-900/30 rounded"></div>
+                </div>
+              </div>
+              <div className="space-y-3">
+                <div className="h-12 bg-white/20 dark:bg-gray-900/30 rounded w-3/4"></div>
+                <div className="h-12 bg-white/20 dark:bg-gray-900/30 rounded w-1/2"></div>
+              </div>
+              <div className="flex items-center space-x-6">
+                <div className="h-6 w-16 bg-white/20 dark:bg-gray-900/30 rounded"></div>
+                <div className="h-6 w-16 bg-white/20 dark:bg-gray-900/30 rounded"></div>
+                <div className="h-6 w-16 bg-white/20 dark:bg-gray-900/30 rounded"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Content Skeleton */}
+        <div className="w-full pt-12 pb-16">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="space-y-6 mb-12">
+              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
+              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
+              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-5/6"></div>
+              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
+              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-4/5"></div>
+            </div>
+            <div className="mt-16 pt-12 border-t border-gray-200 dark:border-gray-700">
+              <div className="h-8 w-32 bg-gray-200 dark:bg-gray-700 rounded mb-6"></div>
+              <div className="space-y-4">
+                {[...Array(3)].map((_, index) => (
+                  <div key={index} className="flex items-start space-x-3 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+                    <div className="flex-1 space-y-2">
+                      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
+                      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
+                      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
