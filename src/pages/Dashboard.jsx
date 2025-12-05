@@ -7,8 +7,8 @@ import useNewsCall from "../hooks/useNewsCall";
 import BlogCard from "../components/blog/BlogCard";
 import Footer from "../components/home/Footer";
 import NewsCard from "../components/home/NewsCard";
-import loadingGif from "../assets/loading.gif";
-import { HiArrowRight, HiFire, HiNewspaper, HiSparkles } from "react-icons/hi";
+import SkeletonLoader from "../components/global/SkeletonLoader";
+import { HiArrowRight, HiFire, HiNewspaper, HiSparkles, HiViewGrid, HiCollection } from "react-icons/hi";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -18,6 +18,8 @@ const Dashboard = () => {
   const { blogs, loading } = useSelector((state) => state.blog);
   const { news, loading: newsLoading } = useSelector((state) => state.newsShows);
   const [currentNewsIndex, setCurrentNewsIndex] = useState(0);
+  const [showAllNews, setShowAllNews] = useState(false);
+  const [viewMode, setViewMode] = useState("slider"); // "slider" or "grid"
 
   const topTrendingBlogs = [...blogs]
     .sort((a, b) => (b.countOfVisitors || 0) - (a.countOfVisitors || 0))
@@ -29,19 +31,28 @@ const Dashboard = () => {
     getNewsData();
   }, []);
 
-  // News carousel auto-rotate
+  // News carousel auto-rotate (only for slider mode)
   useEffect(() => {
-    if (news.length > 1) {
+    if (viewMode === "slider" && news.length > 1) {
       const interval = setInterval(() => {
         setCurrentNewsIndex((prev) => (prev + 1) % news.length);
       }, 6000);
       return () => clearInterval(interval);
     }
-  }, [news.length]);
+  }, [news.length, viewMode]);
 
   const handleNewsDotClick = (index) => {
     setCurrentNewsIndex(index);
   };
+
+  const handleNextNews = () => {
+    setCurrentNewsIndex((prev) => (prev + 1) % news.length);
+  };
+
+  const handlePrevNews = () => {
+    setCurrentNewsIndex((prev) => (prev - 1 + news.length) % news.length);
+  };
+
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
@@ -105,9 +116,7 @@ const Dashboard = () => {
             </div>
             
             {loading ? (
-              <div className="flex justify-center items-center py-20">
-                <img src={loadingGif} alt="Loading..." className="h-24 w-24" />
-              </div>
+              <SkeletonLoader type="blogList" count={6} />
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {topTrendingBlogs.map((blog) => (
@@ -133,107 +142,163 @@ const Dashboard = () => {
                   Latest News
                 </h2>
                 <p className="text-gray-600 dark:text-gray-400 mt-1 text-sm md:text-base">
-                  Stay updated with the latest happenings
+                  Stay updated with the latest happenings from multiple sources
                 </p>
               </div>
             </div>
-            {news.length > 1 && (
-              <div className="hidden md:flex items-center space-x-2 bg-white dark:bg-gray-800 rounded-xl p-2 shadow-lg border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center gap-3">
+              {/* View Mode Toggle */}
+              <div className="flex items-center bg-white dark:bg-gray-800 rounded-xl p-1 shadow-lg border border-gray-200 dark:border-gray-700">
                 <button
-                  onClick={() => setCurrentNewsIndex((prev) => (prev - 1 + news.length) % news.length)}
-                  className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400"
-                  aria-label="Previous news"
+                  onClick={() => setViewMode("slider")}
+                  className={`p-2.5 rounded-lg transition-all duration-200 ${
+                    viewMode === "slider"
+                      ? "bg-primary-600 text-white shadow-md"
+                      : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                  }`}
+                  aria-label="Slider view"
+                  title="Slider View"
                 >
-                  <HiArrowRight className="w-5 h-5 rotate-180" />
+                  <HiCollection className="w-5 h-5" />
                 </button>
-                <span className="px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                  {currentNewsIndex + 1} / {news.length}
-                </span>
                 <button
-                  onClick={() => setCurrentNewsIndex((prev) => (prev + 1) % news.length)}
-                  className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400"
-                  aria-label="Next news"
+                  onClick={() => setViewMode("grid")}
+                  className={`p-2.5 rounded-lg transition-all duration-200 ${
+                    viewMode === "grid"
+                      ? "bg-primary-600 text-white shadow-md"
+                      : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                  }`}
+                  aria-label="Grid view"
+                  title="Grid View"
                 >
-                  <HiArrowRight className="w-5 h-5" />
+                  <HiViewGrid className="w-5 h-5" />
                 </button>
               </div>
-            )}
+            </div>
           </div>
 
           {newsLoading ? (
-            <div className="flex justify-center items-center py-20">
-              <div className="relative">
-                <div className="absolute inset-0 bg-primary-500 rounded-full blur-xl opacity-20 animate-pulse"></div>
-                <img src={loadingGif} alt="Loading..." className="h-24 w-24 relative" />
+            viewMode === "slider" ? (
+              <div className="flex justify-center items-center py-20">
+                <SkeletonLoader type="newsCard" count={1} />
               </div>
-            </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[...Array(6)].map((_, index) => (
+                  <SkeletonLoader key={index} type="newsCard" count={1} />
+                ))}
+              </div>
+            )
           ) : news.length > 0 ? (
-            <div className="relative">
+            <div id="news-section" className="relative">
               {/* Background Decoration */}
               <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/10 via-primary-500/10 to-accent-500/10 rounded-3xl blur-2xl -z-10"></div>
               
-              {/* Main News Card Container */}
-              <div className="relative group">
-                <div 
-                  key={currentNewsIndex}
-                  className="animate-fade-in"
-                  style={{
-                    animation: 'fadeIn 0.5s ease-in-out'
-                  }}
-                >
-                  <NewsCard {...news[currentNewsIndex]} />
-                </div>
-              </div>
-              
-              {/* Enhanced Navigation Controls */}
-              {news.length > 1 && (
-                <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-                  {/* Pagination Dots */}
-                  <div className="flex items-center justify-center space-x-2 flex-wrap gap-2">
-                    {news.slice(0, Math.min(news.length, 10)).map((_, index) => (
+              {/* Slider View */}
+              {viewMode === "slider" ? (
+                <div className="relative group">
+                  <div 
+                    key={currentNewsIndex}
+                    className="animate-fade-in"
+                    style={{
+                      animation: 'fadeIn 0.5s ease-in-out'
+                    }}
+                  >
+                    <div className="h-full">
+                      <NewsCard {...news[currentNewsIndex]} />
+                    </div>
+                  </div>
+                  
+                  {/* Navigation Controls */}
+                  {news.length > 1 && (
+                    <>
+                      {/* Previous/Next Buttons */}
                       <button
-                        key={index}
-                        onClick={() => handleNewsDotClick(index)}
-                        className={`relative rounded-full transition-all duration-300 ${
-                          index === currentNewsIndex
-                            ? "w-10 h-2.5 bg-gradient-to-r from-primary-600 to-accent-600 shadow-lg scale-110"
-                            : "w-2.5 h-2.5 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 hover:scale-125"
-                        }`}
-                        aria-label={`Go to news ${index + 1}`}
+                        onClick={handlePrevNews}
+                        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-lg hover:bg-white dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:scale-110 transition-all duration-200"
+                        aria-label="Previous news"
                       >
-                        {index === currentNewsIndex && (
-                          <div className="absolute inset-0 bg-primary-400 rounded-full animate-pulse opacity-50"></div>
-                        )}
+                        <HiArrowRight className="w-5 h-5 rotate-180" />
                       </button>
+                      <button
+                        onClick={handleNextNews}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-lg hover:bg-white dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:scale-110 transition-all duration-200"
+                        aria-label="Next news"
+                      >
+                        <HiArrowRight className="w-5 h-5" />
+                      </button>
+
+                      {/* Pagination Dots */}
+                      <div className="mt-8 flex flex-col md:flex-row items-center justify-center gap-4">
+                        <div className="flex items-center justify-center space-x-2 flex-wrap gap-2">
+                          {news.slice(0, Math.min(news.length, 15)).map((_, index) => (
+                            <button
+                              key={index}
+                              onClick={() => handleNewsDotClick(index)}
+                              className={`relative rounded-full transition-all duration-300 ${
+                                index === currentNewsIndex
+                                  ? "w-10 h-2.5 bg-gradient-to-r from-primary-600 to-accent-600 shadow-lg scale-110"
+                                  : "w-2.5 h-2.5 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 hover:scale-125"
+                              }`}
+                              aria-label={`Go to news ${index + 1}`}
+                            >
+                              {index === currentNewsIndex && (
+                                <div className="absolute inset-0 bg-primary-400 rounded-full animate-pulse opacity-50"></div>
+                              )}
+                            </button>
+                          ))}
+                          {news.length > 15 && (
+                            <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">
+                              +{news.length - 15} more
+                            </span>
+                          )}
+                        </div>
+
+                        {/* News Counter */}
+                        <div className="flex items-center space-x-3 bg-white dark:bg-gray-800 rounded-xl p-2 shadow-lg border border-gray-200 dark:border-gray-700">
+                          <span className="px-4 py-1.5 text-sm font-semibold text-gray-700 dark:text-gray-300">
+                            {currentNewsIndex + 1} / {news.length}
+                          </span>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              ) : (
+                /* Grid View */
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {(showAllNews ? news : news.slice(0, 9)).map((article, index) => (
+                      <div
+                        key={`${article.title}-${index}`}
+                        className="animate-fade-in h-full"
+                        style={{
+                          animationDelay: `${index * 0.1}s`
+                        }}
+                      >
+                        <NewsCard {...article} />
+                      </div>
                     ))}
-                    {news.length > 10 && (
-                      <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">
-                        +{news.length - 10} more
-                      </span>
-                    )}
                   </div>
 
-                  {/* Mobile Navigation Buttons */}
-                  <div className="flex md:hidden items-center space-x-3 bg-white dark:bg-gray-800 rounded-xl p-2 shadow-lg border border-gray-200 dark:border-gray-700">
-                    <button
-                      onClick={() => setCurrentNewsIndex((prev) => (prev - 1 + news.length) % news.length)}
-                      className="p-2.5 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 active:scale-95"
-                      aria-label="Previous news"
-                    >
-                      <HiArrowRight className="w-5 h-5 rotate-180" />
-                    </button>
-                    <span className="px-4 py-1.5 text-sm font-semibold text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg">
-                      {currentNewsIndex + 1} / {news.length}
-                    </span>
-                    <button
-                      onClick={() => setCurrentNewsIndex((prev) => (prev + 1) % news.length)}
-                      className="p-2.5 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 active:scale-95"
-                      aria-label="Next news"
-                    >
-                      <HiArrowRight className="w-5 h-5" />
-                    </button>
-                  </div>
-                </div>
+                  {/* Show More/Less Button */}
+                  {news.length > 9 && (
+                    <div className="mt-8 text-center">
+                      <button
+                        onClick={() => setShowAllNews(!showAllNews)}
+                        className="inline-flex items-center space-x-2 px-8 py-3 rounded-xl bg-gradient-to-r from-primary-600 to-accent-600 text-white font-semibold hover:from-primary-700 hover:to-accent-700 transition-all hover:scale-105 shadow-lg hover:shadow-xl"
+                      >
+                        <span>
+                          {showAllNews 
+                            ? "Show Less" 
+                            : `Load More News (${news.length - 9} more)`
+                          }
+                        </span>
+                        <HiArrowRight className={`w-5 h-5 transition-transform ${showAllNews ? 'rotate-180' : ''}`} />
+                      </button>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           ) : (

@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import useBlogCall from "../hooks/useBlogCall";
 import useCategoryCall from "../hooks/useCategoryCall";
 import BlogCard from "../components/blog/BlogCard";
 import Footer from "../components/home/Footer";
-import loadingGif from "../assets/loading.gif";
-import { HiChevronLeft, HiChevronRight, HiSearch, HiFilter } from "react-icons/hi";
+import SkeletonLoader from "../components/global/SkeletonLoader";
+import { HiChevronLeft, HiChevronRight, HiSearch, HiFilter, HiHome } from "react-icons/hi";
 
 const Blogs = () => {
+  const navigate = useNavigate();
   const { getBlogData } = useBlogCall();
   const { blogs, loading } = useSelector((state) => state.blog);
   const { categories } = useSelector((state) => state.category);
@@ -66,13 +68,26 @@ const Blogs = () => {
       {/* Hero Section */}
       <div className="relative bg-gradient-to-br from-primary-600 via-primary-700 to-accent-600 text-white py-20 md:py-24">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48Y2lyY2xlIGN4PSIzMCIgY3k9IjMwIiByPSIxLjUiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-20"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">
-            All Blogs
-          </h1>
-          <p className="text-xl text-white/90 max-w-2xl mx-auto">
-            Discover stories, insights, and ideas from our community
-          </p>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Home Icon Button */}
+          <div className="flex justify-start mb-6">
+            <button
+              onClick={() => navigate("/")}
+              className="flex items-center space-x-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/50"
+              aria-label="Go to dashboard"
+            >
+              <HiHome className="w-5 h-5" />
+              <span className="font-medium">Home</span>
+            </button>
+          </div>
+          <div className="text-center">
+            <h1 className="text-4xl md:text-6xl font-bold mb-4">
+              All Blogs
+            </h1>
+            <p className="text-xl text-white/90 max-w-2xl mx-auto">
+              Discover stories, insights, and ideas from our community
+            </p>
+          </div>
         </div>
       </div>
 
@@ -120,13 +135,7 @@ const Blogs = () => {
         </div>
 
         {loading ? (
-          <div className="flex justify-center items-center min-h-[60vh]">
-            <img
-              src={loadingGif}
-              alt="Loading..."
-              className="h-48 w-48"
-            />
-          </div>
+          <SkeletonLoader type="list" count={12} />
         ) : (
           <>
             {currentBlogs.length > 0 ? (
@@ -196,17 +205,17 @@ const Blogs = () => {
                 )}
               </>
             ) : (
-              <div className="text-center py-20">
-                <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-100 dark:bg-gray-800 mb-6">
-                  <HiSearch className="w-10 h-10 text-gray-400" />
+              <div className="text-center py-20 px-4">
+                <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 mb-6 animate-pulse">
+                  <HiSearch className="w-10 h-10 text-gray-400 dark:text-gray-500" />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
                   No blogs found
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400 mb-6">
+                <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">
                   {searchTerm || selectedCategory
-                    ? "Try adjusting your search or filter criteria"
-                    : "Be the first to write a blog!"}
+                    ? "Try adjusting your search or filter criteria to find what you're looking for."
+                    : "Be the first to write a blog and share your thoughts with the community!"}
                 </p>
                 {(searchTerm || selectedCategory) && (
                   <button
@@ -214,7 +223,8 @@ const Blogs = () => {
                       setSearchTerm("");
                       setSelectedCategory("");
                     }}
-                    className="px-6 py-3 rounded-lg bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-colors"
+                    className="px-6 py-3 rounded-lg bg-gradient-to-r from-primary-600 to-accent-600 text-white font-semibold hover:from-primary-700 hover:to-accent-700 transition-all duration-200 shadow-lg shadow-primary-500/50 hover:shadow-xl hover:shadow-primary-500/60 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                    aria-label="Clear all filters"
                   >
                     Clear Filters
                   </button>

@@ -6,7 +6,7 @@ const Editor = () => {
     const editorRef = useRef(null);
     const log = () => {
         if (editorRef.current) {
-            console.log(editorRef.current.getContent());
+            // Get editor content
         }
     }
     return (

@@ -1,10 +1,13 @@
 import { MdArrowOutward } from "react-icons/md";
-import { HiCalendar, HiClock } from "react-icons/hi";
+import { HiCalendar, HiClock, HiExternalLink } from "react-icons/hi";
+import { useState } from "react";
 
 const defaultImage =
   "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&h=450&fit=crop";
 
-const NewsCard = ({ title, url, image, content, publishedAt, source, description }) => {
+const NewsCard = ({ title, url, image, content, publishedAt, source, description, author }) => {
+  const [imageError, setImageError] = useState(false);
+
   const handleReadMore = () => {
     if (url) {
       window.open(url, "_blank", "noopener,noreferrer");
@@ -12,9 +15,9 @@ const NewsCard = ({ title, url, image, content, publishedAt, source, description
   };
 
   const formattedDate = publishedAt
-    ? new Date(publishedAt).toLocaleDateString("en-US", {
+    ? new Date(publishedAt).toLocaleString("en-US", {
         year: "numeric",
-        month: "long",
+        month: "short",
         day: "numeric",
       })
     : "";
@@ -23,95 +26,107 @@ const NewsCard = ({ title, url, image, content, publishedAt, source, description
     ? (() => {
         const now = new Date();
         const published = new Date(publishedAt);
-        const diffInHours = Math.floor((now - published) / (1000 * 60 * 60));
-        if (diffInHours < 1) return "Just now";
-        if (diffInHours < 24) return `${diffInHours}h ago`;
+        const diffInSeconds = Math.floor((now - published) / 1000);
+        const diffInMinutes = Math.floor(diffInSeconds / 60);
+        const diffInHours = Math.floor(diffInMinutes / 60);
         const diffInDays = Math.floor(diffInHours / 24);
+        
+        if (diffInSeconds < 60) return "Just now";
+        if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
+        if (diffInHours < 24) return `${diffInHours}h ago`;
         if (diffInDays < 7) return `${diffInDays}d ago`;
         return formattedDate;
       })()
     : "";
 
   const displayContent = description || content || "";
-  const truncatedContent = displayContent.length > 150 
-    ? displayContent.substring(0, 150) + "..." 
+  const truncatedContent = displayContent.length > 120 
+    ? displayContent.substring(0, 120) + "..." 
     : displayContent;
 
+  const sourceName = source?.name || "News Source";
+
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow border border-gray-200 dark:border-gray-700">
-      <div className="flex flex-col lg:flex-row">
-        {/* Image Section */}
-        <div className="lg:w-2/5 h-64 lg:h-auto relative overflow-hidden bg-gray-100 dark:bg-gray-800">
-          <img
-            src={image || defaultImage}
-            alt={title}
-            className="w-full h-full object-cover"
-            onError={(e) => {
-              e.target.src = defaultImage;
-            }}
-          />
-          {/* Breaking News Badge */}
-          <div className="absolute top-4 left-4">
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
-              • BREAKING NEWS
+    <article className="group relative bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 h-full flex flex-col">
+      {/* Image Section with Overlay */}
+      <div className="relative h-48 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 flex-shrink-0">
+        <img
+          src={imageError ? defaultImage : (image || defaultImage)}
+          alt={title}
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          onError={() => setImageError(true)}
+        />
+        
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        
+        {/* Source Badge */}
+        <div className="absolute top-3 left-3">
+          <span className="inline-flex items-center gap-1.5 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm text-gray-900 dark:text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-lg">
+            <span className="w-1.5 h-1.5 bg-primary-500 rounded-full animate-pulse"></span>
+            {sourceName}
+          </span>
+        </div>
+
+        {/* Time Badge */}
+        {timeAgo && (
+          <div className="absolute top-3 right-3">
+            <span className="inline-flex items-center gap-1.5 bg-black/70 backdrop-blur-sm text-white text-xs font-medium px-3 py-1.5 rounded-full">
+              <HiClock className="w-3 h-3" />
+              {timeAgo}
             </span>
           </div>
-          {/* Source Badge */}
-          {source?.name && (
-            <div className="absolute bottom-4 left-4">
-              <span className="bg-gray-900/80 text-white text-xs font-medium px-3 py-1 rounded-lg">
-                {source.name}
-              </span>
-            </div>
-          )}
-        </div>
+        )}
+      </div>
 
-        {/* Content Section */}
-        <div className="lg:w-3/5 flex flex-col justify-between p-6 lg:p-8">
-          <div>
-            {/* Date & Time */}
-            <div className="flex items-center gap-4 mb-4 text-sm text-gray-500 dark:text-gray-400">
-              <div className="flex items-center gap-1.5">
-                <HiCalendar className="w-4 h-4" />
-                <span>{formattedDate}</span>
-              </div>
-              {timeAgo && (
-                <div className="flex items-center gap-1.5">
-                  <HiClock className="w-4 h-4" />
-                  <span>{timeAgo}</span>
-                </div>
-              )}
-            </div>
-
-            {/* Title */}
-            <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-3 leading-tight">
-              {title}
-            </h3>
-
-            {/* Description */}
-            <p className="text-gray-600 dark:text-gray-400 text-base leading-relaxed mb-6">
-              {truncatedContent || "No description available."}
-            </p>
+      {/* Content Section */}
+      <div className="p-5 flex flex-col flex-grow min-h-0">
+        {/* Date */}
+        {formattedDate && (
+          <div className="flex items-center gap-1.5 mb-3 text-xs text-gray-500 dark:text-gray-400">
+            <HiCalendar className="w-3.5 h-3.5" />
+            <span>{formattedDate}</span>
+            {author && (
+              <>
+                <span className="mx-1">•</span>
+                <span className="text-gray-400 dark:text-gray-500">{author}</span>
+              </>
+            )}
           </div>
+        )}
 
-          {/* Footer */}
-          <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
-            <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-              <span>Live Update</span>
-            </div>
-            <button
-              onClick={handleReadMore}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium hover:opacity-90 transition-opacity"
-              aria-label="Read full article"
-            >
-              <span>Read Full Article</span>
-              <MdArrowOutward className="w-4 h-4" />
-            </button>
+        {/* Title */}
+        <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-3 leading-tight line-clamp-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+          {title}
+        </h3>
+
+        {/* Description */}
+        {truncatedContent && (
+          <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-4 line-clamp-3">
+            {truncatedContent}
+          </p>
+        )}
+
+        {/* Footer */}
+        <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700 mt-auto">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">Live</span>
           </div>
+          <button
+            onClick={handleReadMore}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-primary-600 to-accent-600 text-white text-sm font-semibold hover:from-primary-700 hover:to-accent-700 transition-all duration-200 shadow-md hover:shadow-lg hover:scale-105 active:scale-95"
+            aria-label="Read full article"
+          >
+            <span>Read More</span>
+            <HiExternalLink className="w-4 h-4" />
+          </button>
         </div>
       </div>
-    </div>
+
+      {/* Hover Effect Border */}
+      <div className="absolute inset-0 rounded-2xl border-2 border-primary-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300 pointer-events-none"></div>
+    </article>
   );
 };
 

@@ -29,7 +29,6 @@ const useAuthCall = () => {
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify("Register can not be performed");
-      console.log(error);
     }
   };
 
@@ -50,7 +49,6 @@ const useAuthCall = () => {
           ? error.response.data.message
           : "An unexpected error occurred";
       toastErrorNotify(errorMessage);
-      console.log(error);
     }
   };
   const updateUser = async (info, id) => {
@@ -70,7 +68,6 @@ const useAuthCall = () => {
         ? error.response.data.message
         : "An unexpected error occurred";
       toastErrorNotify(errorMessage);
-      console.log(error);
     }
   };
   const getUser = async (id) => {
@@ -85,7 +82,6 @@ const useAuthCall = () => {
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(error.message);
-      console.log(error);
     }
   };
 
@@ -103,7 +99,6 @@ const useAuthCall = () => {
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify("Logout cannot be performed!");
-      console.log(error);
     }
   };
 

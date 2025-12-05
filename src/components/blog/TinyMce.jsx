@@ -1,4 +1,3 @@
-import { Button } from "@mui/material";
 import { Editor } from "@tinymce/tinymce-react";
 import DOMPurify from "dompurify";
 import React from "react";
@@ -6,10 +5,10 @@ import React from "react";
 const TinyMce = ({ setInfo, content }) => {
   const tinyMceApiKey = import.meta.env.VITE_TinyMCE_apiKey;
   const editorRef = React.useRef(null);
-  const initialContent = React.useMemo(() => content || "", []);
+  const initialContent = React.useMemo(() => content || "", [content]);
   const isUpdatingRef = React.useRef(false);
 
-  const handleEditorChange = (content, editor) => {
+  const handleEditorChange = (htmlContent, editor) => {
     //* Prevent cursor jump by not updating state if we're in the middle of an update
     if (isUpdatingRef.current) {
       return;
@@ -19,14 +18,20 @@ const TinyMce = ({ setInfo, content }) => {
     const selection = editor.selection;
     const bookmark = selection.getBookmark(2, true);
     
-    //* Alternatively, strip HTML using DOMParser
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(content, "text/html");
-    const text = doc.body.textContent || "";
+    //* Sanitize HTML content to prevent XSS attacks
+    const sanitizedContent = DOMPurify.sanitize(htmlContent, {
+      ALLOWED_TAGS: [
+        'p', 'br', 'strong', 'em', 'u', 's', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+        'ul', 'ol', 'li', 'blockquote', 'a', 'img', 'table', 'thead', 'tbody', 
+        'tr', 'td', 'th', 'code', 'pre', 'span', 'div'
+      ],
+      ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'style', 'width', 'height'],
+      ALLOW_DATA_ATTR: false
+    });
     
-    //* Update state asynchronously to prevent blocking
+    //* Update state with sanitized HTML content (not plain text!)
     isUpdatingRef.current = true;
-    setInfo((prevInfo) => ({ ...prevInfo, content: text }));
+    setInfo((prevInfo) => ({ ...prevInfo, content: sanitizedContent }));
     
     //* Restore cursor position immediately after state update
     requestAnimationFrame(() => {
@@ -88,8 +93,6 @@ const TinyMce = ({ setInfo, content }) => {
             "body { font-family:Helvetica,Arial,sans-serif; font-size:14px; text-align: left; direction: ltr;}",
         }}
         onEditorChange={(content, editor) => handleEditorChange(content, editor)}
-        // onChange={handleChange}
-        // value={info.content}
       />
     </>
   );

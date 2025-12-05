@@ -1,10 +1,9 @@
 import { useState, useEffect, useContext } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { ColorModeContext } from "../../styles/theme";
 import useAuthCall from "../../hooks/useAuthCall";
 import useCategoryCall from "../../hooks/useCategoryCall";
-import { toastWarnNotify } from "../../helper/ToastNotify";
 import logo from "../../assets/logo.png";
 import avatar from "../../assets/avatar.png";
 import { BsPencilSquare } from "react-icons/bs";
@@ -12,29 +11,33 @@ import { FaUser } from "react-icons/fa";
 import { CiLogout } from "react-icons/ci";
 import { MdLogin, MdLightMode, MdDarkMode } from "react-icons/md";
 import { FaRegRegistered } from "react-icons/fa";
-import { HiMenu, HiX } from "react-icons/hi";
+import { HiMenu, HiX, HiShieldCheck } from "react-icons/hi";
 
 const Navbar = () => {
   const { logout } = useAuthCall();
   const { currentUser } = useSelector((state) => state.auth);
-  const { categories } = useSelector((state) => state.category);
   const { getCategory } = useCategoryCall();
   const colorMode = useContext(ColorModeContext);
   const navigate = useNavigate();
-  const location = useLocation();
   
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
-  const pages = [
-    { name: "Dashboard", path: "/" },
-    { name: "Blogs", path: "/blog" },
-  ];
+  const isAdmin = currentUser?.isAdmin || currentUser?.role === "admin";
 
   const userMenuItems = currentUser
     ? [
         { icon: <FaUser className="w-4 h-4" />, name: "Profile", path: "/profile" },
+        ...(isAdmin
+          ? [
+              {
+                icon: <HiShieldCheck className="w-4 h-4" />,
+                name: "Admin Panel",
+                path: "/admin",
+              },
+            ]
+          : []),
         { icon: <CiLogout className="w-4 h-4" />, name: "Logout", action: "logout" },
       ]
     : [
@@ -61,14 +64,6 @@ const Navbar = () => {
     colorMode.toggleColorMode();
   };
 
-  const handlePageClick = (page) => {
-    if (!currentUser && page.name === "Blogs") {
-      toastWarnNotify("You must login");
-      return;
-    }
-    navigate(page.path);
-    setMobileMenuOpen(false);
-  };
 
   const handleUserMenuClick = (item) => {
     if (item.action === "logout") {
@@ -95,37 +90,28 @@ const Navbar = () => {
                 <img
                   src={logo}
                   alt="Bloggy Logo"
-                  className="h-12 w-12 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
+                  className="h-12 w-12 transition-all duration-300"
                 />
                 <div className="absolute inset-0 rounded-full bg-primary-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"></div>
               </div>
-              <span className="ml-3 text-2xl font-display font-bold bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent hidden sm:block transition-all duration-300 group-hover:scale-105">
+              <span className="ml-3 text-2xl font-display font-bold bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent hidden sm:block transition-all duration-300">
                 Bloggy
               </span>
             </div>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-2">
-              {pages.map((page) => (
-                <button
-                  key={page.path}
-                  onClick={() => handlePageClick(page)}
-                  className={`relative px-5 py-2.5 rounded-xl font-semibold transition-all duration-300 ${
-                    location.pathname === page.path
-                      ? "bg-gradient-to-r from-primary-600 to-accent-600 text-white shadow-lg shadow-primary-500/50 scale-105"
-                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:scale-105"
-                  }`}
-                >
-                  {page.name}
-                  {location.pathname === page.path && (
-                    <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white rounded-full"></span>
-                  )}
-                </button>
-              ))}
-            </div>
 
             {/* Right Side Actions */}
             <div className="flex items-center space-x-4">
+              {/* Admin Panel Button */}
+              {isAdmin && (
+                <button
+                  onClick={() => navigate("/admin")}
+                  className="hidden md:flex items-center space-x-2 px-5 py-2.5 rounded-xl font-semibold bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 shadow-lg shadow-purple-500/50 hover:shadow-xl hover:shadow-purple-500/60 hover:scale-105 transition-all duration-300"
+                >
+                  <HiShieldCheck className="w-5 h-5" />
+                  <span>Admin</span>
+                </button>
+              )}
               {/* Write Button */}
               {currentUser && (
                 <button
@@ -219,19 +205,18 @@ const Navbar = () => {
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-gray-200/50 dark:border-gray-700/50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg">
             <div className="px-4 pt-2 pb-4 space-y-2">
-              {pages.map((page) => (
+              {isAdmin && (
                 <button
-                  key={page.path}
-                  onClick={() => handlePageClick(page)}
-                  className={`w-full text-left px-4 py-3 rounded-xl font-semibold transition-all duration-300 ${
-                    location.pathname === page.path
-                      ? "bg-gradient-to-r from-primary-600 to-accent-600 text-white shadow-lg"
-                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-                  }`}
+                  onClick={() => {
+                    navigate("/admin");
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full text-left px-4 py-3 rounded-xl font-semibold bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 shadow-lg flex items-center space-x-2 transition-all duration-300"
                 >
-                  {page.name}
+                  <HiShieldCheck className="w-5 h-5" />
+                  <span>Admin Panel</span>
                 </button>
-              ))}
+              )}
               {currentUser && (
                 <button
                   onClick={() => {

@@ -80,6 +80,44 @@ const HomeCard = ({
 
   const { image: userImage, firstName, lastName } = userId;
 
+  // Helper function to extract parent ID from comment (same logic as Detail page)
+  const getParentId = (comment) => {
+    if (!comment) return null;
+    
+    // Try different field names - check all possible variations
+    let parentId = comment.parentCommentId || comment.parentId || comment.parentComment || comment.replyTo || comment.parent;
+    
+    // If it's a string, return it (but check if it's not empty)
+    if (typeof parentId === 'string' && parentId.trim() !== '' && parentId !== 'null' && parentId !== 'undefined') {
+      return parentId;
+    }
+    
+    // If it's an object, extract the ID
+    if (typeof parentId === 'object' && parentId !== null) {
+      const extractedId = parentId._id || parentId.id || null;
+      if (extractedId && typeof extractedId === 'string' && extractedId.trim() !== '') {
+        return extractedId;
+      }
+    }
+    
+    // Also check if comment has a populated parentComment field
+    if (comment.parentComment && typeof comment.parentComment === 'object') {
+      return comment.parentComment._id || comment.parentComment.id || null;
+    }
+    
+    return null;
+  };
+
+  // Count only parent comments (not replies)
+  const getParentCommentCount = () => {
+    if (!Array.isArray(comments)) return 0;
+    return comments.filter(comment => {
+      const parentId = getParentId(comment);
+      // A comment is a parent if it has no parentId or parentId is empty/null
+      return !parentId;
+    }).length;
+  };
+
   return (
     <Container maxWidth="lg" sx={{ paddingBottom: "2rem" }}>
       <PageHeader text="Blogs" />
@@ -127,7 +165,14 @@ const HomeCard = ({
                   </Avatar>
                 }
                 title={`${firstName} ${lastName}`}
-                subheader={new Date(createdAt).toLocaleDateString("de-DE")}
+                subheader={new Date(createdAt).toLocaleString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  second: "2-digit",
+                })}
               />
               <Typography
                 variant="body2"
@@ -162,7 +207,7 @@ const HomeCard = ({
                 />
                 <Typography sx={{ ml: 1 }}>{likes?.length}</Typography>
                 <ChatBubbleOutlineIcon sx={{ ml: 2 }} />
-                <Typography sx={{ ml: 1 }}>{comments?.length}</Typography>
+                <Typography sx={{ ml: 1 }}>{getParentCommentCount()}</Typography>
                 <RemoveRedEyeIcon sx={{ ml: 2 }} />
                 <Typography sx={{ ml: 1 }}>{countOfVisitors}</Typography>
               </Box>

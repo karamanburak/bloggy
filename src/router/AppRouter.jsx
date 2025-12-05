@@ -3,10 +3,12 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import PrivateRouter from "./PrivateRouter";
+import AdminRouter from "./AdminRouter";
 import Dashboard from "../pages/Dashboard";
 import Blogs from "../pages/Blogs";
 import About from "../pages/About";
 import Profile from "../pages/Profile";
+import AdminPanel from "../pages/AdminPanel";
 import Navbar from "../components/global/Navbar";
 import NotFound from "../pages/NotFound";
 import Detail from "../pages/Detail";
@@ -27,6 +29,9 @@ const AppRouter = () => {
           <Route path="/blog" element={<Blogs />} />
           <Route path="/blog/create" element={<CreateBlog />} />
           <Route path="/blog/detail/:id" element={<Detail />} />
+        </Route>
+        <Route path="" element={<AdminRouter />}>
+          <Route path="/admin" element={<AdminPanel />} />
         </Route>
       </Routes>
     </Router>

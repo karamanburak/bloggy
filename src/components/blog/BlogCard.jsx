@@ -35,6 +35,44 @@ const BlogCard = ({
     return category ? category.name : "Uncategorized";
   };
 
+  // Helper function to extract parent ID from comment (same logic as Detail page)
+  const getParentId = (comment) => {
+    if (!comment) return null;
+    
+    // Try different field names - check all possible variations
+    let parentId = comment.parentCommentId || comment.parentId || comment.parentComment || comment.replyTo || comment.parent;
+    
+    // If it's a string, return it (but check if it's not empty)
+    if (typeof parentId === 'string' && parentId.trim() !== '' && parentId !== 'null' && parentId !== 'undefined') {
+      return parentId;
+    }
+    
+    // If it's an object, extract the ID
+    if (typeof parentId === 'object' && parentId !== null) {
+      const extractedId = parentId._id || parentId.id || null;
+      if (extractedId && typeof extractedId === 'string' && extractedId.trim() !== '') {
+        return extractedId;
+      }
+    }
+    
+    // Also check if comment has a populated parentComment field
+    if (comment.parentComment && typeof comment.parentComment === 'object') {
+      return comment.parentComment._id || comment.parentComment.id || null;
+    }
+    
+    return null;
+  };
+
+  // Count only parent comments (not replies)
+  const getParentCommentCount = () => {
+    if (!Array.isArray(comments)) return 0;
+    return comments.filter(comment => {
+      const parentId = getParentId(comment);
+      // A comment is a parent if it has no parentId or parentId is empty/null
+      return !parentId;
+    }).length;
+  };
+
   useEffect(() => {
     if (currentUser && Array.isArray(likes) && likes.includes(currentUser._id)) {
       setLiked(true);
@@ -83,7 +121,16 @@ const BlogCard = ({
   return (
     <article
       onClick={handleCardClick}
-      className="group relative bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer border border-gray-100 dark:border-gray-800 hover:border-primary-300 dark:hover:border-primary-700"
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          handleCardClick();
+        }
+      }}
+      tabIndex={0}
+      role="article"
+      aria-label={`Blog post: ${title}`}
+      className="group relative bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer border border-gray-100 dark:border-gray-800 hover:border-primary-300 dark:hover:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
     >
       {/* Image Container */}
       <div className="relative h-64 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900">
@@ -91,8 +138,12 @@ const BlogCard = ({
           src={image || "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800"}
           alt={title}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+          loading="lazy"
+          decoding="async"
           onError={(e) => {
-            e.target.src = "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800";
+            if (e.target.src !== "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800") {
+              e.target.src = "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800";
+            }
           }}
         />
         
@@ -151,10 +202,13 @@ const BlogCard = ({
               {firstName || "Unknown"} {lastName || ""}
             </p>
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              {createdAt ? new Date(createdAt).toLocaleDateString("en-US", {
+              {createdAt ? new Date(createdAt).toLocaleString("en-US", {
                 month: "short",
                 day: "numeric",
                 year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
               }) : "Recently"}
             </p>
           </div>
@@ -174,7 +228,7 @@ const BlogCard = ({
             
             <div className="flex items-center space-x-1.5">
               <MdChatBubbleOutline className="w-5 h-5" />
-              <span className="text-sm font-medium">{Array.isArray(comments) ? comments.length : 0}</span>
+              <span className="text-sm font-medium">{getParentCommentCount()}</span>
             </div>
             
             <div className="flex items-center space-x-1.5">
@@ -188,7 +242,15 @@ const BlogCard = ({
               e.stopPropagation();
               handleCardClick();
             }}
-            className="flex items-center space-x-1.5 px-4 py-2 rounded-lg bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 hover:bg-primary-100 dark:hover:bg-primary-900/50 transition-all duration-300 group/read"
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                e.stopPropagation();
+                handleCardClick();
+              }
+            }}
+            aria-label={`Read blog: ${title}`}
+            className="flex items-center space-x-1.5 px-4 py-2 rounded-lg bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 hover:bg-primary-100 dark:hover:bg-primary-900/50 transition-all duration-300 group/read focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
           >
             <span className="text-sm font-semibold">Read</span>
             <MdArrowOutward className="w-4 h-4 group-hover/read:translate-x-0.5 group-hover/read:-translate-y-0.5 transition-transform" />

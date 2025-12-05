@@ -33,6 +33,44 @@ const TrendBlogs = () => {
     getTrendsData();
   }, []);
 
+  // Helper function to extract parent ID from comment (same logic as Detail page)
+  const getParentId = (comment) => {
+    if (!comment) return null;
+    
+    // Try different field names - check all possible variations
+    let parentId = comment.parentCommentId || comment.parentId || comment.parentComment || comment.replyTo || comment.parent;
+    
+    // If it's a string, return it (but check if it's not empty)
+    if (typeof parentId === 'string' && parentId.trim() !== '' && parentId !== 'null' && parentId !== 'undefined') {
+      return parentId;
+    }
+    
+    // If it's an object, extract the ID
+    if (typeof parentId === 'object' && parentId !== null) {
+      const extractedId = parentId._id || parentId.id || null;
+      if (extractedId && typeof extractedId === 'string' && extractedId.trim() !== '') {
+        return extractedId;
+      }
+    }
+    
+    // Also check if comment has a populated parentComment field
+    if (comment.parentComment && typeof comment.parentComment === 'object') {
+      return comment.parentComment._id || comment.parentComment.id || null;
+    }
+    
+    return null;
+  };
+
+  // Count only parent comments (not replies)
+  const getParentCommentCount = (comments) => {
+    if (!Array.isArray(comments)) return 0;
+    return comments.filter(comment => {
+      const parentId = getParentId(comment);
+      // A comment is a parent if it has no parentId or parentId is empty/null
+      return !parentId;
+    }).length;
+  };
+
   const topTrendingBlogs = [...trendings]
     .sort((a, b) => b.countOfVisitors - a.countOfVisitors)
     .slice(0, 10);
@@ -207,7 +245,7 @@ const TrendBlogs = () => {
                         <MarkUnreadChatAltOutlinedIcon
                           style={{ fontSize: "1rem" }}
                         />
-                        <sup>{comments.length}</sup>
+                        <sup>{getParentCommentCount(comments)}</sup>
                       </Typography>
                     </Box>
                     <Typography>

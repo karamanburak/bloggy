@@ -26,12 +26,10 @@ export default function WeatherCard() {
             };
             const errorCallback = (error) => {
                 dispatch(fetchFail());
-                console.log(error);
             };
             window.navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
         } catch (error) {
             dispatch(fetchFail())
-            console.log(error);
         }
     }
 

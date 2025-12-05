@@ -17,7 +17,6 @@ const useCategoryCall = () => {
       //   console.log(data.data);
       dispatch(getCategories({ data: data.data }));
     } catch (error) {
-      console.error("Error fetching categories:", error);
       dispatch(fetchFail());
     }
   };

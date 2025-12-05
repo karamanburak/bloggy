@@ -1,32 +1,98 @@
 import { useEffect } from "react";
 import Footer from "../components/home/Footer";
 import useCategoryCall from "../hooks/useCategoryCall";
+import Avatar from "../components/global/Avatar";
 import { HiSparkles, HiUserGroup, HiLightBulb, HiBookOpen } from "react-icons/hi";
+import { FaLinkedin, FaSquareGithub, FaInstagram, FaTwitter } from "react-icons/fa6";
 
-const avatars = [
+const teamMembers = [
   {
-    name: "Ferenc Molnár",
+    name: "Hu Bo",
     position: "Founder & Co-CEO",
+    bio: "Acclaimed filmmaker known for complex narratives and innovative storytelling. Founded Bloggy to bring cinematic depth to digital content creation.",
+    expertise: ["Storytelling", "Narrative", "Innovation"],
+    experience: "25+ years",
+    social: {
+      linkedin: "#",
+      twitter: "#",
+    },
   },
   {
-    name: "Luca Guadagnino",
+    name: "Béla Tarr",
     position: "Co-CEO",
+    bio: "Legendary director and film historian. Brings decades of cinematic expertise to shape our editorial vision and content strategy.",
+    expertise: ["Cinema", "History", "Direction"],
+    experience: "50+ years",
+    social: {
+      linkedin: "#",
+      instagram: "#",
+    },
   },
   {
-    name: "Diego Hitchcock",
-    position: "Editor",
+    name: "Nuri Bilge Ceylan",
+    position: "Senior Editor",
+    bio: "Master storyteller known for creating universally appealing narratives. Ensures our content resonates with audiences worldwide.",
+    expertise: ["Storytelling", "Production", "Editing"],
+    experience: "45+ years",
+    social: {
+      linkedin: "#",
+      twitter: "#",
+    },
   },
   {
-    name: "Dario Argento",
-    position: "Editor",
+    name: "Gaspar Noé",
+    position: "Content Editor",
+    bio: "Award-winning director with a unique voice in storytelling. Brings bold perspectives and creative flair to our editorial content.",
+    expertise: ["Writing", "Dialogue", "Genre"],
+    experience: "30+ years",
+    social: {
+      linkedin: "#",
+      instagram: "#",
+    },
   },
   {
-    name: "Thomas Müller",
-    position: "Editor",
+    name: "Martin Scorsese",
+    position: "Creative Director",
+    bio: "Acclaimed writer-director known for authentic character-driven stories. Shapes our creative direction with fresh, modern perspectives.",
+    expertise: ["Writing", "Direction", "Character"],
+    experience: "15+ years",
+    social: {
+      linkedin: "#",
+      twitter: "#",
+    },
   },
   {
-    name: "Denis Schröder",
-    position: "Editor",
+    name: "Francis Ford Coppola",
+    position: "Visual Editor",
+    bio: "Visionary filmmaker specializing in atmospheric storytelling. Creates visually stunning and thought-provoking content experiences.",
+    expertise: ["Visual", "Atmosphere", "Cinematography"],
+    experience: "20+ years",
+    social: {
+      linkedin: "#",
+      instagram: "#",
+    },
+  },
+  {
+    name: "Guillermo del Toro",
+    position: "International Editor",
+    bio: "Oscar-winning director known for genre-bending narratives. Brings global perspectives and innovative storytelling techniques.",
+    expertise: ["Genre", "International", "Innovation"],
+    experience: "25+ years",
+    social: {
+      linkedin: "#",
+      twitter: "#",
+    },
+  },
+  {
+    name: "Christopher Nolan",
+    position: "Style Editor",
+    bio: "Acclaimed director known for distinctive visual style and intimate storytelling. Curates our aesthetic and editorial voice.",
+    expertise: ["Style", "Aesthetics", "Visual"],
+    experience: "20+ years",
+    social: {
+      linkedin: "#",
+      instagram: "#",
+    },
   },
 ];
 
@@ -175,29 +241,103 @@ const About = () => {
 
           {/* Team Section */}
           <div className="card p-8 lg:p-12 animate-slide-up">
-            <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-gray-100 mb-12">
-              Our Team
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
-              {avatars.map((avatar, index) => (
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+                Our Team
+              </h2>
+              <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                Meet the talented individuals who bring Bloggy to life. Our diverse team of writers, editors, designers, and developers work together to create exceptional content.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {teamMembers.map((member, index) => (
                 <div
                   key={index}
-                  className="flex flex-col items-center text-center group"
+                  className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-700 group"
                 >
-                  <div className="relative mb-4 group-hover:scale-110 transition-transform duration-300">
-                    <img
-                      src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${avatar.name}`}
-                      alt={avatar.name}
-                      className="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-primary-500 shadow-lg"
-                    />
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary-500/20 to-accent-500/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="flex flex-col items-center text-center mb-4">
+                    <div className="relative mb-4 group-hover:scale-105 transition-transform duration-300">
+                      <div className="relative">
+                        <Avatar 
+                          name={member.name} 
+                          size={96}
+                          className="border-4 border-primary-500 shadow-lg"
+                        />
+                        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary-500/20 to-accent-500/20 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                      </div>
+                    </div>
+                    <h4 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-1">
+                      {member.name}
+                    </h4>
+                    <p className="text-sm font-semibold text-primary-600 dark:text-primary-400 mb-2">
+                      {member.position}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
+                      {member.experience} experience
+                    </p>
                   </div>
-                  <h4 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-1">
-                    {avatar.name}
-                  </h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {avatar.position}
+                  
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 line-clamp-3 text-center">
+                    {member.bio}
                   </p>
+                  
+                  <div className="flex flex-wrap gap-2 justify-center mb-4">
+                    {member.expertise.map((skill, skillIndex) => (
+                      <span
+                        key={skillIndex}
+                        className="px-2 py-1 text-xs font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-full"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                  
+                  <div className="flex items-center justify-center space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+                    {member.social.linkedin && (
+                      <a
+                        href={member.social.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                        aria-label={`${member.name} LinkedIn`}
+                      >
+                        <FaLinkedin className="w-5 h-5" />
+                      </a>
+                    )}
+                    {member.social.twitter && (
+                      <a
+                        href={member.social.twitter}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-400 hover:text-blue-400 dark:hover:text-blue-300 transition-colors"
+                        aria-label={`${member.name} Twitter`}
+                      >
+                        <FaTwitter className="w-5 h-5" />
+                      </a>
+                    )}
+                    {member.social.github && (
+                      <a
+                        href={member.social.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+                        aria-label={`${member.name} GitHub`}
+                      >
+                        <FaSquareGithub className="w-5 h-5" />
+                      </a>
+                    )}
+                    {member.social.instagram && (
+                      <a
+                        href={member.social.instagram}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-400 hover:text-pink-600 dark:hover:text-pink-400 transition-colors"
+                        aria-label={`${member.name} Instagram`}
+                      >
+                        <FaInstagram className="w-5 h-5" />
+                      </a>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>

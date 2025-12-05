@@ -26,7 +26,14 @@ const CustomCardHeader = ({
         </Avatar>
       }
       title={`${firstName} ${lastName} `}
-      subheader={` ${new Date(createdAt).toLocaleDateString("de-DE")}`}
+      subheader={` ${new Date(createdAt).toLocaleString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      })}`}
     />
   );
 };

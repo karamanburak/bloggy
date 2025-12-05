@@ -33,7 +33,7 @@ cd bloggy-app
 2.  Install dependencies:
 
 ```
-pnpm install
+bun install
 ```
 
 3. Set up environment variables:
@@ -48,7 +48,7 @@ VITE_WEATHER_apiKey =
 4. Run the development server:
 
 ```
-pnpm dev
+bun run dev
 ```
 
 # Usage
@@ -155,7 +155,7 @@ SOLUTION
 |    ├── index.html
 |    ├── LICENSE
 |    ├── package.json
-|    ├── pnpm-lock.yaml
+|    ├── bun.lockb
 |    ├── README.md
 |    ├── vercel.json
 └──   vite.config.js

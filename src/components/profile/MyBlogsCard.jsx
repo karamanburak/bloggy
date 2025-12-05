@@ -185,10 +185,13 @@ const MyBlogsCard = ({
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
                   {createdAt
-                    ? new Date(createdAt).toLocaleDateString("en-US", {
+                    ? new Date(createdAt).toLocaleString("en-US", {
                         month: "short",
                         day: "numeric",
                         year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit",
                       })
                     : "Recently"}
                 </p>
@@ -231,6 +234,8 @@ const MyBlogsCard = ({
             title: title,
             content: content,
             image: image,
+            categoryId: categoryId?._id || categoryId || "",
+            isPublish: true,
           }}
         />
       )}

@@ -22,7 +22,7 @@ const Quotes = () => {
             // console.log(data);
             setQuote(data)
         } catch (error) {
-            console.log(error);
+            // Error fetching quote
         }
     }
 
