@@ -17,9 +17,13 @@ const Dashboard = () => {
   const { getNewsData } = useNewsCall();
   const { blogs, loading } = useSelector((state) => state.blog);
   const { news, loading: newsLoading } = useSelector((state) => state.newsShows);
+  const { loading: categoriesLoading } = useSelector((state) => state.category);
   const [currentNewsIndex, setCurrentNewsIndex] = useState(0);
   const [showAllNews, setShowAllNews] = useState(false);
   const [viewMode, setViewMode] = useState("slider"); // "slider" or "grid"
+
+  // Tüm veriler gelene kadar loading state'i
+  const isLoading = loading || newsLoading || categoriesLoading;
 
   const topTrendingBlogs = [...blogs]
     .sort((a, b) => (b.countOfVisitors || 0) - (a.countOfVisitors || 0))
@@ -89,107 +93,148 @@ const Dashboard = () => {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {/* Trending Blogs Section */}
-        {topTrendingBlogs.length > 0 && (
-          <section className="mb-20 animate-fade-in">
-            <div className="flex items-center justify-between mb-10">
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center shadow-lg">
-                  <HiFire className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
-                    Trending Now
-                  </h2>
-                  <p className="text-gray-600 dark:text-gray-400 mt-1">
-                    Discover the most popular stories this week
-                  </p>
+        {isLoading ? (
+          <>
+            {/* Trending Blogs Skeleton */}
+            <section className="mb-20 animate-fade-in">
+              <div className="flex items-center justify-between mb-10">
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center shadow-lg">
+                    <HiFire className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
+                      Trending Now
+                    </h2>
+                    <p className="text-gray-600 dark:text-gray-400 mt-1">
+                      Discover the most popular stories this week
+                    </p>
+                  </div>
                 </div>
               </div>
-              <button
-                onClick={() => navigate("/blog")}
-                className="hidden md:flex items-center space-x-2 px-6 py-3 rounded-lg text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 font-semibold transition-all hover:scale-105"
-              >
-                <span>View All</span>
-                <HiArrowRight className="w-5 h-5" />
-              </button>
-            </div>
-            
-            {loading ? (
               <SkeletonLoader type="blogList" count={6} />
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {topTrendingBlogs.map((blog) => (
-                  <BlogCard key={blog._id} {...blog} />
-                ))}
-              </div>
-            )}
-          </section>
-        )}
+            </section>
 
-        {/* Latest News Section */}
-        <section className="mb-20 animate-fade-in">
-          <div className="flex items-center justify-between mb-12">
-            <div className="flex items-center space-x-4">
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-primary-600 rounded-2xl blur-xl opacity-50 animate-pulse"></div>
-                <div className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 via-primary-600 to-accent-600 flex items-center justify-center shadow-xl">
-                  <HiNewspaper className="w-7 h-7 text-white" />
+            {/* Latest News Skeleton */}
+            <section className="mb-20 animate-fade-in">
+              <div className="flex items-center justify-between mb-12">
+                <div className="flex items-center space-x-4">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-primary-600 rounded-2xl blur-xl opacity-50 animate-pulse"></div>
+                    <div className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 via-primary-600 to-accent-600 flex items-center justify-center shadow-xl">
+                      <HiNewspaper className="w-7 h-7 text-white" />
+                    </div>
+                  </div>
+                  <div>
+                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
+                      Latest News
+                    </h2>
+                    <p className="text-gray-600 dark:text-gray-400 mt-1 text-sm md:text-base">
+                      Stay updated with the latest happenings from multiple sources
+                    </p>
+                  </div>
                 </div>
               </div>
-              <div>
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
-                  Latest News
-                </h2>
-                <p className="text-gray-600 dark:text-gray-400 mt-1 text-sm md:text-base">
-                  Stay updated with the latest happenings from multiple sources
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              {/* View Mode Toggle */}
-              <div className="flex items-center bg-white dark:bg-gray-800 rounded-xl p-1 shadow-lg border border-gray-200 dark:border-gray-700">
-                <button
-                  onClick={() => setViewMode("slider")}
-                  className={`p-2.5 rounded-lg transition-all duration-200 ${
-                    viewMode === "slider"
-                      ? "bg-primary-600 text-white shadow-md"
-                      : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
-                  }`}
-                  aria-label="Slider view"
-                  title="Slider View"
-                >
-                  <HiCollection className="w-5 h-5" />
-                </button>
-                <button
-                  onClick={() => setViewMode("grid")}
-                  className={`p-2.5 rounded-lg transition-all duration-200 ${
-                    viewMode === "grid"
-                      ? "bg-primary-600 text-white shadow-md"
-                      : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
-                  }`}
-                  aria-label="Grid view"
-                  title="Grid View"
-                >
-                  <HiViewGrid className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-          </div>
+              {viewMode === "slider" ? (
+                <div className="flex justify-center items-center py-20">
+                  <SkeletonLoader type="newsCard" count={1} />
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {[...Array(6)].map((_, index) => (
+                    <SkeletonLoader key={index} type="newsCard" count={1} />
+                  ))}
+                </div>
+              )}
+            </section>
+          </>
+        ) : (
+          <>
+            {/* Trending Blogs Section */}
+            {topTrendingBlogs.length > 0 && (
+              <section className="mb-20 animate-fade-in">
+                <div className="flex items-center justify-between mb-10">
+                  <div className="flex items-center space-x-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center shadow-lg">
+                      <HiFire className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
+                        Trending Now
+                      </h2>
+                      <p className="text-gray-600 dark:text-gray-400 mt-1">
+                        Discover the most popular stories this week
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => navigate("/blog")}
+                    className="hidden md:flex items-center space-x-2 px-6 py-3 rounded-lg text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 font-semibold transition-all hover:scale-105"
+                  >
+                    <span>View All</span>
+                    <HiArrowRight className="w-5 h-5" />
+                  </button>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {topTrendingBlogs.map((blog) => (
+                    <BlogCard key={blog._id} {...blog} />
+                  ))}
+                </div>
+              </section>
+            )}
 
-          {newsLoading ? (
-            viewMode === "slider" ? (
-              <div className="flex justify-center items-center py-20">
-                <SkeletonLoader type="newsCard" count={1} />
+            {/* Latest News Section */}
+            <section className="mb-20 animate-fade-in">
+              <div className="flex items-center justify-between mb-12">
+                <div className="flex items-center space-x-4">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-primary-600 rounded-2xl blur-xl opacity-50 animate-pulse"></div>
+                    <div className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 via-primary-600 to-accent-600 flex items-center justify-center shadow-xl">
+                      <HiNewspaper className="w-7 h-7 text-white" />
+                    </div>
+                  </div>
+                  <div>
+                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
+                      Latest News
+                    </h2>
+                    <p className="text-gray-600 dark:text-gray-400 mt-1 text-sm md:text-base">
+                      Stay updated with the latest happenings from multiple sources
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  {/* View Mode Toggle */}
+                  <div className="flex items-center bg-white dark:bg-gray-800 rounded-xl p-1 shadow-lg border border-gray-200 dark:border-gray-700">
+                    <button
+                      onClick={() => setViewMode("slider")}
+                      className={`p-2.5 rounded-lg transition-all duration-200 ${
+                        viewMode === "slider"
+                          ? "bg-primary-600 text-white shadow-md"
+                          : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      }`}
+                      aria-label="Slider view"
+                      title="Slider View"
+                    >
+                      <HiCollection className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={() => setViewMode("grid")}
+                      className={`p-2.5 rounded-lg transition-all duration-200 ${
+                        viewMode === "grid"
+                          ? "bg-primary-600 text-white shadow-md"
+                          : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      }`}
+                      aria-label="Grid view"
+                      title="Grid View"
+                    >
+                      <HiViewGrid className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
               </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[...Array(6)].map((_, index) => (
-                  <SkeletonLoader key={index} type="newsCard" count={1} />
-                ))}
-              </div>
-            )
-          ) : news.length > 0 ? (
+
+              {news.length > 0 ? (
             <div id="news-section" className="relative">
               {/* Background Decoration */}
               <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/10 via-primary-500/10 to-accent-500/10 rounded-3xl blur-2xl -z-10"></div>
@@ -321,6 +366,8 @@ const Dashboard = () => {
             </div>
           )}
         </section>
+          </>
+        )}
       </div>
 
       {/* Footer */}

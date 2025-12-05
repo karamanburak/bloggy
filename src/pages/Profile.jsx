@@ -4,6 +4,7 @@ import UpdateProfileModal from "../components/profile/UpdateProfileModal";
 import MyBlogsContainer from "../components/profile/MyBlogsContainer";
 import Footer from "../components/home/Footer";
 import useCategoryCall from "../hooks/useCategoryCall";
+import SkeletonLoader from "../components/global/SkeletonLoader";
 import {
   HiLocationMarker,
   HiCalendar,
@@ -14,9 +15,13 @@ import {
 
 const Profile = () => {
   const { currentUser } = useSelector((state) => state.auth);
+  const { categories, loading: categoriesLoading } = useSelector((state) => state.category);
   const { getCategory } = useCategoryCall();
   const [open, setOpen] = useState(false);
   const [tabValue, setTabValue] = useState(0);
+
+  // Categories yüklenene kadar loading state'i
+  const isLoading = categoriesLoading;
 
   const { image, username, email, bio, city, createdAt, firstName, lastName } =
     currentUser || {};
@@ -30,6 +35,57 @@ const Profile = () => {
 
   if (!currentUser) {
     return null;
+  }
+
+  // Loading skeleton
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300 pt-20 flex flex-col">
+        {/* Cover Image Skeleton */}
+        <div className="relative h-72 w-full overflow-hidden bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 animate-pulse"></div>
+
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-40 pb-12 flex-1">
+          {/* Profile Card Skeleton */}
+          <div className="relative overflow-hidden rounded-3xl bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 shadow-2xl p-6 lg:p-10 mb-8">
+            <div className="flex flex-col md:flex-row items-start md:items-end gap-8">
+              {/* Avatar Skeleton */}
+              <div className="relative -mt-24 md:-mt-32">
+                <div className="w-32 h-32 md:w-44 md:h-44 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse"></div>
+              </div>
+
+              {/* Profile Info Skeleton */}
+              <div className="flex-1 w-full space-y-4">
+                <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded w-1/3 animate-pulse"></div>
+                <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/4 animate-pulse"></div>
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full animate-pulse"></div>
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 animate-pulse"></div>
+                <div className="flex items-center gap-6 mt-4">
+                  <div className="h-10 w-32 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse"></div>
+                  <div className="h-10 w-40 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Tabs Skeleton */}
+          <div className="relative mb-8">
+            <div className="flex space-x-2 bg-gray-100/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-2 border border-gray-200/50 dark:border-gray-700/50">
+              <div className="flex-1 h-12 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse"></div>
+              <div className="flex-1 h-12 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse"></div>
+            </div>
+          </div>
+
+          {/* Content Skeleton */}
+          <div className="py-6 pb-20">
+            <SkeletonLoader type="list" count={4} />
+          </div>
+        </div>
+
+        <div className="relative z-10 mt-auto">
+          <Footer />
+        </div>
+      </div>
+    );
   }
 
   return (

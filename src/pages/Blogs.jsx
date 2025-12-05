@@ -12,12 +12,15 @@ const Blogs = () => {
   const navigate = useNavigate();
   const { getBlogData } = useBlogCall();
   const { blogs, loading } = useSelector((state) => state.blog);
-  const { categories } = useSelector((state) => state.category);
+  const { categories, loading: categoriesLoading } = useSelector((state) => state.category);
   const { getCategory } = useCategoryCall();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const blogsPerPage = 12;
+
+  // Tüm veriler gelene kadar loading state'i
+  const isLoading = loading || categoriesLoading;
 
   // Filter blogs based on search and category
   const filteredBlogs = blogs.filter((blog) => {
@@ -126,15 +129,17 @@ const Blogs = () => {
         </div>
 
         {/* Results Count */}
-        <div className="mb-6">
-          <p className="text-gray-600 dark:text-gray-400">
-            Showing <span className="font-semibold text-gray-900 dark:text-gray-100">{filteredBlogs.length}</span> blog{filteredBlogs.length !== 1 ? "s" : ""}
-            {searchTerm && ` for "${searchTerm}"`}
-            {selectedCategory && ` in ${categories.find(c => c._id === selectedCategory)?.name || "category"}`}
-          </p>
-        </div>
+        {!isLoading && (
+          <div className="mb-6">
+            <p className="text-gray-600 dark:text-gray-400">
+              Showing <span className="font-semibold text-gray-900 dark:text-gray-100">{filteredBlogs.length}</span> blog{filteredBlogs.length !== 1 ? "s" : ""}
+              {searchTerm && ` for "${searchTerm}"`}
+              {selectedCategory && ` in ${categories.find(c => c._id === selectedCategory)?.name || "category"}`}
+            </p>
+          </div>
+        )}
 
-        {loading ? (
+        {isLoading ? (
           <SkeletonLoader type="list" count={12} />
         ) : (
           <>
