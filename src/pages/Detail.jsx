@@ -35,7 +35,7 @@ const Detail = () => {
   const { state } = useLocation();
   const { id } = useParams();
   const navigate = useNavigate();
-  const { getBlogDetail, postLike, deleteComment, updateComment, postCommentLike, postCommentDislike, refreshComments } = useBlogCall();
+  const { getBlogDetail, postLike, deleteComment, updateComment, postCommentLike, postCommentDislike, refreshComments, incrementViewer } = useBlogCall();
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.auth);
   const { blog, loading: blogLoading } = useSelector((state) => state.blog);
@@ -100,21 +100,14 @@ const Detail = () => {
     return category ? category.name : "Unknown Category";
   };
 
-  // Track if this is the first load to prevent duplicate view count increments
-  const isFirstLoad = useRef(true);
+  // Track if viewer has been incremented for this blog in this session
+  const viewerIncremented = useRef(false);
   
-  // Separate useEffect for blog detail and view count
+  // Separate useEffect for blog detail
   useEffect(() => {
     // Use blogId from URL params if _id is not available (direct URL access)
     const targetId = _id || blogId;
     if (!targetId) return;
-    
-    const storageKey = `blog_viewed_${targetId}`;
-    const hasViewed = sessionStorage.getItem(storageKey);
-    
-    // Backend's getBlogDetail auto-increments view count on every call
-    // So we only call it once per session (first visit)
-    // For subsequent visits, we only refresh comments without calling getBlogDetail
     
     // If we don't have blogData and we have an ID, fetch it (direct URL access)
     if (!blogData && targetId) {
@@ -122,38 +115,51 @@ const Detail = () => {
       return;
     }
     
-    // If we have blogData, handle view count logic
-    if (blogData) {
-      if (!hasViewed && isFirstLoad.current) {
-        // First visit: getBlogDetail will increment view count and load comments
-        sessionStorage.setItem(storageKey, "true");
-        isFirstLoad.current = false;
+    // If we have blogData, refresh comments if needed
+    if (blogData && blog?._id !== targetId) {
+      // Blog data exists but Redux store doesn't match, refresh comments
+      refreshComments(targetId).then(comments => {
+        if (blogData && blogData._id === targetId) {
+          dispatch(getBlogDetailSuccess({
+            data: {
+              ...blogData,
+              comments: comments || []
+            }
+          }));
+        }
+      }).catch(() => {
+        // If refresh fails, fetch full blog detail
         getBlogDetail("blogs", targetId);
-      } else if (hasViewed) {
-        // Already viewed: only refresh comments without calling getBlogDetail
-        // This prevents view count from incrementing again
-        const currentBlog = blog?._id === targetId ? blog : blogData;
-        
-        refreshComments(targetId).then(comments => {
-          if (currentBlog && currentBlog._id === targetId) {
-            dispatch(getBlogDetailSuccess({
-              data: {
-                ...currentBlog,
-                comments: comments || []
-              }
-            }));
-          } else if (!currentBlog) {
-            // If blog is not available, fetch it (this will increment view count but it's necessary)
-            getBlogDetail("blogs", targetId);
-          }
-        }).catch(() => {
-          // If refresh fails, fetch full blog detail
-          getBlogDetail("blogs", targetId);
-        });
-      }
+      });
+    } else if (!blogData && targetId) {
+      // No blog data, fetch it
+      getBlogDetail("blogs", targetId);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [blogId, _id, blogData]);
+  
+  // Separate useEffect for incrementing viewer count (only once per session)
+  useEffect(() => {
+    const targetId = _id || blogId;
+    if (!targetId || viewerIncremented.current) return;
+    
+    const storageKey = `blog_viewed_${targetId}`;
+    const hasViewed = sessionStorage.getItem(storageKey);
+    
+    // Only increment viewer if:
+    // 1. Blog data is loaded
+    // 2. We haven't incremented in this session
+    // 3. We haven't viewed this blog in this session
+    if (blog && blog._id === targetId && !hasViewed && !viewerIncremented.current) {
+      // Mark as viewed in session storage
+      sessionStorage.setItem(storageKey, "true");
+      viewerIncremented.current = true;
+      
+      // Increment viewer count (only for published blogs, backend handles this)
+      incrementViewer("blogs", targetId);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [blog, blogId, _id]);
 
   // Separate useEffect for categories
   useEffect(() => {
@@ -631,20 +637,25 @@ const Detail = () => {
                   </p>
                 </div>
               </div>
-              {/* Sort Dropdown */}
-              <div className="flex items-center space-x-2">
-                <label className="text-sm text-gray-600 dark:text-gray-400">Sort:</label>
-                <select
-                  value={commentSort}
-                  onChange={(e) => setCommentSort(e.target.value)}
-                  className="px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500/50"
-                >
-                  <option value="newest">Newest First</option>
-                  <option value="oldest">Oldest First</option>
-                  <option value="mostLiked">Most Liked</option>
-                  <option value="leastLiked">Least Liked</option>
-                </select>
-              </div>
+              {/* Sort Dropdown - Only show if there are comments */}
+              {blog?.comments?.filter(c => 
+                c && typeof c === 'object' && 
+                !c.parentCommentId && !c.parentId && !c.parentComment && !c.replyTo
+              ).length > 0 && (
+                <div className="flex items-center space-x-2">
+                  <label className="text-sm text-gray-600 dark:text-gray-400">Sort:</label>
+                  <select
+                    value={commentSort}
+                    onChange={(e) => setCommentSort(e.target.value)}
+                    className="px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500/50"
+                  >
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="mostLiked">Most Liked</option>
+                    <option value="leastLiked">Least Liked</option>
+                  </select>
+                </div>
+              )}
             </div>
 
             {/* Comments List - Always Visible */}
