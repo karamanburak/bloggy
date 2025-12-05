@@ -16,80 +16,16 @@ const useNewsCall = () => {
   };
 
   // Free API - No registration required: Knowivate News API
+  // DISABLED: CORS issues - API doesn't allow cross-origin requests
   const fetchKnowivateNews = async () => {
-    try {
-      const { data } = await axios.get(
-        "https://news.knowivate.com/api/latest",
-        {
-          headers: {
-            'Accept': 'application/json',
-          },
-          timeout: 10000
-        }
-      );
-      
-      if (data && Array.isArray(data) && data.length > 0) {
-        return data.map((article) => ({
-          title: article.title || article.headline || "",
-          description: stripHtml(article.description || article.summary || ""),
-          content: stripHtml(article.content || article.description || article.summary || ""),
-          url: article.url || article.link || "#",
-          image: article.image || article.imageUrl || "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&h=450&fit=crop",
-          publishedAt: article.publishedAt || article.date || new Date().toISOString(),
-          source: {
-            name: article.source || article.publisher || "News",
-          },
-          author: article.author || article.source || "",
-        }));
-      }
-    } catch (error) {
-      // Only log in development - CORS errors are expected for external APIs
-      if (process.env.NODE_ENV === 'development') {
-        // Check if it's a CORS or network error (expected)
-        if (error.code === 'ERR_NETWORK' || error.message?.includes('CORS')) {
-          // Silently handle CORS errors - they're expected
-        }
-      }
-    }
+    // This API has CORS issues, skipping
     return null;
   };
 
   // Free API - No registration required: The Free News API
+  // DISABLED: SSL certificate issues - API has invalid certificate
   const fetchFreeNewsAPI = async () => {
-    try {
-      const { data } = await axios.get(
-        "https://www.thefreenewsapi.com/api/v1/latest-news",
-        {
-          headers: {
-            'Accept': 'application/json',
-          },
-          timeout: 10000
-        }
-      );
-      
-      if (data && data.news && Array.isArray(data.news) && data.news.length > 0) {
-        return data.news.map((article) => ({
-          title: article.title || "",
-          description: stripHtml(article.description || article.summary || ""),
-          content: stripHtml(article.content || article.description || ""),
-          url: article.url || article.link || "#",
-          image: article.image || article.imageUrl || "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&h=450&fit=crop",
-          publishedAt: article.publishedAt || article.date || new Date().toISOString(),
-          source: {
-            name: article.source || "Free News",
-          },
-          author: article.author || "",
-        }));
-      }
-    } catch (error) {
-      // Only log in development - CORS/SSL errors are expected for external APIs
-      if (process.env.NODE_ENV === 'development') {
-        // Check if it's a CORS, network, or SSL error (expected)
-        if (error.code === 'ERR_NETWORK' || error.code === 'ERR_CERT_DATE_INVALID' || error.message?.includes('CORS')) {
-          // Silently handle expected errors
-        }
-      }
-    }
+    // This API has SSL certificate issues, skipping
     return null;
   };
 
@@ -297,8 +233,7 @@ const useNewsCall = () => {
       const fetchPromises = [];
 
       // Priority 1: Free APIs (No registration required)
-      fetchPromises.push(fetchKnowivateNews());
-      fetchPromises.push(fetchFreeNewsAPI());
+      // Removed fetchKnowivateNews() and fetchFreeNewsAPI() due to CORS/SSL issues
       fetchPromises.push(fetchDevTo());
       fetchPromises.push(fetchHackerNews());
 

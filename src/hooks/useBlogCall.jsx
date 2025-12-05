@@ -8,6 +8,7 @@ import {
 } from "../features/blogSlice";
 import useAxios from "./useAxios";
 import { toastErrorNotify, toastSuccessNotify } from "../helper/ToastNotify";
+import store from "../app/store";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const useBlogCall = () => {
@@ -61,7 +62,12 @@ const useBlogCall = () => {
               // Add replies if they exist
               if (replies && Array.isArray(replies) && replies.length > 0) {
                 replies.forEach(reply => {
-                  flattenedComments.push(reply);
+                  // Ensure parentCommentId is a string (not an object)
+                  const flattenedReply = {
+                    ...reply.toObject ? reply.toObject() : reply,
+                    parentCommentId: comment._id.toString() // Ensure it's a string
+                  };
+                  flattenedComments.push(flattenedReply);
                 });
               }
             });
@@ -88,53 +94,17 @@ const useBlogCall = () => {
     try {
       const { data } = await axiosWithToken(`${url}/${id}`);
       
-      // API returns comments with nested replies structure:
-      // comments: [{ ...comment, replies: [reply1, reply2] }]
-      // We need to flatten this to a single array: [comment1, comment2, reply1, reply2]
-      const comments = data?.data?.comments || [];
+      // Backend's getBlogDetail returns flat comments array without nested replies
+      // We need to fetch comments separately using comment.list endpoint to get nested structure
+      // This endpoint returns: [{ ...comment, replies: [reply1, reply2] }]
+      const populatedComments = await getCommentsByBlogId(id);
       
-      if (comments.length > 0) {
-        // Check if comments have nested replies structure (API format)
-        const hasNestedReplies = comments[0]?.replies && Array.isArray(comments[0].replies);
-        
-        if (hasNestedReplies) {
-          // Flatten comments and replies into a single array
-          const flattenedComments = [];
-          
-          comments.forEach(comment => {
-            // Add parent comment (without replies property)
-            const { replies, ...parentComment } = comment;
-            flattenedComments.push(parentComment);
-            
-            // Add replies if they exist
-            if (replies && Array.isArray(replies) && replies.length > 0) {
-              replies.forEach(reply => {
-                flattenedComments.push(reply);
-              });
-            }
-          });
-          
-          
-          // Replace nested structure with flattened array
-          data.data.comments = flattenedComments;
-        } else {
-          // Check if comments are just IDs (strings) instead of populated objects
-          const hasUnpopulatedComments = comments.length > 0 && 
-            (typeof comments[0] === 'string' || 
-             (typeof comments[0] === 'object' && comments[0]._id && !comments[0].userId));
-          
-          // If comments are not populated, fetch them separately
-          if (hasUnpopulatedComments) {
-            const populatedComments = await getCommentsByBlogId(id);
-            if (populatedComments.length > 0) {
-              // Merge populated comments into blog data
-              data.data.comments = populatedComments;
-            } else {
-              // Set to empty array if we couldn't fetch populated comments
-              data.data.comments = [];
-            }
-          }
-        }
+      // Replace blog's comments with populated comments (including nested replies)
+      if (populatedComments.length > 0) {
+        data.data.comments = populatedComments;
+      } else {
+        // If no comments found, set to empty array
+        data.data.comments = [];
       }
       
       // Ensure we're passing the correct format to the reducer
@@ -211,12 +181,12 @@ const useBlogCall = () => {
       // Small delay to ensure backend has processed the comment
       await new Promise(resolve => setTimeout(resolve, 300));
       
-      // Wait for blog detail to be fetched and state updated
-      // This ensures the new comment/reply appears in the UI
-      await getBlogDetail("blogs", info.blogId);
+      // Refresh only comments without calling getBlogDetail (to avoid view count increment)
+      // The caller should update Redux store with refreshed comments
+      const comments = await getCommentsByBlogId(info.blogId);
       
       toastSuccessNotify("Comment successfully added!");
-      return response;
+      return { ...response, comments }; // Return comments so caller can update store
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(
@@ -245,7 +215,9 @@ const useBlogCall = () => {
     try {
       await axiosWithToken.put(`comments/${commentId}`, { comment: commentText });
       toastSuccessNotify("Comment successfully updated!");
-      await getBlogDetail("blogs", blogId);
+      // Refresh only comments without calling getBlogDetail (to avoid view count increment)
+      const comments = await getCommentsByBlogId(blogId);
+      return comments; // Return comments so caller can update store
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(
@@ -280,8 +252,9 @@ const useBlogCall = () => {
     dispatch(fetchStart());
     try {
       await axiosWithToken.post(`comments/${commentId}/postLike`);
-      // Refresh blog detail to get updated like counts
-      await getBlogDetail("blogs", blogId);
+      // Refresh only comments without calling getBlogDetail (to avoid view count increment)
+      const comments = await getCommentsByBlogId(blogId);
+      return comments; // Return comments so caller can update store
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(
@@ -294,8 +267,9 @@ const useBlogCall = () => {
     dispatch(fetchStart());
     try {
       await axiosWithToken.post(`comments/${commentId}/postDislike`);
-      // Refresh blog detail to get updated dislike counts
-      await getBlogDetail("blogs", blogId);
+      // Refresh only comments without calling getBlogDetail (to avoid view count increment)
+      const comments = await getCommentsByBlogId(blogId);
+      return comments; // Return comments so caller can update store
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(
@@ -317,6 +291,18 @@ const useBlogCall = () => {
     }
   };
 
+  // Refresh only comments without calling getBlogDetail (to avoid view count increment)
+  // This function returns comments, the caller should update Redux store
+  const refreshComments = async (blogId) => {
+    try {
+      const comments = await getCommentsByBlogId(blogId);
+      return comments;
+    } catch (error) {
+      console.error("Error refreshing comments:", error);
+      return [];
+    }
+  };
+
   return {
     getBlogData,
     deleteBlog,
@@ -333,6 +319,7 @@ const useBlogCall = () => {
     postCommentLike,
     postCommentDislike,
     postView,
+    refreshComments,
   };
 };
 

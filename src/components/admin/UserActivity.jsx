@@ -1,11 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import useAdminCall from "../../hooks/useAdminCall";
 import { HiUser, HiDocumentText, HiClock, HiEye, HiChat } from "react-icons/hi";
 import { FaTrash } from "react-icons/fa";
-import { toastSuccessNotify } from "../../helper/ToastNotify";
+import { toastSuccessNotify, toastErrorNotify } from "../../helper/ToastNotify";
 
 const UserActivity = () => {
   const { getAllUsers, getUserBlogs, getAllBlogs, deleteBlog, getUserComments, getAllComments, deleteComment } = useAdminCall();
+  
+  const getUserBlogsRef = useRef(getUserBlogs);
+  const getUserCommentsRef = useRef(getUserComments);
+  
+  useEffect(() => {
+    getUserBlogsRef.current = getUserBlogs;
+    getUserCommentsRef.current = getUserComments;
+  }, [getUserBlogs, getUserComments]);
+  
   const [selectedUser, setSelectedUser] = useState(null);
   const [users, setUsers] = useState([]);
   const [userBlogs, setUserBlogs] = useState([]);
@@ -13,22 +22,8 @@ const UserActivity = () => {
   const [userComments, setUserComments] = useState([]);
   const [allComments, setAllComments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activityView, setActivityView] = useState("all"); // 'all', 'user', 'comments'
-  const [contentType, setContentType] = useState("blogs"); // 'blogs' or 'comments'
-
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  useEffect(() => {
-    if (selectedUser && activityView === "user") {
-      if (contentType === "blogs") {
-        loadUserBlogs(selectedUser);
-      } else {
-        loadUserComments(selectedUser);
-      }
-    }
-  }, [selectedUser, activityView, contentType]);
+  const [activityView, setActivityView] = useState("all");
+  const [contentType, setContentType] = useState("blogs");
 
   const loadData = async () => {
     setLoading(true);
@@ -49,18 +44,93 @@ const UserActivity = () => {
   };
 
   const loadUserBlogs = async (userId) => {
-    const result = await getUserBlogs(userId);
-    if (result.success) {
-      setUserBlogs(Array.isArray(result.data) ? result.data : []);
+    if (!userId) {
+      setUserBlogs([]);
+      return;
+    }
+    try {
+      const result = await getUserBlogsRef.current(userId);
+      
+      if (result.success) {
+        let blogs = Array.isArray(result.data) ? result.data : [];
+        
+        blogs = blogs.filter((blog) => {
+          const blogAuthorId = 
+            blog.userId?._id || 
+            blog.userId || 
+            blog.author?._id || 
+            blog.author ||
+            blog.user?._id ||
+            blog.user;
+          
+          return blogAuthorId === userId || blogAuthorId?.toString() === userId?.toString();
+        });
+        
+        setUserBlogs(blogs);
+      } else {
+        setUserBlogs([]);
+      }
+    } catch (error) {
+      setUserBlogs([]);
     }
   };
 
   const loadUserComments = async (userId) => {
-    const result = await getUserComments(userId);
-    if (result.success) {
-      setUserComments(Array.isArray(result.data) ? result.data : []);
+    if (!userId) {
+      setUserComments([]);
+      return;
+    }
+    try {
+      const result = await getUserCommentsRef.current(userId);
+      if (result.success) {
+        let comments = Array.isArray(result.data) ? result.data : [];
+        
+        comments = comments.filter((comment) => {
+          const commentUserId = comment.user?._id || comment.user || comment.userId?._id || comment.userId;
+          return commentUserId === userId || commentUserId?.toString() === userId?.toString();
+        });
+        
+        setUserComments(comments);
+      } else {
+        setUserComments([]);
+      }
+    } catch (error) {
+      setUserComments([]);
     }
   };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    if (activityView === "user" && selectedUser) {
+      if (contentType === "blogs") {
+        if (!loading && allBlogs.length > 0) {
+          const filteredBlogs = allBlogs.filter((blog) => {
+            const blogAuthorId = 
+              blog.userId?._id || 
+              blog.userId || 
+              blog.author?._id || 
+              blog.author ||
+              blog.user?._id ||
+              blog.user;
+            
+            return blogAuthorId === selectedUser || blogAuthorId?.toString() === selectedUser?.toString();
+          });
+          setUserBlogs(filteredBlogs);
+        } else {
+          loadUserBlogs(selectedUser);
+        }
+      } else if (contentType === "comments") {
+        loadUserComments(selectedUser);
+      }
+    } else if (activityView === "user" && !selectedUser) {
+      setUserBlogs([]);
+      setUserComments([]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedUser, activityView, contentType, allBlogs, loading]);
 
   const handleDeleteBlog = async (blogId) => {
     if (window.confirm("Are you sure you want to delete this blog?")) {
@@ -138,38 +208,28 @@ const UserActivity = () => {
         </div>
         {activityView === "user" && (
           <div className="flex items-center space-x-4 bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
-            <button
-              onClick={() => {
-                setContentType("blogs");
-                if (selectedUser) {
-                  loadUserBlogs(selectedUser);
-                }
-              }}
-              className={`px-6 py-2 rounded-lg font-semibold transition-all ${
-                contentType === "blogs"
-                  ? "bg-gradient-to-r from-primary-600 to-accent-600 text-white shadow-lg"
-                  : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
-              }`}
-            >
-              <HiDocumentText className="w-5 h-5 inline mr-2" />
-              Blogs
-            </button>
-            <button
-              onClick={() => {
-                setContentType("comments");
-                if (selectedUser) {
-                  loadUserComments(selectedUser);
-                }
-              }}
-              className={`px-6 py-2 rounded-lg font-semibold transition-all ${
-                contentType === "comments"
-                  ? "bg-gradient-to-r from-primary-600 to-accent-600 text-white shadow-lg"
-                  : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
-              }`}
-            >
-              <HiChat className="w-5 h-5 inline mr-2" />
-              Comments
-            </button>
+          <button
+            onClick={() => setContentType("blogs")}
+            className={`px-6 py-2 rounded-lg font-semibold transition-all ${
+              contentType === "blogs"
+                ? "bg-gradient-to-r from-primary-600 to-accent-600 text-white shadow-lg"
+                : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+            }`}
+          >
+            <HiDocumentText className="w-5 h-5 inline mr-2" />
+            Blogs
+          </button>
+          <button
+            onClick={() => setContentType("comments")}
+            className={`px-6 py-2 rounded-lg font-semibold transition-all ${
+              contentType === "comments"
+                ? "bg-gradient-to-r from-primary-600 to-accent-600 text-white shadow-lg"
+                : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+            }`}
+          >
+            <HiChat className="w-5 h-5 inline mr-2" />
+            Comments
+          </button>
           </div>
         )}
       </div>
@@ -182,7 +242,10 @@ const UserActivity = () => {
           </label>
           <select
             value={selectedUser || ""}
-            onChange={(e) => setSelectedUser(e.target.value)}
+            onChange={(e) => {
+              const userId = e.target.value;
+              setSelectedUser(userId || null);
+            }}
             className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
           >
             <option value="">Select a user...</option>
@@ -273,7 +336,9 @@ const UserActivity = () => {
             displayComments.length === 0 ? (
               <div className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
                 {activityView === "user" && !selectedUser
-                  ? "Please select a user"
+                  ? "Please select a user to view their comments"
+                  : activityView === "user" && selectedUser
+                  ? "No comments found for this user"
                   : "No comments found"}
               </div>
             ) : (
@@ -337,7 +402,9 @@ const UserActivity = () => {
             displayBlogs.length === 0 ? (
               <div className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
                 {activityView === "user" && !selectedUser
-                  ? "Please select a user"
+                  ? "Please select a user to view their blogs"
+                  : activityView === "user" && selectedUser
+                  ? "No blogs found for this user"
                   : "No blogs found"}
               </div>
             ) : (

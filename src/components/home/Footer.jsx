@@ -34,7 +34,7 @@ const links = [
   },
 ];
 
-const currentYear = new Date().getFullYear();
+const currentYear = 2025;
 
 const Footer = ({ isDashboard }) => {
   return (

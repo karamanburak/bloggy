@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import UserList from "../components/admin/UserList";
 import UserActivity from "../components/admin/UserActivity";
@@ -9,12 +9,44 @@ import {
   HiShieldCheck,
   HiHome,
 } from "react-icons/hi";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const AdminPanel = () => {
   const { currentUser } = useSelector((state) => state.auth);
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("users");
+  const location = useLocation();
+  
+  // URL'den tab'ı belirle
+  const getTabFromUrl = () => {
+    const path = location.pathname;
+    if (path.includes("/activities")) return "activity";
+    if (path.includes("/users")) return "users";
+    return "users"; // default
+  };
+
+  const [activeTab, setActiveTab] = useState(getTabFromUrl());
+
+  // URL değiştiğinde tab'ı güncelle
+  useEffect(() => {
+    const path = location.pathname;
+    // Eğer sadece /admin ise, /admin/users'a yönlendir
+    if (path === "/admin") {
+      navigate("/admin/users", { replace: true });
+      return;
+    }
+    const tab = getTabFromUrl();
+    setActiveTab(tab);
+  }, [location.pathname, navigate]);
+
+  // Tab değiştiğinde URL'yi güncelle
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+    if (tabId === "users") {
+      navigate("/admin/users", { replace: true });
+    } else if (tabId === "activity") {
+      navigate("/admin/activities", { replace: true });
+    }
+  };
 
   const tabs = [
     {
@@ -71,7 +103,7 @@ const AdminPanel = () => {
               return (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
+                  onClick={() => handleTabChange(tab.id)}
                   className={`relative flex-1 py-3 px-6 rounded-xl font-bold text-sm transition-all duration-300 ${
                     activeTab === tab.id
                       ? "text-white shadow-lg"

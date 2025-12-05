@@ -35,11 +35,12 @@ const CommentForm = ({ blogId, userId, parentCommentId = null, onCancel, initial
     
     if (isEdit && commentId) {
       // Update existing comment
-      await updateComment(commentId, blogId, commentText.trim());
+      const comments = await updateComment(commentId, blogId, commentText.trim());
       setCommentText("");
       setIsFocused(false);
       setError("");
-      if (onCancel) onCancel();
+      // Pass comments to onCancel callback so parent can update store
+      if (onCancel) onCancel(comments);
     } else {
       // Create new comment or reply
       const commentData = {

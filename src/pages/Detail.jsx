@@ -8,6 +8,7 @@ import SocialShare from "../components/blog/SocialShare";
 import DeleteBlog from "../components/blog/DeleteBlog";
 import EditBlogModal from "../components/blog/EditBlogModal";
 import { toastSuccessNotify } from "../helper/ToastNotify";
+import { getBlogDetailSuccess } from "../features/blogSlice";
 import {
   HiHeart,
   HiOutlineHeart,
@@ -32,7 +33,7 @@ import DOMPurify from "dompurify";
 const Detail = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const { getBlogDetail, postLike, deleteComment, updateComment, postCommentLike, postCommentDislike } = useBlogCall();
+  const { getBlogDetail, postLike, deleteComment, updateComment, postCommentLike, postCommentDislike, refreshComments } = useBlogCall();
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.auth);
   const { blog } = useSelector((state) => state.blog);
@@ -87,30 +88,38 @@ const Detail = () => {
     return category ? category.name : "Unknown Category";
   };
 
-  // Separate useEffect for blog detail
-  // Always load blog detail to get latest comments, but use sessionStorage to prevent multiple view increments
+  // Track if this is the first load to prevent duplicate view count increments
+  const isFirstLoad = useRef(true);
+  
+  // Separate useEffect for blog detail and view count
   useEffect(() => {
     if (!_id) return;
     
     const storageKey = `blog_viewed_${_id}`;
     const hasViewed = sessionStorage.getItem(storageKey);
     
-    // If backend's getBlogDetail automatically increments view count,
-    // we should only call it once per session to prevent duplicate increments
-    // Otherwise, if backend doesn't auto-increment, we need to use postView separately
+    // Backend's getBlogDetail auto-increments view count on every call
+    // So we only call it once per session (first visit)
+    // For subsequent visits, we only refresh comments without calling getBlogDetail
     
-    // Always fetch blog detail to get latest comments and data
-    // This ensures comments are always loaded even if blog was viewed before
-    if (!hasViewed) {
+    if (!hasViewed && isFirstLoad.current) {
+      // First visit: getBlogDetail will increment view count
       sessionStorage.setItem(storageKey, "true");
-      // Call getBlogDetail - if backend auto-increments, this will increment once
-      // If backend doesn't auto-increment, we need to add postView call here
+      isFirstLoad.current = false;
       getBlogDetail("blogs", _id);
-    } else {
-      // Blog was already viewed in this session, fetch data without incrementing
-      // If backend auto-increments on every getBlogDetail call, we need to prevent this
-      // by using a different endpoint or parameter
-      getBlogDetail("blogs", _id);
+    } else if (hasViewed) {
+      // Already viewed: only refresh comments without calling getBlogDetail
+      // This prevents view count from incrementing again
+      refreshComments(_id).then(comments => {
+        if (comments && blog && blog._id === _id) {
+          dispatch(getBlogDetailSuccess({
+            data: {
+              ...blog,
+              comments: comments
+            }
+          }));
+        }
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [_id]);
@@ -130,6 +139,76 @@ const Detail = () => {
       setLiked(false);
     }
   }, [currentUser, likes]);
+
+  // Auto-expand replies when comments are loaded
+  useEffect(() => {
+    if (!blog?.comments || !Array.isArray(blog.comments)) return;
+    
+    const validComments = blog.comments.filter(comment => {
+      if (!comment || typeof comment !== 'object') return false;
+      if (!comment._id || !comment.comment || !comment.userId) return false;
+      if (typeof comment.userId !== 'object' || !comment.userId._id) return false;
+      return true;
+    });
+    
+    const getParentId = (comment) => {
+      let parentId = comment.parentCommentId || comment.parentId || comment.parentComment || comment.replyTo || comment.parent;
+      if (typeof parentId === 'string' && parentId.trim() !== '' && parentId !== 'null' && parentId !== 'undefined') {
+        return parentId;
+      }
+      if (typeof parentId === 'object' && parentId !== null) {
+        const extractedId = parentId._id || parentId.id || null;
+        if (extractedId && typeof extractedId === 'string' && extractedId.trim() !== '') {
+          return extractedId;
+        }
+      }
+      if (comment.parentComment && typeof comment.parentComment === 'object') {
+        return comment.parentComment._id || comment.parentComment.id || null;
+      }
+      return null;
+    };
+    
+    const compareIds = (id1, id2) => {
+      if (!id1 || !id2) return false;
+      return String(id1).trim() === String(id2).trim();
+    };
+    
+    const parentComments = validComments.filter(comment => {
+      const parentId = getParentId(comment);
+      return !parentId;
+    });
+    
+    const replies = validComments.filter(comment => {
+      const parentId = getParentId(comment);
+      return parentId && parentId !== '';
+    });
+    
+    // Find comments with replies and auto-expand them
+    const commentsWithReplies = parentComments.filter(comment => {
+      const commentReplies = replies.filter(reply => {
+        const replyParentId = getParentId(reply);
+        if (!replyParentId) return false;
+        return compareIds(replyParentId, comment._id);
+      });
+      return commentReplies.length > 0;
+    });
+    
+    // Auto-expand replies for comments that have them - use functional update to avoid dependency issues
+    if (commentsWithReplies.length > 0) {
+      setExpandedReplies(prev => {
+        const newExpanded = new Set(prev);
+        let hasChanges = false;
+        commentsWithReplies.forEach(comment => {
+          if (!newExpanded.has(comment._id)) {
+            newExpanded.add(comment._id);
+            hasChanges = true;
+          }
+        });
+        return hasChanges ? newExpanded : prev;
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [blog?.comments]);
 
 
 
@@ -438,7 +517,7 @@ const Detail = () => {
                 // Helper function to extract parent ID from comment
                 const getParentId = (comment) => {
                   // Try different field names - check all possible variations
-                  // Check both direct field and nested object
+                  // Backend uses parentCommentId field
                   let parentId = comment.parentCommentId || comment.parentId || comment.parentComment || comment.replyTo || comment.parent;
                   
                   // If it's a string, return it (but check if it's not empty)
@@ -449,14 +528,16 @@ const Detail = () => {
                   // If it's an object, extract the ID
                   if (typeof parentId === 'object' && parentId !== null) {
                     const extractedId = parentId._id || parentId.id || null;
-                    if (extractedId && typeof extractedId === 'string' && extractedId.trim() !== '') {
-                      return extractedId;
+                    if (extractedId) {
+                      // Convert to string if it's not already
+                      return String(extractedId).trim();
                     }
                   }
                   
                   // Also check if comment has a populated parentComment field
                   if (comment.parentComment && typeof comment.parentComment === 'object') {
-                    return comment.parentComment._id || comment.parentComment.id || null;
+                    const id = comment.parentComment._id || comment.parentComment.id || null;
+                    return id ? String(id).trim() : null;
                   }
                   
                   return null;
@@ -536,14 +617,17 @@ const Detail = () => {
                   // Filter replies for this comment
                   let commentReplies = replies.filter(reply => {
                     const replyParentId = getParentId(reply);
-                    const commentId = comment._id;
+                    const commentId = String(comment._id); // Ensure it's a string
                     
                     // If no parentId found, it's not a reply to this comment
                     if (!replyParentId) {
                       return false;
                     }
                     
-                    const matches = compareIds(replyParentId, commentId);
+                    // Compare as strings
+                    const replyParentIdStr = String(replyParentId).trim();
+                    const commentIdStr = String(commentId).trim();
+                    const matches = replyParentIdStr === commentIdStr;
                     
                     return matches;
                   });
@@ -631,7 +715,18 @@ const Detail = () => {
                                 commentId={comment._id}
                                 initialText={comment.comment}
                                 isEdit={true}
-                                onCancel={() => setEditingComment(null)}
+                                onCancel={(comments) => {
+                                  setEditingComment(null);
+                                  // Update Redux store with refreshed comments
+                                  if (comments && blog && blog._id === _id) {
+                                    dispatch(getBlogDetailSuccess({
+                                      data: {
+                                        ...blog,
+                                        comments: comments
+                                      }
+                                    }));
+                                  }
+                                }}
                               />
                             </div>
                           ) : (
@@ -644,9 +739,18 @@ const Detail = () => {
                                 {/* Like/Dislike Buttons */}
                                 <div className="flex items-center space-x-2">
                                   <button
-                                    onClick={() => {
+                                    onClick={async () => {
                                       if (currentUser) {
-                                        postCommentLike(comment._id, _id);
+                                        const comments = await postCommentLike(comment._id, _id);
+                                        // Update Redux store with refreshed comments
+                                        if (comments && blog && blog._id === _id) {
+                                          dispatch(getBlogDetailSuccess({
+                                            data: {
+                                              ...blog,
+                                              comments: comments
+                                            }
+                                          }));
+                                        }
                                       } else {
                                         navigate("/login");
                                       }
@@ -669,9 +773,18 @@ const Detail = () => {
                                     <span>{(comment?.likes || []).length}</span>
                                   </button>
                                   <button
-                                    onClick={() => {
+                                    onClick={async () => {
                                       if (currentUser) {
-                                        postCommentDislike(comment._id, _id);
+                                        const comments = await postCommentDislike(comment._id, _id);
+                                        // Update Redux store with refreshed comments
+                                        if (comments && blog && blog._id === _id) {
+                                          dispatch(getBlogDetailSuccess({
+                                            data: {
+                                              ...blog,
+                                              comments: comments
+                                            }
+                                          }));
+                                        }
                                       } else {
                                         navigate("/login");
                                       }
@@ -742,10 +855,23 @@ const Detail = () => {
                             parentCommentId={comment._id}
                             onCancel={() => {
                               setReplyingTo(null);
-                              // Force a refresh of blog data to ensure new reply appears
+                              // Automatically expand replies when a new reply is posted
+                              const newExpanded = new Set(expandedReplies);
+                              newExpanded.add(comment._id);
+                              setExpandedReplies(newExpanded);
+                              // Refresh only comments without calling getBlogDetail (to avoid view count increment)
                               if (_id) {
-                                setTimeout(() => {
-                                  getBlogDetail("blogs", _id);
+                                setTimeout(async () => {
+                                  const comments = await refreshComments(_id);
+                                  // Update Redux store with new comments
+                                  if (blog && blog._id === _id) {
+                                    dispatch(getBlogDetailSuccess({
+                                      data: {
+                                        ...blog,
+                                        comments: comments
+                                      }
+                                    }));
+                                  }
                                 }, 500);
                               }
                             }}
@@ -857,7 +983,18 @@ const Detail = () => {
                                           commentId={reply._id}
                                           initialText={reply.comment}
                                           isEdit={true}
-                                          onCancel={() => setEditingComment(null)}
+                                          onCancel={(comments) => {
+                                            setEditingComment(null);
+                                            // Update Redux store with refreshed comments
+                                            if (comments && blog && blog._id === _id) {
+                                              dispatch(getBlogDetailSuccess({
+                                                data: {
+                                                  ...blog,
+                                                  comments: comments
+                                                }
+                                              }));
+                                            }
+                                          }}
                                         />
                                       </div>
                                     ) : (
@@ -868,9 +1005,18 @@ const Detail = () => {
                                         {/* Like/Dislike Buttons for Reply */}
                                         <div className="flex items-center space-x-2 mt-2">
                                           <button
-                                            onClick={() => {
+                                            onClick={async () => {
                                               if (currentUser) {
-                                                postCommentLike(reply._id, _id);
+                                                const comments = await postCommentLike(reply._id, _id);
+                                                // Update Redux store with refreshed comments
+                                                if (comments && blog && blog._id === _id) {
+                                                  dispatch(getBlogDetailSuccess({
+                                                    data: {
+                                                      ...blog,
+                                                      comments: comments
+                                                    }
+                                                  }));
+                                                }
                                               } else {
                                                 navigate("/login");
                                               }
@@ -893,9 +1039,18 @@ const Detail = () => {
                                             <span>{(reply?.likes || []).length}</span>
                                           </button>
                                           <button
-                                            onClick={() => {
+                                            onClick={async () => {
                                               if (currentUser) {
-                                                postCommentDislike(reply._id, _id);
+                                                const comments = await postCommentDislike(reply._id, _id);
+                                                // Update Redux store with refreshed comments
+                                                if (comments && blog && blog._id === _id) {
+                                                  dispatch(getBlogDetailSuccess({
+                                                    data: {
+                                                      ...blog,
+                                                      comments: comments
+                                                    }
+                                                  }));
+                                                }
                                               } else {
                                                 navigate("/login");
                                               }

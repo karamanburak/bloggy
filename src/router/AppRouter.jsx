@@ -13,10 +13,12 @@ import Navbar from "../components/global/Navbar";
 import NotFound from "../pages/NotFound";
 import Detail from "../pages/Detail";
 import CreateBlog from "../pages/CreateBlog";
+import ScrollToTop from "../components/global/ScrollToTop";
 
 const AppRouter = () => {
   return (
     <Router>
+      <ScrollToTop />
       <Navbar />
       <Routes>
         <Route path="/" element={<Dashboard />} />
@@ -32,6 +34,8 @@ const AppRouter = () => {
         </Route>
         <Route path="" element={<AdminRouter />}>
           <Route path="/admin" element={<AdminPanel />} />
+          <Route path="/admin/users" element={<AdminPanel />} />
+          <Route path="/admin/activities" element={<AdminPanel />} />
         </Route>
       </Routes>
     </Router>
