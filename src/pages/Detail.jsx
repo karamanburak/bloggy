@@ -103,23 +103,34 @@ const Detail = () => {
     // For subsequent visits, we only refresh comments without calling getBlogDetail
     
     if (!hasViewed && isFirstLoad.current) {
-      // First visit: getBlogDetail will increment view count
+      // First visit: getBlogDetail will increment view count and load comments
       sessionStorage.setItem(storageKey, "true");
       isFirstLoad.current = false;
       getBlogDetail("blogs", _id);
     } else if (hasViewed) {
       // Already viewed: only refresh comments without calling getBlogDetail
       // This prevents view count from incrementing again
+      const currentBlog = blog?._id === _id ? blog : blogData;
+      
       refreshComments(_id).then(comments => {
-        if (comments && blog && blog._id === _id) {
+        if (currentBlog && currentBlog._id === _id) {
           dispatch(getBlogDetailSuccess({
             data: {
-              ...blog,
-              comments: comments
+              ...currentBlog,
+              comments: comments || []
             }
           }));
+        } else if (!currentBlog) {
+          // If blog is not available, fetch it (this will increment view count but it's necessary)
+          getBlogDetail("blogs", _id);
         }
+      }).catch(() => {
+        // If refresh fails, fetch full blog detail
+        getBlogDetail("blogs", _id);
       });
+    } else {
+      // If no hasViewed flag and not first load, fetch blog detail
+      getBlogDetail("blogs", _id);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [_id]);
@@ -813,7 +824,7 @@ const Detail = () => {
                                     className="flex items-center space-x-1 text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
                                   >
                                     <HiChatAlt className="w-4 h-4" />
-                                    <span>Reply</span>
+                                    <span>Add a Reply</span>
                                   </button>
                                 )}
                                 {hasReplies && (
