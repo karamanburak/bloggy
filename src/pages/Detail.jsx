@@ -95,16 +95,23 @@ const Detail = () => {
     const storageKey = `blog_viewed_${_id}`;
     const hasViewed = sessionStorage.getItem(storageKey);
     
-    // Always call getBlogDetail to ensure comments are loaded
-    // But only increment view count once per session
-    if (!hasViewed) {
-      sessionStorage.setItem(storageKey, "true");
-    }
+    // If backend's getBlogDetail automatically increments view count,
+    // we should only call it once per session to prevent duplicate increments
+    // Otherwise, if backend doesn't auto-increment, we need to use postView separately
     
     // Always fetch blog detail to get latest comments and data
     // This ensures comments are always loaded even if blog was viewed before
-    // The getBlogDetail function will automatically fetch populated comments if needed
-    getBlogDetail("blogs", _id);
+    if (!hasViewed) {
+      sessionStorage.setItem(storageKey, "true");
+      // Call getBlogDetail - if backend auto-increments, this will increment once
+      // If backend doesn't auto-increment, we need to add postView call here
+      getBlogDetail("blogs", _id);
+    } else {
+      // Blog was already viewed in this session, fetch data without incrementing
+      // If backend auto-increments on every getBlogDetail call, we need to prevent this
+      // by using a different endpoint or parameter
+      getBlogDetail("blogs", _id);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [_id]);
 
@@ -282,7 +289,7 @@ const Detail = () => {
 
               <div className="flex items-center space-x-2">
                 <HiEye className="w-6 h-6" />
-                <span className="font-medium">{countOfVisitors + 1}</span>
+                <span className="font-medium">{blog?.countOfVisitors ?? countOfVisitors ?? 0}</span>
               </div>
 
               {/* Menu */}

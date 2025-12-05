@@ -304,6 +304,19 @@ const useBlogCall = () => {
     }
   };
 
+  const postView = async (url, id) => {
+    try {
+      await axiosWithToken.post(`${url}/${id}/postView`);
+      // Refresh blog list to update view counts in dashboard and other pages
+      // Don't call getBlogDetail here as it's already called in Detail.jsx
+      // and might cause duplicate increments
+      getBlogData("blogs");
+    } catch (error) {
+      // Silently fail - view count increment is not critical
+      // Don't show error to user as it's a background operation
+    }
+  };
+
   return {
     getBlogData,
     deleteBlog,
@@ -319,6 +332,7 @@ const useBlogCall = () => {
     getTrendsData,
     postCommentLike,
     postCommentDislike,
+    postView,
   };
 };
 

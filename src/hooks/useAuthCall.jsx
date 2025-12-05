@@ -25,7 +25,23 @@ const useAuthCall = () => {
       // console.log(data);
       dispatch(registerSuccess(data.data));
       toastSuccessNotify("Register was successfully");
-      navigate("/login");
+      
+      // Otomatik login işlemi
+      try {
+        const loginData = await axios.post(`${BASE_URL}auth/login`, {
+          email: userInfo.email,
+          password: userInfo.password,
+        });
+        dispatch(loginSuccess(loginData.data));
+        toastSuccessNotify(
+          `Hello ${loginData.data.user.firstName} ${loginData.data.user.lastName}! Welcome to Bloggy!`
+        );
+        navigate("/");
+      } catch (loginError) {
+        // Login başarısız olursa login sayfasına yönlendir
+        navigate("/login");
+        toastErrorNotify("Registration successful, but automatic login failed. Please login manually.");
+      }
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify("Register can not be performed");
