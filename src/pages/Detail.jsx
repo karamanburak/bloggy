@@ -799,9 +799,9 @@ const Detail = () => {
                   return (
                     <div key={comment._id}>
                       <div
-                        className={`flex items-start space-x-3 animate-fade-in py-4 ${
-                          index !== parentComments.length - 1 || hasReplies
-                            ? "border-b border-gray-200 dark:border-gray-700" 
+                        className={`flex items-start space-x-3 animate-fade-in py-3 ${
+                          index !== parentComments.length - 1
+                            ? "border-b border-gray-100 dark:border-gray-800" 
                             : ""
                         }`}
                         style={{ animationDelay: `${index * 30}ms` }}
@@ -828,21 +828,11 @@ const Detail = () => {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between mb-1">
                             <div className="flex items-center space-x-2">
-                              <h4 className="font-semibold text-sm text-gray-900 dark:text-gray-100">
+                              <h4 className="font-medium text-sm text-gray-900 dark:text-gray-100">
                                 {comment?.userId?.firstName || "Unknown"} {comment?.userId?.lastName || ""}
                               </h4>
                               <span className="text-xs text-gray-500 dark:text-gray-400">
-                                {new Date(comment.createdAt).toLocaleString(
-                                  "en-US",
-                                  {
-                                    month: "short",
-                                    day: "numeric",
-                                    year: "numeric",
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                    second: "2-digit",
-                                  }
-                                )}
+                                {formatDateTime(comment.createdAt)}
                               </span>
                             </div>
                             {/* Edit/Delete Menu for Comment Owner */}
@@ -890,13 +880,13 @@ const Detail = () => {
                             </div>
                           ) : (
                             <>
-                              <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap mb-2">
+                              <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed whitespace-pre-wrap mb-1">
                                 {comment.comment}
                               </p>
                               {/* Action Buttons - YouTube Style */}
-                              <div className="flex items-center space-x-4 mt-2">
+                              <div className="flex items-center space-x-4 mt-1.5">
                                 {/* Like/Dislike Buttons */}
-                                <div className="flex items-center space-x-2">
+                                <div className="flex items-center space-x-1">
                                   <button
                                     onClick={async () => {
                                       if (currentUser) {
@@ -914,7 +904,7 @@ const Detail = () => {
                                         navigate("/login");
                                       }
                                     }}
-                                    className="flex items-center space-x-1 text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 transition-colors"
+                                    className="flex items-center space-x-1 px-2 py-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 transition-colors"
                                     aria-label="Like comment"
                                   >
                                     {(() => {
@@ -929,7 +919,14 @@ const Detail = () => {
                                         <HiOutlineThumbUp className="w-4 h-4" />
                                       );
                                     })()}
-                                    <span>{(comment?.likes || []).length}</span>
+                                    <span className={(() => {
+                                      const likes = comment?.likes || [];
+                                      const isLiked = Array.isArray(likes) && likes.some(like => {
+                                        const likeId = typeof like === 'object' ? like._id : like;
+                                        return String(likeId) === String(currentUser?._id);
+                                      });
+                                      return isLiked ? "text-green-600 dark:text-green-400" : "";
+                                    })()}>{(comment?.likes || []).length}</span>
                                   </button>
                                   <button
                                     onClick={async () => {
@@ -948,7 +945,7 @@ const Detail = () => {
                                         navigate("/login");
                                       }
                                     }}
-                                    className="flex items-center space-x-1 text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+                                    className="flex items-center space-x-1 px-2 py-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
                                     aria-label="Dislike comment"
                                   >
                                     {(() => {
@@ -963,16 +960,22 @@ const Detail = () => {
                                         <HiOutlineThumbDown className="w-4 h-4" />
                                       );
                                     })()}
-                                    <span>{(comment?.dislikes || []).length}</span>
+                                    <span className={(() => {
+                                      const dislikes = comment?.dislikes || [];
+                                      const isDisliked = Array.isArray(dislikes) && dislikes.some(dislike => {
+                                        const dislikeId = typeof dislike === 'object' ? dislike._id : dislike;
+                                        return String(dislikeId) === String(currentUser?._id);
+                                      });
+                                      return isDisliked ? "text-red-600 dark:text-red-400" : "";
+                                    })()}>{(comment?.dislikes || []).length}</span>
                                   </button>
                                 </div>
                                 {currentUser && (
                                   <button
                                     onClick={() => setReplyingTo(replyingTo === comment._id ? null : comment._id)}
-                                    className="flex items-center space-x-1 text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                                    className="px-2 py-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
                                   >
-                                    <HiChatAlt className="w-4 h-4" />
-                                    <span>Add a Reply</span>
+                                    Reply
                                   </button>
                                 )}
                                 {hasReplies && (
@@ -986,17 +989,20 @@ const Detail = () => {
                                       }
                                       setExpandedReplies(newExpanded);
                                     }}
-                                    className="flex items-center space-x-1 text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                                    className="px-2 py-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
                                     aria-label={expandedReplies.has(comment._id) ? "Hide replies" : "Show replies"}
                                   >
                                     {expandedReplies.has(comment._id) ? (
-                                      <HiChevronUp className="w-4 h-4" />
+                                      <>
+                                        <HiChevronUp className="w-4 h-4 inline mr-1" />
+                                        Hide {commentReplies.length} {commentReplies.length === 1 ? "reply" : "replies"}
+                                      </>
                                     ) : (
-                                      <HiChevronDown className="w-4 h-4" />
+                                      <>
+                                        <HiChevronDown className="w-4 h-4 inline mr-1" />
+                                        View {commentReplies.length} {commentReplies.length === 1 ? "reply" : "replies"}
+                                      </>
                                     )}
-                                    <span>
-                                      {expandedReplies.has(comment._id) ? "Hide" : "Show"} {commentReplies.length} {commentReplies.length === 1 ? "reply" : "replies"}
-                                    </span>
                                   </button>
                                 )}
                               </div>
@@ -1005,9 +1011,9 @@ const Detail = () => {
                         </div>
                       </div>
                       
-                      {/* Reply Form - Show before replies */}
+                      {/* Reply Form - YouTube Style with Animation */}
                       {replyingTo === comment._id && currentUser && (
-                        <div className="ml-[52px] mt-2 mb-4 pl-4 border-l-2 border-primary-200 dark:border-primary-800">
+                        <div className="ml-12 mt-1 mb-2 animate-slide-down">
                           <CommentForm
                             blogId={_id}
                             userId={currentUser._id}
@@ -1038,18 +1044,23 @@ const Detail = () => {
                         </div>
                       )}
 
-                      {/* Replies List - Show/hide based on expandedReplies state */}
-                      {hasReplies && expandedReplies.has(comment._id) && (
-                        <div className="ml-[52px] mt-3 space-y-0">
+                      {hasReplies && (
+                        <div 
+                          className={`ml-12 mt-1 space-y-0 overflow-hidden transition-all duration-700 ease-in-out ${
+                            expandedReplies.has(comment._id) 
+                              ? "max-h-[5000px] opacity-100" 
+                              : "max-h-0 opacity-0"
+                          }`}
+                        >
                           {/* Reply Sort Dropdown */}
                           {commentReplies.length > 1 && (
-                            <div className="flex items-center justify-end mb-2 px-2">
+                            <div className="flex items-center justify-end mb-2 px-1">
                               <div className="flex items-center space-x-2">
                                 <label className="text-xs text-gray-500 dark:text-gray-400">Sort replies:</label>
                                 <select
                                   value={replySort}
                                   onChange={(e) => setReplySort(e.target.value)}
-                                  className="px-2 py-1 text-xs rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500/50"
+                                  className="px-2 py-1 text-xs rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-primary-500"
                                 >
                                   <option value="newest">Newest First</option>
                                   <option value="oldest">Oldest First</option>
@@ -1059,7 +1070,7 @@ const Detail = () => {
                               </div>
                             </div>
                           )}
-                          {/* Replies are already sorted based on replySort */}
+                          {/* Replies */}
                           {commentReplies.map((reply, replyIndex) => {
                             const isReplyOwner = currentUser && reply?.userId?._id === currentUser._id;
                             const isEditingReply = editingComment === reply._id;
@@ -1067,109 +1078,104 @@ const Detail = () => {
                             return (
                               <div
                                 key={reply._id}
-                                className={`py-3 pl-4 border-l-2 border-primary-300 dark:border-primary-700 bg-gray-50/50 dark:bg-gray-800/30 ${
-                                  replyIndex !== commentReplies.length - 1
-                                    ? "border-b border-gray-200 dark:border-gray-700"
-                                    : ""
-                                }`}
+                                className="flex items-start space-x-3 py-1.5"
                               >
-                                <div className="flex items-start space-x-3">
-                                  {/* Avatar - Smaller for replies */}
-                                  <div className="shrink-0">
-                                    <div className="w-8 h-8 rounded-full overflow-hidden bg-gradient-to-br from-primary-500 to-accent-500">
-                                      {reply?.userId?.image ? (
-                                        <img
-                                          src={reply.userId.image}
-                                          alt={`${reply.userId.firstName} ${reply.userId.lastName}`}
-                                          className="w-full h-full object-cover"
-                                        />
-                                      ) : (
-                                        <div className="w-full h-full flex items-center justify-center text-white font-semibold text-xs">
-                                          {reply?.userId?.firstName?.charAt(0)?.toUpperCase() || "U"}
-                                          {reply?.userId?.lastName?.charAt(0)?.toUpperCase() || ""}
-                                        </div>
-                                      )}
-                                    </div>
-                                  </div>
-
-                                  {/* Reply Content */}
-                                  <div className="flex-1 min-w-0">
-                                    <div className="flex items-center justify-between mb-1">
-                                      <div className="flex items-center space-x-2">
-                                        <h4 className="font-semibold text-xs text-gray-900 dark:text-gray-100">
-                                          {reply?.userId?.firstName || "Unknown"} {reply?.userId?.lastName || ""}
-                                        </h4>
-                                        <span className="text-xs text-gray-500 dark:text-gray-400">
-                                          {formatDateTime(reply.createdAt)}
-                                        </span>
+                                {/* Avatar - Smaller for replies */}
+                                <div className="shrink-0">
+                                  <div className="w-8 h-8 rounded-full overflow-hidden bg-gradient-to-br from-primary-500 to-accent-500">
+                                    {reply?.userId?.image ? (
+                                      <img
+                                        src={reply.userId.image}
+                                        alt={`${reply.userId.firstName} ${reply.userId.lastName}`}
+                                        className="w-full h-full object-cover"
+                                      />
+                                    ) : (
+                                      <div className="w-full h-full flex items-center justify-center text-white font-semibold text-xs">
+                                        {reply?.userId?.firstName?.charAt(0)?.toUpperCase() || "U"}
+                                        {reply?.userId?.lastName?.charAt(0)?.toUpperCase() || ""}
                                       </div>
-                                      {/* Edit/Delete for Reply Owner */}
-                                      {isReplyOwner && !isEditingReply && (
-                                        <div className="flex items-center space-x-1">
-                                          <button
-                                            onClick={() => setEditingComment(reply._id)}
-                                            className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-                                            aria-label="Edit reply"
-                                          >
-                                            <HiPencil className="w-3.5 h-3.5" />
-                                          </button>
-                                          <button
-                                            onClick={() => setCommentToDelete(reply._id)}
-                                            className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
-                                            aria-label="Delete reply"
-                                          >
-                                            <HiTrash className="w-3.5 h-3.5" />
-                                          </button>
-                                        </div>
-                                      )}
+                                    )}
+                                  </div>
+                                </div>
+
+                                {/* Reply Content */}
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center justify-between mb-0.5">
+                                    <div className="flex items-center space-x-2">
+                                      <h4 className="font-medium text-xs text-gray-900 dark:text-gray-100">
+                                        {reply?.userId?.firstName || "Unknown"} {reply?.userId?.lastName || ""}
+                                      </h4>
+                                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                                        {formatDateTime(reply.createdAt)}
+                                      </span>
                                     </div>
-                                    
-                                    {isEditingReply ? (
-                                      <div className="mt-2">
-                                        <CommentForm
-                                          blogId={_id}
-                                          userId={currentUser._id}
-                                          commentId={reply._id}
-                                          initialText={reply.comment}
-                                          isEdit={true}
-                                          onCancel={(comments) => {
-                                            setEditingComment(null);
-                                            // Update Redux store with refreshed comments
-                                            if (comments && blog && blog._id === _id) {
-                                              dispatch(getBlogDetailSuccess({
-                                                data: {
-                                                  ...blog,
-                                                  comments: comments
-                                                }
-                                              }));
+                                    {/* Edit/Delete for Reply Owner */}
+                                    {isReplyOwner && !isEditingReply && (
+                                      <div className="flex items-center space-x-1">
+                                        <button
+                                          onClick={() => setEditingComment(reply._id)}
+                                          className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                                          aria-label="Edit reply"
+                                        >
+                                          <HiPencil className="w-3.5 h-3.5" />
+                                        </button>
+                                        <button
+                                          onClick={() => setCommentToDelete(reply._id)}
+                                          className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+                                          aria-label="Delete reply"
+                                        >
+                                          <HiTrash className="w-3.5 h-3.5" />
+                                        </button>
+                                      </div>
+                                    )}
+                                  </div>
+                                  
+                                  {isEditingReply ? (
+                                    <div className="mt-2">
+                                      <CommentForm
+                                        blogId={_id}
+                                        userId={currentUser._id}
+                                        commentId={reply._id}
+                                        initialText={reply.comment}
+                                        isEdit={true}
+                                        onCancel={(comments) => {
+                                          setEditingComment(null);
+                                          // Update Redux store with refreshed comments
+                                          if (comments && blog && blog._id === _id) {
+                                            dispatch(getBlogDetailSuccess({
+                                              data: {
+                                                ...blog,
+                                                comments: comments
+                                              }
+                                            }));
+                                          }
+                                        }}
+                                      />
+                                    </div>
+                                  ) : (
+                                    <>
+                                      <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap mb-1.5">
+                                        {reply.comment}
+                                      </p>
+                                      {/* Like/Dislike Buttons for Reply */}
+                                      <div className="flex items-center space-x-3 mt-1">
+                                        <button
+                                          onClick={async () => {
+                                            if (currentUser) {
+                                              const comments = await postCommentLike(reply._id, _id);
+                                              // Update Redux store with refreshed comments
+                                              if (comments && blog && blog._id === _id) {
+                                                dispatch(getBlogDetailSuccess({
+                                                  data: {
+                                                    ...blog,
+                                                    comments: comments
+                                                  }
+                                                }));
+                                              }
+                                            } else {
+                                              navigate("/login");
                                             }
                                           }}
-                                        />
-                                      </div>
-                                    ) : (
-                                      <>
-                                        <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap mb-2">
-                                          {reply.comment}
-                                        </p>
-                                        {/* Like/Dislike Buttons for Reply */}
-                                        <div className="flex items-center space-x-2 mt-2">
-                                          <button
-                                            onClick={async () => {
-                                              if (currentUser) {
-                                                const comments = await postCommentLike(reply._id, _id);
-                                                // Update Redux store with refreshed comments
-                                                if (comments && blog && blog._id === _id) {
-                                                  dispatch(getBlogDetailSuccess({
-                                                    data: {
-                                                      ...blog,
-                                                      comments: comments
-                                                    }
-                                                  }));
-                                                }
-                                              } else {
-                                                navigate("/login");
-                                              }
-                                            }}
                                             className="flex items-center space-x-1 text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 transition-colors"
                                             aria-label="Like reply"
                                           >
@@ -1180,12 +1186,19 @@ const Detail = () => {
                                                 return String(likeId) === String(currentUser?._id);
                                               });
                                               return isLiked ? (
-                                                <HiThumbUp className="w-3.5 h-3.5 text-green-600 dark:text-green-400" />
+                                                <HiThumbUp className="w-4 h-4 text-green-600 dark:text-green-400" />
                                               ) : (
-                                                <HiOutlineThumbUp className="w-3.5 h-3.5" />
+                                                <HiOutlineThumbUp className="w-4 h-4" />
                                               );
                                             })()}
-                                            <span>{(reply?.likes || []).length}</span>
+                                            <span className={(() => {
+                                              const likes = reply?.likes || [];
+                                              const isLiked = Array.isArray(likes) && likes.some(like => {
+                                                const likeId = typeof like === 'object' ? like._id : like;
+                                                return String(likeId) === String(currentUser?._id);
+                                              });
+                                              return isLiked ? "text-green-600 dark:text-green-400" : "";
+                                            })()}>{(reply?.likes || []).length}</span>
                                           </button>
                                           <button
                                             onClick={async () => {
@@ -1214,17 +1227,23 @@ const Detail = () => {
                                                 return String(dislikeId) === String(currentUser?._id);
                                               });
                                               return isDisliked ? (
-                                                <HiThumbDown className="w-3.5 h-3.5 text-red-600 dark:text-red-400" />
+                                                <HiThumbDown className="w-4 h-4 text-red-600 dark:text-red-400" />
                                               ) : (
-                                                <HiOutlineThumbDown className="w-3.5 h-3.5" />
+                                                <HiOutlineThumbDown className="w-4 h-4" />
                                               );
                                             })()}
-                                            <span>{(reply?.dislikes || []).length}</span>
+                                            <span className={(() => {
+                                              const dislikes = reply?.dislikes || [];
+                                              const isDisliked = Array.isArray(dislikes) && dislikes.some(dislike => {
+                                                const dislikeId = typeof dislike === 'object' ? dislike._id : dislike;
+                                                return String(dislikeId) === String(currentUser?._id);
+                                              });
+                                              return isDisliked ? "text-red-600 dark:text-red-400" : "";
+                                            })()}>{(reply?.dislikes || []).length}</span>
                                           </button>
-                                        </div>
-                                      </>
-                                    )}
-                                  </div>
+                                      </div>
+                                    </>
+                                  )}
                                 </div>
                               </div>
                             );
