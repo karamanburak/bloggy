@@ -5,6 +5,7 @@ import MyBlogsContainer from "../components/profile/MyBlogsContainer";
 import Footer from "../components/home/Footer";
 import useCategoryCall from "../hooks/useCategoryCall";
 import SkeletonLoader from "../components/global/SkeletonLoader";
+import { formatDateOnly } from "../helper/formatDate";
 import {
   HiLocationMarker,
   HiCalendar,
@@ -132,55 +133,41 @@ const Profile = () => {
 
             {/* Profile Info */}
             <div className="flex-1 w-full">
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+              <div className="flex flex-col gap-6">
                 <div className="flex-1">
                   <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent dark:from-primary-400 dark:to-accent-400 mb-2">
                     {firstName} {lastName}
                   </h1>
-                  <p className="text-xl text-gray-600 dark:text-gray-400 mb-4 font-medium">
+                  <p className="text-xl text-gray-600 dark:text-gray-400 mb-6 font-medium">
                     @{username}
                   </p>
-                  {bio && (
-                    <p className="text-gray-700 dark:text-gray-300 mb-6 max-w-2xl leading-relaxed text-lg">
-                      {bio}
-                    </p>
-                  )}
-
-                  <div className="flex flex-wrap items-center gap-6 text-sm">
-                    {city && (
-                      <div className="flex items-center space-x-2 px-4 py-2 rounded-xl bg-gray-100/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50">
-                        <HiLocationMarker className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-                        <span className="font-medium text-gray-700 dark:text-gray-300">{city}</span>
-                      </div>
-                    )}
-                    <div className="flex items-center space-x-2 px-4 py-2 rounded-xl bg-gray-100/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50">
-                      <HiCalendar className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-                      <span className="font-medium text-gray-700 dark:text-gray-300">
-                        Joined{" "}
-                        {new Date(createdAt).toLocaleString("en-US", {
-                          month: "long",
-                          day: "numeric",
-                          year: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          second: "2-digit",
-                        })}
-                      </span>
-                    </div>
-                  </div>
                 </div>
 
-                {/* Modern Edit Button */}
-                <button
-                  onClick={handleOpen}
-                  className="group relative px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-primary-600 via-primary-500 to-accent-600 hover:from-primary-700 hover:via-primary-600 hover:to-accent-700 shadow-lg shadow-primary-500/50 hover:shadow-xl hover:shadow-primary-500/60 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-primary-500/50 hover:scale-105 active:scale-95 overflow-hidden self-start md:self-auto"
-                >
-                  <span className="relative z-10 flex items-center space-x-2">
-                    <HiPencil className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
-                    <span>Edit Profile</span>
-                  </span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                </button>
+                <div className="flex flex-wrap items-center gap-6 text-sm">
+                  {city && (
+                    <div className="flex items-center space-x-2 px-4 py-2 rounded-xl bg-gray-100/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50">
+                      <HiLocationMarker className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                      <span className="font-medium text-gray-700 dark:text-gray-300">{city}</span>
+                    </div>
+                  )}
+                  <div className="flex items-center space-x-2 px-4 py-2 rounded-xl bg-gray-100/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50">
+                    <HiCalendar className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                    <span className="font-medium text-gray-700 dark:text-gray-300">
+                      Joined {formatDateOnly(createdAt, "long")}
+                    </span>
+                  </div>
+                  {/* Modern Edit Button */}
+                  <button
+                    onClick={handleOpen}
+                    className="group relative px-6 py-2 rounded-xl font-bold text-white bg-gradient-to-r from-primary-600 via-primary-500 to-accent-600 hover:from-primary-700 hover:via-primary-600 hover:to-accent-700 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-primary-500/50 hover:scale-105 active:scale-95 overflow-hidden"
+                  >
+                    <span className="relative z-10 flex items-center space-x-2">
+                      <HiPencil className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
+                      <span>Edit Profile</span>
+                    </span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -244,15 +231,21 @@ const Profile = () => {
                     About
                   </h2>
                 </div>
-                <div className="space-y-8">
-                  <div className="relative overflow-hidden rounded-2xl bg-gray-50/50 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 p-6">
-                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
-                      {bio || (
-                        <span className="text-gray-500 dark:text-gray-400 italic">
-                          This user hasn't written a bio yet.
-                        </span>
-                      )}
-                    </p>
+                <div className="space-y-8" data-about-section>
+                  <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100/50 dark:from-gray-800/50 dark:to-gray-700/50 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 p-6 lg:p-8">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center space-x-2">
+                      <HiPencil className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                      <span>Biography</span>
+                    </h3>
+                    <div className="prose prose-gray dark:prose-invert max-w-none">
+                      <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-base whitespace-pre-wrap break-words">
+                        {bio || (
+                          <span className="text-gray-500 dark:text-gray-400 italic">
+                            This user hasn't written a bio yet.
+                          </span>
+                        )}
+                      </p>
+                    </div>
                   </div>
                   <div className="pt-8 border-t border-gray-200/50 dark:border-gray-700/50">
                     <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-6 flex items-center space-x-2">

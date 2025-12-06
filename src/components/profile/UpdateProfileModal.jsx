@@ -5,13 +5,10 @@ import {
   HiX,
   HiUser,
   HiMail,
-  HiPhotograph,
   HiPencil,
   HiLocationMarker,
   HiLockClosed,
-  HiCloudUpload,
-  HiLink,
-  HiFolder,
+  HiTrash,
 } from "react-icons/hi";
 import blogRatings from "../../assets/blog-video.mp4";
 
@@ -73,6 +70,12 @@ const UpdateProfileModal = ({
   };
 
   const handleImageEditClose = () => {
+    setShowImageEditModal(false);
+  };
+
+  const handleRemoveImage = () => {
+    setInfo({ ...info, image: "" });
+    setImagePreview(null);
     setShowImageEditModal(false);
   };
 
@@ -232,54 +235,6 @@ const UpdateProfileModal = ({
                   </button>
                 </div>
 
-                {/* Tabs */}
-                <div className="px-6 pt-4">
-                  <div className="flex space-x-2 border-b border-gray-200 dark:border-gray-700">
-                    <button
-                      type="button"
-                      onClick={() => setActiveTab("url")}
-                      className={`px-4 py-2 text-sm font-medium transition-colors ${
-                        activeTab === "url"
-                          ? "text-primary-600 dark:text-primary-400 border-b-2 border-primary-600 dark:border-primary-400"
-                          : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
-                      }`}
-                    >
-                      <div className="flex items-center space-x-2">
-                        <HiLink className="w-4 h-4" />
-                        <span>URL</span>
-                      </div>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setActiveTab("file")}
-                      className={`px-4 py-2 text-sm font-medium transition-colors ${
-                        activeTab === "file"
-                          ? "text-primary-600 dark:text-primary-400 border-b-2 border-primary-600 dark:border-primary-400"
-                          : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
-                      }`}
-                    >
-                      <div className="flex items-center space-x-2">
-                        <HiFolder className="w-4 h-4" />
-                        <span>File</span>
-                      </div>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setActiveTab("drag")}
-                      className={`px-4 py-2 text-sm font-medium transition-colors ${
-                        activeTab === "drag"
-                          ? "text-primary-600 dark:text-primary-400 border-b-2 border-primary-600 dark:border-primary-400"
-                          : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
-                      }`}
-                    >
-                      <div className="flex items-center space-x-2">
-                        <HiCloudUpload className="w-4 h-4" />
-                        <span>Drag & Drop</span>
-                      </div>
-                    </button>
-                  </div>
-                </div>
-
                 {/* Tab Content */}
                 <div className="p-6">
                   <ImageUploader
@@ -288,10 +243,20 @@ const UpdateProfileModal = ({
                     label=""
                     maxSizeMB={10}
                   />
+                  {(info.image || imagePreview) && (
+                    <button
+                      type="button"
+                      onClick={handleRemoveImage}
+                      className="btn-secondary w-full mt-4 flex items-center justify-center gap-2 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 border-red-200 dark:border-red-800"
+                    >
+                      <HiTrash className="w-5 h-5" />
+                      Remove Photo
+                    </button>
+                  )}
                   <button
                     type="button"
                     onClick={handleImageEditClose}
-                    className="btn-secondary w-full mt-4"
+                    className="btn-secondary w-full mt-3"
                   >
                     Cancel
                   </button>

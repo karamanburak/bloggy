@@ -9,6 +9,7 @@ import DeleteBlog from "../components/blog/DeleteBlog";
 import EditBlogModal from "../components/blog/EditBlogModal";
 import { toastSuccessNotify } from "../helper/ToastNotify";
 import { getBlogDetailSuccess } from "../features/blogSlice";
+import { formatDateTime } from "../helper/formatDate";
 import {
   HiHeart,
   HiOutlineHeart,
@@ -472,14 +473,7 @@ const Detail = () => {
                 </p>
                 <div className="flex items-center space-x-3 text-sm text-white/80">
                   <span>
-                    {new Date(createdAt).toLocaleString("en-US", {
-                      month: "long",
-                      day: "numeric",
-                      year: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      second: "2-digit",
-                    })}
+                    {formatDateTime(createdAt)}
                   </span>
                   <span>•</span>
                   <div className="flex items-center space-x-1">
@@ -1106,17 +1100,7 @@ const Detail = () => {
                                           {reply?.userId?.firstName || "Unknown"} {reply?.userId?.lastName || ""}
                                         </h4>
                                         <span className="text-xs text-gray-500 dark:text-gray-400">
-                                          {new Date(reply.createdAt).toLocaleString(
-                                            "en-US",
-                                            {
-                                              month: "short",
-                                              day: "numeric",
-                                              year: "numeric",
-                                              hour: "2-digit",
-                                              minute: "2-digit",
-                                              second: "2-digit",
-                                            }
-                                          )}
+                                          {formatDateTime(reply.createdAt)}
                                         </span>
                                       </div>
                                       {/* Edit/Delete for Reply Owner */}

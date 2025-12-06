@@ -16,6 +16,7 @@ import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import useBlogCall from "../../hooks/useBlogCall";
 import { MdArrowOutward } from "react-icons/md";
+import { formatDateTime } from "../../helper/formatDate";
 
 const HomeCard = ({
   _id,
@@ -165,14 +166,7 @@ const HomeCard = ({
                   </Avatar>
                 }
                 title={`${firstName} ${lastName}`}
-                subheader={new Date(createdAt).toLocaleString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  second: "2-digit",
-                })}
+                subheader={formatDateTime(createdAt)}
               />
               <Typography
                 variant="body2"

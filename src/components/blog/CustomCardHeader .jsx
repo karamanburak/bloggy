@@ -1,6 +1,7 @@
 import React from "react";
 import CardHeader from "@mui/material/CardHeader";
 import Avatar from "@mui/material/Avatar";
+import { formatDateTime } from "../../helper/formatDate";
 
 const CustomCardHeader = ({
   image: userImage,
@@ -26,14 +27,7 @@ const CustomCardHeader = ({
         </Avatar>
       }
       title={`${firstName} ${lastName} `}
-      subheader={` ${new Date(createdAt).toLocaleString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-      })}`}
+      subheader={` ${formatDateTime(createdAt)}`}
     />
   );
 };

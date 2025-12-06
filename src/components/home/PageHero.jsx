@@ -44,7 +44,7 @@ const PageHero = ({
           </div>
 
           {/* Title */}
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in bg-clip-text text-transparent bg-gradient-to-r from-white to-white/80">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in bg-clip-text text-transparent bg-gradient-to-r from-white to-white/80 leading-[1.1] pb-3 overflow-visible">
             {title}
           </h1>
 

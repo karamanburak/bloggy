@@ -1,6 +1,7 @@
 import { MdArrowOutward } from "react-icons/md";
 import { HiCalendar, HiClock, HiExternalLink } from "react-icons/hi";
 import { useState } from "react";
+import { formatDateOnly } from "../../helper/formatDate";
 
 const defaultImage =
   "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&h=450&fit=crop";
@@ -14,13 +15,7 @@ const NewsCard = ({ title, url, image, content, publishedAt, source, description
     }
   };
 
-  const formattedDate = publishedAt
-    ? new Date(publishedAt).toLocaleString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      })
-    : "";
+  const formattedDate = formatDateOnly(publishedAt, "short");
 
   const timeAgo = publishedAt
     ? (() => {

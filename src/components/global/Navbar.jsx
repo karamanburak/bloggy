@@ -27,7 +27,6 @@ const Navbar = () => {
 
   const userMenuItems = currentUser
     ? [
-        { icon: <FaUser className="w-4 h-4" />, name: "Profile", path: "/profile" },
         ...(isAdmin
           ? [
               {
@@ -37,6 +36,7 @@ const Navbar = () => {
               },
             ]
           : []),
+        { icon: <FaUser className="w-4 h-4" />, name: "Profile", path: "/profile" },
         { icon: <CiLogout className="w-4 h-4" />, name: "Logout", action: "logout" },
       ]
     : [
@@ -101,17 +101,6 @@ const Navbar = () => {
 
             {/* Right Side Actions */}
             <div className="flex items-center space-x-4">
-              {/* Admin Panel Button */}
-              {isAdmin && (
-                <button
-                  onClick={() => navigate("/admin")}
-                  className="hidden md:flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-medium bg-gradient-to-r from-purple-400 to-purple-500 text-white hover:from-purple-500 hover:to-purple-600 transition-all duration-300"
-                >
-                  <HiShieldCheck className="w-4 h-4" />
-                  <span className="text-sm">Admin</span>
-                </button>
-              )}
-
               {/* Theme Toggle */}
               {/* <button
                 onClick={handleToggleTheme}
@@ -194,18 +183,6 @@ const Navbar = () => {
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-gray-200/50 dark:border-gray-700/50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg">
             <div className="px-4 pt-2 pb-4 space-y-2">
-              {isAdmin && (
-                <button
-                  onClick={() => {
-                    navigate("/admin");
-                    setMobileMenuOpen(false);
-                  }}
-                  className="w-full text-left px-4 py-2.5 rounded-lg font-medium bg-gradient-to-r from-purple-400 to-purple-500 text-white hover:from-purple-500 hover:to-purple-600 flex items-center space-x-2 transition-all duration-300"
-                >
-                  <HiShieldCheck className="w-4 h-4" />
-                  <span>Admin Panel</span>
-                </button>
-              )}
             </div>
           </div>
         )}

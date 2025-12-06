@@ -4,6 +4,7 @@ import { toastWarnNotify } from "../../helper/ToastNotify";
 import TinyMce from "./TinyMce";
 import { useSelector } from "react-redux";
 import useCategoryCall from "../../hooks/useCategoryCall";
+import ImageUploader from "../global/ImageUploader";
 import { 
   HiX, 
   HiCheckCircle, 
@@ -78,18 +79,24 @@ export default function EditBlogModal({
   };
 
   const validateImage = (value) => {
-    if (!value.trim()) {
-      setImageError("Image URL is required");
+    if (!value || !value.trim()) {
+      setImageError("Image is required");
       return false;
     }
-    try {
-      new URL(value);
-      setImageError("");
-      return true;
-    } catch {
-      setImageError("Please enter a valid URL");
-      return false;
+    // If it's a URL, validate it
+    if (value.startsWith("http://") || value.startsWith("https://")) {
+      try {
+        new URL(value);
+        setImageError("");
+        return true;
+      } catch {
+        setImageError("Please enter a valid URL");
+        return false;
+      }
     }
+    // If it's a data URL or uploaded URL, it's valid
+    setImageError("");
+    return true;
   };
 
   const handleChange = (e) => {
@@ -102,6 +109,15 @@ export default function EditBlogModal({
       validateImage(value);
     } else if (name === "categoryId") {
       setCategoryError("");
+    }
+  };
+
+  const handleImageUploaded = (imageUrl) => {
+    setInfo({ ...info, image: imageUrl });
+    if (imageUrl) {
+      validateImage(imageUrl);
+    } else {
+      setImageError("Image is required");
     }
   };
 
@@ -275,46 +291,20 @@ export default function EditBlogModal({
               </div>
             </div>
 
-            {/* Image URL Field */}
+            {/* Image Upload Field */}
             <div className="group">
-              <label
-                htmlFor="image"
-                className="flex items-center space-x-2 text-sm font-bold text-gray-700 dark:text-gray-300 mb-3"
-              >
+              <label className="flex items-center space-x-2 text-sm font-bold text-gray-700 dark:text-gray-300 mb-3">
                 <HiPhotograph className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-                <span>Featured Image URL</span>
+                <span>Featured Image</span>
                 <span className="text-red-500">*</span>
               </label>
-              <div className="relative">
-                <input
-                  id="image"
-                  name="image"
-                  type="url"
-                  value={info.image || ""}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className={`w-full px-5 py-4 rounded-2xl border-2 transition-all duration-300 bg-gray-50/50 dark:bg-gray-800/50 backdrop-blur-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-primary-500/20 ${
-                    imageError
-                      ? "border-red-500/50 focus:border-red-500 focus:ring-red-500/20"
-                      : info.image && !imageError
-                      ? "border-green-500/50 focus:border-primary-500"
-                      : "border-gray-300/50 dark:border-gray-600/50 focus:border-primary-500"
-                  }`}
-                  placeholder="https://example.com/beautiful-image.jpg"
-                  aria-invalid={!!imageError}
-                  aria-describedby={imageError ? "image-error" : undefined}
-                />
-                {!imageError && info.image && (
-                  <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                    <HiCheckCircle className="w-6 h-6 text-green-500 animate-scale-in" />
-                  </div>
-                )}
-                {imageError && (
-                  <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                    <HiExclamationCircle className="w-6 h-6 text-red-500" />
-                  </div>
-                )}
-              </div>
+              <ImageUploader
+                onImageUploaded={handleImageUploaded}
+                currentImageUrl={info.image || ""}
+                label=""
+                maxSizeMB={10}
+                accept="image/*"
+              />
               {imageError && (
                 <p
                   id="image-error"
@@ -324,22 +314,6 @@ export default function EditBlogModal({
                   <HiExclamationCircle className="w-4 h-4 shrink-0" />
                   <span>{imageError}</span>
                 </p>
-              )}
-              {info.image && !imageError && (
-                <div className="mt-4 relative group/image-preview rounded-2xl overflow-hidden border-2 border-gray-200/50 dark:border-gray-700/50 shadow-lg">
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover/image-preview:opacity-100 transition-opacity duration-300 z-10"></div>
-                  <img
-                    src={info.image}
-                    alt="Preview"
-                    className="w-full h-64 object-cover group-hover/image-preview:scale-105 transition-transform duration-500"
-                    onError={(e) => {
-                      e.target.style.display = "none";
-                    }}
-                  />
-                  <div className="absolute bottom-4 left-4 right-4 z-20 opacity-0 group-hover/image-preview:opacity-100 transition-opacity duration-300">
-                    <p className="text-white text-sm font-medium">Image Preview</p>
-                  </div>
-                </div>
               )}
             </div>
 

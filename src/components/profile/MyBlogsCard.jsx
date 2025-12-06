@@ -8,6 +8,7 @@ import { HiPencil } from "react-icons/hi";
 import { FiTrash2 } from "react-icons/fi";
 import DeleteBlog from "../blog/DeleteBlog";
 import EditBlogModal from "../blog/EditBlogModal";
+import { formatDateTime } from "../../helper/formatDate";
 
 const MyBlogsCard = ({
   _id,
@@ -184,16 +185,7 @@ const MyBlogsCard = ({
                   {currentUser?.firstName || "Unknown"} {currentUser?.lastName || ""}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  {createdAt
-                    ? new Date(createdAt).toLocaleString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        second: "2-digit",
-                      })
-                    : "Recently"}
+                  {createdAt ? formatDateTime(createdAt) : "Recently"}
                 </p>
               </div>
             </div>

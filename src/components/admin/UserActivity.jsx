@@ -3,6 +3,7 @@ import useAdminCall from "../../hooks/useAdminCall";
 import { HiUser, HiDocumentText, HiClock, HiEye, HiChat } from "react-icons/hi";
 import { FaTrash } from "react-icons/fa";
 import { toastSuccessNotify, toastErrorNotify } from "../../helper/ToastNotify";
+import { formatDateTime } from "../../helper/formatDate";
 
 const UserActivity = () => {
   const { getAllUsers, getUserBlogs, getAllBlogs, deleteBlog, getUserComments, getAllComments, deleteComment } = useAdminCall();
@@ -375,13 +376,7 @@ const UserActivity = () => {
                           <div className="flex items-center space-x-1">
                             <HiClock className="w-4 h-4" />
                             <span>
-                              {new Date(comment.createdAt).toLocaleDateString("en-US", {
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                                hour: "2-digit",
-                                minute: "2-digit",
-                              })}
+                              {formatDateTime(comment.createdAt)}
                             </span>
                           </div>
                         </div>

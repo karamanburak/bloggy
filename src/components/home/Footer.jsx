@@ -92,7 +92,7 @@ const Footer = ({ isDashboard }) => {
               <img
                 src={logo}
                 alt="Bloggy Logo"
-                className="h-10 w-10"
+                className="h-10 w-10 rounded-full object-cover aspect-square"
               />
               <span className="text-white font-bold text-lg">Bloggy</span>
             </div>

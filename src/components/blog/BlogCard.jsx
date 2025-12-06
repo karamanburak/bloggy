@@ -10,6 +10,7 @@ import {
   MdChatBubbleOutline
 } from "react-icons/md";
 import { HiTag } from "react-icons/hi";
+import { formatDateTime } from "../../helper/formatDate";
 
 const BlogCard = ({
   _id,
@@ -202,14 +203,7 @@ const BlogCard = ({
               {firstName || "Unknown"} {lastName || ""}
             </p>
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              {createdAt ? new Date(createdAt).toLocaleString("en-US", {
-                month: "short",
-                day: "numeric",
-                year: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
-              }) : "Recently"}
+              {createdAt ? formatDateTime(createdAt) : "Recently"}
             </p>
           </div>
         </div>

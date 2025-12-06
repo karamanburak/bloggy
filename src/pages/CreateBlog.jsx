@@ -194,17 +194,20 @@ const CreateBlog = () => {
       isValid = false;
     }
 
-    if (!formData.image.trim()) {
-      newErrors.image = "Image URL is required";
+    if (!formData.image || !formData.image.trim()) {
+      newErrors.image = "Image is required";
       isValid = false;
     } else {
-      // Basic URL validation
-      try {
-        new URL(formData.image);
-      } catch {
-        newErrors.image = "Please enter a valid URL";
-        isValid = false;
+      // If it's a URL, validate it
+      if (formData.image.startsWith("http://") || formData.image.startsWith("https://")) {
+        try {
+          new URL(formData.image);
+        } catch {
+          newErrors.image = "Please enter a valid URL";
+          isValid = false;
+        }
       }
+      // If it's a data URL or uploaded URL, it's valid
     }
 
     if (!formData.categoryId) {

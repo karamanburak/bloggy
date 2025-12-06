@@ -4,6 +4,7 @@ import { HiUser, HiMail, HiCalendar, HiLocationMarker } from "react-icons/hi";
 import { FaTrash, FaEdit, FaUserShield } from "react-icons/fa";
 import { HiViewGrid, HiViewList } from "react-icons/hi";
 import { toastSuccessNotify } from "../../helper/ToastNotify";
+import { formatDateOnly } from "../../helper/formatDate";
 
 const UserList = () => {
   const { getAllUsers, deleteUser, updateUser } = useAdminCall();
@@ -210,7 +211,7 @@ const UserList = () => {
                         />
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
-                        {new Date(user.createdAt).toLocaleDateString("en-US")}
+                        {formatDateOnly(user.createdAt)}
                       </td>
                       <td className="px-6 py-4">
                         <label className="flex items-center space-x-2 cursor-pointer">
@@ -297,7 +298,7 @@ const UserList = () => {
                         <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
                           <HiCalendar className="w-4 h-4" />
                           <span className="text-sm">
-                            {new Date(user.createdAt).toLocaleDateString("en-US")}
+                            {formatDateOnly(user.createdAt)}
                           </span>
                         </div>
                       </td>
@@ -491,7 +492,7 @@ const UserList = () => {
                         <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
                           <HiCalendar className="w-4 h-4 flex-shrink-0" />
                           <span className="text-sm">
-                            {new Date(user.createdAt).toLocaleDateString("en-US")}
+                            {formatDateOnly(user.createdAt)}
                           </span>
                         </div>
                       </div>

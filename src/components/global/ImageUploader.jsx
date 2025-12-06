@@ -1,8 +1,7 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   HiCloudUpload,
   HiX,
-  HiFolder,
   HiLink,
   HiPhotograph,
 } from "react-icons/hi";
@@ -18,9 +17,16 @@ const ImageUploader = ({
   const { uploadImage, uploading, uploadProgress } = useImageUpload();
   const fileInputRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [activeTab, setActiveTab] = useState("drag"); // "drag", "file", "url"
+  const [activeTab, setActiveTab] = useState("drag"); // "drag", "url"
   const [imageUrlInput, setImageUrlInput] = useState("");
   const [preview, setPreview] = useState(currentImageUrl);
+
+  // Update preview when currentImageUrl changes
+  useEffect(() => {
+    if (currentImageUrl) {
+      setPreview(currentImageUrl);
+    }
+  }, [currentImageUrl]);
 
   const handleFileSelect = async (file) => {
     if (!file) return;
@@ -76,10 +82,6 @@ const ImageUploader = ({
     if (file) {
       handleFileSelect(file);
     }
-  };
-
-  const handleFileSelectClick = () => {
-    fileInputRef.current?.click();
   };
 
   const handleUrlSubmit = (e) => {
@@ -147,20 +149,6 @@ const ImageUploader = ({
         </button>
         <button
           type="button"
-          onClick={() => setActiveTab("file")}
-          className={`px-4 py-2 text-sm font-medium transition-colors ${
-            activeTab === "file"
-              ? "text-primary-600 dark:text-primary-400 border-b-2 border-primary-600 dark:border-primary-400"
-              : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
-          }`}
-        >
-          <div className="flex items-center space-x-2">
-            <HiFolder className="w-4 h-4" />
-            <span>File</span>
-          </div>
-        </button>
-        <button
-          type="button"
           onClick={() => setActiveTab("url")}
           className={`px-4 py-2 text-sm font-medium transition-colors ${
             activeTab === "url"
@@ -223,49 +211,6 @@ const ImageUploader = ({
                 </>
               )}
             </div>
-          </div>
-        )}
-
-        {/* File Tab */}
-        {activeTab === "file" && (
-          <div className="space-y-4">
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept={accept}
-              onChange={handleFileInputChange}
-              className="hidden"
-              disabled={uploading}
-            />
-            <button
-              type="button"
-              onClick={handleFileSelectClick}
-              disabled={uploading}
-              className="w-full border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 hover:border-primary-500 dark:hover:border-primary-500 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <div className="flex flex-col items-center justify-center space-y-3">
-                {uploading ? (
-                  <>
-                    <div className="w-12 h-12 border-4 border-primary-500 border-t-transparent rounded-full animate-spin" />
-                    <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                      Uploading... {uploadProgress}%
-                    </p>
-                  </>
-                ) : (
-                  <>
-                    <HiFolder className="w-12 h-12 text-gray-400 dark:text-gray-500" />
-                    <div className="text-center">
-                      <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Click to select image
-                      </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                        PNG, JPG, GIF up to {maxSizeMB}MB
-                      </p>
-                    </div>
-                  </>
-                )}
-              </div>
-            </button>
           </div>
         )}
 
