@@ -46,10 +46,10 @@ const Profile = () => {
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-40 pb-12 flex-1">
           {/* Profile Card Skeleton */}
-          <div className="relative overflow-hidden rounded-3xl bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 shadow-2xl p-6 lg:p-10 mb-8">
+          <div className="relative overflow-visible md:overflow-hidden rounded-3xl bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 shadow-2xl p-6 lg:p-10 mb-8 pt-24 md:pt-6">
             <div className="flex flex-col md:flex-row items-start md:items-end gap-8">
               {/* Avatar Skeleton */}
-              <div className="relative -mt-24 md:-mt-32">
+              <div className="relative -mt-20 md:-mt-32 mx-auto md:mx-0">
                 <div className="w-32 h-32 md:w-44 md:h-44 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse"></div>
               </div>
 
@@ -101,13 +101,13 @@ const Profile = () => {
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-40 pb-12 flex-1">
         {/* Modern Profile Card with glassmorphism */}
-        <div className="relative overflow-hidden rounded-3xl bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 shadow-2xl p-6 lg:p-10 mb-8">
+        <div className="relative overflow-visible md:overflow-hidden rounded-3xl bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 shadow-2xl p-6 lg:p-10 mb-8 pt-24 md:pt-6">
           {/* Animated gradient border */}
           <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-primary-500/10 via-accent-500/10 to-primary-500/10 opacity-0 hover:opacity-100 transition-opacity duration-500 -z-10 blur-xl"></div>
           
           <div className="flex flex-col md:flex-row items-start md:items-end gap-8">
             {/* Avatar with modern design */}
-            <div className="relative -mt-24 md:-mt-32">
+            <div className="relative -mt-20 md:-mt-32 mx-auto md:mx-0">
               <div className="relative">
                 {/* Glow effect */}
                 <div className="absolute inset-0 bg-gradient-to-br from-primary-500 to-accent-500 rounded-full blur-2xl opacity-50 animate-pulse"></div>
