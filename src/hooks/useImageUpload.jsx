@@ -1,13 +1,21 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { toastErrorNotify, toastSuccessNotify } from "../helper/ToastNotify";
 
 const useImageUpload = () => {
+  const { token } = useSelector((state) => state.auth);
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
   const uploadImage = async (file) => {
     if (!file) {
       toastErrorNotify("Please select an image file");
+      return null;
+    }
+
+    // Check if user is authenticated
+    if (!token) {
+      toastErrorNotify("NoPermission: You must login.");
       return null;
     }
 
@@ -36,11 +44,18 @@ const useImageUpload = () => {
       const baseUrl = import.meta.env.VITE_BASE_URL || "";
       const uploadUrl = import.meta.env.VITE_BLOB_UPLOAD_URL || `${baseUrl}api/upload`;
 
-      console.log("Upload URL:", uploadUrl); // Debug için
+      console.log("Upload URL:", uploadUrl); // For debugging
+
+      // Prepare headers with authentication token
+      const headers = {};
+      if (token) {
+        headers["Authorization"] = `Token ${token}`;
+      }
 
       // Upload to backend endpoint (which handles Vercel Blob Store)
       const response = await fetch(uploadUrl, {
         method: "POST",
+        headers,
         body: formData,
         // Don't set Content-Type header, browser will set it with boundary
       });
@@ -58,7 +73,7 @@ const useImageUpload = () => {
         
         console.error("Upload failed:", response.status, errorMessage);
         
-        // 404 hatası için özel mesaj
+        // Special message for 404 error
         if (response.status === 404) {
           toastErrorNotify("Upload endpoint not found. Please check backend route.");
         } else {

@@ -43,7 +43,7 @@ const Detail = () => {
   const { categories, loading: categoriesLoading } = useSelector((state) => state.category);
   const { getCategory } = useCategoryCall();
 
-  // Tüm veriler gelene kadar loading state'i
+  // Loading state until all data is loaded
   const isLoading = blogLoading || categoriesLoading;
 
   // Get blog ID from URL params if state is not available (direct URL access)

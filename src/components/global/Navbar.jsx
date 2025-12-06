@@ -10,7 +10,7 @@ import { FaUser } from "react-icons/fa";
 import { CiLogout } from "react-icons/ci";
 import { MdLogin, MdLightMode, MdDarkMode } from "react-icons/md";
 import { FaRegRegistered } from "react-icons/fa";
-import { HiMenu, HiX, HiShieldCheck } from "react-icons/hi";
+import { HiShieldCheck } from "react-icons/hi";
 
 const Navbar = () => {
   const { logout } = useAuthCall();
@@ -19,7 +19,6 @@ const Navbar = () => {
   const colorMode = useContext(ColorModeContext);
   const navigate = useNavigate();
   
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
@@ -162,30 +161,9 @@ const Navbar = () => {
                   </>
                 )}
               </div>
-
-              {/* Mobile Menu Button */}
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2 rounded-lg text-gray-700 dark:text-gray-300 transition-all"
-                aria-label="Toggle menu"
-              >
-                {mobileMenuOpen ? (
-                  <HiX className="w-6 h-6" />
-                ) : (
-                  <HiMenu className="w-6 h-6" />
-                )}
-              </button>
             </div>
           </div>
         </div>
-
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden border-t border-gray-200/50 dark:border-gray-700/50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg">
-            <div className="px-4 pt-2 pb-4 space-y-2">
-            </div>
-          </div>
-        )}
       </nav>
 
     </>

@@ -23,7 +23,7 @@ const Dashboard = () => {
   const [showAllNews, setShowAllNews] = useState(false);
   const [viewMode, setViewMode] = useState("slider"); // "slider" or "grid"
 
-  // Tüm veriler gelene kadar loading state'i
+  // Loading state until all data is loaded
   const isLoading = loading || newsLoading || categoriesLoading;
 
   const topTrendingBlogs = [...blogs]

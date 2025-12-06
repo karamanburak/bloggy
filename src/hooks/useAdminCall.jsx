@@ -15,7 +15,7 @@ const useAdminCall = () => {
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(
-        error?.response?.data?.message || "Kullanıcılar getirilemedi"
+        error?.response?.data?.message || "Failed to fetch users"
       );
       return { success: false, error: error.message };
     }
@@ -29,7 +29,7 @@ const useAdminCall = () => {
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(
-        error?.response?.data?.message || "Kullanıcı bilgileri getirilemedi"
+        error?.response?.data?.message || "Failed to fetch user information"
       );
       return { success: false, error: error.message };
     }
@@ -43,7 +43,7 @@ const useAdminCall = () => {
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(
-        error?.response?.data?.message || "Kullanıcı güncellenemedi"
+        error?.response?.data?.message || "Failed to update user"
       );
       return { success: false, error: error.message };
     }
@@ -57,7 +57,7 @@ const useAdminCall = () => {
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(
-        error?.response?.data?.message || "Kullanıcı silinemedi"
+        error?.response?.data?.message || "Failed to delete user"
       );
       return { success: false, error: error.message };
     }
@@ -93,7 +93,7 @@ const useAdminCall = () => {
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(
-        error?.response?.data?.message || "Blog silinemedi"
+        error?.response?.data?.message || "Failed to delete blog"
       );
       return { success: false, error: error.message };
     }
@@ -129,7 +129,7 @@ const useAdminCall = () => {
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(
-        error?.response?.data?.message || "Yorum silinemedi"
+        error?.response?.data?.message || "Failed to delete comment"
       );
       return { success: false, error: error.message };
     }

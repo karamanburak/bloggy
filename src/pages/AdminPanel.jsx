@@ -16,7 +16,7 @@ const AdminPanel = () => {
   const navigate = useNavigate();
   const location = useLocation();
   
-  // URL'den tab'ı belirle
+  // Determine tab from URL
   const getTabFromUrl = () => {
     const path = location.pathname;
     if (path.includes("/activities")) return "activity";
@@ -26,10 +26,10 @@ const AdminPanel = () => {
 
   const [activeTab, setActiveTab] = useState(getTabFromUrl());
 
-  // URL değiştiğinde tab'ı güncelle
+  // Update tab when URL changes
   useEffect(() => {
     const path = location.pathname;
-    // Eğer sadece /admin ise, /admin/users'a yönlendir
+    // If only /admin, redirect to /admin/users
     if (path === "/admin") {
       navigate("/admin/users", { replace: true });
       return;
@@ -38,7 +38,7 @@ const AdminPanel = () => {
     setActiveTab(tab);
   }, [location.pathname, navigate]);
 
-  // Tab değiştiğinde URL'yi güncelle
+  // Update URL when tab changes
   const handleTabChange = (tabId) => {
     setActiveTab(tabId);
     if (tabId === "users") {

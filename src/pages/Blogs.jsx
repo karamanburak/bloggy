@@ -20,7 +20,7 @@ const Blogs = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const blogsPerPage = 12;
 
-  // Tüm veriler gelene kadar loading state'i
+  // Loading state until all data is loaded
   const isLoading = loading || categoriesLoading;
 
   // Filter blogs based on search and category

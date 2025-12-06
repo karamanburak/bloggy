@@ -12,7 +12,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toastErrorNotify, toastSuccessNotify } from "../helper/ToastNotify";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+const BASE_URL = `${import.meta.env.VITE_BASE_URL}api/`;
 const useAuthCall = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();

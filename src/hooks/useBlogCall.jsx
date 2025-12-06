@@ -10,7 +10,6 @@ import useAxios from "./useAxios";
 import { toastErrorNotify, toastSuccessNotify } from "../helper/ToastNotify";
 import store from "../app/store";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
 const useBlogCall = () => {
   const dispatch = useDispatch();
   const axiosWithToken = useAxios();

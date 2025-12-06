@@ -21,7 +21,7 @@ const Profile = () => {
   const [open, setOpen] = useState(false);
   const [tabValue, setTabValue] = useState(0);
 
-  // Categories yüklenene kadar loading state'i
+  // Loading state until categories are loaded
   const isLoading = categoriesLoading;
 
   const { image, username, email, bio, city, createdAt, firstName, lastName } =
