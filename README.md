@@ -42,7 +42,8 @@ Create a .env file in the root directory and add the following:
 
 ```
 VITE_BASE_URL =
-VITE_WEATHER_apiKey =
+VITE_BLOB_UPLOAD_URL=
+VITE_TinyMCE_apiKey=
 ```
 
 4. Run the development server:
@@ -161,9 +162,6 @@ SOLUTION
 └──   vite.config.js
 ```
 
- ## Outcome 
-
- ![Bloggy Gif](https://github.com/user-attachments/assets/1b87e17a-c46e-4958-8f7c-fea27a1a33b1) 
 
 ## Postman Documentation
 

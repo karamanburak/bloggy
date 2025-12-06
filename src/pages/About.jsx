@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import Footer from "../components/home/Footer";
+import PageHero from "../components/home/PageHero";
 import useCategoryCall from "../hooks/useCategoryCall";
 import Avatar from "../components/global/Avatar";
 import { HiSparkles, HiUserGroup, HiLightBulb, HiBookOpen } from "react-icons/hi";
@@ -104,19 +105,15 @@ const About = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300 pt-20">
+    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-br from-primary-600 via-primary-700 to-accent-600 text-white py-20 md:py-24">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48Y2lyY2xlIGN4PSIzMCIgY3k9IjMwIiByPSIxLjUiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-20"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">
-            Unleash Your Creativity
-          </h1>
-          <p className="text-xl text-white/90 max-w-2xl mx-auto">
-            Dream, Explore, Create
-          </p>
-        </div>
-      </div>
+      <PageHero
+        title="Unleash Your Creativity"
+        description="Dream, Explore, Create"
+        showHomeButton={true}
+        padding="py-24 md:py-32"
+        icon={HiSparkles}
+      />
 
       {/* Content */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

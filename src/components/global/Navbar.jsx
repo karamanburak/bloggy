@@ -90,11 +90,11 @@ const Navbar = () => {
                 <img
                   src={logo}
                   alt="Bloggy Logo"
-                  className="h-12 w-12 transition-all duration-300"
+                  className="h-12 w-12 rounded-full object-cover aspect-square transition-all duration-300"
                 />
                 <div className="absolute inset-0 rounded-full bg-primary-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"></div>
               </div>
-              <span className="ml-3 text-2xl font-display font-bold bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent hidden sm:block transition-all duration-300">
+              <span className="ml-2 sm:ml-3 text-lg sm:text-2xl font-display font-bold bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent transition-all duration-300">
                 Bloggy
               </span>
             </div>
@@ -106,20 +106,20 @@ const Navbar = () => {
               {isAdmin && (
                 <button
                   onClick={() => navigate("/admin")}
-                  className="hidden md:flex items-center space-x-2 px-5 py-2.5 rounded-xl font-semibold bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 shadow-lg shadow-purple-500/50 hover:shadow-xl hover:shadow-purple-500/60 hover:scale-105 transition-all duration-300"
+                  className="hidden md:flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-medium bg-gradient-to-r from-purple-400 to-purple-500 text-white hover:from-purple-500 hover:to-purple-600 transition-all duration-300"
                 >
-                  <HiShieldCheck className="w-5 h-5" />
-                  <span>Admin</span>
+                  <HiShieldCheck className="w-4 h-4" />
+                  <span className="text-sm">Admin</span>
                 </button>
               )}
               {/* Write Button */}
               {currentUser && (
                 <button
                   onClick={() => navigate("/blog/create")}
-                  className="hidden md:flex items-center space-x-2 px-5 py-2.5 rounded-xl font-semibold bg-gradient-to-r from-primary-600 to-accent-600 text-white hover:from-primary-700 hover:to-accent-700 shadow-lg shadow-primary-500/50 hover:shadow-xl hover:shadow-primary-500/60 hover:scale-105 transition-all duration-300"
+                  className="hidden md:flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-medium bg-gradient-to-r from-primary-500 to-accent-500 text-white hover:from-primary-600 hover:to-accent-600 transition-all duration-300"
                 >
-                  <BsPencilSquare className="w-5 h-5" />
-                  <span>Write</span>
+                  <BsPencilSquare className="w-4 h-4" />
+                  <span className="text-sm">Write</span>
                 </button>
               )}
 
@@ -211,9 +211,9 @@ const Navbar = () => {
                     navigate("/admin");
                     setMobileMenuOpen(false);
                   }}
-                  className="w-full text-left px-4 py-3 rounded-xl font-semibold bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 shadow-lg flex items-center space-x-2 transition-all duration-300"
+                  className="w-full text-left px-4 py-2.5 rounded-lg font-medium bg-gradient-to-r from-purple-400 to-purple-500 text-white hover:from-purple-500 hover:to-purple-600 flex items-center space-x-2 transition-all duration-300"
                 >
-                  <HiShieldCheck className="w-5 h-5" />
+                  <HiShieldCheck className="w-4 h-4" />
                   <span>Admin Panel</span>
                 </button>
               )}
@@ -223,9 +223,9 @@ const Navbar = () => {
                     navigate("/blog/create");
                     setMobileMenuOpen(false);
                   }}
-                  className="w-full text-left px-4 py-3 rounded-xl font-semibold bg-gradient-to-r from-primary-600 to-accent-600 text-white hover:from-primary-700 hover:to-accent-700 shadow-lg flex items-center space-x-2 transition-all duration-300"
+                  className="w-full text-left px-4 py-2.5 rounded-lg font-medium bg-gradient-to-r from-primary-500 to-accent-500 text-white hover:from-primary-600 hover:to-accent-600 flex items-center space-x-2 transition-all duration-300"
                 >
-                  <BsPencilSquare className="w-5 h-5" />
+                  <BsPencilSquare className="w-4 h-4" />
                   <span>Write New Post</span>
                 </button>
               )}
