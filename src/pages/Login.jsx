@@ -34,14 +34,17 @@ const Login = () => {
               <Formik
                 initialValues={{ usernameOrEmail: "", password: "" }}
                 validationSchema={SignInScheme}
-                onSubmit={(values, actions) => {
+                onSubmit={async (values, actions) => {
                   // Determine if it's email or username and send appropriate field
                   const isEmail = values.usernameOrEmail.includes("@");
                   const loginData = isEmail
                     ? { email: values.usernameOrEmail, password: values.password }
                     : { username: values.usernameOrEmail, password: values.password };
-                  login(loginData);
-                  actions.resetForm();
+                  const result = await login(loginData);
+                  // Only reset form if login was successful
+                  if (result?.success) {
+                    actions.resetForm();
+                  }
                   actions.setSubmitting(false);
                 }}
                 component={(props) => <LoginForm {...props} />}

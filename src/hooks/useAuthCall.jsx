@@ -26,7 +26,7 @@ const useAuthCall = () => {
       dispatch(registerSuccess(data.data));
       toastSuccessNotify("Register was successfully");
       
-      // Otomatik login işlemi
+      // Automatic login process
       try {
         const loginData = await axios.post(`${BASE_URL}auth/login`, {
           email: userInfo.email,
@@ -38,7 +38,7 @@ const useAuthCall = () => {
         );
         navigate("/");
       } catch (loginError) {
-        // Login başarısız olursa login sayfasına yönlendir
+        // If login fails, redirect to login page
         navigate("/login");
         toastErrorNotify("Registration successful, but automatic login failed. Please login manually.");
       }
@@ -58,6 +58,7 @@ const useAuthCall = () => {
         `Hello ${data.user.firstName} ${data.user.lastName}! Great to have you back. Explore what's new and exciting today! `
       );
       navigate("/");
+      return { success: true };
     } catch (error) {
       dispatch(fetchFail());
       const errorMessage =
@@ -65,6 +66,7 @@ const useAuthCall = () => {
           ? error.response.data.message
           : "An unexpected error occurred";
       toastErrorNotify(errorMessage);
+      return { success: false };
     }
   };
   const updateUser = async (info, id) => {

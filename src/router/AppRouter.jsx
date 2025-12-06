@@ -14,12 +14,14 @@ import NotFound from "../pages/NotFound";
 import Detail from "../pages/Detail";
 import CreateBlog from "../pages/CreateBlog";
 import ScrollToTop from "../components/global/ScrollToTop";
+import FloatingWriteButton from "../components/global/FloatingWriteButton";
 
 const AppRouter = () => {
   return (
     <Router>
       <ScrollToTop />
       <Navbar />
+      <FloatingWriteButton />
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/about" element={<About />} />

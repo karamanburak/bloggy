@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import useAuthCall from "../../hooks/useAuthCall";
+import ImageUploader from "../global/ImageUploader";
 import {
   HiX,
   HiUser,
@@ -27,12 +28,8 @@ const UpdateProfileModal = ({
   _id,
 }) => {
   const { updateUser } = useAuthCall();
-  const fileInputRef = useRef(null);
-  const [isDragging, setIsDragging] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
   const [showImageEditModal, setShowImageEditModal] = useState(false);
-  const [imageUrlInput, setImageUrlInput] = useState("");
-  const [activeTab, setActiveTab] = useState("url"); // "url", "file", "drag"
 
   const [info, setInfo] = useState({
     username: username || "",
@@ -49,15 +46,11 @@ const UpdateProfileModal = ({
     setInfo({ ...info, [e.target.name]: e.target.value });
   };
 
-  const handleFileSelect = (file) => {
-    if (file && file.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64String = reader.result;
-        setInfo({ ...info, image: base64String });
-        setImagePreview(base64String);
-      };
-      reader.readAsDataURL(file);
+  const handleImageUploaded = (url) => {
+    if (url) {
+      setInfo({ ...info, image: url });
+      setImagePreview(url);
+      setShowImageEditModal(false);
     }
   };
 
@@ -71,59 +64,16 @@ const UpdateProfileModal = ({
   useEffect(() => {
     if (!open) {
       setShowImageEditModal(false);
-      setActiveTab("url");
-      setImageUrlInput("");
-      setIsDragging(false);
     }
   }, [open]);
 
   const handleEditImageClick = (e) => {
     e.stopPropagation();
     setShowImageEditModal(true);
-    setImageUrlInput(info.image || "");
   };
 
   const handleImageEditClose = () => {
     setShowImageEditModal(false);
-    setActiveTab("url");
-    setImageUrlInput("");
-    setIsDragging(false);
-  };
-
-  const handleImageUrlSubmit = (e) => {
-    e.preventDefault();
-    if (imageUrlInput.trim()) {
-      setInfo({ ...info, image: imageUrlInput.trim() });
-      setImagePreview(imageUrlInput.trim());
-      handleImageEditClose();
-    }
-  };
-
-  const handleFileSelectClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleDragOverEdit = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(true);
-  };
-
-  const handleDragLeaveEdit = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-  };
-
-  const handleDropEdit = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-    const file = e.dataTransfer.files[0];
-    if (file) {
-      handleFileSelect(file);
-      handleImageEditClose();
-    }
   };
 
   const handleSubmit = (e) => {
@@ -332,152 +282,19 @@ const UpdateProfileModal = ({
 
                 {/* Tab Content */}
                 <div className="p-6">
-                  {/* URL Tab */}
-                  {activeTab === "url" && (
-                    <form onSubmit={handleImageUrlSubmit} className="space-y-4">
-                      <div>
-                        <label
-                          htmlFor="image-url-input"
-                          className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                        >
-                          Image URL
-                        </label>
-                        <div className="relative">
-                          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <HiPhotograph className="h-5 w-5 text-gray-400" />
-                          </div>
-                          <input
-                            id="image-url-input"
-                            type="url"
-                            value={imageUrlInput}
-                            onChange={(e) => setImageUrlInput(e.target.value)}
-                            className="input-field pl-10 w-full"
-                            placeholder="https://example.com/image.jpg"
-                            autoFocus
-                          />
-                        </div>
-                      </div>
-                      <div className="flex space-x-3">
-                        <button
-                          type="button"
-                          onClick={handleImageEditClose}
-                          className="btn-secondary flex-1"
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          type="submit"
-                          className="btn-primary flex-1"
-                          disabled={!imageUrlInput.trim()}
-                        >
-                          Apply
-                        </button>
-                      </div>
-                    </form>
-                  )}
-
-                  {/* File Tab */}
-                  {activeTab === "file" && (
-                    <div className="space-y-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                          Select Image File
-                        </label>
-                        <input
-                          ref={fileInputRef}
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => {
-                            const file = e.target.files[0];
-                            if (file) {
-                              handleFileSelect(file);
-                              handleImageEditClose();
-                            }
-                          }}
-                          className="hidden"
-                        />
-                        <button
-                          type="button"
-                          onClick={handleFileSelectClick}
-                          className="w-full border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 hover:border-primary-500 dark:hover:border-primary-500 transition-colors cursor-pointer"
-                        >
-                          <div className="flex flex-col items-center justify-center space-y-3">
-                            <HiFolder className="w-12 h-12 text-gray-400 dark:text-gray-500" />
-                            <div className="text-center">
-                              <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                                Click to select image
-                              </p>
-                              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                PNG, JPG, GIF up to 10MB
-                              </p>
-                            </div>
-                          </div>
-                        </button>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={handleImageEditClose}
-                        className="btn-secondary w-full"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  )}
-
-                  {/* Drag & Drop Tab */}
-                  {activeTab === "drag" && (
-                    <div className="space-y-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                          Drag & Drop Image
-                        </label>
-                        <div
-                          onDragOver={handleDragOverEdit}
-                          onDragLeave={handleDragLeaveEdit}
-                          onDrop={handleDropEdit}
-                          className={`relative border-2 border-dashed rounded-lg p-8 transition-all ${
-                            isDragging
-                              ? "border-primary-500 bg-primary-50 dark:bg-primary-900/20"
-                              : "border-gray-300 dark:border-gray-600 hover:border-primary-400 dark:hover:border-primary-500"
-                          }`}
-                        >
-                          <div className="flex flex-col items-center justify-center space-y-3">
-                            <HiCloudUpload className="w-12 h-12 text-gray-400 dark:text-gray-500" />
-                            <div className="text-center">
-                              <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                                {isDragging
-                                  ? "Drop image here"
-                                  : "Drag & drop image here"}
-                              </p>
-                              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                Or click to select file
-                              </p>
-                            </div>
-                          </div>
-                          <input
-                            ref={fileInputRef}
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => {
-                              const file = e.target.files[0];
-                              if (file) {
-                                handleFileSelect(file);
-                                handleImageEditClose();
-                              }
-                            }}
-                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                          />
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={handleImageEditClose}
-                        className="btn-secondary w-full"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  )}
+                  <ImageUploader
+                    onImageUploaded={handleImageUploaded}
+                    currentImageUrl={info.image || imagePreview}
+                    label=""
+                    maxSizeMB={10}
+                  />
+                  <button
+                    type="button"
+                    onClick={handleImageEditClose}
+                    className="btn-secondary w-full mt-4"
+                  >
+                    Cancel
+                  </button>
                 </div>
               </div>
             </div>

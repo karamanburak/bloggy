@@ -4,13 +4,14 @@ import { Navigate, Outlet } from "react-router-dom";
 const AdminRouter = () => {
   const { currentUser } = useSelector((state) => state.auth);
 
-  // Admin kontrolü: currentUser.isAdmin veya currentUser.role === 'admin' kontrolü
-  const isAdmin = currentUser?.isAdmin || currentUser?.role === "admin";
-
+  // Check if user is logged in
   if (!currentUser) {
     return <Navigate to="/login" />;
   }
 
+  // Check if user is admin
+  const isAdmin = currentUser?.isAdmin || currentUser?.role === "admin";
+  
   if (!isAdmin) {
     return <Navigate to="/" />;
   }

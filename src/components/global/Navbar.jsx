@@ -6,7 +6,6 @@ import useAuthCall from "../../hooks/useAuthCall";
 import useCategoryCall from "../../hooks/useCategoryCall";
 import logo from "../../assets/logo.png";
 import avatar from "../../assets/avatar.png";
-import { BsPencilSquare } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
 import { CiLogout } from "react-icons/ci";
 import { MdLogin, MdLightMode, MdDarkMode } from "react-icons/md";
@@ -112,16 +111,6 @@ const Navbar = () => {
                   <span className="text-sm">Admin</span>
                 </button>
               )}
-              {/* Write Button */}
-              {currentUser && (
-                <button
-                  onClick={() => navigate("/blog/create")}
-                  className="hidden md:flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-medium bg-gradient-to-r from-primary-500 to-accent-500 text-white hover:from-primary-600 hover:to-accent-600 transition-all duration-300"
-                >
-                  <BsPencilSquare className="w-4 h-4" />
-                  <span className="text-sm">Write</span>
-                </button>
-              )}
 
               {/* Theme Toggle */}
               {/* <button
@@ -215,18 +204,6 @@ const Navbar = () => {
                 >
                   <HiShieldCheck className="w-4 h-4" />
                   <span>Admin Panel</span>
-                </button>
-              )}
-              {currentUser && (
-                <button
-                  onClick={() => {
-                    navigate("/blog/create");
-                    setMobileMenuOpen(false);
-                  }}
-                  className="w-full text-left px-4 py-2.5 rounded-lg font-medium bg-gradient-to-r from-primary-500 to-accent-500 text-white hover:from-primary-600 hover:to-accent-600 flex items-center space-x-2 transition-all duration-300"
-                >
-                  <BsPencilSquare className="w-4 h-4" />
-                  <span>Write New Post</span>
                 </button>
               )}
             </div>

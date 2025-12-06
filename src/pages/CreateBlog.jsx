@@ -5,6 +5,7 @@ import useBlogCall from "../hooks/useBlogCall";
 import useCategoryCall from "../hooks/useCategoryCall";
 import { toastWarnNotify, toastSuccessNotify } from "../helper/ToastNotify";
 import TinyMce from "../components/blog/TinyMce";
+import ImageUploader from "../components/global/ImageUploader";
 import { 
   HiArrowLeft, 
   HiSave, 
@@ -409,63 +410,32 @@ const CreateBlog = () => {
                 </div>
               </div>
 
-              {/* Image URL Field */}
+              {/* Image Upload Field */}
               <div>
-                <label
-                  htmlFor="image"
-                  className="flex items-center space-x-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2"
-                >
+                <div className="flex items-center space-x-2 mb-2">
                   <HiPhotograph className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-                  <span>Featured Image URL</span>
+                  <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                    Featured Image
+                  </span>
                   <span className="text-red-500">*</span>
-                </label>
-                <div className="relative">
-                  <input
-                    type="url"
-                    id="image"
-                    name="image"
-                    value={formData.image}
-                    onChange={handleChange}
-                    placeholder="https://example.com/image.jpg"
-                    className={`w-full px-4 py-3 rounded-lg border-2 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 ${
-                      errors.image
-                        ? "border-red-500 focus:ring-red-500"
-                        : formData.image && !errors.image
-                        ? "border-green-500 focus:border-primary-500"
-                        : "border-gray-300 dark:border-gray-600 focus:border-primary-500"
-                    } bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100`}
-                  />
-                  {formData.image && !errors.image && (
-                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                      <HiCheckCircle className="w-5 h-5 text-green-500" />
-                    </div>
-                  )}
-                  {errors.image && (
-                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                      <HiExclamationCircle className="w-5 h-5 text-red-500" />
-                    </div>
-                  )}
                 </div>
+                <ImageUploader
+                  onImageUploaded={(url) => {
+                    setFormData((prev) => ({ ...prev, image: url }));
+                    setHasUnsavedChanges(true);
+                    if (errors.image) {
+                      setErrors((prev) => ({ ...prev, image: "" }));
+                    }
+                  }}
+                  currentImageUrl={formData.image}
+                  label=""
+                  maxSizeMB={10}
+                />
                 {errors.image && (
                   <p className="text-sm text-red-500 mt-1 flex items-center space-x-1">
                     <HiExclamationCircle className="w-4 h-4" />
                     <span>{errors.image}</span>
                   </p>
-                )}
-                {formData.image && !errors.image && (
-                  <div className="mt-3 relative group rounded-lg overflow-hidden border-2 border-gray-300 dark:border-gray-600">
-                    <img
-                      src={formData.image}
-                      alt="Preview"
-                      className="w-full h-48 md:h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-                      onError={(e) => {
-                        e.target.style.display = "none";
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                      <p className="text-white text-sm font-medium">Image Preview</p>
-                    </div>
-                  </div>
                 )}
               </div>
 
