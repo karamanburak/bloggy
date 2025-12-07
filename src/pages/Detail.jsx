@@ -31,8 +31,13 @@ const Detail = () => {
   const { getCategory } = useCategoryCall();
 
   const isLoading = blogLoading || categoriesLoading;
-  const blogId = id || state?._id || blog?._id;
-  const blogData = blog?._id === blogId ? blog : state || (blogId === blog?._id ? blog : null);
+  const blogId = id || state?._id;
+  
+  const blogData = blog?._id === blogId 
+    ? blog 
+    : (state?._id === blogId ? state : null);
+
+  const isBlogDataValid = blogData && blogData._id === blogId;
 
   const {
     content,
@@ -43,24 +48,24 @@ const Detail = () => {
     _id: blogDataId,
     categoryId,
     countOfVisitors,
-  } = blogData || {};
+  } = isBlogDataValid ? blogData : {};
 
   const _id = blogDataId || blogId;
   
   const [localLikes, setLocalLikes] = useState(() => {
-    if (blog?._id === _id && blog?.likes) {
-      return blog.likes;
+    if (isBlogDataValid && blogData?.likes) {
+      return blogData.likes;
     }
-    return blogData?.likes || [];
+    return [];
   });
 
   useEffect(() => {
-    if (blog?._id === _id && blog?.likes) {
-      setLocalLikes(blog.likes);
-    } else if (blogData?.likes) {
+    if (isBlogDataValid && blogData?.likes) {
       setLocalLikes(blogData.likes);
+    } else if (!isBlogDataValid) {
+      setLocalLikes([]);
     }
-  }, [blog, _id, blogData]);
+  }, [isBlogDataValid, blogData]);
 
   const liked = useMemo(() => {
     return currentUser ? localLikes.includes(currentUser._id) : false;
@@ -69,57 +74,43 @@ const Detail = () => {
   const [openEditModal, setOpenEditModal] = useState(false);
   const isCurrentUserOwner = currentUser && userId?._id === currentUser._id;
   const viewerIncremented = useRef(false);
+  const lastBlogIdRef = useRef(null);
 
   useEffect(() => {
-    const targetId = _id || blogId;
+    if (blogId && lastBlogIdRef.current !== blogId) {
+      viewerIncremented.current = false;
+      lastBlogIdRef.current = blogId;
+    }
+  }, [blogId]);
+
+  useEffect(() => {
+    const targetId = blogId;
     if (!targetId) return;
 
     if (!categories.length) {
       getCategory("categories");
     }
 
-    if (!blogData && targetId) {
-      getBlogDetail("blogs", targetId);
-      return;
-    }
-
-    if (blogData && blog?._id !== targetId) {
-      refreshComments(targetId)
-        .then((comments) => {
-          if (blogData && blogData._id === targetId) {
-            dispatch(
-              getBlogDetailSuccess({
-                data: {
-                  ...blogData,
-                  comments: comments || [],
-                },
-              })
-            );
-          }
-        })
-        .catch(() => {
-          getBlogDetail("blogs", targetId);
-        });
-    } else if (!blogData && targetId) {
+    if (!isBlogDataValid || blog?._id !== targetId) {
       getBlogDetail("blogs", targetId);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [blogId, _id, blogData, categories.length, getCategory, getBlogDetail, refreshComments, dispatch]);
+  }, [blogId, categories.length]);
 
   useEffect(() => {
-    const targetId = _id || blogId;
+    const targetId = blogId;
     if (!targetId || viewerIncremented.current) return;
 
     const storageKey = `blog_viewed_${targetId}`;
     const hasViewed = sessionStorage.getItem(storageKey);
 
-    if (blog && blog._id === targetId && !hasViewed && !viewerIncremented.current) {
+    if (isBlogDataValid && blog && blog._id === targetId && !hasViewed && !viewerIncremented.current) {
       sessionStorage.setItem(storageKey, "true");
       viewerIncremented.current = true;
       incrementViewer("blogs", targetId);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [blog, blogId, _id, incrementViewer]);
+  }, [isBlogDataValid, blog, blogId, incrementViewer]);
 
   const handleLike = () => {
     if (!currentUser) {
@@ -145,7 +136,7 @@ const Detail = () => {
   };
 
   const commentsCount =
-    blog?.comments?.filter(
+    (isBlogDataValid && blog?.comments?.filter(
       (c) =>
         c &&
         typeof c === "object" &&
@@ -153,13 +144,9 @@ const Detail = () => {
         !c.parentId &&
         !c.parentComment &&
         !c.replyTo
-    ).length || 0;
+    ).length) || 0;
 
-  if ((isLoading && !blogData) || (blogId && !blogData && !isLoading)) {
-    return <BlogDetailSkeleton />;
-  }
-
-  if (!blogData && !blogId) {
+  if (!blogId) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900">
         <p className="text-gray-600 dark:text-gray-400">Blog not found</p>
@@ -167,7 +154,8 @@ const Detail = () => {
     );
   }
 
-  if (!blogData && blogId) {
+
+  if (isLoading || !isBlogDataValid || (blog?._id && blog._id !== blogId)) {
     return <BlogDetailSkeleton />;
   }
 
@@ -181,7 +169,7 @@ const Detail = () => {
         content={content}
         likes={localLikes}
         liked={liked}
-        countOfVisitors={blog?.countOfVisitors ?? countOfVisitors ?? 0}
+        countOfVisitors={isBlogDataValid ? (blog?.countOfVisitors ?? countOfVisitors ?? 0) : 0}
         commentsCount={commentsCount}
         isCurrentUserOwner={isCurrentUserOwner}
         onLike={handleLike}
