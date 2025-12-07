@@ -22,17 +22,19 @@ const Blogs = () => {
   // Loading state until all data is loaded
   const isLoading = loading || categoriesLoading;
 
-  // Calculate blog count for each category
+  // Calculate blog count for each category and filter out categories with no blogs
   const categoriesWithCount = useMemo(() => {
     if (!Array.isArray(categories) || !Array.isArray(blogs)) {
       return [];
     }
-    return categories.map((category) => {
-      const count = blogs.filter(
-        (blog) => blog.categoryId?._id === category._id
-      ).length;
-      return { ...category, count };
-    });
+    return categories
+      .map((category) => {
+        const count = blogs.filter(
+          (blog) => blog.categoryId?._id === category._id
+        ).length;
+        return { ...category, count };
+      })
+      .filter((category) => category.count > 0);
   }, [categories, blogs]);
 
   // Filter blogs based on search and category
