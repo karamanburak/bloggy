@@ -34,22 +34,18 @@ const CommentForm = ({ blogId, userId, parentCommentId = null, onCancel, initial
     setError("");
     
     if (isEdit && commentId) {
-      // Update existing comment
       const comments = await updateComment(commentId, blogId, commentText.trim());
       setCommentText("");
       setIsFocused(false);
       setError("");
-      // Pass comments to onCancel callback so parent can update store
       if (onCancel) onCancel(comments);
     } else {
-      // Create new comment or reply
       const commentData = {
         blogId: blogId,
         userId: userId,
         comment: commentText.trim(),
       };
       
-      // Add parent comment ID if it's a reply
       if (parentCommentId) {
         commentData.parentCommentId = parentCommentId;
       }
@@ -59,8 +55,6 @@ const CommentForm = ({ blogId, userId, parentCommentId = null, onCancel, initial
         setCommentText("");
         setIsFocused(false);
         setError("");
-        // Close reply form after comment is successfully posted
-        // getBlogDetail is called inside postComment, so Redux store should be updated
         if (onCancel) onCancel();
       } catch (error) {
         // Error is already handled in postComment
@@ -91,7 +85,6 @@ const CommentForm = ({ blogId, userId, parentCommentId = null, onCancel, initial
     <div className="mb-6">
       <form onSubmit={handleSubmit} className="space-y-3">
         <div className="flex items-start space-x-3">
-          {/* User Avatar */}
           <div className="shrink-0">
             <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-primary-500 to-accent-500">
               {userAvatar ? (
@@ -109,7 +102,6 @@ const CommentForm = ({ blogId, userId, parentCommentId = null, onCancel, initial
             </div>
           </div>
 
-          {/* Comment Input Area */}
           <div className="flex-1 min-w-0">
             <div className="relative">
               <div className={`relative rounded-2xl border transition-all duration-200 ${
@@ -153,7 +145,6 @@ const CommentForm = ({ blogId, userId, parentCommentId = null, onCancel, initial
               )}
             </div>
 
-            {/* Action Buttons - YouTube Style */}
             {showButtons && (
               <div className="flex items-center justify-end space-x-3 mt-3 animate-slide-down">
                 <button

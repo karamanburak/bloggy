@@ -22,6 +22,11 @@ const UserList = () => {
     isActive: true,
   });
 
+  const viewModes = [
+    { id: "table", icon: HiViewList, label: "Table View", ariaLabel: "Table View" },
+    { id: "grid", icon: HiViewGrid, label: "Grid View", ariaLabel: "Grid View" },
+  ];
+
   useEffect(() => {
     loadUsers();
   }, []);
@@ -122,30 +127,25 @@ const UserList = () => {
         
         {/* View Mode Toggle */}
         <div className="flex items-center space-x-2 bg-white dark:bg-gray-800 rounded-xl p-2 border border-gray-200 dark:border-gray-700 shadow-lg">
-          <button
-            onClick={() => setViewMode("table")}
-            className={`p-2 rounded-lg transition-all ${
-              viewMode === "table"
-                ? "bg-gradient-to-r from-primary-600 to-accent-600 text-white shadow-lg"
-                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-            }`}
-            aria-label="Table View"
-            title="Table View"
-          >
-            <HiViewList className="w-5 h-5" />
-          </button>
-          <button
-            onClick={() => setViewMode("grid")}
-            className={`p-2 rounded-lg transition-all ${
-              viewMode === "grid"
-                ? "bg-gradient-to-r from-primary-600 to-accent-600 text-white shadow-lg"
-                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-            }`}
-            aria-label="Grid View"
-            title="Grid View"
-          >
-            <HiViewGrid className="w-5 h-5" />
-          </button>
+          {viewModes.map((mode) => {
+            const Icon = mode.icon;
+            const isActive = viewMode === mode.id;
+            return (
+              <button
+                key={mode.id}
+                onClick={() => setViewMode(mode.id)}
+                className={`p-2 rounded-lg transition-all ${
+                  isActive
+                    ? "bg-gradient-to-r from-primary-600 to-accent-600 text-white shadow-lg"
+                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                }`}
+                aria-label={mode.ariaLabel}
+                title={mode.label}
+              >
+                <Icon className="w-5 h-5" />
+              </button>
+            );
+          })}
         </div>
       </div>
 

@@ -23,6 +23,11 @@ const Dashboard = () => {
   const [showAllNews, setShowAllNews] = useState(false);
   const [viewMode, setViewMode] = useState("slider"); // "slider" or "grid"
 
+  const viewModes = [
+    { id: "slider", icon: HiCollection, label: "Slider view", ariaLabel: "Slider view" },
+    { id: "grid", icon: HiViewGrid, label: "Grid view", ariaLabel: "Grid view" },
+  ];
+
   // Loading state until all data is loaded
   const isLoading = loading || newsLoading || categoriesLoading;
 
@@ -184,30 +189,25 @@ const Dashboard = () => {
                 <div className="flex items-center gap-3">
                   {/* View Mode Toggle */}
                   <div className="flex items-center bg-white dark:bg-gray-800 rounded-xl p-1 shadow-lg border border-gray-200 dark:border-gray-700">
-                    <button
-                      onClick={() => setViewMode("slider")}
-                      className={`p-2.5 rounded-lg transition-all duration-200 ${
-                        viewMode === "slider"
-                          ? "bg-primary-600 text-white shadow-md"
-                          : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
-                      }`}
-                      aria-label="Slider view"
-                      title="Slider View"
-                    >
-                      <HiCollection className="w-5 h-5" />
-                    </button>
-                    <button
-                      onClick={() => setViewMode("grid")}
-                      className={`p-2.5 rounded-lg transition-all duration-200 ${
-                        viewMode === "grid"
-                          ? "bg-primary-600 text-white shadow-md"
-                          : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
-                      }`}
-                      aria-label="Grid view"
-                      title="Grid View"
-                    >
-                      <HiViewGrid className="w-5 h-5" />
-                    </button>
+                    {viewModes.map((mode) => {
+                      const Icon = mode.icon;
+                      const isActive = viewMode === mode.id;
+                      return (
+                        <button
+                          key={mode.id}
+                          onClick={() => setViewMode(mode.id)}
+                          className={`p-2.5 rounded-lg transition-all duration-200 ${
+                            isActive
+                              ? "bg-primary-600 text-white shadow-md"
+                              : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                          }`}
+                          aria-label={mode.ariaLabel}
+                          title={mode.label}
+                        >
+                          <Icon className="w-5 h-5" />
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               </div>

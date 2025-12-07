@@ -14,7 +14,6 @@ const useCategoryCall = () => {
     dispatch(fetchStart());
     try {
       const { data } = await axiosWithToken(`${url}`);
-      //   console.log(data.data);
       dispatch(getCategories({ data: data.data }));
     } catch (error) {
       dispatch(fetchFail());

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import UpdateProfileModal from "../components/profile/UpdateProfileModal";
 import MyBlogsContainer from "../components/profile/MyBlogsContainer";
@@ -12,11 +12,16 @@ import {
   HiPencil,
   HiUser,
   HiMail,
+  HiHeart,
+  HiEye,
+  HiDocumentText,
+  HiChatAlt,
 } from "react-icons/hi";
 
 const Profile = () => {
   const { currentUser } = useSelector((state) => state.auth);
   const { categories, loading: categoriesLoading } = useSelector((state) => state.category);
+  const { blogs } = useSelector((state) => state.blog);
   const { getCategory } = useCategoryCall();
   const [open, setOpen] = useState(false);
   const [tabValue, setTabValue] = useState(0);
@@ -30,6 +35,117 @@ const Profile = () => {
   const handleClose = () => setOpen(false);
   const handleOpen = () => setOpen(true);
 
+  const stats = useMemo(() => {
+    if (!currentUser || !blogs) {
+      return {
+        totalBlogs: 0,
+        totalLikes: 0,
+        totalViews: 0,
+        totalComments: 0,
+      };
+    }
+
+    const userBlogs = blogs.filter((blog) => blog.userId?._id === currentUser._id);
+    
+    return {
+      totalBlogs: userBlogs.length,
+      totalLikes: userBlogs.reduce((sum, blog) => sum + (blog.likes?.length || 0), 0),
+      totalViews: userBlogs.reduce((sum, blog) => sum + (blog.countOfVisitors || 0), 0),
+      totalComments: userBlogs.reduce((sum, blog) => {
+        const comments = blog.comments || [];
+        // Count only parent comments
+        const parentComments = comments.filter(
+          (c) => c && !c.parentCommentId && !c.parentId && !c.parentComment && !c.replyTo
+        );
+        return sum + parentComments.length;
+      }, 0),
+    };
+  }, [blogs, currentUser]);
+
+  const statsCards = useMemo(() => [
+    {
+      id: 'blogs',
+      icon: HiDocumentText,
+      value: stats.totalBlogs,
+      label: 'Total Blogs',
+      gradientFrom: 'from-primary-50',
+      gradientTo: 'to-primary-100/50',
+      darkGradientFrom: 'dark:from-primary-900/20',
+      darkGradientTo: 'dark:to-primary-800/30',
+      borderColor: 'border-primary-200/50',
+      darkBorderColor: 'dark:border-primary-800/50',
+      iconBgFrom: 'from-primary-500',
+      iconBgTo: 'to-primary-600',
+      textColor: 'text-primary-600',
+      darkTextColor: 'dark:text-primary-400',
+      circleBg: 'bg-primary-500/10',
+    },
+    {
+      id: 'likes',
+      icon: HiHeart,
+      value: stats.totalLikes,
+      label: 'Total Likes',
+      gradientFrom: 'from-red-50',
+      gradientTo: 'to-red-100/50',
+      darkGradientFrom: 'dark:from-red-900/20',
+      darkGradientTo: 'dark:to-red-800/30',
+      borderColor: 'border-red-200/50',
+      darkBorderColor: 'dark:border-red-800/50',
+      iconBgFrom: 'from-red-500',
+      iconBgTo: 'to-red-600',
+      textColor: 'text-red-600',
+      darkTextColor: 'dark:text-red-400',
+      circleBg: 'bg-red-500/10',
+    },
+    {
+      id: 'views',
+      icon: HiEye,
+      value: stats.totalViews,
+      label: 'Total Views',
+      gradientFrom: 'from-blue-50',
+      gradientTo: 'to-blue-100/50',
+      darkGradientFrom: 'dark:from-blue-900/20',
+      darkGradientTo: 'dark:to-blue-800/30',
+      borderColor: 'border-blue-200/50',
+      darkBorderColor: 'dark:border-blue-800/50',
+      iconBgFrom: 'from-blue-500',
+      iconBgTo: 'to-blue-600',
+      textColor: 'text-blue-600',
+      darkTextColor: 'dark:text-blue-400',
+      circleBg: 'bg-blue-500/10',
+    },
+    {
+      id: 'comments',
+      icon: HiChatAlt,
+      value: stats.totalComments,
+      label: 'Total Comments',
+      gradientFrom: 'from-accent-50',
+      gradientTo: 'to-accent-100/50',
+      darkGradientFrom: 'dark:from-accent-900/20',
+      darkGradientTo: 'dark:to-accent-800/30',
+      borderColor: 'border-accent-200/50',
+      darkBorderColor: 'dark:border-accent-800/50',
+      iconBgFrom: 'from-accent-500',
+      iconBgTo: 'to-accent-600',
+      textColor: 'text-accent-600',
+      darkTextColor: 'dark:text-accent-400',
+      circleBg: 'bg-accent-500/10',
+    },
+  ], [stats]);
+
+  const tabs = useMemo(() => [
+    {
+      id: 0,
+      label: 'Posts',
+      icon: HiDocumentText,
+    },
+    {
+      id: 1,
+      label: 'About',
+      icon: HiUser,
+    },
+  ], []);
+
   useEffect(() => {
     getCategory("categories");
   }, []);
@@ -38,20 +154,19 @@ const Profile = () => {
     return null;
   }
 
-  // Loading skeleton
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300 pt-20 flex flex-col">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300 pt-20 flex flex-col">
         {/* Cover Image Skeleton */}
-        <div className="relative h-72 w-full overflow-hidden bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 animate-pulse"></div>
+        <div className="relative h-64 md:h-80 w-full overflow-hidden bg-gradient-to-br from-primary-200 via-accent-200 to-primary-200 dark:from-primary-900/30 dark:via-accent-900/30 dark:to-primary-900/30 animate-pulse"></div>
 
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-40 pb-12 flex-1">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-32 pb-12 flex-1 w-full">
           {/* Profile Card Skeleton */}
-          <div className="relative overflow-visible md:overflow-hidden rounded-3xl bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 shadow-2xl p-6 lg:p-10 mb-8 pt-24 md:pt-6">
+          <div className="relative overflow-visible rounded-3xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 shadow-2xl p-6 lg:p-10 mb-8 pt-28 md:pt-8">
             <div className="flex flex-col md:flex-row items-start md:items-end gap-8">
               {/* Avatar Skeleton */}
-              <div className="relative -mt-20 md:-mt-32 mx-auto md:mx-0">
-                <div className="w-32 h-32 md:w-44 md:h-44 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse"></div>
+              <div className="relative -mt-24 md:-mt-28 mx-auto md:mx-0">
+                <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse border-4 border-white dark:border-gray-800"></div>
               </div>
 
               {/* Profile Info Skeleton */}
@@ -66,6 +181,13 @@ const Profile = () => {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Stats Skeleton */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="h-24 bg-gray-200 dark:bg-gray-700 rounded-2xl animate-pulse"></div>
+            ))}
           </div>
 
           {/* Tabs Skeleton */}
@@ -90,29 +212,29 @@ const Profile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300 pt-20 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300 pt-20 flex flex-col">
       {/* Modern Cover Image with animated gradient */}
-      <div className="relative h-72 w-full overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-600 via-accent-600 to-primary-600">
+      <div className="relative h-64 md:h-80 w-full overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-500 via-accent-500 to-primary-600 dark:from-primary-700 dark:via-accent-700 dark:to-primary-800">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48Y2lyY2xlIGN4PSIzMCIgY3k9IjMwIiByPSIxLjUiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-20"></div>
         </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-black/10 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white dark:from-gray-900 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-black/5 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-gray-50 dark:from-gray-900 to-transparent"></div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-40 pb-12 flex-1">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-32 pb-12 flex-1 w-full">
         {/* Modern Profile Card with glassmorphism */}
-        <div className="relative overflow-visible md:overflow-hidden rounded-3xl bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 shadow-2xl p-6 lg:p-10 mb-8 pt-24 md:pt-6">
+        <div className="relative overflow-visible rounded-3xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 shadow-2xl p-6 lg:p-10 mb-8 pt-28 md:pt-8">
           {/* Animated gradient border */}
           <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-primary-500/10 via-accent-500/10 to-primary-500/10 opacity-0 hover:opacity-100 transition-opacity duration-500 -z-10 blur-xl"></div>
           
           <div className="flex flex-col md:flex-row items-start md:items-end gap-8">
             {/* Avatar with modern design */}
-            <div className="relative -mt-20 md:-mt-32 mx-auto md:mx-0">
-              <div className="relative">
+            <div className="relative -mt-24 md:-mt-28 mx-auto md:mx-0">
+              <div className="relative group">
                 {/* Glow effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-primary-500 to-accent-500 rounded-full blur-2xl opacity-50 animate-pulse"></div>
-                <div className="relative w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-white dark:border-gray-900 overflow-hidden bg-gradient-to-br from-primary-500 to-accent-500 shadow-2xl">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary-500 to-accent-500 rounded-full blur-2xl opacity-50 group-hover:opacity-70 transition-opacity duration-300"></div>
+                <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-white dark:border-gray-800 overflow-hidden bg-gradient-to-br from-primary-500 to-accent-500 shadow-2xl transition-transform duration-300 group-hover:scale-105">
                   {image ? (
                     <img
                       src={image}
@@ -120,38 +242,38 @@ const Profile = () => {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-white text-5xl font-bold">
+                    <div className="w-full h-full flex items-center justify-center text-white text-4xl md:text-5xl font-bold">
                       {firstName?.charAt(0).toUpperCase()}
                       {lastName?.charAt(0).toUpperCase()}
                     </div>
                   )}
                 </div>
                 {/* Status indicator */}
-                <div className="absolute bottom-2 right-2 w-6 h-6 bg-green-500 rounded-full border-4 border-white dark:border-gray-900 shadow-lg"></div>
+                <div className="absolute bottom-2 right-2 w-6 h-6 bg-green-500 rounded-full border-4 border-white dark:border-gray-800 shadow-lg animate-pulse"></div>
               </div>
             </div>
 
             {/* Profile Info */}
-            <div className="flex-1 w-full">
+            <div className="flex-1 w-full text-center md:text-left">
               <div className="flex flex-col gap-6">
                 <div className="flex-1">
-                  <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent dark:from-primary-400 dark:to-accent-400 mb-2">
+                  <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent dark:from-primary-400 dark:to-accent-400 mb-2">
                     {firstName} {lastName}
                   </h1>
-                  <p className="text-xl text-gray-600 dark:text-gray-400 mb-6 font-medium">
+                  <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-4 font-medium">
                     @{username}
                   </p>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-6 text-sm">
+                <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-sm">
                   {city && (
-                    <div className="flex items-center space-x-2 px-4 py-2 rounded-xl bg-gray-100/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50">
-                      <HiLocationMarker className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                    <div className="flex items-center space-x-2 px-4 py-2 rounded-xl bg-gray-100/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 hover:bg-gray-200/80 dark:hover:bg-gray-700/80 transition-colors">
+                      <HiLocationMarker className="w-4 h-4 text-primary-600 dark:text-primary-400" />
                       <span className="font-medium text-gray-700 dark:text-gray-300">{city}</span>
                     </div>
                   )}
-                  <div className="flex items-center space-x-2 px-4 py-2 rounded-xl bg-gray-100/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50">
-                    <HiCalendar className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                  <div className="flex items-center space-x-2 px-4 py-2 rounded-xl bg-gray-100/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 hover:bg-gray-200/80 dark:hover:bg-gray-700/80 transition-colors">
+                    <HiCalendar className="w-4 h-4 text-primary-600 dark:text-primary-400" />
                     <span className="font-medium text-gray-700 dark:text-gray-300">
                       Joined {formatDateOnly(createdAt, "long")}
                     </span>
@@ -159,10 +281,10 @@ const Profile = () => {
                   {/* Modern Edit Button */}
                   <button
                     onClick={handleOpen}
-                    className="group relative px-6 py-2 rounded-xl font-bold text-white bg-gradient-to-r from-primary-600 via-primary-500 to-accent-600 hover:from-primary-700 hover:via-primary-600 hover:to-accent-700 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-primary-500/50 hover:scale-105 active:scale-95 overflow-hidden"
+                    className="group relative px-6 py-2.5 rounded-xl font-bold text-white bg-gradient-to-r from-primary-600 via-primary-500 to-accent-600 hover:from-primary-700 hover:via-primary-600 hover:to-accent-700 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-primary-500/50 hover:scale-105 active:scale-95 overflow-hidden shadow-lg"
                   >
                     <span className="relative z-10 flex items-center space-x-2">
-                      <HiPencil className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
+                      <HiPencil className="w-4 h-4 group-hover:rotate-12 transition-transform duration-300" />
                       <span>Edit Profile</span>
                     </span>
                     <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
@@ -173,50 +295,71 @@ const Profile = () => {
           </div>
         </div>
 
+        {/* Statistics Cards */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          {statsCards.map((card) => {
+            const Icon = card.icon;
+            return (
+              <div
+                key={card.id}
+                className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${card.gradientFrom} ${card.gradientTo} ${card.darkGradientFrom} ${card.darkGradientTo} border ${card.borderColor} ${card.darkBorderColor} p-6 hover:shadow-xl transition-all duration-300`}
+              >
+                <div className={`absolute top-0 right-0 w-20 h-20 ${card.circleBg} rounded-full -mr-10 -mt-10`}></div>
+                <div className="relative">
+                  <div className="flex items-center space-x-3 mb-2">
+                    <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${card.iconBgFrom} ${card.iconBgTo} flex items-center justify-center shadow-lg`}>
+                      <Icon className="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+                  <p className={`text-3xl font-bold ${card.textColor} ${card.darkTextColor} mb-1`}>{card.value}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">{card.label}</p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
         {/* Modern Tabs */}
         <div className="relative mb-8">
-          <div className="flex space-x-2 bg-gray-100/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-2 border border-gray-200/50 dark:border-gray-700/50">
-            <button
-              onClick={() => setTabValue(0)}
-              className={`relative flex-1 py-3 px-6 rounded-xl font-bold text-sm transition-all duration-300 ${
-                tabValue === 0
-                  ? "text-white shadow-lg"
-                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-              }`}
-            >
-              {tabValue === 0 && (
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary-600 to-accent-600 animate-scale-in"></div>
-              )}
-              <span className="relative z-10">Posts</span>
-            </button>
-            <button
-              onClick={() => setTabValue(1)}
-              className={`relative flex-1 py-3 px-6 rounded-xl font-bold text-sm transition-all duration-300 ${
-                tabValue === 1
-                  ? "text-white shadow-lg"
-                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-              }`}
-            >
-              {tabValue === 1 && (
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary-600 to-accent-600 animate-scale-in"></div>
-              )}
-              <span className="relative z-10">About</span>
-            </button>
+          <div className="flex space-x-2 bg-gray-100/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-2 border border-gray-200/50 dark:border-gray-700/50 shadow-lg">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = tabValue === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setTabValue(tab.id)}
+                  className={`relative flex-1 py-3 px-6 rounded-xl font-bold text-sm transition-all duration-300 ${
+                    isActive
+                      ? "text-white shadow-lg"
+                      : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                  }`}
+                >
+                  {isActive && (
+                    <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary-600 to-accent-600 animate-scale-in"></div>
+                  )}
+                  <span className="relative z-10 flex items-center justify-center space-x-2">
+                    <Icon className="w-4 h-4" />
+                    <span>{tab.label}</span>
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
         {/* Tab Content */}
         <div className="py-6 pb-20">
           <div className="relative">
-            <div className={`transition-opacity duration-300 ease-in-out ${
+            <div className={`transition-all duration-500 ease-in-out ${
               tabValue === 0 ? 'opacity-100 block' : 'opacity-0 hidden'
             }`}>
               <MyBlogsContainer userId={currentUser._id} />
             </div>
-            <div className={`transition-opacity duration-300 ease-in-out ${
+            <div className={`transition-all duration-500 ease-in-out ${
               tabValue === 1 ? 'opacity-100 block' : 'opacity-0 hidden'
             }`}>
-              <div className="relative overflow-hidden rounded-3xl bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 shadow-xl p-8 lg:p-10">
+              <div className="relative overflow-hidden rounded-3xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 shadow-xl p-8 lg:p-10">
                 {/* Gradient border effect */}
                 <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-primary-500/5 via-accent-500/5 to-primary-500/5 opacity-0 hover:opacity-100 transition-opacity duration-500 -z-10 blur-xl"></div>
                 

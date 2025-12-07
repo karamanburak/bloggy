@@ -18,7 +18,6 @@ const useBlogCall = () => {
     dispatch(fetchStart());
     try {
       const { data } = await axiosWithToken(`${url}`);
-      //   console.log(data.data);
       dispatch(getSuccess({ data: data.data, url }));
     } catch (error) {
       dispatch(fetchFail());
@@ -30,7 +29,6 @@ const useBlogCall = () => {
     try {
       const { data } = await axiosWithToken(`blogs?author=${userId}`);
       dispatch(getSuccess({ data: data.data, url: "blogs" }));
-      //   console.log(data);
     } catch (error) {
       dispatch(fetchFail());
     }
@@ -38,43 +36,33 @@ const useBlogCall = () => {
 
   const getCommentsByBlogId = async (blogId) => {
     try {
-      // API endpoint: comments?blogId=...
-      // API returns nested structure: [{ ...comment, replies: [reply1, reply2] }]
-      // We need to flatten it to: [comment1, comment2, reply1, reply2]
       try {
         const { data } = await axiosWithToken(`comments?blogId=${blogId}`);
         const comments = data?.data || [];
         
         if (Array.isArray(comments) && comments.length > 0) {
-          // Check if comments have nested replies structure (API format)
           const hasNestedReplies = comments[0]?.replies && Array.isArray(comments[0].replies);
           
           if (hasNestedReplies) {
-            // Flatten comments and replies into a single array
             const flattenedComments = [];
             
             comments.forEach(comment => {
-              // Add parent comment (without replies property)
               const { replies, ...parentComment } = comment;
               flattenedComments.push(parentComment);
               
-              // Add replies if they exist
               if (replies && Array.isArray(replies) && replies.length > 0) {
                 replies.forEach(reply => {
-                  // Ensure parentCommentId is a string (not an object)
                   const flattenedReply = {
                     ...reply.toObject ? reply.toObject() : reply,
-                    parentCommentId: comment._id.toString() // Ensure it's a string
+                    parentCommentId: comment._id.toString()
                   };
                   flattenedComments.push(flattenedReply);
                 });
               }
             });
             
-            
             return flattenedComments;
           } else {
-            // Already flat structure, return as is
             return comments;
           }
         }
@@ -92,21 +80,14 @@ const useBlogCall = () => {
     dispatch(fetchStart());
     try {
       const { data } = await axiosWithToken(`${url}/${id}`);
-      
-      // Backend's getBlogDetail returns flat comments array without nested replies
-      // We need to fetch comments separately using comment.list endpoint to get nested structure
-      // This endpoint returns: [{ ...comment, replies: [reply1, reply2] }]
       const populatedComments = await getCommentsByBlogId(id);
       
-      // Replace blog's comments with populated comments (including nested replies)
       if (populatedComments.length > 0) {
         data.data.comments = populatedComments;
       } else {
-        // If no comments found, set to empty array
         data.data.comments = [];
       }
       
-      // Ensure we're passing the correct format to the reducer
       dispatch(getBlogDetailSuccess(data));
       return data;
     } catch (error) {
@@ -176,16 +157,11 @@ const useBlogCall = () => {
     dispatch(fetchStart());
     try {
       const response = await axiosWithToken.post(`${url}`, info);
-      
-      // Small delay to ensure backend has processed the comment
       await new Promise(resolve => setTimeout(resolve, 300));
-      
-      // Refresh only comments without calling getBlogDetail (to avoid view count increment)
-      // The caller should update Redux store with refreshed comments
       const comments = await getCommentsByBlogId(info.blogId);
       
       toastSuccessNotify("Comment successfully added!");
-      return { ...response, comments }; // Return comments so caller can update store
+      return { ...response, comments };
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(
@@ -214,9 +190,8 @@ const useBlogCall = () => {
     try {
       await axiosWithToken.put(`comments/${commentId}`, { comment: commentText });
       toastSuccessNotify("Comment successfully updated!");
-      // Refresh only comments without calling getBlogDetail (to avoid view count increment)
       const comments = await getCommentsByBlogId(blogId);
-      return comments; // Return comments so caller can update store
+      return comments;
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(
@@ -240,7 +215,6 @@ const useBlogCall = () => {
     dispatch(fetchStart());
     try {
       const { data } = await axiosWithToken("blogs/?page=1&limit=100");
-      // console.log(data);
       dispatch(getSuccess({ data: data?.data, url: "trendings" }));
     } catch (error) {
       dispatch(fetchFail());
@@ -251,9 +225,8 @@ const useBlogCall = () => {
     dispatch(fetchStart());
     try {
       await axiosWithToken.post(`comments/${commentId}/postLike`);
-      // Refresh only comments without calling getBlogDetail (to avoid view count increment)
       const comments = await getCommentsByBlogId(blogId);
-      return comments; // Return comments so caller can update store
+      return comments;
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(
@@ -266,9 +239,8 @@ const useBlogCall = () => {
     dispatch(fetchStart());
     try {
       await axiosWithToken.post(`comments/${commentId}/postDislike`);
-      // Refresh only comments without calling getBlogDetail (to avoid view count increment)
       const comments = await getCommentsByBlogId(blogId);
-      return comments; // Return comments so caller can update store
+      return comments;
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(
@@ -280,18 +252,12 @@ const useBlogCall = () => {
   const incrementViewer = async (url, id) => {
     try {
       await axiosWithToken.post(`${url}/${id}/incrementViewer`);
-      // Refresh blog list to update view counts in dashboard and other pages
-      // Don't call getBlogDetail here as it's already called in Detail.jsx
-      // and might cause duplicate increments
       getBlogData("blogs");
     } catch (error) {
       // Silently fail - view count increment is not critical
-      // Don't show error to user as it's a background operation
     }
   };
 
-  // Refresh only comments without calling getBlogDetail (to avoid view count increment)
-  // This function returns comments, the caller should update Redux store
   const refreshComments = async (blogId) => {
     try {
       const comments = await getCommentsByBlogId(blogId);

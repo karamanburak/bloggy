@@ -19,7 +19,6 @@ const Quotes = () => {
     const getQuote = async () => {
         try {
             const { data } = await axios('https://api.quotable.io/random')
-            // console.log(data);
             setQuote(data)
         } catch (error) {
             // Error fetching quote

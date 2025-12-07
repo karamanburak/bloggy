@@ -29,7 +29,6 @@ const useNewsCall = () => {
     return null;
   };
 
-  // Free API - No registration required: Hacker News API
   const fetchHackerNews = async () => {
     try {
       // Get top story IDs
@@ -72,7 +71,6 @@ const useNewsCall = () => {
     return null;
   };
 
-  // Free API - No registration required: Dev.to API
   const fetchDevTo = async () => {
     try {
       const { data } = await axios.get(
@@ -260,7 +258,6 @@ const useNewsCall = () => {
       const uniqueArticles = removeDuplicates(allArticles);
       const limitedArticles = uniqueArticles.slice(0, 30);
 
-      // Sort by published date (newest first)
       limitedArticles.sort((a, b) => {
         const dateA = new Date(a.publishedAt || 0);
         const dateB = new Date(b.publishedAt || 0);

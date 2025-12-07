@@ -100,6 +100,29 @@ const teamMembers = [
 const About = () => {
   const { getCategory } = useCategoryCall();
 
+  const socialIcons = [
+    {
+      key: "linkedin",
+      icon: FaLinkedin,
+      hoverColor: "hover:text-blue-600 dark:hover:text-blue-400",
+    },
+    {
+      key: "twitter",
+      icon: FaTwitter,
+      hoverColor: "hover:text-blue-400 dark:hover:text-blue-300",
+    },
+    {
+      key: "github",
+      icon: FaSquareGithub,
+      hoverColor: "hover:text-gray-700 dark:hover:text-gray-200",
+    },
+    {
+      key: "instagram",
+      icon: FaInstagram,
+      hoverColor: "hover:text-pink-600 dark:hover:text-pink-400",
+    },
+  ];
+
   useEffect(() => {
     getCategory("categories");
   }, []);
@@ -290,50 +313,24 @@ const About = () => {
                   </div>
                   
                   <div className="flex items-center justify-center space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700">
-                    {member.social.linkedin && (
-                      <a
-                        href={member.social.linkedin}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                        aria-label={`${member.name} LinkedIn`}
-                      >
-                        <FaLinkedin className="w-5 h-5" />
-                      </a>
-                    )}
-                    {member.social.twitter && (
-                      <a
-                        href={member.social.twitter}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-gray-400 hover:text-blue-400 dark:hover:text-blue-300 transition-colors"
-                        aria-label={`${member.name} Twitter`}
-                      >
-                        <FaTwitter className="w-5 h-5" />
-                      </a>
-                    )}
-                    {member.social.github && (
-                      <a
-                        href={member.social.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
-                        aria-label={`${member.name} GitHub`}
-                      >
-                        <FaSquareGithub className="w-5 h-5" />
-                      </a>
-                    )}
-                    {member.social.instagram && (
-                      <a
-                        href={member.social.instagram}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-gray-400 hover:text-pink-600 dark:hover:text-pink-400 transition-colors"
-                        aria-label={`${member.name} Instagram`}
-                      >
-                        <FaInstagram className="w-5 h-5" />
-                      </a>
-                    )}
+                    {socialIcons.map((social) => {
+                      const Icon = social.icon;
+                      const url = member.social[social.key];
+                      if (!url) return null;
+                      
+                      return (
+                        <a
+                          key={social.key}
+                          href={url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`text-gray-400 ${social.hoverColor} transition-colors`}
+                          aria-label={`${member.name} ${social.key.charAt(0).toUpperCase() + social.key.slice(1)}`}
+                        >
+                          <Icon className="w-5 h-5" />
+                        </a>
+                      );
+                    })}
                   </div>
                 </div>
               ))}

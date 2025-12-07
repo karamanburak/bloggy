@@ -8,8 +8,6 @@ import "swiper/css/autoplay";
 import "../../../index.css";
 
 const CustomSwiper = ({ items, ItemComponent }) => {
-  // console.log(items);
-
   return (
     <Swiper
       style={{

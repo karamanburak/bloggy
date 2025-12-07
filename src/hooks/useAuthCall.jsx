@@ -22,11 +22,9 @@ const useAuthCall = () => {
     dispatch(fetchStart());
     try {
       const { data } = await axios.post(`${BASE_URL}users/`, userInfo);
-      // console.log(data);
       dispatch(registerSuccess(data.data));
       toastSuccessNotify("Register was successfully");
       
-      // Automatic login process
       try {
         const loginData = await axios.post(`${BASE_URL}auth/login`, {
           email: userInfo.email,
@@ -38,7 +36,6 @@ const useAuthCall = () => {
         );
         navigate("/");
       } catch (loginError) {
-        // If login fails, redirect to login page
         navigate("/login");
         toastErrorNotify("Registration successful, but automatic login failed. Please login manually.");
       }
@@ -52,7 +49,6 @@ const useAuthCall = () => {
     dispatch(fetchStart());
     try {
       const { data } = await axios.post(`${BASE_URL}auth/login`, userInfo);
-      // console.log(data);
       dispatch(loginSuccess(data));
       toastSuccessNotify(
         `Hello ${data.user.firstName} ${data.user.lastName}! Great to have you back. Explore what's new and exciting today! `
@@ -79,7 +75,6 @@ const useAuthCall = () => {
       });
       dispatch(updateUserSuccess(data));
       toastSuccessNotify(`Profile successfully updated`);
-      // console.log(data);
     } catch (error) {
       dispatch(fetchFail());
       const errorMessage = error.response.data.message

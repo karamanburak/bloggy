@@ -18,11 +18,8 @@ const Blogs = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
   const blogsPerPage = 12;
-
-  // Loading state until all data is loaded
   const isLoading = loading || categoriesLoading;
 
-  // Calculate blog count for each category and filter out categories with no blogs
   const categoriesWithCount = useMemo(() => {
     if (!Array.isArray(categories) || !Array.isArray(blogs)) {
       return [];
@@ -37,7 +34,6 @@ const Blogs = () => {
       .filter((category) => category.count > 0);
   }, [categories, blogs]);
 
-  // Filter blogs based on search and category
   const filteredBlogs = useMemo(() => {
     if (!Array.isArray(blogs)) {
       return [];

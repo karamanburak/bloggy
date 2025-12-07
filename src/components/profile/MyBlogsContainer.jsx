@@ -49,7 +49,7 @@ const MyBlogsContainer = ({ userId }) => {
           </p>
         </div>
       ) : (
-        <div className="w-full flex flex-col gap-6">
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6">
           {currentBlogs?.map((blog) => (
             <MyBlogsCard key={blog._id} {...blog} />
           ))}

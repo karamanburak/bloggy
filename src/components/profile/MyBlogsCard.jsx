@@ -79,9 +79,9 @@ const MyBlogsCard = ({
 
   return (
     <>
-      <article className="relative bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-700">
+      <article className="relative bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-700 group">
         {/* Image Container */}
-        <div className="relative h-48 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-900">
+        <div className="relative h-48 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-900 group-hover:scale-105 transition-transform duration-500">
           <img
             src={image || "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800"}
             alt={title}
@@ -159,7 +159,7 @@ const MyBlogsCard = ({
           </div>
 
           {/* Preview Text */}
-          <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3 leading-relaxed">
+          <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2 leading-relaxed">
             {previewText}
           </p>
 
