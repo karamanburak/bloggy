@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import useBlogCall from "../hooks/useBlogCall";
@@ -33,11 +33,19 @@ const Detail = () => {
   const isLoading = blogLoading || categoriesLoading;
   const blogId = id || state?._id;
   
-  const blogData = blog?._id === blogId 
-    ? blog 
-    : (state?._id === blogId ? state : null);
+  const blogData = useMemo(() => {
+    if (blog?._id === blogId) {
+      return blog;
+    }
+    if (state?._id === blogId) {
+      return state;
+    }
+    return null;
+  }, [blog, blogId, state]);
 
-  const isBlogDataValid = blogData && blogData._id === blogId;
+  const isBlogDataValid = useMemo(() => {
+    return blogData && blogData._id === blogId;
+  }, [blogData, blogId]);
 
   const {
     content,
@@ -53,19 +61,20 @@ const Detail = () => {
   const _id = blogDataId || blogId;
   
   const [localLikes, setLocalLikes] = useState(() => {
-    if (isBlogDataValid && blogData?.likes) {
+    if (blogData?.likes && Array.isArray(blogData.likes)) {
       return blogData.likes;
     }
     return [];
   });
 
+  // Update localLikes only when blogData.likes actually changes
   useEffect(() => {
-    if (isBlogDataValid && blogData?.likes) {
+    if (isBlogDataValid && blogData?.likes && Array.isArray(blogData.likes)) {
       setLocalLikes(blogData.likes);
     } else if (!isBlogDataValid) {
       setLocalLikes([]);
     }
-  }, [isBlogDataValid, blogData]);
+  }, [isBlogDataValid, blogData?.likes]);
 
   const liked = useMemo(() => {
     return currentUser ? localLikes.includes(currentUser._id) : false;
@@ -75,42 +84,51 @@ const Detail = () => {
   const isCurrentUserOwner = currentUser && userId?._id === currentUser._id;
   const viewerIncremented = useRef(false);
   const lastBlogIdRef = useRef(null);
+  const hasFetchedRef = useRef(false);
 
+  // Reset flags when blogId changes
   useEffect(() => {
     if (blogId && lastBlogIdRef.current !== blogId) {
       viewerIncremented.current = false;
+      hasFetchedRef.current = false;
       lastBlogIdRef.current = blogId;
     }
   }, [blogId]);
 
+  // Memoize incrementViewer callback to prevent unnecessary re-renders
+  const handleIncrementViewer = useCallback(() => {
+    if (!blogId || viewerIncremented.current) return;
+
+    const storageKey = `blog_viewed_${blogId}`;
+    const hasViewed = sessionStorage.getItem(storageKey);
+
+    if (isBlogDataValid && blog && blog._id === blogId && !hasViewed) {
+      sessionStorage.setItem(storageKey, "true");
+      viewerIncremented.current = true;
+      incrementViewer("blogs", blogId);
+    }
+  }, [blogId, isBlogDataValid, blog, incrementViewer]);
+
   useEffect(() => {
-    const targetId = blogId;
-    if (!targetId) return;
+    if (!blogId) return;
 
     if (!categories.length) {
       getCategory("categories");
     }
 
-    if (!isBlogDataValid || blog?._id !== targetId) {
-      getBlogDetail("blogs", targetId);
+    const shouldFetch = !hasFetchedRef.current && (!isBlogDataValid || blog?._id !== blogId);
+    if (shouldFetch) {
+      hasFetchedRef.current = true;
+      getBlogDetail("blogs", blogId);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [blogId, categories.length]);
+  }, [blogId]);
 
   useEffect(() => {
-    const targetId = blogId;
-    if (!targetId || viewerIncremented.current) return;
-
-    const storageKey = `blog_viewed_${targetId}`;
-    const hasViewed = sessionStorage.getItem(storageKey);
-
-    if (isBlogDataValid && blog && blog._id === targetId && !hasViewed && !viewerIncremented.current) {
-      sessionStorage.setItem(storageKey, "true");
-      viewerIncremented.current = true;
-      incrementViewer("blogs", targetId);
+    if (isBlogDataValid && blog && blog._id === blogId) {
+      handleIncrementViewer();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isBlogDataValid, blog, blogId, incrementViewer]);
+  }, [isBlogDataValid, blog, blogId, handleIncrementViewer]);
 
   const handleLike = () => {
     if (!currentUser) {
@@ -135,8 +153,11 @@ const Detail = () => {
     }
   };
 
-  const commentsCount =
-    (isBlogDataValid && blog?.comments?.filter(
+  const commentsCount = useMemo(() => {
+    if (!isBlogDataValid || !blog?.comments || !Array.isArray(blog.comments)) {
+      return 0;
+    }
+    return blog.comments.filter(
       (c) =>
         c &&
         typeof c === "object" &&
@@ -144,7 +165,8 @@ const Detail = () => {
         !c.parentId &&
         !c.parentComment &&
         !c.replyTo
-    ).length) || 0;
+    ).length;
+  }, [isBlogDataValid, blog?.comments]);
 
   if (!blogId) {
     return (

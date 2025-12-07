@@ -77,15 +77,20 @@ const useBlogCall = () => {
     }
   };
 
-  const getBlogDetail = async (url, id) => {
+  const getBlogDetail = async (url, id, skipComments = false) => {
     dispatch(fetchStart());
     try {
       const { data } = await axiosWithToken(`${url}/${id}`);
-      const populatedComments = await getCommentsByBlogId(id);
       
-      if (populatedComments.length > 0) {
-        data.data.comments = populatedComments;
-      } else {
+      if (!skipComments) {
+        const populatedComments = await getCommentsByBlogId(id);
+        
+        if (populatedComments.length > 0) {
+          data.data.comments = populatedComments;
+        } else {
+          data.data.comments = [];
+        }
+      } else if (!data.data.comments) {
         data.data.comments = [];
       }
       
@@ -203,10 +208,12 @@ const useBlogCall = () => {
   };
 
   const postLike = async (url, id) => {
-    dispatch(fetchStart());
     try {
       await axiosWithToken.post(`${url}/${id}/postLike`);
-      getBlogData("blogs");
+      const currentBlog = store.getState().blog.blog;
+      if (currentBlog && currentBlog._id === id) {
+        getBlogDetail(url, id, true); 
+      }
     } catch (error) {
       dispatch(fetchFail());
     }
@@ -255,13 +262,6 @@ const useBlogCall = () => {
       await axiosWithToken.post(`${url}/${id}/incrementViewer`);
       
       dispatch(incrementBlogViewer({ blogId: id }));
-      
-      getBlogData("blogs");
-      
-      const currentBlog = store.getState().blog.blog;
-      if (currentBlog && currentBlog._id === id) {
-        getBlogDetail(url, id);
-      }
     } catch (error) {
       console.error("Error incrementing viewer:", error);
     }
