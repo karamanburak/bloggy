@@ -42,6 +42,19 @@ const blogSlice = createSlice({
       state.loading = false;
       state.error = true;
     },
+
+    incrementBlogViewer: (state, { payload: { blogId } }) => {
+      // Update countOfVisitors in blogs array
+      const blogIndex = state.blogs.findIndex((b) => b._id === blogId);
+      if (blogIndex !== -1 && state.blogs[blogIndex]) {
+        state.blogs[blogIndex].countOfVisitors = (state.blogs[blogIndex].countOfVisitors || 0) + 1;
+      }
+      
+      // Update countOfVisitors in blog detail if it matches
+      if (state.blog && state.blog._id === blogId) {
+        state.blog.countOfVisitors = (state.blog.countOfVisitors || 0) + 1;
+      }
+    },
   },
 });
 
@@ -53,6 +66,7 @@ export const {
   getBlogSuccess,
   getCommentSuccess,
   fetchFail,
+  incrementBlogViewer,
 } = blogSlice.actions;
 
 export default blogSlice.reducer;

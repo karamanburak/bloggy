@@ -5,6 +5,7 @@ import {
   getSuccess,
   getBlogDetailSuccess,
   getCommentSuccess,
+  incrementBlogViewer,
 } from "../features/blogSlice";
 import useAxios from "./useAxios";
 import { toastErrorNotify, toastSuccessNotify } from "../helper/ToastNotify";
@@ -252,9 +253,17 @@ const useBlogCall = () => {
   const incrementViewer = async (url, id) => {
     try {
       await axiosWithToken.post(`${url}/${id}/incrementViewer`);
+      
+      dispatch(incrementBlogViewer({ blogId: id }));
+      
       getBlogData("blogs");
+      
+      const currentBlog = store.getState().blog.blog;
+      if (currentBlog && currentBlog._id === id) {
+        getBlogDetail(url, id);
+      }
     } catch (error) {
-      // Silently fail - view count increment is not critical
+      console.error("Error incrementing viewer:", error);
     }
   };
 
