@@ -147,7 +147,7 @@ const Detail = () => {
     const link = `${window.location.origin}/blog/detail/${_id}`;
     try {
       await navigator.clipboard.writeText(link);
-      toastSuccessNotify("Link copied to clipboard!");
+      toastSuccessNotify("Link copied to clipboard! 📋");
     } catch (err) {
       // Error copying link
     }

@@ -6,18 +6,18 @@ import BlogCard from "../components/blog/BlogCard";
 import Footer from "../components/home/Footer";
 import PageHero from "../components/home/PageHero";
 import SkeletonLoader from "../components/global/SkeletonLoader";
-import { HiChevronLeft, HiChevronRight, HiSearch, HiBookOpen, HiTag, HiX, HiChevronDown, HiChevronUp } from "react-icons/hi";
+import Pagination from "../components/global/Pagination";
+import usePagination from "../hooks/usePagination";
+import { HiSearch, HiBookOpen, HiTag, HiX, HiChevronDown, HiChevronUp } from "react-icons/hi";
 
 const Blogs = () => {
   const { getBlogData } = useBlogCall();
   const { blogs, loading } = useSelector((state) => state.blog);
   const { categories, loading: categoriesLoading } = useSelector((state) => state.category);
   const { getCategory } = useCategoryCall();
-  const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
-  const blogsPerPage = 12;
   const isLoading = loading || categoriesLoading;
 
   const categoriesWithCount = useMemo(() => {
@@ -51,36 +51,20 @@ const Blogs = () => {
     });
   }, [blogs, searchTerm, selectedCategory]);
 
-  const indexOfLastBlog = currentPage * blogsPerPage;
-  const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
-  const currentBlogs = filteredBlogs.slice(indexOfFirstBlog, indexOfLastBlog);
-  const totalPages = Math.ceil(filteredBlogs.length / blogsPerPage);
-
-  const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-  
-  const nextPage = () => {
-    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-  
-  const prevPage = () => {
-    setCurrentPage((prev) => Math.max(prev - 1, 1));
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  const {
+    currentPage,
+    itemsPerPage,
+    paginatedData: currentBlogs,
+    totalPages,
+    totalItems,
+    handlePageChange,
+  } = usePagination(filteredBlogs, 12, [searchTerm, selectedCategory]);
 
   useEffect(() => {
     getBlogData("blogs");
     getCategory("categories");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // Reset to page 1 when filters change
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm, selectedCategory]);
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
@@ -259,59 +243,18 @@ const Blogs = () => {
 
                     {/* Pagination */}
                     {totalPages > 1 && (
-                      <div className="flex items-center justify-center space-x-2 mb-8">
-                        <button
-                          onClick={prevPage}
-                          disabled={currentPage === 1}
-                          className="p-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:scale-105"
-                          aria-label="Previous page"
-                        >
-                          <HiChevronLeft className="w-6 h-6" />
-                        </button>
-
-                        <div className="flex items-center space-x-2">
-                          {Array.from({ length: totalPages }, (_, index) => {
-                            const page = index + 1;
-                            if (
-                              page === 1 ||
-                              page === totalPages ||
-                              (page >= currentPage - 1 && page <= currentPage + 1)
-                            ) {
-                              return (
-                                <button
-                                  key={page}
-                                  onClick={() => paginate(page)}
-                                  className={`w-10 h-10 rounded-lg font-semibold transition-all hover:scale-105 ${
-                                    currentPage === page
-                                      ? "bg-primary-600 text-white shadow-lg"
-                                      : "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
-                                  }`}
-                                >
-                                  {page}
-                                </button>
-                              );
-                            } else if (
-                              page === currentPage - 2 ||
-                              page === currentPage + 2
-                            ) {
-                              return (
-                                <span key={page} className="text-gray-500 dark:text-gray-400 px-2">
-                                  ...
-                                </span>
-                              );
-                            }
-                            return null;
-                          })}
-                        </div>
-
-                        <button
-                          onClick={nextPage}
-                          disabled={currentPage === totalPages}
-                          className="p-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:scale-105"
-                          aria-label="Next page"
-                        >
-                          <HiChevronRight className="w-6 h-6" />
-                        </button>
+                      <div className="mb-8">
+                        <Pagination
+                          currentPage={currentPage}
+                          totalPages={totalPages}
+                          onPageChange={handlePageChange}
+                          itemsPerPage={itemsPerPage}
+                          totalItems={totalItems}
+                          showItemsPerPage={false}
+                          showInfo={false}
+                          itemName="blogs"
+                          variant="default"
+                        />
                       </div>
                     )}
                   </>

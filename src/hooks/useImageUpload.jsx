@@ -9,26 +9,26 @@ const useImageUpload = () => {
 
   const uploadImage = async (file) => {
     if (!file) {
-      toastErrorNotify("Please select an image file");
+      toastErrorNotify("Please select an image file to upload");
       return null;
     }
 
     // Check if user is authenticated
     if (!token) {
-      toastErrorNotify("NoPermission: You must login.");
+      toastErrorNotify("Please sign in to upload images");
       return null;
     }
 
     // Validate file type
     if (!file.type.startsWith("image/")) {
-      toastErrorNotify("Please select a valid image file");
+      toastErrorNotify("Please select a valid image file (JPG, PNG, GIF, etc.)");
       return null;
     }
 
     // Validate file size (max 10MB)
     const maxSize = 10 * 1024 * 1024; // 10MB
     if (file.size > maxSize) {
-      toastErrorNotify("Image size must be less than 10MB");
+      toastErrorNotify("Image size must be less than 10MB. Please choose a smaller file.");
       return null;
     }
 
@@ -75,7 +75,7 @@ const useImageUpload = () => {
         
         // Special message for 404 error
         if (response.status === 404) {
-          toastErrorNotify("Upload endpoint not found. Please check backend route.");
+          toastErrorNotify("Upload service unavailable. Please try again later.");
         } else {
           toastErrorNotify(errorMessage);
         }
@@ -85,11 +85,11 @@ const useImageUpload = () => {
 
       const data = await response.json();
       setUploadProgress(100);
-      toastSuccessNotify("Image uploaded successfully!");
+      toastSuccessNotify("Image uploaded successfully! ✨");
       return data.url; // Return the uploaded image URL
     } catch (error) {
       console.error("Upload error:", error);
-      toastErrorNotify("Failed to upload image. Please try again.");
+      toastErrorNotify("Image upload failed. Please check your connection and try again.");
       return null;
     } finally {
       setUploading(false);

@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import useAdminCall from "../../hooks/useAdminCall";
-import { HiUser, HiDocumentText, HiClock, HiEye, HiChat } from "react-icons/hi";
+import { HiUser, HiDocumentText, HiClock, HiEye, HiChat, HiSearch } from "react-icons/hi";
 import { FaTrash } from "react-icons/fa";
 import { toastSuccessNotify, toastErrorNotify } from "../../helper/ToastNotify";
 import { formatDateTime } from "../../helper/formatDate";
+import usePagination from "../../hooks/usePagination";
+import Pagination from "../global/Pagination";
 
 const UserActivity = () => {
   const { getAllUsers, getUserBlogs, getAllBlogs, deleteBlog, getUserComments, getAllComments, deleteComment } = useAdminCall();
@@ -25,6 +27,7 @@ const UserActivity = () => {
   const [loading, setLoading] = useState(true);
   const [activityView, setActivityView] = useState("all");
   const [contentType, setContentType] = useState("blogs");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const loadData = async () => {
     setLoading(true);
@@ -167,6 +170,94 @@ const UserActivity = () => {
     return allComments.filter((comment) => comment.user?._id === userId || comment.user === userId);
   };
 
+  // Filter blogs and comments based on search term
+  const filterBlogs = (blogs) => {
+    if (!searchTerm) return blogs;
+    const searchLower = searchTerm.toLowerCase();
+    return blogs.filter((blog) => {
+      const author = users.find(
+        (u) => u._id === blog.author?._id || u._id === blog.author
+      );
+      const authorName = author ? `${author.firstName} ${author.lastName}` : "";
+      return (
+        blog.title?.toLowerCase().includes(searchLower) ||
+        blog.content?.toLowerCase().includes(searchLower) ||
+        authorName.toLowerCase().includes(searchLower)
+      );
+    });
+  };
+
+  const filterComments = (comments) => {
+    if (!searchTerm) return comments;
+    const searchLower = searchTerm.toLowerCase();
+    return comments.filter((comment) => {
+      const commentUser = users.find(
+        (u) => u._id === comment.user?._id || u._id === comment.user
+      );
+      const userName = commentUser ? `${commentUser.firstName} ${commentUser.lastName}` : "";
+      const blog = allBlogs.find(
+        (b) => b._id === comment.blogId || b._id === comment.blog?._id
+      );
+      const blogTitle = blog?.title || "";
+      return (
+        comment.comment?.toLowerCase().includes(searchLower) ||
+        userName.toLowerCase().includes(searchLower) ||
+        blogTitle.toLowerCase().includes(searchLower)
+      );
+    });
+  };
+
+  // Get display data
+  const displayBlogs = activityView === "all" ? allBlogs : userBlogs;
+  const displayComments = activityView === "all" ? allComments : userComments;
+
+  // Filter data
+  const filteredBlogs = filterBlogs(displayBlogs);
+  const filteredComments = filterComments(displayComments);
+
+  // Use pagination hook
+  const {
+    currentPage,
+    itemsPerPage,
+    paginatedData: paginatedBlogs,
+    totalPages: blogsTotalPages,
+    totalItems: blogsTotalItems,
+    handlePageChange: handleBlogsPageChange,
+    handleItemsPerPageChange: handleBlogsItemsPerPageChange,
+  } = usePagination(filteredBlogs, 10, [searchTerm, activityView, contentType, selectedUser]);
+
+  const {
+    currentPage: commentsCurrentPage,
+    itemsPerPage: commentsItemsPerPage,
+    paginatedData: paginatedComments,
+    totalPages: commentsTotalPages,
+    totalItems: commentsTotalItems,
+    handlePageChange: handleCommentsPageChange,
+    handleItemsPerPageChange: handleCommentsItemsPerPageChange,
+  } = usePagination(filteredComments, 10, [searchTerm, activityView, contentType, selectedUser]);
+
+  const currentPagination = contentType === "comments" 
+    ? {
+        currentPage: commentsCurrentPage,
+        itemsPerPage: commentsItemsPerPage,
+        paginatedData: paginatedComments,
+        totalPages: commentsTotalPages,
+        totalItems: commentsTotalItems,
+        handlePageChange: handleCommentsPageChange,
+        handleItemsPerPageChange: handleCommentsItemsPerPageChange,
+      }
+    : {
+        currentPage,
+        itemsPerPage,
+        paginatedData: paginatedBlogs,
+        totalPages: blogsTotalPages,
+        totalItems: blogsTotalItems,
+        handlePageChange: handleBlogsPageChange,
+        handleItemsPerPageChange: handleBlogsItemsPerPageChange,
+      };
+  
+  const currentData = contentType === "comments" ? filteredComments : filteredBlogs;
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -174,9 +265,6 @@ const UserActivity = () => {
       </div>
     );
   }
-
-  const displayBlogs = activityView === "all" ? allBlogs : userBlogs;
-  const displayComments = activityView === "all" ? allComments : userComments;
 
   return (
     <div className="space-y-6">
@@ -235,29 +323,59 @@ const UserActivity = () => {
         )}
       </div>
 
-      {/* User Selector (for user view) */}
+      {/* User Selector and Search (for user view) */}
       {activityView === "user" && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
-          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-            Select User
-          </label>
-          <select
-            value={selectedUser || ""}
-            onChange={(e) => {
-              const userId = e.target.value;
-              setSelectedUser(userId || null);
-            }}
-            className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
-          >
-            <option value="">Select a user...</option>
-            {users.map((user) => (
-              <option key={user._id} value={user._id}>
-                {user.firstName} {user.lastName} (@{user.username})
-              </option>
-            ))}
-          </select>
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 space-y-4">
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+              Select User
+            </label>
+            <select
+              value={selectedUser || ""}
+              onChange={(e) => {
+                const userId = e.target.value;
+                setSelectedUser(userId || null);
+              }}
+              className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+            >
+              <option value="">Select a user...</option>
+              {users.map((user) => (
+                <option key={user._id} value={user._id}>
+                  {user.firstName} {user.lastName} (@{user.username})
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       )}
+
+      {/* Search Bar */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+        <div className="relative">
+          <input
+            type="text"
+            placeholder={`Search ${contentType === "comments" ? "comments" : "blogs"}...`}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full px-4 py-3 pl-12 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+          />
+          <HiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+        </div>
+      </div>
+
+      {/* Info and Pagination Controls */}
+      <Pagination
+        currentPage={currentPagination.currentPage}
+        totalPages={currentPagination.totalPages}
+        onPageChange={currentPagination.handlePageChange}
+        itemsPerPage={currentPagination.itemsPerPage}
+        onItemsPerPageChange={currentPagination.handleItemsPerPageChange}
+        totalItems={currentPagination.totalItems}
+        showItemsPerPage={true}
+        showInfo={true}
+        itemName={contentType === "comments" ? "comments" : "blogs"}
+        variant="admin"
+      />
 
       {/* Activity Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -334,16 +452,20 @@ const UserActivity = () => {
         </div>
         <div className="divide-y divide-gray-200 dark:divide-gray-700">
           {contentType === "comments" ? (
-            displayComments.length === 0 ? (
+            paginatedComments.length === 0 ? (
               <div className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
                 {activityView === "user" && !selectedUser
                   ? "Please select a user to view their comments"
                   : activityView === "user" && selectedUser
-                  ? "No comments found for this user"
+                  ? searchTerm
+                    ? "No comments found matching your search"
+                    : "No comments found for this user"
+                  : searchTerm
+                  ? "No comments found matching your search"
                   : "No comments found"}
               </div>
             ) : (
-              displayComments.map((comment) => {
+              paginatedComments.map((comment) => {
                 const commentUser = users.find(
                   (u) => u._id === comment.user?._id || u._id === comment.user
                 );
@@ -394,16 +516,20 @@ const UserActivity = () => {
               })
             )
           ) : (
-            displayBlogs.length === 0 ? (
+            paginatedBlogs.length === 0 ? (
               <div className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
                 {activityView === "user" && !selectedUser
                   ? "Please select a user to view their blogs"
                   : activityView === "user" && selectedUser
-                  ? "No blogs found for this user"
+                  ? searchTerm
+                    ? "No blogs found matching your search"
+                    : "No blogs found for this user"
+                  : searchTerm
+                  ? "No blogs found matching your search"
                   : "No blogs found"}
               </div>
             ) : (
-              displayBlogs.map((blog) => {
+              paginatedBlogs.map((blog) => {
                 const author = users.find(
                   (u) => u._id === blog.author?._id || u._id === blog.author
                 );
@@ -463,6 +589,22 @@ const UserActivity = () => {
           )}
         </div>
       </div>
+
+      {/* Pagination Controls */}
+      {currentData.length > 0 && (
+        <Pagination
+          currentPage={currentPagination.currentPage}
+          totalPages={currentPagination.totalPages}
+          onPageChange={currentPagination.handlePageChange}
+          itemsPerPage={currentPagination.itemsPerPage}
+          onItemsPerPageChange={currentPagination.handleItemsPerPageChange}
+          totalItems={currentPagination.totalItems}
+          showItemsPerPage={false}
+          showInfo={true}
+          itemName={contentType === "comments" ? "comments" : "blogs"}
+          variant="admin"
+        />
+      )}
     </div>
   );
 };

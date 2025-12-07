@@ -18,7 +18,7 @@ const ShowsCard = ({ name, genres, image, summary, url, rating }) => {
 
   const handleReadMore = () => {
     if (!currentUser) {
-      toastWarnNotify("You must Login");
+      toastWarnNotify("Please sign in to continue");
     } else {
       window.open(url, "_blank");
     }

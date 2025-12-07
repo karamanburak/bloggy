@@ -1,36 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import MyBlogsCard from "./MyBlogsCard";
 import useBlogCall from "../../hooks/useBlogCall";
 import SkeletonLoader from "../global/SkeletonLoader";
-import { HiChevronLeft, HiChevronRight, HiPencil } from "react-icons/hi";
+import Pagination from "../global/Pagination";
+import usePagination from "../../hooks/usePagination";
+import { HiPencil } from "react-icons/hi";
 
 const MyBlogsContainer = ({ userId }) => {
   const { getUserBlogs, getBlogData } = useBlogCall();
   const { blogs, loading } = useSelector((state) => state.blog);
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const blogsPerPage = 4;
 
   const userBlogs = blogs.filter((blog) => blog.userId._id === userId);
 
   useEffect(() => {
     getUserBlogs(userId);
     getBlogData("blogs");
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId]);
 
-  const indexOfLastBlog = currentPage * blogsPerPage;
-  const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
-  const currentBlogs = userBlogs.slice(
-    indexOfFirstBlog,
-    indexOfFirstBlog + blogsPerPage
-  );
-
-  const totalPages = Math.ceil(userBlogs.length / blogsPerPage);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  const nextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-  const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+  const {
+    currentPage,
+    itemsPerPage,
+    paginatedData: currentBlogs,
+    totalPages,
+    totalItems,
+    handlePageChange,
+  } = usePagination(userBlogs, 4, [userId]);
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -57,39 +53,18 @@ const MyBlogsContainer = ({ userId }) => {
       )}
 
       {userBlogs?.length > 0 && totalPages > 1 && (
-        <div className="mt-8 flex justify-center items-center gap-2 flex-wrap">
-          <button
-            onClick={prevPage}
-            disabled={currentPage === 1}
-            className="px-4 py-2 rounded-lg border border-primary-600 text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:scale-105 flex items-center space-x-2"
-          >
-            <HiChevronLeft className="w-5 h-5" />
-            <span>Previous</span>
-          </button>
-          {Array.from({ length: totalPages }).map((_, index) => {
-            const page = index + 1;
-            return (
-              <button
-                key={index}
-                onClick={() => paginate(page)}
-                className={`min-w-[40px] px-3 py-2 rounded-lg font-medium transition-all hover:scale-105 ${
-                  currentPage === page
-                    ? "bg-primary-600 text-white shadow-lg"
-                    : "border border-primary-600 text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20"
-                }`}
-              >
-                {page}
-              </button>
-            );
-          })}
-          <button
-            onClick={nextPage}
-            disabled={currentPage === totalPages}
-            className="px-4 py-2 rounded-lg border border-primary-600 text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:scale-105 flex items-center space-x-2"
-          >
-            <span>Next</span>
-            <HiChevronRight className="w-5 h-5" />
-          </button>
+        <div className="mt-8">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+            itemsPerPage={itemsPerPage}
+            totalItems={totalItems}
+            showItemsPerPage={false}
+            showInfo={false}
+            itemName="blogs"
+            variant="default"
+          />
         </div>
       )}
     </div>

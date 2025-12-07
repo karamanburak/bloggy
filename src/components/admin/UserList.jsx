@@ -5,6 +5,8 @@ import { FaTrash, FaEdit, FaUserShield } from "react-icons/fa";
 import { HiViewGrid, HiViewList } from "react-icons/hi";
 import { toastSuccessNotify } from "../../helper/ToastNotify";
 import { formatDateOnly } from "../../helper/formatDate";
+import usePagination from "../../hooks/usePagination";
+import Pagination from "../global/Pagination";
 
 const UserList = () => {
   const { getAllUsers, deleteUser, updateUser } = useAdminCall();
@@ -65,7 +67,7 @@ const UserList = () => {
   const handleSaveEdit = async () => {
     const result = await updateUser(editingUser, editForm);
     if (result.success) {
-      toastSuccessNotify("User updated successfully");
+      toastSuccessNotify("User updated successfully! Changes have been saved.");
       setEditingUser(null);
       loadUsers();
     }
@@ -88,7 +90,7 @@ const UserList = () => {
     const result = await updateUser(userId, { isActive: newStatus });
     if (result.success) {
       toastSuccessNotify(
-        `User ${newStatus ? "activated" : "deactivated"} successfully`
+        `User ${newStatus ? "activated" : "deactivated"} successfully!`
       );
       loadUsers();
     }
@@ -101,6 +103,17 @@ const UserList = () => {
       user.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.lastName?.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // Use pagination hook
+  const {
+    currentPage,
+    itemsPerPage,
+    paginatedData: paginatedUsers,
+    totalPages,
+    totalItems,
+    handlePageChange,
+    handleItemsPerPageChange,
+  } = usePagination(filteredUsers, 10, [searchTerm]);
 
   if (loading) {
     return (
@@ -149,6 +162,20 @@ const UserList = () => {
         </div>
       </div>
 
+      {/* Users Info and Pagination Controls */}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+        itemsPerPage={itemsPerPage}
+        onItemsPerPageChange={handleItemsPerPageChange}
+        totalItems={totalItems}
+        showItemsPerPage={true}
+        showInfo={true}
+        itemName="users"
+        variant="admin"
+      />
+
       {/* Users Table View */}
       {viewMode === "table" && (
       <div className="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg">
@@ -164,14 +191,14 @@ const UserList = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-            {filteredUsers.length === 0 ? (
+            {paginatedUsers.length === 0 ? (
               <tr>
                 <td colSpan="6" className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
                   No users found
                 </td>
               </tr>
             ) : (
-              filteredUsers.map((user) => (
+              paginatedUsers.map((user) => (
                 <tr
                   key={user._id}
                   className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
@@ -372,12 +399,12 @@ const UserList = () => {
       {/* Users Grid View */}
       {viewMode === "grid" && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredUsers.length === 0 ? (
+          {paginatedUsers.length === 0 ? (
             <div className="col-span-full flex items-center justify-center py-12">
               <p className="text-gray-500 dark:text-gray-400">No users found</p>
             </div>
           ) : (
-            filteredUsers.map((user) => (
+            paginatedUsers.map((user) => (
               <div
                 key={user._id}
                 className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
@@ -564,9 +591,21 @@ const UserList = () => {
         </div>
       )}
 
-      <div className="text-sm text-gray-600 dark:text-gray-400 text-center">
-        Showing {filteredUsers.length} total users
-      </div>
+      {/* Pagination Controls */}
+      {filteredUsers.length > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+          itemsPerPage={itemsPerPage}
+          onItemsPerPageChange={handleItemsPerPageChange}
+          totalItems={totalItems}
+          showItemsPerPage={false}
+          showInfo={true}
+          itemName="users"
+          variant="admin"
+        />
+      )}
     </div>
   );
 };

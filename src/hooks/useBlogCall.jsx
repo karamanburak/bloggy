@@ -106,11 +106,11 @@ const useBlogCall = () => {
     dispatch(fetchStart());
     try {
       await axiosWithToken.delete(`${url}/${id}`);
-      toastSuccessNotify("Blog successfully deleted");
+      toastSuccessNotify("Blog deleted successfully");
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(
-        error?.response?.data?.message || "Operation not success"
+        error?.response?.data?.message || "Operation failed. Please try again."
       );
     } finally {
       getBlogData(url);
@@ -121,11 +121,11 @@ const useBlogCall = () => {
     dispatch(fetchStart());
     try {
       await axiosWithToken.post(url, info);
-      toastSuccessNotify("Blog successfully added!");
+      toastSuccessNotify("Blog published successfully! 🎉");
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(
-        error?.response?.data?.message || "Operation not success"
+        error?.response?.data?.message || "Operation failed. Please try again."
       );
     } finally {
       getBlogData(url);
@@ -136,11 +136,11 @@ const useBlogCall = () => {
     dispatch(fetchStart());
     try {
       await axiosWithToken.put(`${url}/${id}`, info);
-      toastSuccessNotify("Blog successfully changed");
+      toastSuccessNotify("Blog updated successfully! Your changes have been saved.");
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(
-        error?.response?.data?.message || "Operation not success"
+        error?.response?.data?.message || "Operation failed. Please try again."
       );
     } finally {
       getBlogDetail(url, id);
@@ -155,7 +155,7 @@ const useBlogCall = () => {
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(
-        error?.response?.data?.message || "Operation not success"
+        error?.response?.data?.message || "Operation failed. Please try again."
       );
     }
   };
@@ -166,12 +166,12 @@ const useBlogCall = () => {
       await new Promise(resolve => setTimeout(resolve, 300));
       const comments = await getCommentsByBlogId(info.blogId);
       
-      toastSuccessNotify("Comment successfully added!");
+      toastSuccessNotify("Comment added successfully! Thanks for sharing your thoughts.");
       return { ...response, comments };
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(
-        error?.response?.data?.message || "Operation not success"
+        error?.response?.data?.message || "Operation failed. Please try again."
       );
       throw error;
     }
@@ -181,12 +181,12 @@ const useBlogCall = () => {
     dispatch(fetchStart());
     try {
       await axiosWithToken.delete(`comments/${commentId}`);
-      toastSuccessNotify("Comment successfully deleted!");
+      toastSuccessNotify("Comment deleted successfully");
       getBlogDetail("blogs", blogId);
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(
-        error?.response?.data?.message || "Operation not success"
+        error?.response?.data?.message || "Operation failed. Please try again."
       );
     }
   };
@@ -195,13 +195,13 @@ const useBlogCall = () => {
     dispatch(fetchStart());
     try {
       await axiosWithToken.put(`comments/${commentId}`, { comment: commentText });
-      toastSuccessNotify("Comment successfully updated!");
+      toastSuccessNotify("Comment updated successfully!");
       const comments = await getCommentsByBlogId(blogId);
       return comments;
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(
-        error?.response?.data?.message || "Operation not success"
+        error?.response?.data?.message || "Operation failed. Please try again."
       );
       throw error;
     }
@@ -238,7 +238,7 @@ const useBlogCall = () => {
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(
-        error?.response?.data?.message || "Operation not success"
+        error?.response?.data?.message || "Operation failed. Please try again."
       );
     }
   };
@@ -252,7 +252,7 @@ const useBlogCall = () => {
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(
-        error?.response?.data?.message || "Operation not success"
+        error?.response?.data?.message || "Operation failed. Please try again."
       );
     }
   };

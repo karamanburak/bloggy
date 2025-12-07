@@ -143,13 +143,13 @@ export default function EditBlogModal({
     }
 
     if (!isTitleValid || !isImageValid || !isCategoryValid) {
-      toastWarnNotify("Please fill in all required fields correctly");
+      toastWarnNotify("Please fill in all required fields correctly before submitting");
       return;
     }
 
     const contentLength = info.content?.trim().split(/\s+/).length || 0;
     if (contentLength < 30) {
-      toastWarnNotify("Content must be at least 30 words");
+      toastWarnNotify("Content must be at least 30 words. Please add more content.");
       return;
     }
 

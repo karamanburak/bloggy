@@ -52,7 +52,7 @@ const HomeCard = ({
 
   const handleLike = () => {
     if (!currentUser) {
-      toastWarnNotify("You must login to like the blog.");
+      toastWarnNotify("Please sign in to like this blog");
       return;
     }
 
@@ -61,7 +61,7 @@ const HomeCard = ({
 
   const handleReadMore = () => {
     if (!currentUser) {
-      toastWarnNotify("You must Login");
+      toastWarnNotify("Please sign in to continue");
     } else {
       navigate(`/blog/detail/${_id}`, {
         state: {

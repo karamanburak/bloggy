@@ -11,7 +11,7 @@ import { toastErrorNotify } from "../helper/ToastNotify";
  */
 export const handleApiError = (error, options = {}) => {
   const {
-    defaultMessage = "An unexpected error occurred",
+    defaultMessage = "Something went wrong. Please try again.",
     showToast = true,
     onError = null,
   } = options;
@@ -36,7 +36,7 @@ export const handleApiError = (error, options = {}) => {
     }
   } else if (error?.request) {
     // Request was made but no response received
-    errorMessage = "Network error. Please check your connection.";
+    errorMessage = "Connection error. Please check your internet connection and try again.";
   } else if (error?.message) {
     // Error in request setup
     errorMessage = error.message;

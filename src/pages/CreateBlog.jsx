@@ -99,7 +99,7 @@ const CreateBlog = () => {
       if ((e.ctrlKey || e.metaKey) && e.key === "s") {
         e.preventDefault();
         saveDraft();
-        toastSuccessNotify("Draft saved locally!");
+        toastSuccessNotify("Draft saved! Your work is safe. 💾");
       }
       // Escape to close preview
       if (e.key === "Escape" && showPreview) {
@@ -179,7 +179,7 @@ const CreateBlog = () => {
     });
     setHasUnsavedChanges(false);
     setLastSaved(null);
-    toastSuccessNotify("Draft cleared!");
+    toastSuccessNotify("Draft cleared successfully");
   };
 
   const validateForm = () => {
@@ -228,7 +228,7 @@ const CreateBlog = () => {
     e.preventDefault();
     
     if (!validateForm()) {
-      toastWarnNotify("Please fix the errors in the form");
+      toastWarnNotify("Please fix the errors in the form before submitting");
       return;
     }
 

@@ -15,7 +15,7 @@ const useAdminCall = () => {
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(
-        error?.response?.data?.message || "Failed to fetch users"
+        error?.response?.data?.message || "Unable to load users. Please try again."
       );
       return { success: false, error: error.message };
     }
@@ -29,7 +29,7 @@ const useAdminCall = () => {
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(
-        error?.response?.data?.message || "Failed to fetch user information"
+        error?.response?.data?.message || "Unable to load user information. Please try again."
       );
       return { success: false, error: error.message };
     }
@@ -43,7 +43,7 @@ const useAdminCall = () => {
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(
-        error?.response?.data?.message || "Failed to update user"
+        error?.response?.data?.message || "Unable to update user. Please try again."
       );
       return { success: false, error: error.message };
     }
@@ -57,7 +57,7 @@ const useAdminCall = () => {
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(
-        error?.response?.data?.message || "Failed to delete user"
+        error?.response?.data?.message || "Unable to delete user. Please try again."
       );
       return { success: false, error: error.message };
     }
@@ -93,7 +93,7 @@ const useAdminCall = () => {
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(
-        error?.response?.data?.message || "Failed to delete blog"
+        error?.response?.data?.message || "Unable to delete blog. Please try again."
       );
       return { success: false, error: error.message };
     }
@@ -129,7 +129,7 @@ const useAdminCall = () => {
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify(
-        error?.response?.data?.message || "Failed to delete comment"
+        error?.response?.data?.message || "Unable to delete comment. Please try again."
       );
       return { success: false, error: error.message };
     }

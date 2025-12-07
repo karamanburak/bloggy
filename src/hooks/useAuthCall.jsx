@@ -23,7 +23,7 @@ const useAuthCall = () => {
     try {
       const { data } = await axios.post(`${BASE_URL}users/`, userInfo);
       dispatch(registerSuccess(data.data));
-      toastSuccessNotify("Register was successfully");
+      toastSuccessNotify("Registration successful! Welcome to Bloggy! 🎉");
       
       try {
         const loginData = await axios.post(`${BASE_URL}auth/login`, {
@@ -32,16 +32,16 @@ const useAuthCall = () => {
         });
         dispatch(loginSuccess(loginData.data));
         toastSuccessNotify(
-          `Hello ${loginData.data.user.firstName} ${loginData.data.user.lastName}! Welcome to Bloggy!`
+          `Welcome, ${loginData.data.user.firstName}! We're excited to have you here! 🎉`
         );
         navigate("/");
       } catch (loginError) {
         navigate("/login");
-        toastErrorNotify("Registration successful, but automatic login failed. Please login manually.");
+        toastErrorNotify("Registration complete! Please sign in to continue.");
       }
     } catch (error) {
       dispatch(fetchFail());
-      toastErrorNotify("Register can not be performed");
+      toastErrorNotify("Registration failed. Please check your information and try again.");
     }
   };
 
@@ -51,7 +51,7 @@ const useAuthCall = () => {
       const { data } = await axios.post(`${BASE_URL}auth/login`, userInfo);
       dispatch(loginSuccess(data));
       toastSuccessNotify(
-        `Hello ${data.user.firstName} ${data.user.lastName}! Great to have you back. Explore what's new and exciting today! `
+        `Welcome back, ${data.user.firstName}! Great to see you again. ✨`
       );
       navigate("/");
       return { success: true };
@@ -74,7 +74,7 @@ const useAuthCall = () => {
         },
       });
       dispatch(updateUserSuccess(data));
-      toastSuccessNotify(`Profile successfully updated`);
+      toastSuccessNotify("Profile updated successfully! Your changes have been saved.");
     } catch (error) {
       dispatch(fetchFail());
       const errorMessage = error.response.data.message
@@ -107,11 +107,11 @@ const useAuthCall = () => {
         },
       });
       dispatch(logoutSuccess());
-      toastSuccessNotify(`Logout was successfully`);
+      toastSuccessNotify("You've been signed out successfully. See you soon! 👋");
       navigate("/login");
     } catch (error) {
       dispatch(fetchFail());
-      toastErrorNotify("Logout cannot be performed!");
+      toastErrorNotify("Unable to sign out. Please try again.");
     }
   };
 
