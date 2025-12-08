@@ -31,7 +31,8 @@ const Blogs = () => {
         ).length;
         return { ...category, count };
       })
-      .filter((category) => category.count > 0);
+      .filter((category) => category.count > 0)
+      .sort((a, b) => b.count - a.count);
   }, [categories, blogs]);
 
   const filteredBlogs = useMemo(() => {
