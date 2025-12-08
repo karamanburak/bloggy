@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import DOMPurify from "dompurify";
 import SocialShare from "./SocialShare";
@@ -5,7 +6,10 @@ import { HiArrowLeft } from "react-icons/hi";
 
 const BlogContent = ({ content, title, image, blogId }) => {
   const navigate = useNavigate();
-  const sanitizedContent = DOMPurify.sanitize(content || "");
+  // Memoize sanitized content to avoid re-sanitizing on every render
+  const sanitizedContent = useMemo(() => {
+    return DOMPurify.sanitize(content || "");
+  }, [content]);
 
   return (
     <div className="w-full pt-12 pb-16">

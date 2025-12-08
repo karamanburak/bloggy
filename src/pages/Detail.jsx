@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback, lazy, Suspense } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import useBlogCall from "../hooks/useBlogCall";
@@ -6,10 +6,11 @@ import useCategoryCall from "../hooks/useCategoryCall";
 import EditBlogModal from "../components/blog/EditBlogModal";
 import BlogHero from "../components/blog/BlogHero";
 import BlogContent from "../components/blog/BlogContent";
-import CommentsSection from "../components/blog/CommentsSection";
 import BlogDetailSkeleton from "../components/blog/BlogDetailSkeleton";
 import { toastSuccessNotify } from "../helper/ToastNotify";
 import { getBlogDetailSuccess } from "../features/blogSlice";
+
+const CommentsSection = lazy(() => import("../components/blog/CommentsSection"));
 
 const Detail = () => {
   const { state } = useLocation();
@@ -112,7 +113,8 @@ const Detail = () => {
   useEffect(() => {
     if (!blogId) return;
 
-    if (!categories.length) {
+    // Only fetch categories if they're not already loaded (avoid unnecessary calls)
+    if (!categories.length && !categoriesLoading) {
       getCategory("categories");
     }
 
@@ -204,15 +206,17 @@ const Detail = () => {
 
       <div className="w-full">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <CommentsSection
-            blog={blog}
-            blogId={_id}
-            currentUser={currentUser}
-            onDeleteComment={deleteComment}
-            onLikeComment={postCommentLike}
-            onDislikeComment={postCommentDislike}
-            onRefreshComments={refreshComments}
-          />
+          <Suspense fallback={<div className="mt-16 pt-12 border-t border-gray-200/50 dark:border-gray-700/50"><div className="animate-pulse space-y-4"><div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div><div className="h-20 bg-gray-200 dark:bg-gray-700 rounded"></div></div></div>}>
+            <CommentsSection
+              blog={blog}
+              blogId={_id}
+              currentUser={currentUser}
+              onDeleteComment={deleteComment}
+              onLikeComment={postCommentLike}
+              onDislikeComment={postCommentDislike}
+              onRefreshComments={refreshComments}
+            />
+          </Suspense>
         </div>
       </div>
 

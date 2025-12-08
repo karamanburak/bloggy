@@ -73,6 +73,8 @@ const BlogHero = ({
         alt={title}
         className="w-full h-full object-cover"
         loading="eager"
+        decoding="async"
+        fetchPriority="high"
         onError={(e) => {
           e.target.src = "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200";
         }}
@@ -89,6 +91,8 @@ const BlogHero = ({
                   src={userId.image}
                   alt={`${userId.firstName} ${userId.lastName}`}
                   className="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-white font-bold text-lg">

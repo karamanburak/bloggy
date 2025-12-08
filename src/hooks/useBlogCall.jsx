@@ -80,11 +80,12 @@ const useBlogCall = () => {
   const getBlogDetail = async (url, id, skipComments = false) => {
     dispatch(fetchStart());
     try {
-      const { data } = await axiosWithToken(`${url}/${id}`);
+      const blogPromise = axiosWithToken(`${url}/${id}`);
+      const commentsPromise = skipComments ? Promise.resolve(null) : getCommentsByBlogId(id);
       
-      if (!skipComments) {
-        const populatedComments = await getCommentsByBlogId(id);
-        
+      const [{ data }, populatedComments] = await Promise.all([blogPromise, commentsPromise]);
+      
+      if (!skipComments && populatedComments) {
         if (populatedComments.length > 0) {
           data.data.comments = populatedComments;
         } else {
