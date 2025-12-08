@@ -231,30 +231,28 @@ const useBlogCall = () => {
   };
 
   const postCommentLike = async (commentId, blogId) => {
-    dispatch(fetchStart());
     try {
       await axiosWithToken.post(`comments/${commentId}/postLike`);
       const comments = await getCommentsByBlogId(blogId);
       return comments;
     } catch (error) {
-      dispatch(fetchFail());
       toastErrorNotify(
         error?.response?.data?.message || "Operation failed. Please try again."
       );
+      throw error;
     }
   };
 
   const postCommentDislike = async (commentId, blogId) => {
-    dispatch(fetchStart());
     try {
       await axiosWithToken.post(`comments/${commentId}/postDislike`);
       const comments = await getCommentsByBlogId(blogId);
       return comments;
     } catch (error) {
-      dispatch(fetchFail());
       toastErrorNotify(
         error?.response?.data?.message || "Operation failed. Please try again."
       );
+      throw error;
     }
   };
 

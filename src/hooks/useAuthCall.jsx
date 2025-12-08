@@ -34,9 +34,13 @@ const useAuthCall = () => {
         toastSuccessNotify(
           `Welcome, ${loginData.data.user.firstName}! We're excited to have you here! 🎉`
         );
-        navigate("/");
+        setTimeout(() => {
+          navigate("/");
+        }, 0);
       } catch (loginError) {
-        navigate("/login");
+        setTimeout(() => {
+          navigate("/login");
+        }, 0);
         toastErrorNotify("Registration complete! Please sign in to continue.");
       }
     } catch (error) {
@@ -53,7 +57,9 @@ const useAuthCall = () => {
       toastSuccessNotify(
         `Welcome back, ${data.user.firstName}! Great to see you again. ✨`
       );
-      navigate("/");
+      setTimeout(() => {
+        navigate("/");
+      }, 0);
       return { success: true };
     } catch (error) {
       dispatch(fetchFail());
@@ -108,7 +114,9 @@ const useAuthCall = () => {
       });
       dispatch(logoutSuccess());
       toastSuccessNotify("You've been signed out successfully. See you soon! 👋");
-      navigate("/login");
+      setTimeout(() => {
+        navigate("/login");
+      }, 0);
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify("Unable to sign out. Please try again.");

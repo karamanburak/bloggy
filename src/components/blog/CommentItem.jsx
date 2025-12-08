@@ -207,7 +207,11 @@ const CommentItem = ({
                     return (
                       <button
                         key={reaction.id}
-                        onClick={reaction.onClick}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          reaction.onClick(e);
+                        }}
                         className={`flex items-center space-x-1 px-2 py-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-xs font-medium transition-colors ${
                           reaction.isActive ? reaction.activeColor : reaction.inactiveColor
                         }`}
@@ -486,7 +490,11 @@ const ReplyItem = ({ reply, currentUser, blogId, blog, onDelete, onLike, onDisli
                 return (
                   <button
                     key={reaction.id}
-                    onClick={reaction.onClick}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      reaction.onClick(e);
+                    }}
                     className={`flex items-center space-x-1 text-xs font-medium transition-colors ${
                       reaction.isActive ? reaction.activeColor : reaction.inactiveColor
                     }`}
