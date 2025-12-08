@@ -146,7 +146,20 @@ const CommentsSection = ({
     <div id="comments-section" className="mt-16 pt-12 border-t border-gray-200/50 dark:border-gray-700/50">
       {currentUser && (
         <div className="mb-12">
-          <CommentForm blogId={blogId} userId={currentUser._id} />
+          <CommentForm 
+            blogId={blogId} 
+            userId={currentUser._id}
+            onCancel={async () => {
+              if (onRefreshComments && blogId) {
+                const comments = await onRefreshComments(blogId);
+                if (blog && blog._id === blogId) {
+                  setTimeout(() => {
+                    onRefreshComments(blogId);
+                  }, 100);
+                }
+              }
+            }}
+          />
         </div>
       )}
 

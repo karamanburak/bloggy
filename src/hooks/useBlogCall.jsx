@@ -167,6 +167,19 @@ const useBlogCall = () => {
       await new Promise(resolve => setTimeout(resolve, 300));
       const comments = await getCommentsByBlogId(info.blogId);
       
+      const currentBlog = store.getState().blog.blog;
+      if (currentBlog && currentBlog._id === info.blogId) {
+        dispatch(
+          getBlogDetailSuccess({
+            data: {
+              ...currentBlog,
+              comments: comments,
+            },
+          })
+        );
+      }
+      
+      dispatch(fetchFail());
       toastSuccessNotify("Comment added successfully! Thanks for sharing your thoughts.");
       return { ...response, comments };
     } catch (error) {
