@@ -28,6 +28,7 @@ const UserActivity = () => {
   const [activityView, setActivityView] = useState("all");
   const [contentType, setContentType] = useState("blogs");
   const [searchTerm, setSearchTerm] = useState("");
+  const [userSearchTerm, setUserSearchTerm] = useState("");
 
   const loadData = async () => {
     setLoading(true);
@@ -270,7 +271,7 @@ const UserActivity = () => {
     <div className="space-y-6">
       {/* View Toggle */}
       <div className="space-y-4">
-        <div className="flex items-center space-x-4 bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+        <div className="flex items-center space-x-4 bg-white rounded-xl p-4 border border-gray-200">
           <button
             onClick={() => {
               setActivityView("all");
@@ -279,7 +280,7 @@ const UserActivity = () => {
             className={`px-6 py-2 rounded-lg font-semibold transition-all ${
               activityView === "all"
                 ? "bg-gradient-to-r from-primary-600 to-accent-600 text-white shadow-lg"
-                : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
           >
             All Activities
@@ -289,20 +290,20 @@ const UserActivity = () => {
             className={`px-6 py-2 rounded-lg font-semibold transition-all ${
               activityView === "user"
                 ? "bg-gradient-to-r from-primary-600 to-accent-600 text-white shadow-lg"
-                : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
           >
             User Activities
           </button>
         </div>
         {activityView === "user" && (
-          <div className="flex items-center space-x-4 bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+          <div className="flex items-center space-x-4 bg-white rounded-xl p-4 border border-gray-200">
           <button
             onClick={() => setContentType("blogs")}
             className={`px-6 py-2 rounded-lg font-semibold transition-all ${
               contentType === "blogs"
                 ? "bg-gradient-to-r from-primary-600 to-accent-600 text-white shadow-lg"
-                : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
           >
             <HiDocumentText className="w-5 h-5 inline mr-2" />
@@ -313,7 +314,7 @@ const UserActivity = () => {
             className={`px-6 py-2 rounded-lg font-semibold transition-all ${
               contentType === "comments"
                 ? "bg-gradient-to-r from-primary-600 to-accent-600 text-white shadow-lg"
-                : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
           >
             <HiChat className="w-5 h-5 inline mr-2" />
@@ -325,9 +326,24 @@ const UserActivity = () => {
 
       {/* User Selector and Search (for user view) */}
       {activityView === "user" && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 space-y-4">
+        <div className="bg-white rounded-xl p-4 border border-gray-200 space-y-4">
           <div>
-            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Search User
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search users by name, username, or email..."
+                value={userSearchTerm}
+                onChange={(e) => setUserSearchTerm(e.target.value)}
+                className="w-full px-4 py-3 pl-12 rounded-xl border border-gray-300 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              />
+              <HiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
               Select User
             </label>
             <select
@@ -336,28 +352,41 @@ const UserActivity = () => {
                 const userId = e.target.value;
                 setSelectedUser(userId || null);
               }}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
               <option value="">Select a user...</option>
-              {users.map((user) => (
-                <option key={user._id} value={user._id}>
-                  {user.firstName} {user.lastName} (@{user.username})
-                </option>
-              ))}
+              {users
+                .filter((user) => {
+                  if (!userSearchTerm) return true;
+                  const searchLower = userSearchTerm.toLowerCase();
+                  const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
+                  const username = user.username?.toLowerCase() || "";
+                  const email = user.email?.toLowerCase() || "";
+                  return (
+                    fullName.includes(searchLower) ||
+                    username.includes(searchLower) ||
+                    email.includes(searchLower)
+                  );
+                })
+                .map((user) => (
+                  <option key={user._id} value={user._id}>
+                    {user.firstName} {user.lastName} (@{user.username})
+                  </option>
+                ))}
             </select>
           </div>
         </div>
       )}
 
       {/* Search Bar */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+      <div className="bg-white rounded-xl p-4 border border-gray-200">
         <div className="relative">
           <input
             type="text"
             placeholder={`Search ${contentType === "comments" ? "comments" : "blogs"}...`}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-4 py-3 pl-12 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            className="w-full px-4 py-3 pl-12 rounded-xl border border-gray-300 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           />
           <HiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
         </div>
@@ -429,7 +458,7 @@ const UserActivity = () => {
       </div>
 
       {/* Blogs/Comments List */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-lg overflow-hidden">
+      <div className="bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden">
         <div className="px-6 py-4 bg-gradient-to-r from-primary-600 to-accent-600 text-white">
           <h3 className="text-lg font-bold flex items-center space-x-2">
             {contentType === "comments" ? (
@@ -450,10 +479,10 @@ const UserActivity = () => {
             </span>
           </h3>
         </div>
-        <div className="divide-y divide-gray-200 dark:divide-gray-700">
+        <div className="divide-y divide-gray-200">
           {contentType === "comments" ? (
             paginatedComments.length === 0 ? (
-              <div className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
+              <div className="px-6 py-12 text-center text-gray-500">
                 {activityView === "user" && !selectedUser
                   ? "Please select a user to view their comments"
                   : activityView === "user" && selectedUser
@@ -475,26 +504,26 @@ const UserActivity = () => {
                 return (
                   <div
                     key={comment._id}
-                    className="px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                    className="px-6 py-4 hover:bg-gray-50 transition-colors"
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center space-x-3 mb-2">
                           {commentUser && (
-                            <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                            <span className="text-sm font-semibold text-gray-900">
                               {commentUser.firstName} {commentUser.lastName}
                             </span>
                           )}
                           {blog && (
-                            <span className="text-sm text-gray-500 dark:text-gray-400">
+                            <span className="text-sm text-gray-500">
                               on "{blog.title}"
                             </span>
                           )}
                         </div>
-                        <p className="text-gray-600 dark:text-gray-400 text-sm mb-3">
+                        <p className="text-gray-600 text-sm mb-3">
                           {comment.comment}
                         </p>
-                        <div className="flex items-center space-x-4 text-xs text-gray-500 dark:text-gray-400">
+                        <div className="flex items-center space-x-4 text-xs text-gray-500">
                           <div className="flex items-center space-x-1">
                             <HiClock className="w-4 h-4" />
                             <span>
@@ -505,7 +534,7 @@ const UserActivity = () => {
                       </div>
                       <button
                         onClick={() => handleDeleteComment(comment._id)}
-                        className="ml-4 p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                        className="ml-4 p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                         aria-label="Delete Comment"
                       >
                         <FaTrash className="w-5 h-5" />
@@ -517,7 +546,7 @@ const UserActivity = () => {
             )
           ) : (
             paginatedBlogs.length === 0 ? (
-              <div className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
+              <div className="px-6 py-12 text-center text-gray-500">
                 {activityView === "user" && !selectedUser
                   ? "Please select a user to view their blogs"
                   : activityView === "user" && selectedUser
@@ -536,24 +565,24 @@ const UserActivity = () => {
                 return (
                   <div
                     key={blog._id}
-                    className="px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                    className="px-6 py-4 hover:bg-gray-50 transition-colors"
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center space-x-3 mb-2">
-                          <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                          <h4 className="text-lg font-semibold text-gray-900">
                             {blog.title}
                           </h4>
                           {author && (
-                            <span className="text-sm text-gray-500 dark:text-gray-400">
+                            <span className="text-sm text-gray-500">
                               by {author.firstName} {author.lastName}
                             </span>
                           )}
                         </div>
-                        <p className="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">
+                        <p className="text-gray-600 text-sm mb-3 line-clamp-2">
                           {blog.content?.replace(/<[^>]*>/g, "").substring(0, 150)}...
                         </p>
-                        <div className="flex items-center space-x-4 text-xs text-gray-500 dark:text-gray-400">
+                        <div className="flex items-center space-x-4 text-xs text-gray-500">
                           <div className="flex items-center space-x-1">
                             <HiClock className="w-4 h-4" />
                             <span>
@@ -576,7 +605,7 @@ const UserActivity = () => {
                       </div>
                       <button
                         onClick={() => handleDeleteBlog(blog._id)}
-                        className="ml-4 p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                        className="ml-4 p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                         aria-label="Delete Blog"
                       >
                         <FaTrash className="w-5 h-5" />

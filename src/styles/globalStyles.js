@@ -40,10 +40,10 @@ export const infoMessage = {
 export const wellcomeMessage = {
     marginTop: "-2rem",
     position: "relative",
-    backgroundColor: "neutral.dark",
+    backgroundColor: "#cbd5e1",
     textAlign: "center",
     padding: "2rem",
-    color: "neutral.light",
+    color: "#0f172a",
 }
 export const avatarNavbar = {
     display: "flex",

@@ -68,7 +68,7 @@ const Blogs = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
+    <div className="min-h-screen bg-white transition-colors duration-300">
       {/* Hero Section */}
       <PageHero
         title="All Blogs"
@@ -86,7 +86,7 @@ const Blogs = () => {
             {/* Mobile Toggle Button */}
             <button
               onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
-              className="lg:hidden w-full flex items-center justify-between px-4 py-3 mb-4 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"
+              className="lg:hidden w-full flex items-center justify-between px-4 py-3 mb-4 rounded-lg bg-gray-100 text-gray-900 hover:bg-gray-200 transition-all"
               aria-label="Toggle categories"
               aria-expanded={isCategoriesOpen}
             >
@@ -107,7 +107,7 @@ const Blogs = () => {
                 : 'max-h-0 opacity-0 overflow-hidden hidden lg:block lg:max-h-none lg:opacity-100'
             }`}>
               <div className="mb-4 hidden lg:block">
-                <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center space-x-2">
+                <h3 className="text-sm font-semibold text-gray-900 mb-3 flex items-center space-x-2">
                   <HiTag className="w-4 h-4 text-primary-500" />
                   <span>Categories</span>
                 </h3>
@@ -126,13 +126,13 @@ const Blogs = () => {
                   className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${
                     !selectedCategory
                       ? "bg-primary-500 text-white font-medium"
-                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                      : "text-gray-700 hover:bg-gray-100"
                   }`}
                   aria-label="Show all categories"
                 >
                   <div className="flex items-center justify-between">
                     <span>All</span>
-                    <span className={`text-xs ${!selectedCategory ? "text-white/80" : "text-gray-500 dark:text-gray-400"}`}>
+                    <span className={`text-xs ${!selectedCategory ? "text-white/80" : "text-gray-500"}`}>
                       {Array.isArray(blogs) ? blogs.length : 0}
                     </span>
                   </div>
@@ -154,13 +154,13 @@ const Blogs = () => {
                       className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${
                         isSelected
                           ? "bg-primary-500 text-white font-medium"
-                          : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                          : "text-gray-700 hover:bg-gray-100"
                       }`}
                       aria-label={`Filter by ${category.name} category`}
                     >
                       <div className="flex items-center justify-between">
                         <span className="truncate">{category.name}</span>
-                        <span className={`text-xs flex-shrink-0 ml-2 ${isSelected ? "text-white/80" : "text-gray-500 dark:text-gray-400"}`}>
+                        <span className={`text-xs flex-shrink-0 ml-2 ${isSelected ? "text-white/80" : "text-gray-500"}`}>
                           {category.count}
                         </span>
                       </div>
@@ -182,12 +182,12 @@ const Blogs = () => {
                   placeholder="Search blogs..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                  className="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                 />
                 {searchTerm && (
                   <button
                     onClick={() => setSearchTerm("")}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 p-1 rounded-full hover:bg-gray-100 transition-colors"
                     aria-label="Clear search"
                   >
                     <HiX className="w-5 h-5 text-gray-400" />
@@ -199,16 +199,16 @@ const Blogs = () => {
             {/* Results Count */}
             {!isLoading && (
               <div className="mb-6 flex items-center justify-between flex-wrap gap-4">
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  <span className="font-semibold text-gray-900 dark:text-gray-100">{filteredBlogs.length}</span> blog{filteredBlogs.length !== 1 ? "s" : ""} found
+                <p className="text-sm text-gray-600">
+                  <span className="font-semibold text-gray-900">{filteredBlogs.length}</span> blog{filteredBlogs.length !== 1 ? "s" : ""} found
                   {searchTerm && (
                     <span className="ml-2">
-                      for "<span className="font-semibold text-primary-600 dark:text-primary-400">{searchTerm}</span>"
+                      for "<span className="font-semibold text-primary-600">{searchTerm}</span>"
                     </span>
                   )}
                   {selectedCategory && (
                     <span className="ml-2">
-                      in <span className="font-semibold text-primary-600 dark:text-primary-400">
+                      in <span className="font-semibold text-primary-600">
                         {Array.isArray(categories) ? categories.find(c => c._id === selectedCategory)?.name || "category" : "category"}
                       </span>
                     </span>
@@ -220,7 +220,7 @@ const Blogs = () => {
                       setSearchTerm("");
                       setSelectedCategory("");
                     }}
-                    className="flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all text-sm font-medium"
+                    className="flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all text-sm font-medium"
                     aria-label="Clear all filters"
                   >
                     <HiX className="w-4 h-4" />
@@ -261,13 +261,13 @@ const Blogs = () => {
                   </>
                 ) : (
                   <div className="text-center py-20 px-4">
-                    <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 mb-6 animate-pulse">
-                      <HiSearch className="w-10 h-10 text-gray-400 dark:text-gray-500" />
+                    <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 mb-6 animate-pulse">
+                      <HiSearch className="w-10 h-10 text-gray-400" />
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">
                       No blogs found
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">
+                    <p className="text-gray-600 mb-6 max-w-md mx-auto">
                       {searchTerm || selectedCategory
                         ? "Try adjusting your search or filter criteria to find what you're looking for."
                         : "Be the first to write a blog and share your thoughts with the community!"}

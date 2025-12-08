@@ -106,8 +106,8 @@ const CommentForm = ({ blogId, userId, parentCommentId = null, onCancel, initial
             <div className="relative">
               <div className={`relative rounded-2xl border transition-all duration-200 ${
                 isFocused || commentText
-                  ? "border-primary-500 dark:border-primary-400 bg-white dark:bg-gray-800"
-                  : "border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/50"
+                  ? "border-primary-500 bg-white"
+                  : "border-gray-300 bg-gray-50"
               }`}>
                 <textarea
                   id="comment"
@@ -121,9 +121,9 @@ const CommentForm = ({ blogId, userId, parentCommentId = null, onCancel, initial
                       setIsFocused(false);
                     }
                   }}
-                  className={`w-full px-4 py-3 rounded-2xl resize-none transition-all duration-200 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none ${
+                  className={`w-full px-4 py-3 rounded-2xl resize-none transition-all duration-200 text-gray-900 placeholder-gray-500 focus:outline-none ${
                     error
-                      ? "border-red-500 dark:border-red-400"
+                      ? "border-red-500"
                       : ""
                   }`}
                   placeholder={isEdit ? "Edit your comment..." : parentCommentId ? "Add a reply..." : "Add a public comment..."}
@@ -136,7 +136,7 @@ const CommentForm = ({ blogId, userId, parentCommentId = null, onCancel, initial
               {error && (
                 <p
                   id="comment-error"
-                  className="mt-2 flex items-center space-x-1 text-sm text-red-600 dark:text-red-400"
+                  className="mt-2 flex items-center space-x-1 text-sm text-red-600"
                   role="alert"
                 >
                   <HiExclamationCircle className="w-4 h-4 shrink-0" />
@@ -150,13 +150,13 @@ const CommentForm = ({ blogId, userId, parentCommentId = null, onCancel, initial
                 <button
                   type="button"
                   onClick={handleCancel}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500/50"
+                  className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500/50"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-primary-600"
+                  className="px-6 py-2 text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-primary-600"
                   disabled={!commentText.trim() || commentText.trim().length < 3}
                 >
                   {isEdit ? "Update" : parentCommentId ? "Reply" : "Comment"}

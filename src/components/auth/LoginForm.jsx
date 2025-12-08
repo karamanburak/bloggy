@@ -47,7 +47,7 @@ const LoginForm = ({
       <div>
         <label
           htmlFor="usernameOrEmail"
-          className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+          className="block text-sm font-medium text-gray-700 mb-2"
         >
           Username or Email
         </label>
@@ -72,7 +72,7 @@ const LoginForm = ({
           />
         </div>
         {touched.usernameOrEmail && errors.usernameOrEmail && (
-          <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+          <p className="mt-1 text-sm text-red-600">
             {errors.usernameOrEmail}
           </p>
         )}
@@ -82,7 +82,7 @@ const LoginForm = ({
       <div>
         <label
           htmlFor="password"
-          className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+          className="block text-sm font-medium text-gray-700 mb-2"
         >
           Password
         </label>
@@ -111,14 +111,14 @@ const LoginForm = ({
             className="absolute inset-y-0 right-0 pr-3 flex items-center"
           >
             {showPassword ? (
-              <HiEyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" />
+              <HiEyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
             ) : (
-              <HiEye className="h-5 w-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" />
+              <HiEye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
             )}
           </button>
         </div>
         {touched.password && errors.password && (
-          <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+          <p className="mt-1 text-sm text-red-600">
             {errors.password}
           </p>
         )}

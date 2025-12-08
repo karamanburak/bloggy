@@ -1,16 +1,11 @@
-
 import { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
-import { Box } from "@mui/material";
-
-
 
 export default function WeatherCard() {
     const [weatherData, setWeatherData] = useState(null)
     const [latitude, setLatitude] = useState('')
     const [longitude, setLongitude] = useState('')
-
 
     const savePositionToState = (position) => {
         setLatitude(position.coords.latitude)
@@ -25,43 +20,33 @@ export default function WeatherCard() {
                 setWeatherData(data);
             };
             const errorCallback = (error) => {
-                dispatch(fetchFail());
+                // Error handling
             };
             window.navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
         } catch (error) {
-            dispatch(fetchFail())
+            // Error handling
         }
     }
 
     useEffect(() => {
         getWeatherCall()
     }, [])
+    
     if (!weatherData) {
         return null;
     }
 
-
-
     return (
-        <Box
-            sx={{
-                display: "flex",
-                justifyContent: "space-evenly",
-                alignItems: "center",
-                height: 70,
-                color:  "neutral.light" 
-            }}>
-            <Box gap={2}>
+        <div className="flex justify-evenly items-center h-[70px] text-gray-100">
+            <div className="flex gap-2">
                 <img src={`https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`} alt="" width="50px" />
-            </Box>
-            <Box fontWeight="bold">
+            </div>
+            <div className="font-bold">
                 {weatherData.name}
-            </Box>
-                
-            <Box variant="span" sx={{ display: "flex",padding:".4rem" }}>
+            </div>
+            <div className="flex p-1">
                 {Math.round(weatherData.main.temp)} <b><sup>°C</sup></b>
-            </Box>
-
-        </Box>
+            </div>
+        </div>
     );
 }

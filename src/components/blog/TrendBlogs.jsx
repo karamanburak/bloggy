@@ -9,17 +9,8 @@ import useBlogCall from "../../hooks/useBlogCall";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { MdArrowOutward } from "react-icons/md";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import MarkUnreadChatAltOutlinedIcon from "@mui/icons-material/MarkUnreadChatAltOutlined";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardMedia,
-  Container,
-  Typography,
-} from "@mui/material";
+import { HiHeart } from "react-icons/hi";
+import { HiChatBubbleLeftRight } from "react-icons/hi2";
 import { FaChartBar } from "react-icons/fa";
 import { MdOutlineVisibility } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
@@ -33,19 +24,15 @@ const TrendBlogs = () => {
     getTrendsData();
   }, []);
 
-  // Helper function to extract parent ID from comment (same logic as Detail page)
   const getParentId = (comment) => {
     if (!comment) return null;
     
-    // Try different field names - check all possible variations
     let parentId = comment.parentCommentId || comment.parentId || comment.parentComment || comment.replyTo || comment.parent;
     
-    // If it's a string, return it (but check if it's not empty)
     if (typeof parentId === 'string' && parentId.trim() !== '' && parentId !== 'null' && parentId !== 'undefined') {
       return parentId;
     }
     
-    // If it's an object, extract the ID
     if (typeof parentId === 'object' && parentId !== null) {
       const extractedId = parentId._id || parentId.id || null;
       if (extractedId && typeof extractedId === 'string' && extractedId.trim() !== '') {
@@ -53,7 +40,6 @@ const TrendBlogs = () => {
       }
     }
     
-    // Also check if comment has a populated parentComment field
     if (comment.parentComment && typeof comment.parentComment === 'object') {
       return comment.parentComment._id || comment.parentComment.id || null;
     }
@@ -61,12 +47,10 @@ const TrendBlogs = () => {
     return null;
   };
 
-  // Count only parent comments (not replies)
   const getParentCommentCount = (comments) => {
     if (!Array.isArray(comments)) return 0;
     return comments.filter(comment => {
       const parentId = getParentId(comment);
-      // A comment is a parent if it has no parentId or parentId is empty/null
       return !parentId;
     }).length;
   };
@@ -76,20 +60,14 @@ const TrendBlogs = () => {
     .slice(0, 10);
 
   return (
-    <Container maxWidth={"100vw"}>
-      <Box>
-        <Typography
-          variant="h5"
-          sx={{
-            color: "neutral.light",
-            marginLeft: { xs: "4rem", md: "2.5rem" },
-          }}
-        >
+    <div className="w-full max-w-[100vw]">
+      <div>
+        <h5 className="text-gray-100 font-semibold ml-10 md:ml-10 mb-2 flex items-center gap-2">
           <FaChartBar /> Trendings on Bloggy
-        </Typography>
-        <hr />
-      </Box>
-      <Box>
+        </h5>
+        <hr className="border-gray-300" />
+      </div>
+      <div>
         <Swiper
           style={{
             "--swiper-pagination-bullet-inactive-color": "#999999",
@@ -137,71 +115,25 @@ const TrendBlogs = () => {
             return (
               <SwiperSlide
                 key={blog._id}
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  height: "320px",
-                }}
+                className="flex justify-center h-[320px]"
               >
-                <Card
-                  sx={{
-                    width: 220,
-                    height: 280,
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-                    borderRadius: "8px",
-                    overflow: "hidden",
-                    transition: "transform 0.3s ease",
-                    "&:hover": {
-                      transform: "scale(1.05)",
-                      boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.15)",
-                    },
-                  }}
+                <div
+                  className="w-[220px] h-[280px] flex flex-col justify-between shadow-lg rounded-lg overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-xl bg-white"
                 >
-                  <CardMedia
-                    component="img"
-                    height="140"
-                    image={image}
+                  <img
+                    src={image}
                     alt={image}
-                    sx={{
-                      borderBottom: "1px solid #ccc",
-                      objectFit: "fill",
-                    }}
+                    className="h-[140px] w-full object-cover border-b border-gray-300"
                   />
-                  <CardContent
-                    sx={{
-                      padding: "1rem",
-                      // textAlign: "center",
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        fontSize: "0.8rem",
-                        // fontWeight: "bold",
-                        // color: "#2D3748",
-                        marginBottom: "0.5rem",
-                      }}
-                    >
+                  <div className="p-4 flex-1 flex flex-col">
+                    <p className="text-xs mb-2 text-gray-600">
                       {categoryId.name}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: "0.8rem",
-                        fontWeight: "bold",
-                        // color: "#4A5568",
-                        height: "40px",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        // whiteSpace: "nowrap",
-                        textAlign: "center",
-                      }}
-                    >
+                    </p>
+                    <p className="text-xs font-bold h-10 overflow-hidden text-ellipsis text-center line-clamp-2">
                       {title}
-                    </Typography>
-                  </CardContent>
-                  <Button
+                    </p>
+                  </div>
+                  <button
                     onClick={() =>
                       navigate(`/blog/detail/${_id}`, {
                         state: {
@@ -217,48 +149,33 @@ const TrendBlogs = () => {
                         },
                       })
                     }
-                    variant="contained"
-                    sx={{
-                      cursor: "pointer",
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      backgroundColor: "#2D3748",
-                      color: "#F7FAFC",
-                      borderRadius: "0 0 8px 8px",
-                      padding: "0.5rem 1rem",
-                      "&:hover": {
-                        backgroundColor: "#4A5568",
-                      },
-                    }}
+                    className="cursor-pointer flex justify-between items-center bg-gray-800 text-gray-100 rounded-b-lg px-4 py-2 hover:bg-gray-700 transition-colors"
                   >
-                    <Box sx={{ display: "flex", gap: 1 }}>
-                      <Typography>
+                    <div className="flex gap-2 text-xs">
+                      <span className="flex items-center gap-1">
                         <MdOutlineVisibility />
                         <sup>{countOfVisitors}</sup>
-                      </Typography>
-                      <Typography>
-                        <FavoriteIcon style={{ fontSize: "1rem" }} />
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <HiHeart className="text-base" />
                         <sup>{likes.length}</sup>
-                      </Typography>
-                      <Typography>
-                        <MarkUnreadChatAltOutlinedIcon
-                          style={{ fontSize: "1rem" }}
-                        />
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <HiChatBubbleLeftRight className="text-base" />
                         <sup>{getParentCommentCount(comments)}</sup>
-                      </Typography>
-                    </Box>
-                    <Typography>
+                      </span>
+                    </div>
+                    <span>
                       <MdArrowOutward />
-                    </Typography>
-                  </Button>
-                </Card>
+                    </span>
+                  </button>
+                </div>
               </SwiperSlide>
             );
           })}
         </Swiper>
-      </Box>
-    </Container>
+      </div>
+    </div>
   );
 };
 

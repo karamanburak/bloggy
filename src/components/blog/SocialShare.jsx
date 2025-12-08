@@ -14,7 +14,7 @@ const SocialShare = ({ content, image, title }) => {
 
   return (
     <div className="flex items-center space-x-3">
-      <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mr-2">
+      <span className="text-sm font-medium text-gray-700 mr-2">
         Share:
       </span>
       <div className="flex items-center space-x-2">

@@ -104,22 +104,22 @@ const About = () => {
     {
       key: "linkedin",
       icon: FaLinkedin,
-      hoverColor: "hover:text-blue-600 dark:hover:text-blue-400",
+      hoverColor: "hover:text-blue-600",
     },
     {
       key: "twitter",
       icon: FaTwitter,
-      hoverColor: "hover:text-blue-400 dark:hover:text-blue-300",
+      hoverColor: "hover:text-blue-400",
     },
     {
       key: "github",
       icon: FaSquareGithub,
-      hoverColor: "hover:text-gray-700 dark:hover:text-gray-200",
+      hoverColor: "hover:text-gray-700",
     },
     {
       key: "instagram",
       icon: FaInstagram,
-      hoverColor: "hover:text-pink-600 dark:hover:text-pink-400",
+      hoverColor: "hover:text-pink-600",
     },
   ];
 
@@ -128,7 +128,7 @@ const About = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
+    <div className="min-h-screen bg-white transition-colors duration-300">
       {/* Hero Section */}
       <PageHero
         title="Unleash Your Creativity"
@@ -144,13 +144,13 @@ const About = () => {
           {/* About Content */}
           <div className="card p-8 lg:p-12 mb-12 animate-slide-up">
             <div className="flex items-center space-x-3 mb-8">
-              <HiSparkles className="w-8 h-8 text-primary-600 dark:text-primary-400" />
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+              <HiSparkles className="w-8 h-8 text-primary-600" />
+              <h2 className="text-3xl font-bold text-gray-900">
                 About Us
               </h2>
             </div>
 
-            <div className="space-y-6 text-gray-700 dark:text-gray-300 leading-relaxed">
+            <div className="space-y-6 text-gray-700 leading-relaxed">
               <p className="text-lg">
                 At Bloggy, we are passionate about sharing stories, insights,
                 and knowledge across a variety of topics. Our mission is to
@@ -160,8 +160,8 @@ const About = () => {
 
               <div className="mt-8">
                 <div className="flex items-center space-x-3 mb-4">
-                  <HiUserGroup className="w-6 h-6 text-primary-600 dark:text-primary-400" />
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  <HiUserGroup className="w-6 h-6 text-primary-600" />
+                  <h3 className="text-2xl font-bold text-gray-900">
                     Who We Are
                   </h3>
                 </div>
@@ -176,8 +176,8 @@ const About = () => {
 
               <div className="mt-8">
                 <div className="flex items-center space-x-3 mb-4">
-                  <HiLightBulb className="w-6 h-6 text-primary-600 dark:text-primary-400" />
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  <HiLightBulb className="w-6 h-6 text-primary-600" />
+                  <h3 className="text-2xl font-bold text-gray-900">
                     Our Mission
                   </h3>
                 </div>
@@ -192,14 +192,14 @@ const About = () => {
 
               <div className="mt-8">
                 <div className="flex items-center space-x-3 mb-4">
-                  <HiBookOpen className="w-6 h-6 text-primary-600 dark:text-primary-400" />
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  <HiBookOpen className="w-6 h-6 text-primary-600" />
+                  <h3 className="text-2xl font-bold text-gray-900">
                     What We Offer
                   </h3>
                 </div>
                 <ul className="space-y-3 text-lg">
                   <li className="flex items-start space-x-3">
-                    <span className="text-primary-600 dark:text-primary-400 font-bold mt-1">
+                    <span className="text-primary-600 font-bold mt-1">
                       •
                     </span>
                     <span>
@@ -208,7 +208,7 @@ const About = () => {
                     </span>
                   </li>
                   <li className="flex items-start space-x-3">
-                    <span className="text-primary-600 dark:text-primary-400 font-bold mt-1">
+                    <span className="text-primary-600 font-bold mt-1">
                       •
                     </span>
                     <span>
@@ -217,7 +217,7 @@ const About = () => {
                     </span>
                   </li>
                   <li className="flex items-start space-x-3">
-                    <span className="text-primary-600 dark:text-primary-400 font-bold mt-1">
+                    <span className="text-primary-600 font-bold mt-1">
                       •
                     </span>
                     <span>
@@ -226,7 +226,7 @@ const About = () => {
                     </span>
                   </li>
                   <li className="flex items-start space-x-3">
-                    <span className="text-primary-600 dark:text-primary-400 font-bold mt-1">
+                    <span className="text-primary-600 font-bold mt-1">
                       •
                     </span>
                     <span>
@@ -237,8 +237,8 @@ const About = () => {
                 </ul>
               </div>
 
-              <div className="mt-8 p-6 bg-primary-50 dark:bg-primary-900/20 rounded-xl border-l-4 border-primary-500">
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+              <div className="mt-8 p-6 bg-primary-50 rounded-xl border-l-4 border-primary-500">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">
                   Join Our Community
                 </h3>
                 <p className="text-lg">
@@ -251,7 +251,7 @@ const About = () => {
               </div>
 
               <div className="mt-8 text-center">
-                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                <p className="text-2xl font-bold text-gray-900">
                   Thank you for being a part of Bloggy. Together, let's dream,
                   explore, and create.
                 </p>
@@ -262,10 +262,10 @@ const About = () => {
           {/* Team Section */}
           <div className="card p-8 lg:p-12 animate-slide-up">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">
                 Our Team
               </h2>
-              <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                 Meet the talented individuals who bring Bloggy to life. Our diverse team of writers, editors, designers, and developers work together to create exceptional content.
               </p>
             </div>
@@ -273,7 +273,7 @@ const About = () => {
               {teamMembers.map((member, index) => (
                 <div
                   key={index}
-                  className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-700 group"
+                  className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-200 group"
                 >
                   <div className="flex flex-col items-center text-center mb-4">
                     <div className="relative mb-4 group-hover:scale-105 transition-transform duration-300">
@@ -286,18 +286,18 @@ const About = () => {
                         <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary-500/20 to-accent-500/20 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
                       </div>
                     </div>
-                    <h4 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-1">
+                    <h4 className="text-xl font-bold text-gray-900 mb-1">
                       {member.name}
                     </h4>
-                    <p className="text-sm font-semibold text-primary-600 dark:text-primary-400 mb-2">
+                    <p className="text-sm font-semibold text-primary-600 mb-2">
                       {member.position}
                     </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
+                    <p className="text-xs text-gray-500 mb-3">
                       {member.experience} experience
                     </p>
                   </div>
                   
-                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 line-clamp-3 text-center">
+                  <p className="text-sm text-gray-600 mb-4 line-clamp-3 text-center">
                     {member.bio}
                   </p>
                   
@@ -305,14 +305,14 @@ const About = () => {
                     {member.expertise.map((skill, skillIndex) => (
                       <span
                         key={skillIndex}
-                        className="px-2 py-1 text-xs font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-full"
+                        className="px-2 py-1 text-xs font-medium bg-primary-100 text-primary-700 rounded-full"
                       >
                         {skill}
                       </span>
                     ))}
                   </div>
                   
-                  <div className="flex items-center justify-center space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <div className="flex items-center justify-center space-x-3 pt-4 border-t border-gray-200">
                     {socialIcons.map((social) => {
                       const Icon = social.icon;
                       const url = member.social[social.key];

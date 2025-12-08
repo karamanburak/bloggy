@@ -31,9 +31,11 @@ const Dashboard = () => {
   // Loading state until all data is loaded
   const isLoading = loading || newsLoading || categoriesLoading;
 
-  const topTrendingBlogs = [...blogs]
-    .sort((a, b) => (b.countOfVisitors || 0) - (a.countOfVisitors || 0))
-    .slice(0, 6);
+  const topTrendingBlogs = Array.isArray(blogs) 
+    ? [...blogs]
+        .sort((a, b) => (b.countOfVisitors || 0) - (a.countOfVisitors || 0))
+        .slice(0, 6)
+    : [];
 
   useEffect(() => {
     getBlogData("blogs");
@@ -65,7 +67,7 @@ const Dashboard = () => {
 
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
+    <div className="min-h-screen bg-white transition-colors duration-300">
       {/* Modern Hero Section */}
       <PageHero
         title="Welcome to Bloggy"
@@ -86,10 +88,10 @@ const Dashboard = () => {
                     <HiFire className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
+                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
                       Trending Now
                     </h2>
-                    <p className="text-gray-600 dark:text-gray-400 mt-1">
+                    <p className="text-gray-600 mt-1">
                       Discover the most popular stories this week
                     </p>
                   </div>
@@ -109,10 +111,10 @@ const Dashboard = () => {
                     </div>
                   </div>
                   <div>
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
+                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
                       Latest News
                     </h2>
-                    <p className="text-gray-600 dark:text-gray-400 mt-1 text-sm md:text-base">
+                    <p className="text-gray-600 mt-1 text-sm md:text-base">
                       Stay updated with the latest happenings from multiple sources
                     </p>
                   </div>
@@ -142,17 +144,17 @@ const Dashboard = () => {
                       <HiFire className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
+                      <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
                         Trending Now
                       </h2>
-                      <p className="text-gray-600 dark:text-gray-400 mt-1">
+                      <p className="text-gray-600 mt-1">
                         Discover the most popular stories this week
                       </p>
                     </div>
                   </div>
                   <button
                     onClick={() => navigate("/blog")}
-                    className="hidden md:flex items-center space-x-2 px-6 py-3 rounded-lg text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 font-semibold transition-all hover:scale-105"
+                    className="hidden md:flex items-center space-x-2 px-6 py-3 rounded-lg text-primary-600 hover:bg-primary-50 font-semibold transition-all hover:scale-105"
                   >
                     <span>View All</span>
                     <HiArrowRight className="w-5 h-5" />
@@ -178,17 +180,17 @@ const Dashboard = () => {
                     </div>
                   </div>
                   <div>
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
+                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
                       Latest News
                     </h2>
-                    <p className="text-gray-600 dark:text-gray-400 mt-1 text-sm md:text-base">
+                    <p className="text-gray-600 mt-1 text-sm md:text-base">
                       Stay updated with the latest happenings from multiple sources
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
                   {/* View Mode Toggle */}
-                  <div className="flex items-center bg-white dark:bg-gray-800 rounded-xl p-1 shadow-lg border border-gray-200 dark:border-gray-700">
+                  <div className="flex items-center bg-white rounded-xl p-1 shadow-lg border border-gray-200">
                     {viewModes.map((mode) => {
                       const Icon = mode.icon;
                       const isActive = viewMode === mode.id;
@@ -199,7 +201,7 @@ const Dashboard = () => {
                           className={`p-2.5 rounded-lg transition-all duration-200 ${
                             isActive
                               ? "bg-primary-600 text-white shadow-md"
-                              : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                              : "text-gray-600 hover:bg-gray-100"
                           }`}
                           aria-label={mode.ariaLabel}
                           title={mode.label}
@@ -238,14 +240,14 @@ const Dashboard = () => {
                       {/* Previous/Next Buttons */}
                       <button
                         onClick={handlePrevNews}
-                        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-lg hover:bg-white dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:scale-110 transition-all duration-200 opacity-0 group-hover:opacity-100"
+                        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full bg-white/90 backdrop-blur-sm shadow-lg hover:bg-white text-gray-700 hover:text-primary-600 hover:scale-110 transition-all duration-200 opacity-0 group-hover:opacity-100"
                         aria-label="Previous news"
                       >
                         <HiArrowRight className="w-5 h-5 rotate-180" />
                       </button>
                       <button
                         onClick={handleNextNews}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-lg hover:bg-white dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:scale-110 transition-all duration-200 opacity-0 group-hover:opacity-100"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full bg-white/90 backdrop-blur-sm shadow-lg hover:bg-white text-gray-700 hover:text-primary-600 hover:scale-110 transition-all duration-200 opacity-0 group-hover:opacity-100"
                         aria-label="Next news"
                       >
                         <HiArrowRight className="w-5 h-5" />
@@ -261,7 +263,7 @@ const Dashboard = () => {
                               className={`relative rounded-full transition-all duration-300 ${
                                 index === currentNewsIndex
                                   ? "w-10 h-2.5 bg-gradient-to-r from-primary-600 to-accent-600 shadow-lg scale-110"
-                                  : "w-2.5 h-2.5 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 hover:scale-125"
+                                  : "w-2.5 h-2.5 bg-gray-300 hover:bg-gray-400 hover:scale-125"
                               }`}
                               aria-label={`Go to news ${index + 1}`}
                             >
@@ -271,15 +273,15 @@ const Dashboard = () => {
                             </button>
                           ))}
                           {news.length > 15 && (
-                            <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">
+                            <span className="text-xs text-gray-500 ml-2">
                               +{news.length - 15} more
                             </span>
                           )}
                         </div>
 
                         {/* News Counter */}
-                        <div className="flex items-center space-x-3 bg-white dark:bg-gray-800 rounded-xl p-2 shadow-lg border border-gray-200 dark:border-gray-700">
-                          <span className="px-4 py-1.5 text-sm font-semibold text-gray-700 dark:text-gray-300">
+                        <div className="flex items-center space-x-3 bg-white rounded-xl p-2 shadow-lg border border-gray-200">
+                          <span className="px-4 py-1.5 text-sm font-semibold text-gray-700">
                             {currentNewsIndex + 1} / {news.length}
                           </span>
                         </div>
@@ -326,17 +328,17 @@ const Dashboard = () => {
             </div>
           ) : (
             <div className="relative">
-              <div className="absolute -inset-4 bg-gradient-to-r from-gray-200/50 to-gray-300/50 dark:from-gray-700/50 dark:to-gray-800/50 rounded-3xl blur-xl -z-10"></div>
+              <div className="absolute -inset-4 bg-gradient-to-r from-gray-200/50 to-gray-300/50 rounded-3xl blur-xl -z-10"></div>
               <div className="card p-16 text-center relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-transparent dark:from-gray-800/50 opacity-50"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-transparent opacity-50"></div>
                 <div className="relative">
-                  <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-100 dark:bg-gray-800 mb-6">
-                    <HiNewspaper className="w-10 h-10 text-gray-400 dark:text-gray-500" />
+                  <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-100 mb-6">
+                    <HiNewspaper className="w-10 h-10 text-gray-400" />
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                  <h3 className="text-xl font-semibold text-gray-700 mb-2">
                     No News Available
                   </h3>
-                  <p className="text-gray-500 dark:text-gray-400">
+                  <p className="text-gray-500">
                     Check back later for the latest updates!
                   </p>
                 </div>

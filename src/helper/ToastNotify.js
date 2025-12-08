@@ -17,3 +17,9 @@ export const toastErrorNotify = (msg) => {
     duration: 4000,
   });
 };
+
+export const toastInfoNotify = (msg) => {
+  toast.info(msg, {
+    duration: 3000,
+  });
+};

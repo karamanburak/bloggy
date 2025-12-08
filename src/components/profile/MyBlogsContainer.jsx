@@ -34,13 +34,13 @@ const MyBlogsContainer = ({ userId }) => {
         <SkeletonLoader type="list" count={4} />
       ) : userBlogs.length === 0 ? (
         <div className="text-center py-16 px-4">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-primary-100 to-accent-100 dark:from-primary-900/30 dark:to-accent-900/30 mb-6">
-            <HiPencil className="w-10 h-10 text-primary-600 dark:text-primary-400" />
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-primary-100 to-accent-100 mb-6">
+            <HiPencil className="w-10 h-10 text-primary-600" />
           </div>
-          <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3">
+          <h3 className="text-2xl font-bold text-gray-900 mb-3">
             No Blogs Yet
           </h3>
-          <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">
+          <p className="text-gray-600 mb-6 max-w-md mx-auto">
             You haven't written any blogs yet. Start sharing your thoughts and ideas with the community!
           </p>
         </div>

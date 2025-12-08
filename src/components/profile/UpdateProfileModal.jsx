@@ -147,7 +147,7 @@ const UpdateProfileModal = ({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-white dark:bg-gray-900 transition-colors duration-300">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-white transition-colors duration-300">
       {/* Background Video */}
       <div className="fixed inset-0 z-0" onClick={handleClose}>
         <video
@@ -156,22 +156,22 @@ const UpdateProfileModal = ({
           loop
           muted
           playsInline
-          className="w-full h-full object-cover opacity-20 dark:opacity-30"
+          className="w-full h-full object-cover opacity-20"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/90 via-white/80 to-white/90 dark:from-gray-900/90 dark:via-gray-900/80 dark:to-gray-900/90" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/90 via-white/80 to-white/90" />
       </div>
 
       {/* Modal */}
       <div className="relative z-10 flex min-h-full items-center justify-center p-4">
-        <div className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto border border-gray-200 dark:border-gray-700">
+        <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto border border-gray-200">
           {/* Header */}
-          <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+          <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
+            <h2 className="text-2xl font-bold text-gray-900">
               Edit Profile
             </h2>
             <button
               onClick={handleClose}
-              className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+              className="text-gray-400 hover:text-gray-600 transition-colors"
               aria-label="Close modal"
             >
               <HiX className="w-6 h-6" />
@@ -182,7 +182,7 @@ const UpdateProfileModal = ({
           <div className="px-6 pt-6 pb-4">
             <div className="flex justify-center">
               <div className="relative group">
-                <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-gray-200 dark:border-gray-700 bg-gradient-to-br from-primary-500 to-accent-500 shadow-xl">
+                <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-gray-200 bg-gradient-to-br from-primary-500 to-accent-500 shadow-xl">
                   {info.image || imagePreview ? (
                     <img
                       src={info.image || imagePreview}
@@ -219,16 +219,16 @@ const UpdateProfileModal = ({
               onClick={handleImageEditClose}
             >
               <div
-                className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md border border-gray-200 dark:border-gray-700"
+                className="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-gray-200"
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                  <h3 className="text-xl font-bold text-gray-900">
                     Edit Profile Image
                   </h3>
                   <button
                     onClick={handleImageEditClose}
-                    className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                    className="text-gray-400 hover:text-gray-600 transition-colors"
                     aria-label="Close"
                   >
                     <HiX className="w-6 h-6" />
@@ -247,7 +247,7 @@ const UpdateProfileModal = ({
                     <button
                       type="button"
                       onClick={handleRemoveImage}
-                      className="btn-secondary w-full mt-4 flex items-center justify-center gap-2 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 border-red-200 dark:border-red-800"
+                      className="btn-secondary w-full mt-4 flex items-center justify-center gap-2 bg-red-50 hover:bg-red-100 text-red-600 border-red-200"
                     >
                       <HiTrash className="w-5 h-5" />
                       Remove Photo
@@ -279,7 +279,7 @@ const UpdateProfileModal = ({
                   >
                     <label
                       htmlFor={field.id}
-                      className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                      className="block text-sm font-medium text-gray-700 mb-2"
                     >
                       {field.label}
                       {field.required && (
@@ -324,7 +324,7 @@ const UpdateProfileModal = ({
                       )}
                     </div>
                     {field.required && !info[field.name] && (
-                      <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                      <p className="mt-1 text-sm text-red-600">
                         This field is required
                       </p>
                     )}
@@ -334,7 +334,7 @@ const UpdateProfileModal = ({
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200">
               <button
                 type="button"
                 onClick={handleClose}

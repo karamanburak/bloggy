@@ -44,7 +44,10 @@ const useImageUpload = () => {
       const baseUrl = import.meta.env.VITE_BASE_URL || "";
       const uploadUrl = import.meta.env.VITE_BLOB_UPLOAD_URL || `${baseUrl}api/upload`;
 
-      console.log("Upload URL:", uploadUrl); // For debugging
+      // Debug log only in development
+      if (import.meta.env.DEV) {
+        console.log("Upload URL:", uploadUrl);
+      }
 
       // Prepare headers with authentication token
       const headers = {};
@@ -71,7 +74,10 @@ const useImageUpload = () => {
           errorMessage = errorText || errorMessage;
         }
         
-        console.error("Upload failed:", response.status, errorMessage);
+        // Debug log only in development
+        if (import.meta.env.DEV) {
+          console.error("Upload failed:", response.status, errorMessage);
+        }
         
         // Special message for 404 error
         if (response.status === 404) {
@@ -88,7 +94,10 @@ const useImageUpload = () => {
       toastSuccessNotify("Image uploaded successfully! ✨");
       return data.url; // Return the uploaded image URL
     } catch (error) {
-      console.error("Upload error:", error);
+      // Debug log only in development
+      if (import.meta.env.DEV) {
+        console.error("Upload error:", error);
+      }
       toastErrorNotify("Image upload failed. Please check your connection and try again.");
       return null;
     } finally {

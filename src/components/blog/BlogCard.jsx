@@ -131,10 +131,10 @@ const BlogCard = ({
       tabIndex={0}
       role="article"
       aria-label={`Blog post: ${title}`}
-      className="group relative bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer border border-gray-100 dark:border-gray-800 hover:border-primary-300 dark:hover:border-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+      className="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer border border-gray-100 hover:border-primary-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
     >
       {/* Image Container */}
-      <div className="relative h-64 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900">
+      <div className="relative h-64 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
         <img
           src={image || "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800"}
           alt={title}
@@ -153,7 +153,7 @@ const BlogCard = ({
         
         {/* Category Badge - Top Left */}
         <div className="absolute top-4 left-4 z-10">
-          <span className="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm rounded-full text-xs font-bold text-primary-600 dark:text-primary-400 shadow-lg">
+          <span className="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-white/95 backdrop-blur-sm rounded-full text-xs font-bold text-primary-600 shadow-lg">
             <HiTag className="w-3 h-3" />
             <span>{getCategoryName()}</span>
           </span>
@@ -173,18 +173,18 @@ const BlogCard = ({
       {/* Content Section */}
       <div className="p-6">
         {/* Title */}
-        <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-3 line-clamp-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300 min-h-[3.5rem]">
+        <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-primary-600 transition-colors duration-300 min-h-[3.5rem]">
           {title}
         </h3>
         
         {/* Preview Text */}
-        <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3 leading-relaxed">
+        <p className="text-gray-600 text-sm mb-4 line-clamp-3 leading-relaxed">
           {previewText}
         </p>
 
         {/* Author & Date */}
-        <div className="flex items-center space-x-3 mb-4 pb-4 border-b border-gray-100 dark:border-gray-800">
-          <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-200 dark:border-primary-800 bg-gradient-to-br from-primary-400 to-accent-500 flex-shrink-0">
+        <div className="flex items-center space-x-3 mb-4 pb-4 border-b border-gray-100">
+          <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-200 bg-gradient-to-br from-primary-400 to-accent-500 flex-shrink-0">
             {userImage ? (
               <img
                 src={userImage}
@@ -199,10 +199,10 @@ const BlogCard = ({
             )}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">
+            <p className="text-sm font-semibold text-gray-900 truncate">
               {firstName || "Unknown"} {lastName || ""}
             </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
+            <p className="text-xs text-gray-500">
               {createdAt ? formatDateTime(createdAt) : "Recently"}
             </p>
           </div>
@@ -210,7 +210,7 @@ const BlogCard = ({
 
         {/* Stats Footer */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4 text-gray-600 dark:text-gray-400">
+          <div className="flex items-center space-x-4 text-gray-600">
             <div className="flex items-center space-x-1.5">
               {liked ? (
                 <MdFavorite className="w-5 h-5 text-red-500" />
@@ -244,7 +244,7 @@ const BlogCard = ({
               }
             }}
             aria-label={`Read blog: ${title}`}
-            className="flex items-center space-x-1.5 px-4 py-2 rounded-lg bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 hover:bg-primary-100 dark:hover:bg-primary-900/50 transition-all duration-300 group/read focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            className="flex items-center space-x-1.5 px-4 py-2 rounded-lg bg-primary-50 text-primary-600 hover:bg-primary-100 transition-all duration-300 group/read focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
           >
             <span className="text-sm font-semibold">Read</span>
             <MdArrowOutward className="w-4 h-4 group-hover/read:translate-x-0.5 group-hover/read:-translate-y-0.5 transition-transform" />

@@ -79,9 +79,9 @@ const MyBlogsCard = ({
 
   return (
     <>
-      <article className="relative bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-700 group">
+      <article className="relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-primary-300 group">
         {/* Image Container */}
-        <div className="relative h-48 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-900 group-hover:scale-105 transition-transform duration-500">
+        <div className="relative h-48 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 group-hover:scale-105 transition-transform duration-500">
           <img
             src={image || "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800"}
             alt={title}
@@ -97,7 +97,7 @@ const MyBlogsCard = ({
           {/* Title and Menu */}
           <div className="flex items-start justify-between mb-3 gap-2">
             <h3
-              className="text-lg font-bold text-gray-900 dark:text-gray-100 flex-1 line-clamp-2 cursor-pointer hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+              className="text-lg font-bold text-gray-900 flex-1 line-clamp-2 cursor-pointer hover:text-primary-600 transition-colors"
               onClick={() =>
                 navigate(`/blog/detail/${_id}`, {
                   state: {
@@ -123,20 +123,20 @@ const MyBlogsCard = ({
                   e.stopPropagation();
                   setMenuOpen(!menuOpen);
                 }}
-                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
                 aria-label="More options"
               >
-                <BsThreeDots className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                <BsThreeDots className="w-5 h-5 text-gray-600" />
               </button>
 
               {menuOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 py-2 z-50">
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-200 py-2 z-50">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       handleCopyLink();
                     }}
-                    className="w-full flex items-center space-x-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    className="w-full flex items-center space-x-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                   >
                     <IoIosLink className="w-4 h-4" />
                     <span>Copy Link</span>
@@ -146,12 +146,12 @@ const MyBlogsCard = ({
                       e.stopPropagation();
                       handleEditBlog();
                     }}
-                    className="w-full flex items-center space-x-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    className="w-full flex items-center space-x-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                   >
                     <HiPencil className="w-4 h-4" />
                     <span>Edit Blog</span>
                   </button>
-                  <div className="border-t border-gray-200 dark:border-gray-700 my-1" />
+                  <div className="border-t border-gray-200 my-1" />
                   <DeleteBlog id={_id} isMenuItem={true} />
                 </div>
               )}
@@ -159,14 +159,14 @@ const MyBlogsCard = ({
           </div>
 
           {/* Preview Text */}
-          <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2 leading-relaxed">
+          <p className="text-gray-600 text-sm mb-4 line-clamp-2 leading-relaxed">
             {previewText}
           </p>
 
           {/* Author & Date */}
-          <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
+          <div className="flex items-center justify-between pt-4 border-t border-gray-100">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-primary-200 dark:border-primary-800 bg-gradient-to-br from-primary-400 to-accent-500 flex-shrink-0">
+              <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-primary-200 bg-gradient-to-br from-primary-400 to-accent-500 flex-shrink-0">
                 {currentUser?.image ? (
                   <img
                     src={currentUser.image}
@@ -181,10 +181,10 @@ const MyBlogsCard = ({
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-semibold text-gray-900 dark:text-gray-100 truncate">
+                <p className="text-xs font-semibold text-gray-900 truncate">
                   {currentUser?.firstName || "Unknown"} {currentUser?.lastName || ""}
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
+                <p className="text-xs text-gray-500">
                   {createdAt ? formatDateTime(createdAt) : "Recently"}
                 </p>
               </div>
@@ -207,7 +207,7 @@ const MyBlogsCard = ({
                   },
                 });
               }}
-              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 hover:bg-primary-100 dark:hover:bg-primary-900/50 transition-all duration-300"
+              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-primary-50 text-primary-600 hover:bg-primary-100 transition-all duration-300"
             >
               <span className="text-xs font-semibold">Read</span>
               <MdArrowOutward className="w-3.5 h-3.5" />

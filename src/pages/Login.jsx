@@ -11,7 +11,7 @@ const Login = () => {
   const { login } = useAuthCall();
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300 flex flex-col">
+    <div className="min-h-screen bg-white transition-colors duration-300 flex flex-col">
       <div className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-20 pb-12">
         <div className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left Side - Form */}
@@ -22,10 +22,10 @@ const Login = () => {
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-primary-500 to-accent-500 mb-4">
                   <HiUserGroup className="w-8 h-8 text-white" />
                 </div>
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">
                   Welcome Back
                 </h1>
-                <p className="text-gray-600 dark:text-gray-400">
+                <p className="text-gray-600">
                   Sign in to continue to Bloggy
                 </p>
               </div>
@@ -52,11 +52,11 @@ const Login = () => {
 
               {/* Footer Link */}
               <div className="text-center mt-6">
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-sm text-gray-600">
                   Don't have an account?{" "}
                   <Link
                     to="/register"
-                    className="text-primary-600 dark:text-primary-400 font-semibold hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
+                    className="text-primary-600 font-semibold hover:text-primary-700 transition-colors"
                   >
                     Sign up for Bloggy
                   </Link>

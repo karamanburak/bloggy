@@ -133,13 +133,13 @@ const UserList = () => {
             placeholder="Search users..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-4 py-3 pl-12 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            className="w-full px-4 py-3 pl-12 rounded-xl border border-gray-300 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           />
           <HiUser className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
         </div>
         
         {/* View Mode Toggle */}
-        <div className="flex items-center space-x-2 bg-white dark:bg-gray-800 rounded-xl p-2 border border-gray-200 dark:border-gray-700 shadow-lg">
+        <div className="flex items-center space-x-2 bg-white rounded-xl p-2 border border-gray-200 shadow-lg">
           {viewModes.map((mode) => {
             const Icon = mode.icon;
             const isActive = viewMode === mode.id;
@@ -150,7 +150,7 @@ const UserList = () => {
                 className={`p-2 rounded-lg transition-all ${
                   isActive
                     ? "bg-gradient-to-r from-primary-600 to-accent-600 text-white shadow-lg"
-                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                 }`}
                 aria-label={mode.ariaLabel}
                 title={mode.label}
@@ -178,7 +178,7 @@ const UserList = () => {
 
       {/* Users Table View */}
       {viewMode === "table" && (
-      <div className="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg">
+      <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-lg">
         <table className="w-full">
           <thead className="bg-gradient-to-r from-primary-600 to-accent-600 text-white">
             <tr>
@@ -190,10 +190,10 @@ const UserList = () => {
               <th className="px-6 py-4 text-center text-sm font-bold">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+          <tbody className="divide-y divide-gray-200">
             {paginatedUsers.length === 0 ? (
               <tr>
-                <td colSpan="6" className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
+                <td colSpan="6" className="px-6 py-12 text-center text-gray-500">
                   No users found
                 </td>
               </tr>
@@ -201,7 +201,7 @@ const UserList = () => {
               paginatedUsers.map((user) => (
                 <tr
                   key={user._id}
-                  className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                  className="hover:bg-gray-50 transition-colors"
                 >
                   {editingUser === user._id ? (
                     <>
@@ -214,7 +214,7 @@ const UserList = () => {
                               setEditForm({ ...editForm, firstName: e.target.value })
                             }
                             placeholder="First Name"
-                            className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm"
+                            className="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-gray-900 text-sm"
                           />
                           <input
                             type="text"
@@ -223,7 +223,7 @@ const UserList = () => {
                               setEditForm({ ...editForm, lastName: e.target.value })
                             }
                             placeholder="Last Name"
-                            className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm"
+                            className="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-gray-900 text-sm"
                           />
                         </div>
                       </td>
@@ -234,10 +234,10 @@ const UserList = () => {
                           onChange={(e) =>
                             setEditForm({ ...editForm, email: e.target.value })
                           }
-                          className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm"
+                          className="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-gray-900 text-sm"
                         />
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
+                      <td className="px-6 py-4 text-sm text-gray-600">
                         {formatDateOnly(user.createdAt)}
                       </td>
                       <td className="px-6 py-4">
@@ -250,7 +250,7 @@ const UserList = () => {
                             }
                             className="w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
                           />
-                          <span className="text-sm text-gray-700 dark:text-gray-300">
+                          <span className="text-sm text-gray-700">
                             Admin
                           </span>
                         </label>
@@ -265,7 +265,7 @@ const UserList = () => {
                             }
                             className="w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
                           />
-                          <span className="text-sm text-gray-700 dark:text-gray-300">
+                          <span className="text-sm text-gray-700">
                             Active
                           </span>
                         </label>
@@ -306,23 +306,23 @@ const UserList = () => {
                             )}
                           </div>
                           <div>
-                            <p className="font-semibold text-gray-900 dark:text-gray-100">
+                            <p className="font-semibold text-gray-900">
                               {user.firstName} {user.lastName}
                             </p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                            <p className="text-sm text-gray-500">
                               @{user.username}
                             </p>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="flex items-center space-x-2 text-gray-700 dark:text-gray-300">
+                        <div className="flex items-center space-x-2 text-gray-700">
                           <HiMail className="w-4 h-4 text-gray-400" />
                           <span className="text-sm">{user.email}</span>
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
+                        <div className="flex items-center space-x-2 text-gray-600">
                           <HiCalendar className="w-4 h-4" />
                           <span className="text-sm">
                             {formatDateOnly(user.createdAt)}
@@ -336,18 +336,18 @@ const UserList = () => {
                             Admin
                           </span>
                         ) : (
-                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gray-200 text-gray-700">
                             User
                           </span>
                         )}
                       </td>
                       <td className="px-6 py-4">
                         {user.isActive !== false ? (
-                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200">
+                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-200 text-green-800">
                             Active
                           </span>
                         ) : (
-                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-200 dark:bg-red-800 text-red-800 dark:text-red-200">
+                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-200 text-red-800">
                             Inactive
                           </span>
                         )}
@@ -356,7 +356,7 @@ const UserList = () => {
                         <div className="flex items-center justify-center space-x-2">
                           <button
                             onClick={() => handleEditUser(user)}
-                            className="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
+                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                             aria-label="Edit"
                           >
                             <FaEdit className="w-4 h-4" />
@@ -365,8 +365,8 @@ const UserList = () => {
                             onClick={() => handleToggleUserStatus(user._id, user.isActive !== false)}
                             className={`p-2 rounded-lg transition-colors ${
                               user.isActive !== false
-                                ? "text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20"
-                                : "text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20"
+                                ? "text-orange-600 hover:bg-orange-50"
+                                : "text-green-600 hover:bg-green-50"
                             }`}
                             aria-label={user.isActive !== false ? "Deactivate" : "Activate"}
                             title={user.isActive !== false ? "Deactivate User" : "Activate User"}
@@ -379,7 +379,7 @@ const UserList = () => {
                           </button>
                           <button
                             onClick={() => handleDeleteUser(user._id)}
-                            className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                             aria-label="Delete"
                           >
                             <FaTrash className="w-4 h-4" />
@@ -401,13 +401,13 @@ const UserList = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {paginatedUsers.length === 0 ? (
             <div className="col-span-full flex items-center justify-center py-12">
-              <p className="text-gray-500 dark:text-gray-400">No users found</p>
+              <p className="text-gray-500">No users found</p>
             </div>
           ) : (
             paginatedUsers.map((user) => (
               <div
                 key={user._id}
-                className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
+                className="bg-white rounded-xl border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
               >
                 {editingUser === user._id ? (
                   <div className="p-6 space-y-4">
@@ -419,7 +419,7 @@ const UserList = () => {
                           setEditForm({ ...editForm, firstName: e.target.value })
                         }
                         placeholder="First Name"
-                        className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm"
+                        className="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-gray-900 text-sm"
                       />
                       <input
                         type="text"
@@ -428,7 +428,7 @@ const UserList = () => {
                           setEditForm({ ...editForm, lastName: e.target.value })
                         }
                         placeholder="Last Name"
-                        className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm"
+                        className="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-gray-900 text-sm"
                       />
                     </div>
                     <input
@@ -438,7 +438,7 @@ const UserList = () => {
                         setEditForm({ ...editForm, email: e.target.value })
                       }
                       placeholder="Email"
-                      className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm"
+                      className="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-gray-900 text-sm"
                     />
                     <div className="space-y-3">
                       <label className="flex items-center space-x-2 cursor-pointer">
@@ -450,7 +450,7 @@ const UserList = () => {
                           }
                           className="w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
                         />
-                        <span className="text-sm text-gray-700 dark:text-gray-300">
+                        <span className="text-sm text-gray-700">
                           Admin
                         </span>
                       </label>
@@ -463,7 +463,7 @@ const UserList = () => {
                           }
                           className="w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
                         />
-                        <span className="text-sm text-gray-700 dark:text-gray-300">
+                        <span className="text-sm text-gray-700">
                           Active
                         </span>
                       </label>
@@ -502,21 +502,21 @@ const UserList = () => {
                           )}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="font-semibold text-gray-900 dark:text-gray-100 truncate">
+                          <p className="font-semibold text-gray-900 truncate">
                             {user.firstName} {user.lastName}
                           </p>
-                          <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                          <p className="text-sm text-gray-500 truncate">
                             @{user.username}
                           </p>
                         </div>
                       </div>
 
                       <div className="space-y-3 mb-4">
-                        <div className="flex items-center space-x-2 text-gray-700 dark:text-gray-300">
+                        <div className="flex items-center space-x-2 text-gray-700">
                           <HiMail className="w-4 h-4 text-gray-400 flex-shrink-0" />
                           <span className="text-sm truncate">{user.email}</span>
                         </div>
-                        <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
+                        <div className="flex items-center space-x-2 text-gray-600">
                           <HiCalendar className="w-4 h-4 flex-shrink-0" />
                           <span className="text-sm">
                             {formatDateOnly(user.createdAt)}
@@ -531,27 +531,27 @@ const UserList = () => {
                             Admin
                           </span>
                         ) : (
-                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gray-200 text-gray-700">
                             User
                           </span>
                         )}
                         {user.isActive !== false ? (
-                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200">
+                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-200 text-green-800">
                             Active
                           </span>
                         ) : (
-                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-200 dark:bg-red-800 text-red-800 dark:text-red-200">
+                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-200 text-red-800">
                             Inactive
                           </span>
                         )}
                       </div>
                     </div>
 
-                    <div className="px-6 py-4 bg-gray-50 dark:bg-gray-700/50 border-t border-gray-200 dark:border-gray-700">
+                    <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
                       <div className="flex items-center justify-center space-x-2">
                         <button
                           onClick={() => handleEditUser(user)}
-                          className="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
+                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                           aria-label="Edit"
                           title="Edit User"
                         >
@@ -561,8 +561,8 @@ const UserList = () => {
                           onClick={() => handleToggleUserStatus(user._id, user.isActive !== false)}
                           className={`p-2 rounded-lg transition-colors ${
                             user.isActive !== false
-                              ? "text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20"
-                              : "text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20"
+                              ? "text-orange-600 hover:bg-orange-50"
+                              : "text-green-600 hover:bg-green-50"
                           }`}
                           aria-label={user.isActive !== false ? "Deactivate" : "Activate"}
                           title={user.isActive !== false ? "Deactivate User" : "Activate User"}
@@ -575,7 +575,7 @@ const UserList = () => {
                         </button>
                         <button
                           onClick={() => handleDeleteUser(user._id)}
-                          className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                           aria-label="Delete"
                           title="Delete User"
                         >

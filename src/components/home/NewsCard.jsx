@@ -42,9 +42,9 @@ const NewsCard = ({ title, url, image, content, publishedAt, source, description
   const sourceName = source?.name || "News Source";
 
   return (
-    <article className="group relative bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 h-full flex flex-col">
+    <article className="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-200 hover:border-primary-300 h-full flex flex-col">
       {/* Image Section with Overlay */}
-      <div className="relative h-48 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 flex-shrink-0">
+      <div className="relative h-48 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 flex-shrink-0">
         <img
           src={imageError ? defaultImage : (image || defaultImage)}
           alt={title}
@@ -57,7 +57,7 @@ const NewsCard = ({ title, url, image, content, publishedAt, source, description
         
         {/* Source Badge */}
         <div className="absolute top-3 left-3">
-          <span className="inline-flex items-center gap-1.5 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm text-gray-900 dark:text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-lg">
+          <span className="inline-flex items-center gap-1.5 bg-white/95 backdrop-blur-sm text-gray-900 text-xs font-semibold px-3 py-1.5 rounded-full shadow-lg">
             <span className="w-1.5 h-1.5 bg-primary-500 rounded-full animate-pulse"></span>
             {sourceName}
           </span>
@@ -78,35 +78,35 @@ const NewsCard = ({ title, url, image, content, publishedAt, source, description
       <div className="p-5 flex flex-col flex-grow min-h-0">
         {/* Date */}
         {formattedDate && (
-          <div className="flex items-center gap-1.5 mb-3 text-xs text-gray-500 dark:text-gray-400">
+          <div className="flex items-center gap-1.5 mb-3 text-xs text-gray-500">
             <HiCalendar className="w-3.5 h-3.5" />
             <span>{formattedDate}</span>
             {author && (
               <>
                 <span className="mx-1">•</span>
-                <span className="text-gray-400 dark:text-gray-500">{author}</span>
+                <span className="text-gray-400">{author}</span>
               </>
             )}
           </div>
         )}
 
         {/* Title */}
-        <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-3 leading-tight line-clamp-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+        <h3 className="text-lg font-bold text-gray-900 mb-3 leading-tight line-clamp-2 group-hover:text-primary-600 transition-colors">
           {title}
         </h3>
 
         {/* Description */}
         {truncatedContent && (
-          <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-4 line-clamp-3">
+          <p className="text-sm text-gray-600 leading-relaxed mb-4 line-clamp-3">
             {truncatedContent}
           </p>
         )}
 
         {/* Footer */}
-        <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700 mt-auto">
+        <div className="flex items-center justify-between pt-4 border-t border-gray-200 mt-auto">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">Live</span>
+            <span className="text-xs text-gray-500 font-medium">Live</span>
           </div>
           <button
             onClick={handleReadMore}

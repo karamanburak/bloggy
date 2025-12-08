@@ -1,12 +1,4 @@
 import "react-slideshow-image/dist/styles.css";
-import {
-  Box,
-  Card,
-  CardMedia,
-  Container,
-  Grid,
-  Typography,
-} from "@mui/material";
 import PageHeader from "./PageHeader";
 import { MdArrowOutward } from "react-icons/md";
 
@@ -25,109 +17,39 @@ const BooksCard = ({
   };
 
   return (
-    <Container maxWidth="lg" sx={{ paddingBottom: "2rem" }}>
+    <div className="max-w-7xl mx-auto px-4 pb-8">
       <PageHeader text="Books" />
-      <Card
-        sx={{
-          display: "flex",
-          flexDirection: { xs: "column", md: "row" },
-          borderRadius: "16px",
-          boxShadow: "0 12px 30px rgba(0,0,0,0.15)",
-          overflow: "hidden",
-          padding: "1rem",
-          backgroundColor: "#f9f9f9",
-          border: "1px solid #e0e0e0",
-          position: "relative",
-          transition: "transform 0.3s ease, box-shadow 0.3s ease",
-        }}
-      >
-        <Grid container spacing={2}>
-          <Grid
-            item
-            xs={12}
-            md={6}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              p: 2,
-            }}
-          >
-            <CardMedia
-              component="img"
-              image={book_image || defaultImage}
+      <div className="flex flex-col md:flex-row rounded-2xl shadow-xl overflow-hidden p-4 bg-gray-50 border border-gray-200 relative transition-transform duration-300 hover:shadow-2xl hover:scale-[1.01]">
+        <div className="w-full md:w-1/2 grid grid-cols-12 gap-4">
+          <div className="col-span-12 md:col-span-6 flex items-center justify-center p-4">
+            <img
+              src={book_image || defaultImage}
               alt={`image for ${title}`}
-              sx={{
-                width: "100%",
-                // maxWidth: "400px",
-                height: "350px",
-                borderRadius: "12px",
-                boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-                objectFit: "fill",
-              }}
+              className="w-full h-[350px] rounded-xl shadow-lg object-cover"
             />
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            md={6}
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              p: 3,
-            }}
-          >
-            <Box>
-              <Typography
-                variant="h5"
-                sx={{
-                  fontWeight: "bold",
-                  mt: 1,
-                  mb: 1,
-                  color: "#333",
-                }}
-              >
+          </div>
+          <div className="col-span-12 md:col-span-6 flex flex-col justify-between p-6">
+            <div>
+              <h5 className="font-bold mt-2 mb-2 text-gray-900 text-xl">
                 {title}
-              </Typography>
-              <Typography
-                variant="h6"
-                sx={{
-                  mb: 2,
-                  color: "#555",
-                }}
-              >
+              </h5>
+              <h6 className="mb-4 text-gray-700 text-lg">
                 {author}
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{
-                  mb: 3,
-                  display: "-webkit-box",
-                  WebkitLineClamp: { xs: 4, md: 6 },
-                  WebkitBoxOrient: "vertical",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  color: "#666",
-                }}
-              >
+              </h6>
+              <p className="mb-6 line-clamp-4 md:line-clamp-6 overflow-hidden text-ellipsis text-gray-600">
                 {description}
-              </Typography>
-            </Box>
-            <Typography
+              </p>
+            </div>
+            <button
               onClick={handleReadMore}
-              sx={{
-                alignSelf: "flex-end",
-                textTransform: "none",
-                cursor: "pointer",
-              }}
+              className="self-end cursor-pointer text-primary-600 hover:text-primary-700 transition-colors flex items-center"
             >
-              Read More <MdArrowOutward style={{ marginLeft: ".5rem" }} />
-            </Typography>
-          </Grid>
-        </Grid>
-      </Card>
-    </Container>
+              Read More <MdArrowOutward className="ml-2" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

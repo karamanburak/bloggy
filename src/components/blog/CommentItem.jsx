@@ -99,8 +99,8 @@ const CommentItem = ({
       activeIcon: HiThumbUp,
       inactiveIcon: HiOutlineThumbUp,
       count: (comment?.likes || []).length,
-      activeColor: "text-green-600 dark:text-green-400",
-      inactiveColor: "text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400",
+      activeColor: "text-green-600",
+      inactiveColor: "text-gray-600 hover:text-green-600",
       ariaLabel: "Like comment",
     },
     {
@@ -110,8 +110,8 @@ const CommentItem = ({
       activeIcon: HiThumbDown,
       inactiveIcon: HiOutlineThumbDown,
       count: (comment?.dislikes || []).length,
-      activeColor: "text-red-600 dark:text-red-400",
-      inactiveColor: "text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400",
+      activeColor: "text-red-600",
+      inactiveColor: "text-gray-600 hover:text-red-600",
       ariaLabel: "Dislike comment",
     },
   ];
@@ -141,10 +141,10 @@ const CommentItem = ({
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-1">
             <div className="flex items-center space-x-2">
-              <h4 className="font-medium text-sm text-gray-900 dark:text-gray-100">
+              <h4 className="font-medium text-sm text-gray-900">
                 {comment?.userId?.firstName || "Unknown"} {comment?.userId?.lastName || ""}
               </h4>
-              <span className="text-xs text-gray-500 dark:text-gray-400">
+              <span className="text-xs text-gray-500">
                 {formatDateTime(comment.createdAt)}
               </span>
             </div>
@@ -153,14 +153,14 @@ const CommentItem = ({
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => setEditingComment(comment._id)}
-                  className="p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                  className="p-1.5 rounded-full hover:bg-gray-100 text-gray-600 hover:text-primary-600 transition-colors"
                   aria-label="Edit comment"
                 >
                   <HiPencil className="w-4 h-4" />
                 </button>
                 <button
                   onClick={() => onDelete(comment._id)}
-                  className="p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+                  className="p-1.5 rounded-full hover:bg-gray-100 text-gray-600 hover:text-red-600 transition-colors"
                   aria-label="Delete comment"
                 >
                   <HiTrash className="w-4 h-4" />
@@ -194,7 +194,7 @@ const CommentItem = ({
             </div>
           ) : (
             <>
-              <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed whitespace-pre-wrap mb-1">
+              <p className="text-sm text-gray-800 leading-relaxed whitespace-pre-wrap mb-1">
                 {comment.comment}
               </p>
               {/* Action Buttons */}
@@ -212,7 +212,7 @@ const CommentItem = ({
                           e.stopPropagation();
                           reaction.onClick(e);
                         }}
-                        className={`flex items-center space-x-1 px-2 py-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-xs font-medium transition-colors ${
+                        className={`flex items-center space-x-1 px-2 py-1 rounded-full hover:bg-gray-100 text-xs font-medium transition-colors ${
                           reaction.isActive ? reaction.activeColor : reaction.inactiveColor
                         }`}
                         aria-label={reaction.ariaLabel}
@@ -230,7 +230,7 @@ const CommentItem = ({
                 {currentUser && (
                   <button
                     onClick={() => setReplyingTo(replyingTo === comment._id ? null : comment._id)}
-                    className="px-2 py-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+                    className="px-2 py-1 rounded-full hover:bg-gray-100 text-xs font-medium text-gray-600 hover:text-gray-900 transition-colors"
                   >
                     Reply
                   </button>
@@ -238,7 +238,7 @@ const CommentItem = ({
                 {hasReplies && (
                   <button
                     onClick={() => onToggleReplies(comment._id)}
-                    className="px-2 py-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+                    className="px-2 py-1 rounded-full hover:bg-gray-100 text-xs font-medium text-gray-600 hover:text-gray-900 transition-colors"
                     aria-label={isExpanded ? "Hide replies" : "Show replies"}
                   >
                     {isExpanded ? (
@@ -385,8 +385,8 @@ const ReplyItem = ({ reply, currentUser, blogId, blog, onDelete, onLike, onDisli
       activeIcon: HiThumbUp,
       inactiveIcon: HiOutlineThumbUp,
       count: (reply?.likes || []).length,
-      activeColor: "text-green-600 dark:text-green-400",
-      inactiveColor: "text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400",
+      activeColor: "text-green-600",
+      inactiveColor: "text-gray-600 hover:text-green-600",
       ariaLabel: "Like reply",
     },
     {
@@ -396,8 +396,8 @@ const ReplyItem = ({ reply, currentUser, blogId, blog, onDelete, onLike, onDisli
       activeIcon: HiThumbDown,
       inactiveIcon: HiOutlineThumbDown,
       count: (reply?.dislikes || []).length,
-      activeColor: "text-red-600 dark:text-red-400",
-      inactiveColor: "text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400",
+      activeColor: "text-red-600",
+      inactiveColor: "text-gray-600 hover:text-red-600",
       ariaLabel: "Dislike reply",
     },
   ];
@@ -426,10 +426,10 @@ const ReplyItem = ({ reply, currentUser, blogId, blog, onDelete, onLike, onDisli
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between mb-0.5">
           <div className="flex items-center space-x-2">
-            <h4 className="font-medium text-xs text-gray-900 dark:text-gray-100">
+            <h4 className="font-medium text-xs text-gray-900">
               {reply?.userId?.firstName || "Unknown"} {reply?.userId?.lastName || ""}
             </h4>
-            <span className="text-xs text-gray-500 dark:text-gray-400">
+            <span className="text-xs text-gray-500">
               {formatDateTime(reply.createdAt)}
             </span>
           </div>
@@ -438,14 +438,14 @@ const ReplyItem = ({ reply, currentUser, blogId, blog, onDelete, onLike, onDisli
             <div className="flex items-center space-x-1">
               <button
                 onClick={() => setEditingReply(reply._id)}
-                className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                className="p-1 rounded-full hover:bg-gray-100 text-gray-600 hover:text-primary-600 transition-colors"
                 aria-label="Edit reply"
               >
                 <HiPencil className="w-3.5 h-3.5" />
               </button>
               <button
                 onClick={() => onDelete(reply._id)}
-                className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+                className="p-1 rounded-full hover:bg-gray-100 text-gray-600 hover:text-red-600 transition-colors"
                 aria-label="Delete reply"
               >
                 <HiTrash className="w-3.5 h-3.5" />
@@ -479,7 +479,7 @@ const ReplyItem = ({ reply, currentUser, blogId, blog, onDelete, onLike, onDisli
           </div>
         ) : (
           <>
-            <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap mb-1.5">
+            <p className="text-xs text-gray-700 leading-relaxed whitespace-pre-wrap mb-1.5">
               {reply.comment}
             </p>
             {/* Like/Dislike Buttons for Reply */}

@@ -143,7 +143,7 @@ const CommentsSection = ({
   const parentCommentsCount = parentComments.length;
 
   return (
-    <div id="comments-section" className="mt-16 pt-12 border-t border-gray-200/50 dark:border-gray-700/50">
+    <div id="comments-section" className="mt-16 pt-12 border-t border-gray-200/50">
       {currentUser && (
         <div className="mb-12">
           <CommentForm 
@@ -172,8 +172,8 @@ const CommentsSection = ({
             </div>
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Comments</h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+            <h2 className="text-2xl font-bold text-gray-900">Comments</h2>
+            <p className="text-sm text-gray-500 mt-0.5">
               {parentCommentsCount} {parentCommentsCount === 1 ? "comment" : "comments"}
             </p>
           </div>
@@ -181,11 +181,11 @@ const CommentsSection = ({
         {/* Sort Dropdown - Only show if there are comments */}
         {parentCommentsCount > 0 && (
           <div className="flex items-center space-x-2">
-            <label className="text-sm text-gray-600 dark:text-gray-400">Sort:</label>
+            <label className="text-sm text-gray-600">Sort:</label>
             <select
               value={commentSort}
               onChange={(e) => setCommentSort(e.target.value)}
-              className="px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500/50"
+              className="px-3 py-1.5 text-sm rounded-lg border border-gray-300 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500/50"
             >
               {sortOptions.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -228,8 +228,8 @@ const CommentsSection = ({
           })
         ) : (
           <div className="text-center py-12">
-            <HiChatAlt className="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-3" />
-            <p className="text-gray-600 dark:text-gray-400 text-sm">
+            <HiChatAlt className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+            <p className="text-gray-600 text-sm">
               No comments yet. Be the first to comment!
             </p>
           </div>
@@ -254,28 +254,28 @@ const CommentsSection = ({
           {/* Modal Container */}
           <div className="flex min-h-full items-center justify-center p-4">
             <div
-              className="relative w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-gray-900 shadow-2xl transition-all duration-300 animate-scale-in border border-gray-200 dark:border-gray-700"
+              className="relative w-full max-w-md transform overflow-hidden rounded-2xl bg-white shadow-2xl transition-all duration-300 animate-scale-in border border-gray-200"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
-              <div className="px-6 py-5 border-b border-gray-200 dark:border-gray-700">
+              <div className="px-6 py-5 border-b border-gray-200">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center shadow-lg">
                       <HiTrash className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                      <h3 className="text-xl font-bold text-gray-900">
                         Delete Comment
                       </h3>
-                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+                      <p className="text-sm text-gray-500 mt-0.5">
                         This action cannot be undone
                       </p>
                     </div>
                   </div>
                   <button
                     onClick={() => setCommentToDelete(null)}
-                    className="p-2 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    className="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
                     aria-label="Close modal"
                   >
                     <HiX className="w-5 h-5" />
@@ -285,17 +285,17 @@ const CommentsSection = ({
 
               {/* Content */}
               <div className="px-6 py-6">
-                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                <p className="text-gray-700 leading-relaxed">
                   Are you sure you want to delete this comment? This action cannot be undone and the
                   comment will be permanently removed.
                 </p>
               </div>
 
               {/* Actions */}
-              <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-end space-x-3">
+              <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-end space-x-3">
                 <button
                   onClick={() => setCommentToDelete(null)}
-                  className="px-6 py-2.5 rounded-xl font-semibold text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500/50"
+                  className="px-6 py-2.5 rounded-xl font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500/50"
                 >
                   Cancel
                 </button>

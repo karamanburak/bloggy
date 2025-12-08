@@ -1,15 +1,8 @@
 import React from "react";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import Avatar from "@mui/material/Avatar";
-import Typography from "@mui/material/Typography";
-import { Box, Container, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
-import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import { HiHeart } from "react-icons/hi";
+import { HiChatBubbleLeftRight } from "react-icons/hi2";
+import { HiEye } from "react-icons/hi";
 import PageHeader from "./PageHeader";
 import { toastWarnNotify } from "../../helper/ToastNotify";
 import { useSelector } from "react-redux";
@@ -81,19 +74,15 @@ const HomeCard = ({
 
   const { image: userImage, firstName, lastName } = userId;
 
-  // Helper function to extract parent ID from comment (same logic as Detail page)
   const getParentId = (comment) => {
     if (!comment) return null;
     
-    // Try different field names - check all possible variations
     let parentId = comment.parentCommentId || comment.parentId || comment.parentComment || comment.replyTo || comment.parent;
     
-    // If it's a string, return it (but check if it's not empty)
     if (typeof parentId === 'string' && parentId.trim() !== '' && parentId !== 'null' && parentId !== 'undefined') {
       return parentId;
     }
     
-    // If it's an object, extract the ID
     if (typeof parentId === 'object' && parentId !== null) {
       const extractedId = parentId._id || parentId.id || null;
       if (extractedId && typeof extractedId === 'string' && extractedId.trim() !== '') {
@@ -101,7 +90,6 @@ const HomeCard = ({
       }
     }
     
-    // Also check if comment has a populated parentComment field
     if (comment.parentComment && typeof comment.parentComment === 'object') {
       return comment.parentComment._id || comment.parentComment.id || null;
     }
@@ -109,145 +97,87 @@ const HomeCard = ({
     return null;
   };
 
-  // Count only parent comments (not replies)
   const getParentCommentCount = () => {
     if (!Array.isArray(comments)) return 0;
     return comments.filter(comment => {
       const parentId = getParentId(comment);
-      // A comment is a parent if it has no parentId or parentId is empty/null
       return !parentId;
     }).length;
   };
 
   return (
-    <Container maxWidth="lg" sx={{ paddingBottom: "2rem" }}>
+    <div className="max-w-7xl mx-auto px-4 pb-8">
       <PageHeader text="Blogs" />
-      <Card
-        sx={{
-          minHeight: "300px",
-          flexDirection: { xs: "column", md: "row" },
-          padding: "1rem",
-        }}
-      >
-        <Grid container>
-          <Grid
-            item
-            xs={12}
-            md={6}
-            order={{ xs: 2, md: 1 }}
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              my: 3,
-              p: 2,
-              borderRadius: "12px",
-            }}
-          >
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <CardHeader
-                sx={{
-                  "& .MuiTypography-root": {
-                    fontSize: 18,
-                    fontWeight: "bold",
-                  },
-                }}
-                avatar={
-                  <Avatar aria-label="recipe">
-                    {userImage ? (
-                      <img
-                        src={userImage}
-                        alt="user"
-                        style={{ width: "100%" }}
-                      />
-                    ) : (
-                      "A"
-                    )}
-                  </Avatar>
-                }
-                title={`${firstName} ${lastName}`}
-                subheader={formatDateTime(createdAt)}
-              />
-              <Typography
-                variant="body2"
-                sx={{
-                  fontSize: "0.9rem",
-                  fontWeight: "bold",
-                  mt: 3,
-                }}
+      <div className="min-h-[300px] flex flex-col md:flex-row p-4 bg-white rounded-xl shadow-lg">
+        <div className="w-full md:w-1/2 flex flex-col justify-between my-6 p-4 rounded-xl order-2 md:order-1">
+          <div className="flex justify-between items-start">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center flex-shrink-0">
+                {userImage ? (
+                  <img
+                    src={userImage}
+                    alt="user"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span className="text-gray-600 font-semibold">
+                    {firstName?.charAt(0) || lastName?.charAt(0) || "A"}
+                  </span>
+                )}
+              </div>
+              <div className="flex flex-col">
+                <span className="text-lg font-bold text-gray-900">
+                  {firstName} {lastName}
+                </span>
+                <span className="text-sm text-gray-500">
+                  {formatDateTime(createdAt)}
+                </span>
+              </div>
+            </div>
+            <span className="text-sm font-bold mt-3 text-gray-700">
+              {readingTime}
+            </span>
+          </div>
+          <div className="mt-4">
+            <p className="max-h-20 overflow-hidden text-ellipsis line-clamp-3 leading-relaxed text-gray-700">
+              {content}
+            </p>
+            <div className="flex items-center mt-4 space-x-4">
+              <button
+                onClick={handleLike}
+                className={`flex items-center space-x-1 ${liked ? "text-red-500" : "text-gray-500"} hover:text-red-500 transition-colors`}
               >
-                {readingTime}
-              </Typography>
-            </Box>
-            <CardContent>
-              <Typography
-                variant="body2"
-                sx={{
-                  maxHeight: "80px",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  display: "-webkit-box",
-                  WebkitLineClamp: "3",
-                  WebkitBoxOrient: "vertical",
-                  lineHeight: 1.5,
-                }}
-              >
-                {content}
-              </Typography>
-              <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
-                <FavoriteIcon
-                  sx={{ color: liked ? "red" : "", cursor: "pointer" }}
-                  onClick={handleLike}
-                />
-                <Typography sx={{ ml: 1 }}>{likes?.length}</Typography>
-                <ChatBubbleOutlineIcon sx={{ ml: 2 }} />
-                <Typography sx={{ ml: 1 }}>{getParentCommentCount()}</Typography>
-                <RemoveRedEyeIcon sx={{ ml: 2 }} />
-                <Typography sx={{ ml: 1 }}>{countOfVisitors}</Typography>
-              </Box>
-            </CardContent>
-
-            <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
-              <Typography
-                onClick={handleReadMore}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1,
-                  cursor: "pointer",
-                  fontWeight: 500,
-                }}
-              >
-                Read More <MdArrowOutward style={{ marginTop: ".2rem" }} />
-              </Typography>
-            </Box>
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            md={6}
-            order={{ xs: 1, md: 2 }}
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <CardMedia
-              component="img"
-              height="374"
-              image={image}
-              alt="image"
-              sx={{
-                width: "100%",
-                objectFit: "fill",
-                borderRadius: "1rem",
-              }}
-            />
-          </Grid>
-        </Grid>
-      </Card>
-    </Container>
+                <HiHeart className="w-5 h-5" />
+                <span>{likes?.length || 0}</span>
+              </button>
+              <div className="flex items-center space-x-1 text-gray-500">
+                <HiChatBubbleLeftRight className="w-5 h-5" />
+                <span>{getParentCommentCount()}</span>
+              </div>
+              <div className="flex items-center space-x-1 text-gray-500">
+                <HiEye className="w-5 h-5" />
+                <span>{countOfVisitors || 0}</span>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-end mt-4">
+            <button
+              onClick={handleReadMore}
+              className="flex items-center gap-2 cursor-pointer font-medium text-primary-600 hover:text-primary-700 transition-colors"
+            >
+              Read More <MdArrowOutward className="mt-0.5" />
+            </button>
+          </div>
+        </div>
+        <div className="w-full md:w-1/2 flex justify-center items-center order-1 md:order-2">
+          <img
+            src={image}
+            alt="blog"
+            className="w-full h-[374px] object-cover rounded-2xl"
+          />
+        </div>
+      </div>
+    </div>
   );
 };
 

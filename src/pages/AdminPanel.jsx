@@ -64,16 +64,16 @@ const AdminPanel = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300 pt-20 flex flex-col">
+    <div className="min-h-screen bg-gray-50 transition-colors duration-300 pt-20 flex flex-col">
       <div className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent dark:from-primary-400 dark:to-accent-400">
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent">
                 Admin Panel
               </h1>
-              <p className="text-gray-600 dark:text-gray-400 mt-2">
+              <p className="text-gray-600 mt-2">
                 Manage users and track activities
               </p>
             </div>
@@ -86,7 +86,7 @@ const AdminPanel = () => {
               </div>
               <button
                 onClick={() => navigate("/")}
-                className="px-4 py-2 rounded-xl bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors flex items-center space-x-2"
+                className="px-4 py-2 rounded-xl bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors flex items-center space-x-2"
               >
                 <HiHome className="w-5 h-5" />
                 <span>Home</span>
@@ -97,7 +97,7 @@ const AdminPanel = () => {
 
         {/* Tabs */}
         <div className="mb-6">
-          <div className="flex space-x-2 bg-white dark:bg-gray-800 rounded-xl p-2 border border-gray-200 dark:border-gray-700 shadow-lg">
+          <div className="flex space-x-2 bg-white rounded-xl p-2 border border-gray-200 shadow-lg">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               return (
@@ -107,7 +107,7 @@ const AdminPanel = () => {
                   className={`relative flex-1 py-3 px-6 rounded-xl font-bold text-sm transition-all duration-300 ${
                     activeTab === tab.id
                       ? "text-white shadow-lg"
-                      : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                      : "text-gray-600 hover:text-gray-900"
                   }`}
                 >
                   {activeTab === tab.id && (
@@ -124,7 +124,7 @@ const AdminPanel = () => {
         </div>
 
         {/* Tab Content */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-xl p-6 lg:p-8">
+        <div className="bg-white rounded-xl border border-gray-200 shadow-xl p-6 lg:p-8">
           {tabs.find((tab) => tab.id === activeTab)?.component}
         </div>
       </div>

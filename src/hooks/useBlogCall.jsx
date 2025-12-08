@@ -68,7 +68,6 @@ const useBlogCall = () => {
           }
         }
       } catch (err) {
-        // Error fetching comments
       }
       
       return [];
@@ -277,7 +276,6 @@ const useBlogCall = () => {
       
       dispatch(incrementBlogViewer({ blogId: id }));
     } catch (error) {
-      console.error("Error incrementing viewer:", error);
     }
   };
 
@@ -286,7 +284,6 @@ const useBlogCall = () => {
       const comments = await getCommentsByBlogId(blogId);
       return comments;
     } catch (error) {
-      console.error("Error refreshing comments:", error);
       return [];
     }
   };

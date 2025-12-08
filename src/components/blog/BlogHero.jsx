@@ -167,18 +167,18 @@ const BlogHero = ({
                     className="fixed inset-0 z-40"
                     onClick={() => setMenuOpen(false)}
                   />
-                  <div className="absolute right-0 bottom-full mb-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 py-2 z-50 max-h-[90vh] overflow-y-auto">
+                  <div className="absolute right-0 bottom-full mb-2 w-48 bg-white rounded-xl shadow-xl border border-gray-200 py-2 z-50 max-h-[90vh] overflow-y-auto">
                     {menuItems.map((item, index) => {
                       if (!item.show) return null;
                       const Icon = item.icon;
                       return (
                         <div key={item.id}>
                           {index > 0 && (
-                            <div className="border-t border-gray-200 dark:border-gray-700 my-1" />
+                            <div className="border-t border-gray-200 my-1" />
                           )}
                           <button
                             onClick={item.onClick}
-                            className="w-full flex items-center space-x-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                            className="w-full flex items-center space-x-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                           >
                             <Icon className="w-4 h-4" />
                             <span>{item.label}</span>
@@ -188,7 +188,7 @@ const BlogHero = ({
                     })}
                     {isCurrentUserOwner && (
                       <>
-                        <div className="border-t border-gray-200 dark:border-gray-700 my-1" />
+                        <div className="border-t border-gray-200 my-1" />
                         <DeleteBlog id={blogId} isMenuItem={true} />
                       </>
                     )}

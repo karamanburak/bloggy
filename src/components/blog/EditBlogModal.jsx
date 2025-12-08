@@ -188,7 +188,7 @@ export default function EditBlogModal({
       <div className="flex min-h-full items-center justify-center p-4">
         <div
           ref={modalRef}
-          className="relative w-full max-w-4xl transform overflow-hidden rounded-3xl bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl shadow-2xl transition-all duration-500 animate-scale-in border border-white/20 dark:border-gray-700/50"
+          className="relative w-full max-w-4xl transform overflow-hidden rounded-3xl bg-white/95 backdrop-blur-xl shadow-2xl transition-all duration-500 animate-scale-in border border-white/20"
           onClick={(e) => e.stopPropagation()}
           style={{
             boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1)",
@@ -198,7 +198,7 @@ export default function EditBlogModal({
           <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-primary-500/20 via-accent-500/20 to-primary-500/20 opacity-0 hover:opacity-100 transition-opacity duration-500 -z-10 blur-xl"></div>
           
           {/* Header with modern design */}
-          <div className="relative flex items-center justify-between px-8 py-6 bg-gradient-to-r from-primary-600/10 via-accent-600/10 to-primary-600/10 dark:from-primary-900/30 dark:via-accent-900/30 dark:to-primary-900/30 border-b border-primary-200/50 dark:border-primary-800/50 backdrop-blur-sm">
+          <div className="relative flex items-center justify-between px-8 py-6 bg-gradient-to-r from-primary-600/10 via-accent-600/10 to-primary-600/10 border-b border-primary-200/50 backdrop-blur-sm">
             <div className="flex items-center space-x-3">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary-500 to-accent-500 rounded-xl blur-lg opacity-50 animate-pulse"></div>
@@ -209,18 +209,18 @@ export default function EditBlogModal({
               <div>
                 <h2
                   id="modal-title"
-                  className="text-3xl font-bold bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent dark:from-primary-400 dark:to-accent-400"
+                  className="text-3xl font-bold bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent"
                 >
                   Edit Blog
                 </h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+                <p className="text-sm text-gray-500 mt-0.5">
                   Update your blog post
                 </p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="group relative rounded-xl p-2.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-white/50 dark:hover:bg-gray-800/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500/50"
+              className="group relative rounded-xl p-2.5 text-gray-400 hover:text-gray-600 hover:bg-white/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500/50"
               aria-label="Close modal"
             >
               <HiX className="w-6 h-6 group-hover:rotate-90 transition-transform duration-300" />
@@ -233,9 +233,9 @@ export default function EditBlogModal({
             <div className="group">
               <label
                 htmlFor="title"
-                className="flex items-center space-x-2 text-sm font-bold text-gray-700 dark:text-gray-300 mb-3"
+                className="flex items-center space-x-2 text-sm font-bold text-gray-700 mb-3"
               >
-                <HiDocumentText className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                <HiDocumentText className="w-5 h-5 text-primary-600" />
                 <span>Blog Title</span>
                 <span className="text-red-500">*</span>
               </label>
@@ -247,12 +247,12 @@ export default function EditBlogModal({
                   value={info.title || ""}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className={`w-full px-5 py-4 rounded-2xl border-2 transition-all duration-300 bg-gray-50/50 dark:bg-gray-800/50 backdrop-blur-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-primary-500/20 ${
+                  className={`w-full px-5 py-4 rounded-2xl border-2 transition-all duration-300 bg-gray-50/50 backdrop-blur-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-primary-500/20 ${
                     titleError
                       ? "border-red-500/50 focus:border-red-500 focus:ring-red-500/20"
                       : info.title && !titleError
                       ? "border-green-500/50 focus:border-primary-500"
-                      : "border-gray-300/50 dark:border-gray-600/50 focus:border-primary-500"
+                      : "border-gray-300/50 focus:border-primary-500"
                   }`}
                   placeholder="Write an engaging title..."
                   aria-invalid={!!titleError}
@@ -272,7 +272,7 @@ export default function EditBlogModal({
               {titleError && (
                 <p
                   id="title-error"
-                  className="mt-2 flex items-center space-x-2 text-sm text-red-600 dark:text-red-400 animate-slide-down"
+                  className="mt-2 flex items-center space-x-2 text-sm text-red-600 animate-slide-down"
                   role="alert"
                 >
                   <HiExclamationCircle className="w-4 h-4 shrink-0" />
@@ -280,11 +280,11 @@ export default function EditBlogModal({
                 </p>
               )}
               <div className="mt-2 flex items-center justify-between">
-                <p className="text-xs text-gray-500 dark:text-gray-400">
+                <p className="text-xs text-gray-500">
                   {info.title?.length || 0}/100 characters
                 </p>
                 {info.title && !titleError && (
-                  <p className="text-xs text-green-600 dark:text-green-400 font-medium">
+                  <p className="text-xs text-green-600 font-medium">
                     ✓ Looks good!
                   </p>
                 )}
@@ -293,8 +293,8 @@ export default function EditBlogModal({
 
             {/* Image Upload Field */}
             <div className="group">
-              <label className="flex items-center space-x-2 text-sm font-bold text-gray-700 dark:text-gray-300 mb-3">
-                <HiPhotograph className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+              <label className="flex items-center space-x-2 text-sm font-bold text-gray-700 mb-3">
+                <HiPhotograph className="w-5 h-5 text-primary-600" />
                 <span>Featured Image</span>
                 <span className="text-red-500">*</span>
               </label>
@@ -308,7 +308,7 @@ export default function EditBlogModal({
               {imageError && (
                 <p
                   id="image-error"
-                  className="mt-2 flex items-center space-x-2 text-sm text-red-600 dark:text-red-400 animate-slide-down"
+                  className="mt-2 flex items-center space-x-2 text-sm text-red-600 animate-slide-down"
                   role="alert"
                 >
                   <HiExclamationCircle className="w-4 h-4 shrink-0" />
@@ -321,9 +321,9 @@ export default function EditBlogModal({
             <div className="group">
               <label
                 htmlFor="categoryId"
-                className="flex items-center space-x-2 text-sm font-bold text-gray-700 dark:text-gray-300 mb-3"
+                className="flex items-center space-x-2 text-sm font-bold text-gray-700 mb-3"
               >
-                <HiTag className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                <HiTag className="w-5 h-5 text-primary-600" />
                 <span>Category</span>
                 <span className="text-red-500">*</span>
               </label>
@@ -333,12 +333,12 @@ export default function EditBlogModal({
                   name="categoryId"
                   value={info?.categoryId || ""}
                   onChange={handleChange}
-                  className={`w-full px-5 py-4 rounded-2xl border-2 transition-all duration-300 bg-gray-50/50 dark:bg-gray-800/50 backdrop-blur-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-4 focus:ring-primary-500/20 appearance-none cursor-pointer ${
+                  className={`w-full px-5 py-4 rounded-2xl border-2 transition-all duration-300 bg-gray-50/50 backdrop-blur-sm text-gray-900 focus:outline-none focus:ring-4 focus:ring-primary-500/20 appearance-none cursor-pointer ${
                     categoryError
                       ? "border-red-500/50 focus:border-red-500 focus:ring-red-500/20"
                       : info?.categoryId
                       ? "border-green-500/50 focus:border-primary-500"
-                      : "border-gray-300/50 dark:border-gray-600/50 focus:border-primary-500"
+                      : "border-gray-300/50 focus:border-primary-500"
                   }`}
                   aria-invalid={!!categoryError}
                   aria-describedby={categoryError ? "category-error" : undefined}
@@ -373,7 +373,7 @@ export default function EditBlogModal({
               {categoryError && (
                 <p
                   id="category-error"
-                  className="mt-2 flex items-center space-x-2 text-sm text-red-600 dark:text-red-400 animate-slide-down"
+                  className="mt-2 flex items-center space-x-2 text-sm text-red-600 animate-slide-down"
                   role="alert"
                 >
                   <HiExclamationCircle className="w-4 h-4 shrink-0" />
@@ -386,9 +386,9 @@ export default function EditBlogModal({
             <div className="group">
               <label
                 htmlFor="isPublish"
-                className="flex items-center space-x-2 text-sm font-bold text-gray-700 dark:text-gray-300 mb-3"
+                className="flex items-center space-x-2 text-sm font-bold text-gray-700 mb-3"
               >
-                <HiStatusOnline className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                <HiStatusOnline className="w-5 h-5 text-primary-600" />
                 <span>Publish Status</span>
                 <span className="text-red-500">*</span>
               </label>
@@ -398,7 +398,7 @@ export default function EditBlogModal({
                   name="isPublish"
                   value={info.isPublish ?? true}
                   onChange={handleChange}
-                  className="w-full px-5 py-4 rounded-2xl border-2 border-gray-300/50 dark:border-gray-600/50 bg-gray-50/50 dark:bg-gray-800/50 backdrop-blur-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-4 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-300 appearance-none cursor-pointer"
+                  className="w-full px-5 py-4 rounded-2xl border-2 border-gray-300/50 bg-gray-50/50 backdrop-blur-sm text-gray-900 focus:outline-none focus:ring-4 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-300 appearance-none cursor-pointer"
                 >
                   {isPublish.map((status) => (
                     <option key={status.id} value={status.value}>
@@ -426,28 +426,28 @@ export default function EditBlogModal({
 
             {/* Content Editor */}
             <div className="group">
-              <label className="flex items-center space-x-2 text-sm font-bold text-gray-700 dark:text-gray-300 mb-3">
-                <HiDocumentText className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+              <label className="flex items-center space-x-2 text-sm font-bold text-gray-700 mb-3">
+                <HiDocumentText className="w-5 h-5 text-primary-600" />
                 <span>Blog Content</span>
                 <span className="text-red-500">*</span>
-                <span className="ml-2 text-xs font-normal text-gray-500 dark:text-gray-400">
+                <span className="ml-2 text-xs font-normal text-gray-500">
                   (Minimum 30 words)
                 </span>
               </label>
-              <div className="relative rounded-2xl overflow-hidden border-2 border-gray-300/50 dark:border-gray-600/50 bg-gray-50/50 dark:bg-gray-800/50 backdrop-blur-sm focus-within:border-primary-500 focus-within:ring-4 focus-within:ring-primary-500/20 transition-all duration-300">
+              <div className="relative rounded-2xl overflow-hidden border-2 border-gray-300/50 bg-gray-50/50 backdrop-blur-sm focus-within:border-primary-500 focus-within:ring-4 focus-within:ring-primary-500/20 transition-all duration-300">
                 <TinyMce content={initialState.content} setInfo={setInfo} />
               </div>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200/50 dark:border-gray-700/50">
+            <div className="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200/50">
               <button
                 type="button"
                 onClick={onClose}
-                className="group relative px-8 py-4 rounded-2xl font-bold text-gray-700 dark:text-gray-300 bg-gray-100/80 dark:bg-gray-800/80 backdrop-blur-sm hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-gray-500/20 hover:scale-105 active:scale-95"
+                className="group relative px-8 py-4 rounded-2xl font-bold text-gray-700 bg-gray-100/80 backdrop-blur-sm hover:bg-gray-200 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-gray-500/20 hover:scale-105 active:scale-95"
               >
                 <span className="relative z-10">Cancel</span>
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-gray-200 to-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </button>
               <button
                 type="submit"

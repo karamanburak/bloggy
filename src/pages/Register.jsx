@@ -10,7 +10,7 @@ const Register = () => {
   const { register } = useAuthCall();
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300 flex flex-col">
+    <div className="min-h-screen bg-white transition-colors duration-300 flex flex-col">
       <div className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-20 pb-12">
         <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
           {/* Left Side - Information */}
@@ -27,10 +27,10 @@ const Register = () => {
                   <HiUser className="w-8 h-8 text-white" />
                   <HiPlus className="w-4 h-4 text-white absolute -bottom-1 -right-1 bg-primary-600 rounded-full p-0.5" />
                 </div>
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">
                   Create Your Account
                 </h1>
-                <p className="text-gray-600 dark:text-gray-400">
+                <p className="text-gray-600">
                   Join Bloggy and start sharing your stories
                 </p>
               </div>
@@ -54,11 +54,11 @@ const Register = () => {
 
               {/* Footer Link */}
               <div className="text-center mt-6">
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-sm text-gray-600">
                   Already have an account?{" "}
                   <Link
                     to="/login"
-                    className="text-primary-600 dark:text-primary-400 font-semibold hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
+                    className="text-primary-600 font-semibold hover:text-primary-700 transition-colors"
                   >
                     Sign in
                   </Link>

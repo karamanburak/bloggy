@@ -52,16 +52,6 @@ export const handleApiError = (error, options = {}) => {
     onError(error, { message: errorMessage, statusCode, errorData });
   }
 
-  // Log error for debugging (only in development)
-  if (import.meta.env.DEV) {
-    console.error("API Error:", {
-      message: errorMessage,
-      statusCode,
-      errorData,
-      originalError: error,
-    });
-  }
-
   return {
     message: errorMessage,
     statusCode,
@@ -108,10 +98,6 @@ export const retryApiCall = async (apiCall, options = {}) => {
       // Wait before retrying (exponential backoff)
       const waitTime = delay * Math.pow(2, attempt);
       await new Promise((resolve) => setTimeout(resolve, waitTime));
-
-      if (import.meta.env.DEV) {
-        console.warn(`Retrying API call (attempt ${attempt + 1}/${maxRetries})...`);
-      }
     }
   }
 

@@ -26,9 +26,10 @@ const DRAFT_STORAGE_KEY = "bloggy_draft_blog";
 
 const CreateBlog = () => {
   const navigate = useNavigate();
-  const { postBlog } = useBlogCall();
+  const { postBlog, getBlogData } = useBlogCall();
   const { getCategory } = useCategoryCall();
   const { categories, loading: categoriesLoading } = useSelector((state) => state.category);
+  const { blogs } = useSelector((state) => state.blog);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [lastSaved, setLastSaved] = useState(null);
@@ -126,6 +127,7 @@ const CreateBlog = () => {
 
   useEffect(() => {
     getCategory("categories");
+    getBlogData("blogs");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -232,6 +234,18 @@ const CreateBlog = () => {
       return;
     }
 
+    // Check if blog with same title already exists
+    const trimmedTitle = formData.title.trim();
+    const existingBlog = Array.isArray(blogs) 
+      ? blogs.find(blog => blog.title?.trim().toLowerCase() === trimmedTitle.toLowerCase())
+      : null;
+
+    if (existingBlog) {
+      toastWarnNotify(`A blog with the title "${trimmedTitle}" already exists. Please choose a different title.`);
+      setErrors((prev) => ({ ...prev, title: "A blog with this title already exists" }));
+      return;
+    }
+
     setIsSubmitting(true);
     postBlog("blogs", formData);
     // Clear draft after successful submission
@@ -247,7 +261,7 @@ const CreateBlog = () => {
   const selectedCategory = categories.find(cat => cat._id === formData.categoryId);
 
   return (
-    <div className="relative min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
+    <div className="relative min-h-screen bg-white transition-colors duration-300">
       {/* Background Video */}
       <div className="fixed inset-0 z-0">
         <video
@@ -256,9 +270,9 @@ const CreateBlog = () => {
           loop
           muted
           playsInline
-          className="w-full h-full object-cover opacity-20 dark:opacity-30"
+          className="w-full h-full object-cover opacity-20"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/90 via-white/80 to-white/90 dark:from-gray-900/90 dark:via-gray-900/80 dark:to-gray-900/90" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/90 via-white/80 to-white/90" />
       </div>
 
       {/* Content */}
@@ -269,7 +283,7 @@ const CreateBlog = () => {
             <div className="flex items-center justify-between mb-4">
               <button
                 onClick={() => navigate(-1)}
-                className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                className="flex items-center space-x-2 text-gray-700 hover:text-primary-600 transition-colors"
               >
                 <HiArrowLeft className="w-5 h-5" />
                 <span>Back</span>
@@ -278,7 +292,7 @@ const CreateBlog = () => {
               {/* Draft Status & Actions */}
               <div className="flex items-center space-x-3">
                 {lastSaved && (
-                  <div className="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400">
+                  <div className="flex items-center space-x-2 text-xs text-gray-500">
                     <HiClock className="w-4 h-4" />
                     <span>Saved {lastSaved.toLocaleTimeString()}</span>
                   </div>
@@ -291,14 +305,14 @@ const CreateBlog = () => {
                 )}
                 <button
                   onClick={saveDraft}
-                  className="px-3 py-1.5 text-xs font-semibold text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"
+                  className="px-3 py-1.5 text-xs font-semibold text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-all"
                   title="Save draft (Ctrl+S)"
                 >
                   Save Draft
                 </button>
                 <button
                   onClick={() => setShowPreview(!showPreview)}
-                  className="px-3 py-1.5 text-xs font-semibold text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20 rounded-lg hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-all flex items-center space-x-1"
+                  className="px-3 py-1.5 text-xs font-semibold text-primary-600 bg-primary-50 rounded-lg hover:bg-primary-100 transition-all flex items-center space-x-1"
                 >
                   {showPreview ? (
                     <>
@@ -314,10 +328,10 @@ const CreateBlog = () => {
                 </button>
               </div>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">
               Create New Blog Post
             </h1>
-            <p className="text-gray-600 dark:text-gray-400 text-lg">
+            <p className="text-gray-600 text-lg">
               Share your thoughts, ideas, and stories with the community
             </p>
           </div>
@@ -325,17 +339,17 @@ const CreateBlog = () => {
           {/* Preview Mode */}
           {showPreview ? (
             <div className="card p-6 md:p-8 mb-6">
-              <div className="border-b border-gray-200 dark:border-gray-700 pb-4 mb-6">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+              <div className="border-b border-gray-200 pb-4 mb-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">
                   {formData.title || "Untitled Blog Post"}
                 </h2>
-                <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
+                <div className="flex items-center space-x-4 text-sm text-gray-600">
                   {selectedCategory && (
-                    <span className="px-3 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-full font-medium">
+                    <span className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full font-medium">
                       {selectedCategory.name}
                     </span>
                   )}
-                  <span className={formData.isPublish ? "text-green-600 dark:text-green-400" : "text-orange-600 dark:text-orange-400"}>
+                  <span className={formData.isPublish ? "text-green-600" : "text-orange-600"}>
                     {formData.isPublish ? "Published" : "Draft"}
                   </span>
                 </div>
@@ -353,8 +367,8 @@ const CreateBlog = () => {
                 </div>
               )}
               <div 
-                className="prose dark:prose-invert max-w-none"
-                dangerouslySetInnerHTML={{ __html: formData.content || "<p className='text-gray-500 dark:text-gray-400 italic'>No content yet...</p>" }}
+                className="prose max-w-none"
+                dangerouslySetInnerHTML={{ __html: formData.content || "<p className='text-gray-500 italic'>No content yet...</p>" }}
               />
             </div>
           ) : null}
@@ -366,9 +380,9 @@ const CreateBlog = () => {
               <div>
                 <label
                   htmlFor="title"
-                  className="flex items-center space-x-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2"
+                  className="flex items-center space-x-2 text-sm font-semibold text-gray-700 mb-2"
                 >
-                  <HiDocumentText className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                  <HiDocumentText className="w-5 h-5 text-primary-600" />
                   <span>Title</span>
                   <span className="text-red-500">*</span>
                 </label>
@@ -385,8 +399,8 @@ const CreateBlog = () => {
                         ? "border-red-500 focus:ring-red-500"
                         : formData.title && !errors.title
                         ? "border-green-500 focus:border-primary-500"
-                        : "border-gray-300 dark:border-gray-600 focus:border-primary-500"
-                    } bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100`}
+                        : "border-gray-300 focus:border-primary-500"
+                    } bg-white text-gray-900`}
                     maxLength={100}
                   />
                   {formData.title && !errors.title && (
@@ -407,7 +421,7 @@ const CreateBlog = () => {
                       <span>{errors.title}</span>
                     </p>
                   )}
-                  <p className={`text-xs ml-auto ${formData.title.length > 90 ? "text-orange-500" : "text-gray-500 dark:text-gray-400"}`}>
+                  <p className={`text-xs ml-auto ${formData.title.length > 90 ? "text-orange-500" : "text-gray-500"}`}>
                     {formData.title.length}/100
                   </p>
                 </div>
@@ -416,8 +430,8 @@ const CreateBlog = () => {
               {/* Image Upload Field */}
               <div>
                 <div className="flex items-center space-x-2 mb-2">
-                  <HiPhotograph className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-                  <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                  <HiPhotograph className="w-5 h-5 text-primary-600" />
+                  <span className="text-sm font-semibold text-gray-700">
                     Featured Image
                   </span>
                   <span className="text-red-500">*</span>
@@ -448,9 +462,9 @@ const CreateBlog = () => {
                 <div>
                   <label
                     htmlFor="categoryId"
-                    className="flex items-center space-x-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2"
+                    className="flex items-center space-x-2 text-sm font-semibold text-gray-700 mb-2"
                   >
-                    <HiTag className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                    <HiTag className="w-5 h-5 text-primary-600" />
                     <span>Category</span>
                     <span className="text-red-500">*</span>
                   </label>
@@ -466,8 +480,8 @@ const CreateBlog = () => {
                           ? "border-red-500 focus:ring-red-500"
                           : formData.categoryId && !errors.categoryId
                           ? "border-green-500 focus:border-primary-500"
-                          : "border-gray-300 dark:border-gray-600 focus:border-primary-500"
-                      } bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 disabled:opacity-50 disabled:cursor-not-allowed`}
+                          : "border-gray-300 focus:border-primary-500"
+                      } bg-white text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed`}
                     >
                       <option value="">
                         {categoriesLoading ? "Loading categories..." : "Select a category"}
@@ -505,9 +519,9 @@ const CreateBlog = () => {
                 <div>
                   <label
                     htmlFor="isPublish"
-                    className="flex items-center space-x-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2"
+                    className="flex items-center space-x-2 text-sm font-semibold text-gray-700 mb-2"
                   >
-                    <HiStatusOnline className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                    <HiStatusOnline className="w-5 h-5 text-primary-600" />
                     <span>Publish Status</span>
                   </label>
                   <div className="relative">
@@ -522,7 +536,7 @@ const CreateBlog = () => {
                         }));
                         setHasUnsavedChanges(true);
                       }}
-                      className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 appearance-none cursor-pointer"
+                      className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white text-gray-900 appearance-none cursor-pointer"
                     >
                       <option value="true">Published</option>
                       <option value="false">Draft</option>
@@ -539,18 +553,18 @@ const CreateBlog = () => {
               {/* Content Editor */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="flex items-center space-x-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                    <HiDocumentText className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                  <label className="flex items-center space-x-2 text-sm font-semibold text-gray-700">
+                    <HiDocumentText className="w-5 h-5 text-primary-600" />
                     <span>Content</span>
                     <span className="text-red-500">*</span>
                   </label>
                   <div className="flex items-center space-x-2">
                     <span className={`text-sm font-medium ${
                       isContentValid 
-                        ? "text-green-600 dark:text-green-400" 
+                        ? "text-green-600" 
                         : wordCount > 0 
-                        ? "text-orange-600 dark:text-orange-400" 
-                        : "text-gray-500 dark:text-gray-400"
+                        ? "text-orange-600" 
+                        : "text-gray-500"
                     }`}>
                       {wordCount} / {minWords} words
                     </span>
@@ -564,7 +578,7 @@ const CreateBlog = () => {
                     ? "border-red-500"
                     : isContentValid
                     ? "border-green-500"
-                    : "border-gray-300 dark:border-gray-600"
+                    : "border-gray-300"
                 }`}>
                   <TinyMce
                     content={formData.content}
@@ -578,11 +592,11 @@ const CreateBlog = () => {
                   </p>
                 )}
                 <div className="mt-2 flex items-center justify-between">
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                  <p className="text-xs text-gray-500">
                     Minimum {minWords} words required
                   </p>
                   {isContentValid && (
-                    <p className="text-xs text-green-600 dark:text-green-400 font-medium">
+                    <p className="text-xs text-green-600 font-medium">
                       ✓ Content length is valid
                     </p>
                   )}
@@ -590,7 +604,7 @@ const CreateBlog = () => {
               </div>
 
               {/* Submit Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200 dark:border-gray-700">
+              <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
                 <button
                   type="submit"
                   disabled={isSubmitting}
@@ -612,7 +626,7 @@ const CreateBlog = () => {
                   <button
                     type="button"
                     onClick={clearDraft}
-                    className="px-4 py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-all text-sm"
+                    className="px-4 py-3 bg-gray-100 text-gray-700 font-semibold rounded-lg hover:bg-gray-200 transition-all text-sm"
                     title="Clear draft"
                   >
                     Clear
@@ -628,7 +642,7 @@ const CreateBlog = () => {
                         navigate(-1);
                       }
                     }}
-                    className="px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all"
+                    className="px-6 py-3 bg-gray-200 text-gray-700 font-semibold rounded-lg hover:bg-gray-300 transition-all"
                   >
                     Cancel
                   </button>
@@ -638,11 +652,11 @@ const CreateBlog = () => {
           </div>
 
           {/* Keyboard Shortcuts Help */}
-          <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
-            <p className="text-xs text-gray-600 dark:text-gray-400 mb-2 font-semibold">Keyboard Shortcuts:</p>
-            <div className="flex flex-wrap gap-4 text-xs text-gray-500 dark:text-gray-400">
-              <span><kbd className="px-2 py-1 bg-white dark:bg-gray-700 rounded border border-gray-300 dark:border-gray-600">Ctrl</kbd> + <kbd className="px-2 py-1 bg-white dark:bg-gray-700 rounded border border-gray-300 dark:border-gray-600">S</kbd> - Save draft</span>
-              <span><kbd className="px-2 py-1 bg-white dark:bg-gray-700 rounded border border-gray-300 dark:border-gray-600">Esc</kbd> - Close preview</span>
+          <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+            <p className="text-xs text-gray-600 mb-2 font-semibold">Keyboard Shortcuts:</p>
+            <div className="flex flex-wrap gap-4 text-xs text-gray-500">
+              <span><kbd className="px-2 py-1 bg-white rounded border border-gray-300">Ctrl</kbd> + <kbd className="px-2 py-1 bg-white rounded border border-gray-300">S</kbd> - Save draft</span>
+              <span><kbd className="px-2 py-1 bg-white rounded border border-gray-300">Esc</kbd> - Close preview</span>
             </div>
           </div>
         </div>
