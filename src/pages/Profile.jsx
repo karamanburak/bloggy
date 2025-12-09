@@ -4,6 +4,7 @@ import UpdateProfileModal from "../components/profile/UpdateProfileModal";
 import MyBlogsContainer from "../components/profile/MyBlogsContainer";
 import Footer from "../components/home/Footer";
 import useCategoryCall from "../hooks/useCategoryCall";
+import useBlogCall from "../hooks/useBlogCall";
 import SkeletonLoader from "../components/global/SkeletonLoader";
 import { formatDateOnly } from "../helper/formatDate";
 import {
@@ -16,6 +17,8 @@ import {
   HiEye,
   HiDocumentText,
   HiChatAlt,
+  HiCheckCircle,
+  HiDocument,
 } from "react-icons/hi";
 
 const Profile = () => {
@@ -35,8 +38,13 @@ const Profile = () => {
   const handleClose = () => setOpen(false);
   const handleOpen = () => setOpen(true);
 
+  const userBlogs = useMemo(() => {
+    if (!currentUser || !blogs) return [];
+    return blogs.filter((blog) => blog.userId?._id === currentUser._id);
+  }, [blogs, currentUser]);
+
   const stats = useMemo(() => {
-    if (!currentUser || !blogs) {
+    if (!currentUser || !blogs || userBlogs.length === 0) {
       return {
         totalBlogs: 0,
         totalLikes: 0,
@@ -44,8 +52,6 @@ const Profile = () => {
         totalComments: 0,
       };
     }
-
-    const userBlogs = blogs.filter((blog) => blog.userId?._id === currentUser._id);
     
     return {
       totalBlogs: userBlogs.length,
@@ -60,7 +66,7 @@ const Profile = () => {
         return sum + parentComments.length;
       }, 0),
     };
-  }, [blogs, currentUser]);
+  }, [userBlogs, currentUser]);
 
   const statsCards = useMemo(() => [
     {
@@ -120,19 +126,35 @@ const Profile = () => {
   const tabs = useMemo(() => [
     {
       id: 0,
-      label: 'Posts',
-      icon: HiDocumentText,
+      label: 'Published',
+      icon: HiCheckCircle,
+      filterType: 'published',
+      type: 'blogs',
     },
     {
       id: 1,
+      label: 'Drafts',
+      icon: HiDocument,
+      filterType: 'drafts',
+      type: 'blogs',
+    },
+    {
+      id: 2,
       label: 'About',
       icon: HiUser,
+      type: 'about',
     },
   ], []);
 
+  const { getUserBlogs } = useBlogCall();
+
   useEffect(() => {
     getCategory("categories");
-  }, []);
+    if (currentUser?._id) {
+      getUserBlogs(currentUser._id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser?._id]);
 
   if (!currentUser) {
     return null;
@@ -184,7 +206,7 @@ const Profile = () => {
 
           {/* Content Skeleton */}
           <div className="py-6 pb-20">
-            <SkeletonLoader type="list" count={4} />
+            <SkeletonLoader type="list" count={4} variant="twoColumnsGap6" />
           </div>
         </div>
 
@@ -303,12 +325,14 @@ const Profile = () => {
           })}
         </div>
 
-        {/* Modern Tabs */}
+        {/* Modern Tabs - Published, Drafts & About */}
         <div className="relative mb-8">
           <div className="flex space-x-2 bg-gray-100/80 backdrop-blur-sm rounded-2xl p-2 border border-gray-200/50 shadow-lg">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = tabValue === tab.id;
+              const isDraftsTab = tab.filterType === 'drafts';
+              const isAboutTab = tab.type === 'about';
               return (
                 <button
                   key={tab.id}
@@ -320,11 +344,24 @@ const Profile = () => {
                   }`}
                 >
                   {isActive && (
-                    <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary-600 to-accent-600 animate-scale-in"></div>
+                    <div className={`absolute inset-0 rounded-xl animate-scale-in ${
+                      isDraftsTab
+                        ? "bg-gradient-to-r from-amber-500 to-amber-600"
+                        : isAboutTab
+                        ? "bg-gradient-to-r from-purple-500 to-purple-600"
+                        : "bg-gradient-to-r from-primary-600 to-accent-600"
+                    }`}></div>
                   )}
                   <span className="relative z-10 flex items-center justify-center space-x-2">
                     <Icon className="w-4 h-4" />
                     <span>{tab.label}</span>
+                    {tab.filterType === 'drafts' && userBlogs.filter(b => b.isPublish === false).length > 0 && (
+                      <span className={`ml-1 px-2 py-0.5 rounded-full text-xs font-bold ${
+                        isActive ? "bg-white/20 text-white" : "bg-amber-500 text-white"
+                      }`}>
+                        {userBlogs.filter(b => b.isPublish === false).length}
+                      </span>
+                    )}
                   </span>
                 </button>
               );
@@ -332,70 +369,80 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* Tab Content */}
+        {/* Tab Content - Published, Drafts & About */}
         <div className="py-6 pb-20">
           <div className="relative">
-            <div className={`transition-all duration-500 ease-in-out ${
-              tabValue === 0 ? 'opacity-100 block' : 'opacity-0 hidden'
-            }`}>
-              <MyBlogsContainer userId={currentUser._id} />
-            </div>
-            <div className={`transition-all duration-500 ease-in-out ${
-              tabValue === 1 ? 'opacity-100 block' : 'opacity-0 hidden'
-            }`}>
-              <div className="relative overflow-hidden rounded-3xl bg-white/90 backdrop-blur-xl border border-gray-200/50 shadow-xl p-8 lg:p-10">
-                {/* Gradient border effect */}
-                <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-primary-500/5 via-accent-500/5 to-primary-500/5 opacity-0 hover:opacity-100 transition-opacity duration-500 -z-10 blur-xl"></div>
-                
-                <div className="flex items-center space-x-4 mb-8">
-                  <div className="relative">
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary-500 to-accent-500 rounded-xl blur-lg opacity-30"></div>
-                    <div className="relative w-14 h-14 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center shadow-lg">
-                      <HiUser className="w-7 h-7 text-white" />
-                    </div>
-                  </div>
-                  <h2 className="text-3xl font-bold bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent">
-                    About
-                  </h2>
-                </div>
-                <div className="space-y-8" data-about-section>
-                  <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100/50 backdrop-blur-sm border border-gray-200/50 p-6 lg:p-8">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center space-x-2">
-                      <HiPencil className="w-5 h-5 text-primary-600" />
-                      <span>Biography</span>
-                    </h3>
-                    <div className="prose prose-gray max-w-none">
-                      <p className="text-gray-700 leading-relaxed text-base whitespace-pre-wrap break-words">
-                        {bio || (
-                          <span className="text-gray-500 italic">
-                            This user hasn't written a bio yet.
-                          </span>
-                        )}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="pt-8 border-t border-gray-200/50">
-                    <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center space-x-2">
-                      <HiMail className="w-6 h-6 text-primary-600" />
-                      <span>Contact Information</span>
-                    </h3>
-                    <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-primary-50 to-accent-50 border border-primary-200/50 p-6">
-                      <div className="flex items-center space-x-4">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center shadow-lg">
-                          <HiMail className="w-6 h-6 text-white" />
+            {tabs.map((tab) => {
+              const isActive = tabValue === tab.id;
+              return (
+                <div
+                  key={tab.id}
+                  className={`transition-all duration-500 ease-in-out ${
+                    isActive ? 'opacity-100 block' : 'opacity-0 hidden'
+                  }`}
+                >
+                  {tab.type === 'blogs' ? (
+                    <MyBlogsContainer 
+                      userId={currentUser._id} 
+                      filterType={tab.filterType}
+                    />
+                  ) : (
+                    <div className="relative overflow-hidden rounded-3xl bg-white/90 backdrop-blur-xl border border-gray-200/50 shadow-xl p-8 lg:p-10">
+                      {/* Gradient border effect */}
+                      <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-purple-500/5 via-purple-500/5 to-purple-500/5 opacity-0 hover:opacity-100 transition-opacity duration-500 -z-10 blur-xl"></div>
+                      
+                      <div className="flex items-center space-x-4 mb-8">
+                        <div className="relative">
+                          <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl blur-lg opacity-30"></div>
+                          <div className="relative w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-lg">
+                            <HiUser className="w-7 h-7 text-white" />
+                          </div>
                         </div>
-                        <div>
-                          <p className="text-sm text-gray-500 mb-1">Email</p>
-                          <p className="text-lg font-semibold text-gray-900">
-                            {email}
-                          </p>
+                        <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-purple-700 bg-clip-text text-transparent">
+                          About
+                        </h2>
+                      </div>
+                      <div className="space-y-8" data-about-section>
+                        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100/50 backdrop-blur-sm border border-gray-200/50 p-6 lg:p-8">
+                          <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center space-x-2">
+                            <HiPencil className="w-5 h-5 text-purple-600" />
+                            <span>Biography</span>
+                          </h3>
+                          <div className="prose prose-gray max-w-none">
+                            <p className="text-gray-700 leading-relaxed text-base whitespace-pre-wrap break-words">
+                              {bio || (
+                                <span className="text-gray-500 italic">
+                                  This user hasn't written a bio yet.
+                                </span>
+                              )}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="pt-8 border-t border-gray-200/50">
+                          <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center space-x-2">
+                            <HiMail className="w-6 h-6 text-purple-600" />
+                            <span>Contact Information</span>
+                          </h3>
+                          <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-purple-50 to-purple-100/50 border border-purple-200/50 p-6">
+                            <div className="flex items-center space-x-4">
+                              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-lg">
+                                <HiMail className="w-6 h-6 text-white" />
+                              </div>
+                              <div>
+                                <p className="text-sm text-gray-500 mb-1">Email</p>
+                                <p className="text-lg font-semibold text-gray-900">
+                                  {email}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </div>
-              </div>
-            </div>
+              );
+            })}
           </div>
         </div>
       </div>

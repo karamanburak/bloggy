@@ -119,6 +119,13 @@ const BlogCard = ({
 
   const previewText = stripHtml(content).substring(0, 120) + "...";
 
+  const formatNumber = (num) => {
+    if (!num || num === 0) return "0";
+    if (num >= 1000000) return (num / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
+    if (num >= 1000) return (num / 1000).toFixed(1).replace(/\.0$/, "") + "K";
+    return num.toString();
+  };
+
   return (
     <article
       onClick={handleCardClick}
@@ -209,25 +216,31 @@ const BlogCard = ({
         </div>
 
         {/* Stats Footer */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4 text-gray-600">
-            <div className="flex items-center space-x-1.5">
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <div className="flex items-center gap-3 text-gray-600 flex-wrap">
+            <div className="flex items-center gap-1.5 min-w-0">
               {liked ? (
-                <MdFavorite className="w-5 h-5 text-red-500" />
+                <MdFavorite className="w-4 h-4 text-red-500 shrink-0" />
               ) : (
-                <MdFavoriteBorder className="w-5 h-5" />
+                <MdFavoriteBorder className="w-4 h-4 shrink-0" />
               )}
-              <span className="text-sm font-medium">{Array.isArray(likes) ? likes.length : 0}</span>
+              <span className="text-xs font-semibold whitespace-nowrap">
+                {formatNumber(Array.isArray(likes) ? likes.length : 0)}
+              </span>
             </div>
             
-            <div className="flex items-center space-x-1.5">
-              <MdChatBubbleOutline className="w-5 h-5" />
-              <span className="text-sm font-medium">{getParentCommentCount()}</span>
+            <div className="flex items-center gap-1.5 min-w-0">
+              <MdChatBubbleOutline className="w-4 h-4 shrink-0" />
+              <span className="text-xs font-semibold whitespace-nowrap">
+                {formatNumber(getParentCommentCount())}
+              </span>
             </div>
             
-            <div className="flex items-center space-x-1.5">
-              <MdVisibility className="w-5 h-5" />
-              <span className="text-sm font-medium">{countOfVisitors || 0}</span>
+            <div className="flex items-center gap-1.5 min-w-0">
+              <MdVisibility className="w-4 h-4 shrink-0" />
+              <span className="text-xs font-semibold whitespace-nowrap">
+                {formatNumber(countOfVisitors || 0)}
+              </span>
             </div>
           </div>
           
@@ -244,10 +257,10 @@ const BlogCard = ({
               }
             }}
             aria-label={`Read blog: ${title}`}
-            className="flex items-center space-x-1.5 px-4 py-2 rounded-lg bg-primary-50 text-primary-600 hover:bg-primary-100 transition-all duration-300 group/read focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-primary-600 to-primary-700 text-white hover:from-primary-700 hover:to-primary-800 transition-all duration-300 group/read focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 shadow-sm hover:shadow-md shrink-0"
           >
-            <span className="text-sm font-semibold">Read</span>
-            <MdArrowOutward className="w-4 h-4 group-hover/read:translate-x-0.5 group-hover/read:-translate-y-0.5 transition-transform" />
+            <span className="text-xs font-bold">Read</span>
+            <MdArrowOutward className="w-3.5 h-3.5 group-hover/read:translate-x-0.5 group-hover/read:-translate-y-0.5 transition-transform" />
           </button>
         </div>
       </div>

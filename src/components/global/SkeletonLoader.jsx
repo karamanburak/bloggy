@@ -1,4 +1,4 @@
-const SkeletonLoader = ({ type = "card", count = 1 }) => {
+const SkeletonLoader = ({ type = "card", count = 1, variant, className }) => {
   const CardSkeleton = () => (
     <div className="bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 animate-pulse">
       {/* Image Skeleton */}
@@ -96,63 +96,73 @@ const SkeletonLoader = ({ type = "card", count = 1 }) => {
   );
 
   const NewsCardSkeleton = () => (
-    <div className="bg-white rounded-xl overflow-hidden shadow-md border border-gray-200 animate-pulse">
-      <div className="flex flex-col lg:flex-row">
-        {/* Image Section */}
-        <div className="lg:w-2/5 h-64 lg:h-auto relative overflow-hidden bg-gradient-to-br from-gray-200 to-gray-300">
-          {/* Breaking News Badge */}
-          <div className="absolute top-4 left-4">
-            <div className="w-28 h-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full"></div>
-          </div>
-          {/* Source Badge */}
-          <div className="absolute bottom-4 left-4">
-            <div className="w-24 h-6 bg-gray-900/80 rounded-lg"></div>
-          </div>
+    <div className="bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-200 animate-pulse h-full flex flex-col">
+      {/* Image Section */}
+      <div className="relative h-48 overflow-hidden bg-gradient-to-br from-gray-200 to-gray-300 flex-shrink-0">
+        {/* Source Badge */}
+        <div className="absolute top-3 left-3">
+          <div className="w-24 h-6 bg-white/50 backdrop-blur-sm rounded-full"></div>
+        </div>
+        {/* Time Badge */}
+        <div className="absolute top-3 right-3">
+          <div className="w-20 h-6 bg-black/30 backdrop-blur-sm rounded-full"></div>
+        </div>
+      </div>
+
+      {/* Content Section */}
+      <div className="p-5 flex flex-col flex-grow min-h-0">
+        {/* Date */}
+        <div className="flex items-center gap-1.5 mb-3">
+          <div className="h-3 w-24 bg-gray-200 rounded"></div>
         </div>
 
-        {/* Content Section */}
-        <div className="lg:w-3/5 flex flex-col justify-between p-6 lg:p-8">
-          <div>
-            {/* Date & Time */}
-            <div className="flex items-center gap-4 mb-4">
-              <div className="h-4 w-32 bg-gray-200 rounded"></div>
-              <div className="h-4 w-24 bg-gray-200 rounded"></div>
-            </div>
+        {/* Title */}
+        <div className="mb-3 space-y-2">
+          <div className="h-5 bg-gray-200 rounded w-full"></div>
+          <div className="h-5 bg-gray-200 rounded w-5/6"></div>
+        </div>
 
-            {/* Title */}
-            <div className="mb-3 space-y-2">
-              <div className="h-7 bg-gray-200 rounded w-full"></div>
-              <div className="h-7 bg-gray-200 rounded w-5/6"></div>
-            </div>
+        {/* Description */}
+        <div className="mb-4 space-y-2 flex-grow">
+          <div className="h-4 bg-gray-200 rounded w-full"></div>
+          <div className="h-4 bg-gray-200 rounded w-full"></div>
+          <div className="h-4 bg-gray-200 rounded w-4/5"></div>
+        </div>
 
-            {/* Description */}
-            <div className="mb-6 space-y-2">
-              <div className="h-4 bg-gray-200 rounded w-full"></div>
-              <div className="h-4 bg-gray-200 rounded w-full"></div>
-              <div className="h-4 bg-gray-200 rounded w-4/5"></div>
-            </div>
+        {/* Footer */}
+        <div className="flex items-center justify-between pt-4 border-t border-gray-200 mt-auto">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-gray-200 rounded-full"></div>
+            <div className="h-3 w-16 bg-gray-200 rounded"></div>
           </div>
-
-          {/* Footer */}
-          <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-gray-200 rounded-full"></div>
-              <div className="h-4 w-20 bg-gray-200 rounded"></div>
-            </div>
-            <div className="h-10 w-40 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg"></div>
-          </div>
+          <div className="h-9 w-32 bg-gradient-to-r from-primary-600 to-accent-600 rounded-lg"></div>
         </div>
       </div>
     </div>
   );
 
-  const BlogListSkeleton = () => (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {Array.from({ length: count }).map((_, index) => (
-        <BlogCardSkeleton key={index} />
-      ))}
-    </div>
-  );
+  const BlogListSkeleton = ({ variant = "default", containerClassName }) => {
+    const gridClasses = {
+      default: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8",
+      threeColumns: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8",
+      threeColumnsGap6: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+      twoColumns: "grid grid-cols-1 md:grid-cols-2 gap-8",
+      twoColumnsGap6: "grid grid-cols-1 md:grid-cols-2 gap-6",
+    };
+
+    const gridClass = gridClasses[variant] || gridClasses.default;
+    const containerClass = containerClassName 
+      ? `${gridClass} ${containerClassName}` 
+      : gridClass;
+
+    return (
+      <div className={containerClass}>
+        {Array.from({ length: count }).map((_, index) => (
+          <BlogCardSkeleton key={index} />
+        ))}
+      </div>
+    );
+  };
 
   const TextSkeleton = ({ lines = 3 }) => (
     <div className="space-y-2">
@@ -177,11 +187,11 @@ const SkeletonLoader = ({ type = "card", count = 1 }) => {
     case "blogCard":
       return <BlogCardSkeleton />;
     case "blogList":
-      return <BlogListSkeleton />;
+      return <BlogListSkeleton variant={variant} containerClassName={className} />;
     case "newsCard":
       return <NewsCardSkeleton />;
     case "list":
-      return <BlogListSkeleton />;
+      return <BlogListSkeleton variant={variant} containerClassName={className} />;
     case "text":
       return <TextSkeleton lines={count} />;
     case "circle":

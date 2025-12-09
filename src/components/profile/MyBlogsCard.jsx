@@ -6,6 +6,7 @@ import { IoIosLink } from "react-icons/io";
 import { MdArrowOutward } from "react-icons/md";
 import { HiPencil } from "react-icons/hi";
 import { FiTrash2 } from "react-icons/fi";
+import { HiDocumentText } from "react-icons/hi";
 import DeleteBlog from "../blog/DeleteBlog";
 import EditBlogModal from "../blog/EditBlogModal";
 import { formatDateTime } from "../../helper/formatDate";
@@ -20,6 +21,7 @@ const MyBlogsCard = ({
   likes,
   countOfVisitors,
   categoryId,
+  isPublish,
 }) => {
   const navigate = useNavigate();
   const [readingTime, setReadingTime] = useState(null);
@@ -80,8 +82,22 @@ const MyBlogsCard = ({
   return (
     <>
       <article className="relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-primary-300 group">
+        {/* Draft Badge - Top Right Corner */}
+        {isPublish === false && (
+          <div className="absolute top-3 right-3 z-20">
+            <div className="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-amber-500/95 backdrop-blur-sm rounded-full text-xs font-bold text-white shadow-lg border border-amber-600/50">
+              <HiDocumentText className="w-3.5 h-3.5" />
+              <span>Draft</span>
+            </div>
+          </div>
+        )}
+        
         {/* Image Container */}
         <div className="relative h-48 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 group-hover:scale-105 transition-transform duration-500">
+          {/* Draft Overlay */}
+          {isPublish === false && (
+            <div className="absolute inset-0 bg-amber-500/10 z-10 pointer-events-none"></div>
+          )}
           <img
             src={image || "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800"}
             alt={title}
@@ -96,27 +112,36 @@ const MyBlogsCard = ({
         <div className="p-4">
           {/* Title and Menu */}
           <div className="flex items-start justify-between mb-3 gap-2">
-            <h3
-              className="text-lg font-bold text-gray-900 flex-1 line-clamp-2 cursor-pointer hover:text-primary-600 transition-colors"
-              onClick={() =>
-                navigate(`/blog/detail/${_id}`, {
-                  state: {
-                    _id,
-                    content,
-                    image,
-                    title,
-                    userId,
-                    createdAt,
-                    likes,
-                    countOfVisitors,
-                    categoryId,
-                    readingTime,
-                  },
-                })
-              }
-            >
-              {title}
-            </h3>
+            <div className="flex-1 min-w-0">
+              <h3
+                className="text-lg font-bold text-gray-900 line-clamp-2 cursor-pointer hover:text-primary-600 transition-colors mb-1"
+                onClick={() =>
+                  navigate(`/blog/detail/${_id}`, {
+                    state: {
+                      _id,
+                      content,
+                      image,
+                      title,
+                      userId,
+                      createdAt,
+                      likes,
+                      countOfVisitors,
+                      categoryId,
+                      readingTime,
+                      isPublish,
+                    },
+                  })
+                }
+              >
+                {title}
+              </h3>
+              {/* Draft indicator below title */}
+              {isPublish === false && (
+                <div className="inline-flex items-center space-x-1 px-2 py-0.5 bg-amber-50 border border-amber-200 rounded-md">
+                  <span className="text-xs font-semibold text-amber-700">Draft</span>
+                </div>
+              )}
+            </div>
             <div className="relative flex-shrink-0" ref={menuRef}>
               <button
                 onClick={(e) => {
@@ -204,12 +229,19 @@ const MyBlogsCard = ({
                     countOfVisitors,
                     categoryId,
                     readingTime,
+                    isPublish,
                   },
                 });
               }}
-              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-primary-50 text-primary-600 hover:bg-primary-100 transition-all duration-300"
+              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg transition-all duration-300 ${
+                isPublish === false
+                  ? "bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-200"
+                  : "bg-primary-50 text-primary-600 hover:bg-primary-100"
+              }`}
             >
-              <span className="text-xs font-semibold">Read</span>
+              <span className="text-xs font-semibold">
+                {isPublish === false ? "Preview" : "Read"}
+              </span>
               <MdArrowOutward className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -221,13 +253,13 @@ const MyBlogsCard = ({
         <EditBlogModal
           open={openEditModal}
           onClose={() => setOpenEditModal(false)}
-          blog={{ _id, content, image, title, userId, createdAt, likes, countOfVisitors, categoryId }}
+          blog={{ _id, content, image, title, userId, createdAt, likes, countOfVisitors, categoryId, isPublish }}
           initialState={{
             title: title,
             content: content,
             image: image,
             categoryId: categoryId?._id || categoryId || "",
-            isPublish: true,
+            isPublish: isPublish ?? true,
           }}
         />
       )}
