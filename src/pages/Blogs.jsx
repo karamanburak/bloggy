@@ -8,7 +8,7 @@ import PageHero from "../components/home/PageHero";
 import SkeletonLoader from "../components/global/SkeletonLoader";
 import Pagination from "../components/global/Pagination";
 import usePagination from "../hooks/usePagination";
-import { HiSearch, HiBookOpen, HiTag, HiX, HiChevronDown, HiChevronUp } from "react-icons/hi";
+import { HiSearch, HiBookOpen, HiTag, HiX, HiChevronDown, HiChevronUp, HiSortAscending, HiSortDescending } from "react-icons/hi";
 
 const Blogs = () => {
   const { getBlogData } = useBlogCall();
@@ -18,6 +18,8 @@ const Blogs = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
+  const [sortBy, setSortBy] = useState("popular"); // popular, likes, comments, views, newest, oldest
+  const [isSortOpen, setIsSortOpen] = useState(false);
   const isLoading = loading || categoriesLoading;
 
   const categoriesWithCount = useMemo(() => {
@@ -35,11 +37,34 @@ const Blogs = () => {
       .sort((a, b) => b.count - a.count);
   }, [categories, blogs]);
 
+  const getParentCommentCount = (comments) => {
+    if (!Array.isArray(comments)) return 0;
+    return comments.filter(comment => {
+      const parentId = comment.parentCommentId || comment.parentId || comment.parentComment || comment.replyTo || comment.parent;
+      if (typeof parentId === 'string' && parentId.trim() !== '' && parentId !== 'null' && parentId !== 'undefined') {
+        return false; 
+      }
+      if (typeof parentId === 'object' && parentId !== null) {
+        return false;
+      }
+      return true;
+    }).length;
+  };
+
+  const calculatePopularityScore = (blog) => {
+    const likes = Array.isArray(blog.likes) ? blog.likes.length : 0;
+    const comments = getParentCommentCount(blog.comments);
+    const views = blog.countOfVisitors || 0;
+    
+    return (likes * 3) + (comments * 2) + views;
+  };
+
   const filteredBlogs = useMemo(() => {
     if (!Array.isArray(blogs)) {
       return [];
     }
-    return blogs.filter((blog) => {
+    
+    let filtered = blogs.filter((blog) => {
       const matchesSearch = 
         blog.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         blog.content?.toLowerCase().includes(searchTerm.toLowerCase());
@@ -50,7 +75,46 @@ const Blogs = () => {
       
       return matchesSearch && matchesCategory;
     });
-  }, [blogs, searchTerm, selectedCategory]);
+
+    filtered = [...filtered].sort((a, b) => {
+      switch (sortBy) {
+        case "popular": {
+          const scoreA = calculatePopularityScore(a);
+          const scoreB = calculatePopularityScore(b);
+          return scoreB - scoreA;
+        }
+        case "likes": {
+          const likesA = Array.isArray(a.likes) ? a.likes.length : 0;
+          const likesB = Array.isArray(b.likes) ? b.likes.length : 0;
+          return likesB - likesA;
+        }
+        case "comments": {
+          const commentsA = getParentCommentCount(a.comments);
+          const commentsB = getParentCommentCount(b.comments);
+          return commentsB - commentsA;
+        }
+        case "views": {
+          const viewsA = a.countOfVisitors || 0;
+          const viewsB = b.countOfVisitors || 0;
+          return viewsB - viewsA;
+        }
+        case "newest": {
+          const dateA = new Date(a.createdAt || 0);
+          const dateB = new Date(b.createdAt || 0);
+          return dateB - dateA;
+        }
+        case "oldest": {
+          const dateA = new Date(a.createdAt || 0);
+          const dateB = new Date(b.createdAt || 0);
+          return dateA - dateB;
+        }
+        default:
+          return 0;
+      }
+    });
+
+    return filtered;
+  }, [blogs, searchTerm, selectedCategory, sortBy]);
 
   const {
     currentPage,
@@ -59,7 +123,7 @@ const Blogs = () => {
     totalPages,
     totalItems,
     handlePageChange,
-  } = usePagination(filteredBlogs, 12, [searchTerm, selectedCategory]);
+  } = usePagination(filteredBlogs, 12, [searchTerm, selectedCategory, sortBy]);
 
   useEffect(() => {
     getBlogData("blogs");
@@ -173,9 +237,9 @@ const Blogs = () => {
 
           {/* Main Content - Right */}
           <div className="flex-1 min-w-0">
-            {/* Search Bar */}
-            <div className="mb-6">
-              <div className="relative">
+            {/* Search Bar and Sort */}
+            <div className="mb-6 flex flex-col sm:flex-row gap-4">
+              <div className="relative flex-1">
                 <HiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   type="text"
@@ -192,6 +256,86 @@ const Blogs = () => {
                   >
                     <HiX className="w-5 h-5 text-gray-400" />
                   </button>
+                )}
+              </div>
+              
+              {/* Sort Dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => setIsSortOpen(!isSortOpen)}
+                  className="w-full sm:w-auto flex items-center justify-between gap-2 px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all min-w-[180px]"
+                  aria-label="Sort blogs"
+                  aria-expanded={isSortOpen}
+                >
+                  <div className="flex items-center space-x-2">
+                    {sortBy === "newest" || sortBy === "oldest" ? (
+                      sortBy === "newest" ? (
+                        <HiSortDescending className="w-4 h-4 text-primary-500" />
+                      ) : (
+                        <HiSortAscending className="w-4 h-4 text-primary-500" />
+                      )
+                    ) : (
+                      <HiSortDescending className="w-4 h-4 text-primary-500" />
+                    )}
+                    <span className="text-sm font-medium">
+                      {sortBy === "popular" && "Most Popular"}
+                      {sortBy === "likes" && "Most Liked"}
+                      {sortBy === "comments" && "Most Commented"}
+                      {sortBy === "views" && "Most Viewed"}
+                      {sortBy === "newest" && "Newest First"}
+                      {sortBy === "oldest" && "Oldest First"}
+                    </span>
+                  </div>
+                  {isSortOpen ? (
+                    <HiChevronUp className="w-4 h-4 text-gray-500" />
+                  ) : (
+                    <HiChevronDown className="w-4 h-4 text-gray-500" />
+                  )}
+                </button>
+                
+                {isSortOpen && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-10"
+                      onClick={() => setIsSortOpen(false)}
+                    />
+                    <div className="absolute right-0 mt-2 w-full sm:w-56 bg-white rounded-lg shadow-lg border border-gray-200 z-20 overflow-hidden">
+                      <div className="py-1">
+                        {[
+                          { value: "popular", label: "Most Popular", desc: "Likes, comments & views" },
+                          { value: "likes", label: "Most Liked", desc: "Highest likes first" },
+                          { value: "comments", label: "Most Commented", desc: "Highest comments first" },
+                          { value: "views", label: "Most Viewed", desc: "Highest views first" },
+                          { value: "newest", label: "Newest First", desc: "Recently published" },
+                          { value: "oldest", label: "Oldest First", desc: "Oldest published" },
+                        ].map((option) => (
+                          <button
+                            key={option.value}
+                            onClick={() => {
+                              setSortBy(option.value);
+                              setIsSortOpen(false);
+                            }}
+                            className={`w-full text-left px-4 py-2.5 hover:bg-gray-50 transition-colors ${
+                              sortBy === option.value
+                                ? "bg-primary-50 text-primary-700 font-medium"
+                                : "text-gray-700"
+                            }`}
+                          >
+                            <div className="flex flex-col">
+                              <span className="text-sm">{option.label}</span>
+                              <span className={`text-xs mt-0.5 ${
+                                sortBy === option.value
+                                  ? "text-primary-600"
+                                  : "text-gray-500"
+                              }`}>
+                                {option.desc}
+                              </span>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </>
                 )}
               </div>
             </div>

@@ -50,11 +50,11 @@ const SkeletonLoader = ({ type = "card", count = 1, variant, className }) => {
       <div className="relative h-64 overflow-hidden bg-gradient-to-br from-gray-200 to-gray-300">
         {/* Category Badge - Top Left */}
         <div className="absolute top-4 left-4 z-10">
-          <div className="w-20 h-6 bg-white/50 backdrop-blur-sm rounded-full"></div>
+          <div className="w-20 h-7 bg-white/50 backdrop-blur-sm rounded-full"></div>
         </div>
         {/* Reading Time - Top Right */}
         <div className="absolute top-4 right-4 z-10">
-          <div className="w-24 h-6 bg-black/30 backdrop-blur-sm rounded-full"></div>
+          <div className="w-24 h-7 bg-black/30 backdrop-blur-sm rounded-full"></div>
         </div>
       </div>
 
@@ -75,7 +75,7 @@ const SkeletonLoader = ({ type = "card", count = 1, variant, className }) => {
 
         {/* Author & Date */}
         <div className="flex items-center space-x-3 mb-4 pb-4 border-b border-gray-100">
-          <div className="w-10 h-10 rounded-full bg-gray-200 flex-shrink-0"></div>
+          <div className="w-10 h-10 rounded-full bg-gray-200 shrink-0"></div>
           <div className="flex-1 min-w-0 space-y-2">
             <div className="h-4 bg-gray-200 rounded w-1/3"></div>
             <div className="h-3 bg-gray-200 rounded w-1/4"></div>
@@ -83,13 +83,59 @@ const SkeletonLoader = ({ type = "card", count = 1, variant, className }) => {
         </div>
 
         {/* Stats Footer */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <div className="h-5 w-12 bg-gray-200 rounded"></div>
-            <div className="h-5 w-12 bg-gray-200 rounded"></div>
-            <div className="h-5 w-12 bg-gray-200 rounded"></div>
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <div className="flex items-center gap-3 flex-wrap">
+            <div className="flex items-center gap-1.5 min-w-0">
+              <div className="h-4 w-4 bg-gray-200 rounded shrink-0"></div>
+              <div className="h-4 w-8 bg-gray-200 rounded"></div>
+            </div>
+            <div className="flex items-center gap-1.5 min-w-0">
+              <div className="h-4 w-4 bg-gray-200 rounded shrink-0"></div>
+              <div className="h-4 w-8 bg-gray-200 rounded"></div>
+            </div>
+            <div className="flex items-center gap-1.5 min-w-0">
+              <div className="h-4 w-4 bg-gray-200 rounded shrink-0"></div>
+              <div className="h-4 w-8 bg-gray-200 rounded"></div>
+            </div>
           </div>
-          <div className="h-9 w-20 bg-gray-200 rounded-lg"></div>
+          <div className="h-9 w-20 bg-gray-200 rounded-lg shrink-0"></div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const MyBlogsCardSkeleton = () => (
+    <div className="relative bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 animate-pulse">
+      {/* Image Container */}
+      <div className="relative h-48 overflow-hidden bg-gradient-to-br from-gray-200 to-gray-300"></div>
+
+      {/* Content Section */}
+      <div className="p-4">
+        {/* Title and Menu */}
+        <div className="flex items-start justify-between mb-3 gap-2">
+          <div className="flex-1 min-w-0 space-y-2">
+            <div className="h-5 bg-gray-200 rounded w-3/4"></div>
+            <div className="h-5 bg-gray-200 rounded w-1/2"></div>
+          </div>
+          <div className="w-9 h-9 bg-gray-200 rounded-lg shrink-0"></div>
+        </div>
+
+        {/* Preview Text */}
+        <div className="mb-4 space-y-2">
+          <div className="h-4 bg-gray-200 rounded w-full"></div>
+          <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+        </div>
+
+        {/* Author & Date Footer */}
+        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 rounded-full bg-gray-200 shrink-0"></div>
+            <div className="flex-1 min-w-0 space-y-2">
+              <div className="h-3 bg-gray-200 rounded w-1/3"></div>
+              <div className="h-3 bg-gray-200 rounded w-1/4"></div>
+            </div>
+          </div>
+          <div className="h-8 w-20 bg-gray-200 rounded-lg shrink-0"></div>
         </div>
       </div>
     </div>
@@ -141,7 +187,7 @@ const SkeletonLoader = ({ type = "card", count = 1, variant, className }) => {
     </div>
   );
 
-  const BlogListSkeleton = ({ variant = "default", containerClassName }) => {
+  const BlogListSkeleton = ({ variant = "default", containerClassName, cardType = "blogCard" }) => {
     const gridClasses = {
       default: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8",
       threeColumns: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8",
@@ -155,10 +201,12 @@ const SkeletonLoader = ({ type = "card", count = 1, variant, className }) => {
       ? `${gridClass} ${containerClassName}` 
       : gridClass;
 
+    const CardComponent = cardType === "myBlogsCard" ? MyBlogsCardSkeleton : BlogCardSkeleton;
+
     return (
       <div className={containerClass}>
         {Array.from({ length: count }).map((_, index) => (
-          <BlogCardSkeleton key={index} />
+          <CardComponent key={index} />
         ))}
       </div>
     );
@@ -186,12 +234,16 @@ const SkeletonLoader = ({ type = "card", count = 1, variant, className }) => {
       return <CardSkeleton />;
     case "blogCard":
       return <BlogCardSkeleton />;
+    case "myBlogsCard":
+      return <MyBlogsCardSkeleton />;
     case "blogList":
-      return <BlogListSkeleton variant={variant} containerClassName={className} />;
+      return <BlogListSkeleton variant={variant} containerClassName={className} cardType="blogCard" />;
     case "newsCard":
       return <NewsCardSkeleton />;
     case "list":
-      return <BlogListSkeleton variant={variant} containerClassName={className} />;
+      return <BlogListSkeleton variant={variant} containerClassName={className} cardType="blogCard" />;
+    case "myBlogsList":
+      return <BlogListSkeleton variant={variant} containerClassName={className} cardType="myBlogsCard" />;
     case "text":
       return <TextSkeleton lines={count} />;
     case "circle":

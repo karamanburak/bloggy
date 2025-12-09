@@ -1,9 +1,9 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, memo } from "react";
 import CommentForm from "./CommentForm";
 import CommentItem from "./CommentItem";
 import { HiChatAlt, HiX, HiTrash } from "react-icons/hi";
 
-const CommentsSection = ({
+const CommentsSection = memo(({
   blog,
   blogId,
   currentUser,
@@ -312,7 +312,16 @@ const CommentsSection = ({
       )}
     </div>
   );
-};
+}, (prevProps, nextProps) => {
+  return (
+    prevProps.blogId === nextProps.blogId &&
+    prevProps.blog?._id === nextProps.blog?._id &&
+    prevProps.blog?.comments === nextProps.blog?.comments &&
+    prevProps.currentUser?._id === nextProps.currentUser?._id
+  );
+});
+
+CommentsSection.displayName = "CommentsSection";
 
 export default CommentsSection;
 

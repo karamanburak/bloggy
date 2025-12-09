@@ -13,7 +13,7 @@ import {
   HiOutlineThumbUp,
   HiOutlineThumbDown,
 } from "react-icons/hi";
-import { getBlogDetailSuccess } from "../../features/blogSlice";
+import { updateBlogComments } from "../../features/blogSlice";
 
 const CommentItem = ({
   comment,
@@ -43,14 +43,7 @@ const CommentItem = ({
     if (currentUser) {
       const comments = await onLike(comment._id, blogId);
       if (comments && blog && blog._id === blogId) {
-        dispatch(
-          getBlogDetailSuccess({
-            data: {
-              ...blog,
-              comments: comments,
-            },
-          })
-        );
+        dispatch(updateBlogComments({ comments }));
       }
     } else {
       navigate("/login");
@@ -61,14 +54,7 @@ const CommentItem = ({
     if (currentUser) {
       const comments = await onDislike(comment._id, blogId);
       if (comments && blog && blog._id === blogId) {
-        dispatch(
-          getBlogDetailSuccess({
-            data: {
-              ...blog,
-              comments: comments,
-            },
-          })
-        );
+        dispatch(updateBlogComments({ comments }));
       }
     } else {
       navigate("/login");
@@ -180,14 +166,7 @@ const CommentItem = ({
                 onCancel={(comments) => {
                   setEditingComment(null);
                   if (comments && blog && blog._id === blogId) {
-                    dispatch(
-                      getBlogDetailSuccess({
-                        data: {
-                          ...blog,
-                          comments: comments,
-                        },
-                      })
-                    );
+                    dispatch(updateBlogComments({ comments }));
                   }
                 }}
               />
@@ -276,14 +255,7 @@ const CommentItem = ({
                 setTimeout(async () => {
                   const comments = await onRefreshComments(blogId);
                   if (blog && blog._id === blogId) {
-                    dispatch(
-                      getBlogDetailSuccess({
-                        data: {
-                          ...blog,
-                          comments: comments,
-                        },
-                      })
-                    );
+                    dispatch(updateBlogComments({ comments }));
                   }
                 }, 500);
               }
@@ -329,14 +301,7 @@ const ReplyItem = ({ reply, currentUser, blogId, blog, onDelete, onLike, onDisli
     if (currentUser) {
       const comments = await onLike(reply._id, blogId);
       if (comments && blog && blog._id === blogId) {
-        dispatch(
-          getBlogDetailSuccess({
-            data: {
-              ...blog,
-              comments: comments,
-            },
-          })
-        );
+        dispatch(updateBlogComments({ comments }));
       }
     } else {
       navigate("/login");
@@ -347,14 +312,7 @@ const ReplyItem = ({ reply, currentUser, blogId, blog, onDelete, onLike, onDisli
     if (currentUser) {
       const comments = await onDislike(reply._id, blogId);
       if (comments && blog && blog._id === blogId) {
-        dispatch(
-          getBlogDetailSuccess({
-            data: {
-              ...blog,
-              comments: comments,
-            },
-          })
-        );
+        dispatch(updateBlogComments({ comments }));
       }
     } else {
       navigate("/login");
@@ -465,14 +423,7 @@ const ReplyItem = ({ reply, currentUser, blogId, blog, onDelete, onLike, onDisli
               onCancel={(comments) => {
                 setEditingReply(null);
                 if (comments && blog && blog._id === blogId) {
-                  dispatch(
-                    getBlogDetailSuccess({
-                      data: {
-                        ...blog,
-                        comments: comments,
-                      },
-                    })
-                  );
+                  dispatch(updateBlogComments({ comments }));
                 }
               }}
             />

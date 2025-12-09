@@ -55,6 +55,13 @@ const blogSlice = createSlice({
         state.blog.countOfVisitors = (state.blog.countOfVisitors || 0) + 1;
       }
     },
+
+    updateBlogComments: (state, { payload: { comments } }) => {
+      state.loading = false;
+      if (state.blog && state.blog._id) {
+        state.blog.comments = comments;
+      }
+    },
   },
 });
 
@@ -67,6 +74,7 @@ export const {
   getCommentSuccess,
   fetchFail,
   incrementBlogViewer,
+  updateBlogComments,
 } = blogSlice.actions;
 
 export default blogSlice.reducer;

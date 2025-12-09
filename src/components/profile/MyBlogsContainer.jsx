@@ -43,7 +43,7 @@ const MyBlogsContainer = ({ userId, filterType = "published" }) => {
   return (
     <div className="flex flex-col items-center w-full">
       {loading ? (
-        <SkeletonLoader type="list" count={4} variant="twoColumnsGap6" />
+        <SkeletonLoader type="myBlogsList" count={4} variant="twoColumnsGap6" />
       ) : userBlogs.length === 0 ? (
         <div className="text-center py-16 px-4">
           <div className={`inline-flex items-center justify-center w-20 h-20 rounded-full mb-6 ${

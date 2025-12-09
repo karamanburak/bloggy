@@ -8,7 +8,6 @@ import BlogHero from "../components/blog/BlogHero";
 import BlogContent from "../components/blog/BlogContent";
 import BlogDetailSkeleton from "../components/blog/BlogDetailSkeleton";
 import { toastSuccessNotify } from "../helper/ToastNotify";
-import { getBlogDetailSuccess } from "../features/blogSlice";
 
 const CommentsSection = lazy(() => 
   import("../components/blog/CommentsSection").then(module => ({ default: module.default }))
